@@ -28,6 +28,7 @@ int uctMcBrain(player pl) {
   ArrayList<uctNode> uctMcNodes = new ArrayList<uctNode>();
   //println("ループ回数のカウント");
   pl.myBoard.simulatorNumber=0;
+  
   //println("シミュレーション開始");
   if (pl.myBoard.attackChanceP()) {// アタックチャンスのときの処理を先に書く。
     uctNode newNode=new uctNode();
@@ -133,7 +134,8 @@ int uctMcBrain(player pl) {
     //println("UCTループここまで");
     // アタックチャンスのときの処理、ここまで
   } else {// 通常のときの処理
-    uctNode newNode=new uctNode();
+    //println("uctMcBrain:通常時の１列目");
+    uctNode newNode=new uctNode();//右辺はnullでも動くのでは？
     for (int j=0; j<25; j++) {
       if (pl.myBoard.vp[j]>0) {
         newNode = new uctNode();
