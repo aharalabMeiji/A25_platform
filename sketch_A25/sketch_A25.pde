@@ -202,7 +202,7 @@ void openFileSelected(File selection) {
   if (selection == null) {
     println("ファイルが選択されませんでした。");
   } else {
-    filePath = selection.getAbsolutePath(); //<>//
+    filePath = selection.getAbsolutePath(); //<>// //<>//
     String[] lines = loadStrings(filePath);
     int lineSize=lines.length;
     if (lines[0].charAt(0)=='0' && lines[0].charAt(1)==',') {
