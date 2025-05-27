@@ -227,7 +227,7 @@ int uctMcBrain(player pl) {
 }
 
 int uctMcAttackChance(player pl) {
-  if (pl.yellow!=-1) return pl.yellow;// すでに決定済みであれば、それを回答する。 //<>// //<>// //<>//
+  if (pl.yellow!=-1) return pl.yellow;// すでに決定済みであれば、それを回答する。 
   int[] ac = new int[25];
   for (int i=0; i<25; i++) {
     if (1<=pl.myBoard.s[i].col && pl.myBoard.s[i].col<=4) {

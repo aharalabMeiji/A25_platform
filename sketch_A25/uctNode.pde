@@ -11,6 +11,7 @@ class uctNode {
   int player=0;
   int move=-1;// attack chance時には、625までの数が入る。
   ArrayList<uctNode> children=null;
+  String id;
   uctNode parent=null;//不要なら後でやめる
 
   uctNode() {
@@ -24,6 +25,7 @@ class uctNode {
     uct=new float[5];
     for (int p=0; p<5; p++) uct[p]=0;
     children = null;
+    id="R";
   }
   boolean setItem(int _p, int _m) {
     player=_p;

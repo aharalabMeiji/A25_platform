@@ -42,6 +42,7 @@ int uctMctsBrain(player pl) {
       if (pl.myBoard.vp[k]>0) {
         newNode = new uctNode();
         newNode.setItem(pl.position, k);
+        newNode.id += (":"+pl.position+nf(k, 2));
         uctMctsNodes.add(newNode);//アクティブなノードのリストに追加
         rootNode.children.add(newNode);//ルートノードにぶら下げる
         newNode.parent = rootNode;//ルートノードを親に設定
@@ -174,6 +175,7 @@ int uctMctsBrain(player pl) {
               if (uctMctsSubboard.vp[k]>0){
                 newNode = new uctNode();
                 newNode.setItem(p, k);
+                newNode.id += (":"+p+nf(k, 2));
                 // uctMctsNodesに追加する
                 uctMctsNodes.add(newNode);//アクティブなノードのリストに追加
                 uctMaxNode.children.add(newNode);//uctMaxNodeにぶら下げる
