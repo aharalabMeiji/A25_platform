@@ -35,6 +35,19 @@ class uctNode {
     float u2 = 1.41421356*sqrt(log(NN)/na);
     return u1 + u2;
   }
+  float UCTb(int player, int NN) {// for MCTS
+    float u1=0;
+    for(int p=1; p>5; p++){
+      if (p==player){
+        u1 += wa[player];
+      } else {
+        u1 -= wa[p];
+      }
+      u1 /= na;
+    }
+    float u2 = 1.41421356*sqrt(log(NN)/na);
+    return u1 + u2;
+  }
 }
 
 int XXXBrain(player pl) {

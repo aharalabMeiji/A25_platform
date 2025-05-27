@@ -108,7 +108,7 @@ int uctMctsBrain(player pl) {
         println("uct failure");
         break;
       } else {
-        //println("uctMctsBrain:",uctMaxNode.player, uctMaxNode.move, "の枝を調べる");
+        //println("uctMctsBrain:",uctMaxNode.player, uctMaxNode.move, "のノードを調べる");
         //println("uctMctsBrain:uctMcSubboardへ盤面をコピー");
         for (int i=0; i<25; i++) {
           uctMcSubboard.s[i].col = uctMaxNode.bd[i];
@@ -131,22 +131,21 @@ int uctMctsBrain(player pl) {
         do {          
           if (nd0.parent!=null){
             nd0 = nd0.parent;
-            if (nd0.parent==null){
+            if (nd0.parent==null){// ルートまでたどり着いた、の意味
               break;
-            }
-            else {
+            } else {
               nd0.na ++;
               for (int p=1; p<=4; p++) {
                 nd0.wa[p] += wp.points[p];//2回め以降は和
                 nd0.pa[p] += 1.0*wp.panels[p];//2回め以降は和
               }
-              for (int p=1; p<=4; p++) {
-                nd0.uct[p] = nd0.UCTa(p, pl.myBoard.simulatorNumber);// シミュレーション総回数はpl.myBoard.simulatorNumber
-              }
+              for (int p=1; p<=4; p++) {// 上がっていったら、たぶんUCTいらない。
+                nd0.uct[p] = nd0.UCTa(p, pl.myBoard.simulatorNumber);// 上がっていったら、たぶんUCTいらない。
+              }// 上がっていったら、たぶんUCTいらない。
             }
           }
         } while(true);
-        //println("uctMctsBrain:",uctMaxNode.na, uctMaxNode.wa[uctMaxNode.player], uctMaxNode.pa[uctMaxNode.player], uctMaxNode.uct[uctMaxNode.player]);
+        //println("uctMctsBrain:",uctMaxNode.na, uctMaxNode.wa[uctMaxNode.player], uctMaxNode.pa[uctMaxNode.player]);
         if (uctMaxNode.na >= 100) {// 100は調整可能なパラメータの一つ
           //println("uctMctsBrain:展開");
           // uctMaxNodeの下にノードをぶら下げる
