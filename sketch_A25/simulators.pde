@@ -223,6 +223,8 @@ void showSimulator() {
     fullRandomMC();
   } else if (gameOptions.get("SimMethod")==2) {
     UCT1();
+  //} else if (gameOptions.get("SimMethod")==3) {
+  //  UCT2();
   } else {
     fullRandomMC();
   }

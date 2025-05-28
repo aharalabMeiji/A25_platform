@@ -81,34 +81,34 @@ void showContents() {
     //fill(200, 200, 200);
     text(buttonText, left, top);
     left += (textWidth(buttonText)+10);
-    //if (gameOptions.get("Player1")%10 == 3){
-    //  top += utils.vStep;
-    //  left=utils.hOffset;
-    //  captionText = "    UCT:";
-    //  fill(0);
-    //  text(captionText, left, top);
-    //  left += (textWidth(captionText)+utils.hSpace);
-    //  //
-    //  buttonText = "[MC]";
-    //  button buttonUCT1MC1=new button();
-    //  buttonUCT1MC1.setLT(left, top, buttonText);
-    //  buttonUCT1MC1.setItem("Player1", 3);
-    //  buttons.add(buttonUCT1MC1);
-    //  if (gameOptions.get("Player1")==3) fill(255, 0, 0);
-    //  else fill(0);
-    //  text(buttonText, left, top);
-    //  left += (textWidth(buttonText)+utils.hSpace);
-    ////
-    //  buttonText = "[MCTS]";
-    //  button buttonUCT1MC2=new button();
-    //  buttonUCT1MC2.setLT(left, top, buttonText);
-    //  buttonUCT1MC2.setItem("Player1", 13);
-    //  buttons.add(buttonUCT1MC2);
-    //  if (gameOptions.get("Player1")==13) fill(255, 0, 0);
-    //  else fill(0);
-    //  text(buttonText, left, top);
-    //  left += (textWidth(buttonText)+utils.hSpace);
-    //}
+    if (gameOptions.get("Player1")%10 == 3){
+      top += utils.vStep;
+      left=utils.hOffset;
+      captionText = "    UCT:";
+      fill(0);
+      text(captionText, left, top);
+      left += (textWidth(captionText)+utils.hSpace);
+      //
+      buttonText = "[MC]";
+      button buttonUCT1MC1=new button();
+      buttonUCT1MC1.setLT(left, top, buttonText);
+      buttonUCT1MC1.setItem("Player1", 3);
+      buttons.add(buttonUCT1MC1);
+      if (gameOptions.get("Player1")==3) fill(255, 0, 0);
+      else fill(0);
+      text(buttonText, left, top);
+      left += (textWidth(buttonText)+utils.hSpace);
+    //
+      buttonText = "[MCTS]";
+      button buttonUCT1MC2=new button();
+      buttonUCT1MC2.setLT(left, top, buttonText);
+      buttonUCT1MC2.setItem("Player1", 13);
+      buttons.add(buttonUCT1MC2);
+      if (gameOptions.get("Player1")==13) fill(255, 0, 0);
+      else fill(0);
+      text(buttonText, left, top);
+      left += (textWidth(buttonText)+utils.hSpace);
+    }
     // Player2
     top += utils.vStep;
     left=utils.hOffset;
@@ -431,10 +431,10 @@ void showContents() {
     button buttonSimMethod3=new button();
     buttonSimMethod3.setLT(left, top, buttonText);
     buttonSimMethod3.setItem("SimMethod", 3);
-    //buttons.add(buttonSimMethod3);
+    buttons.add(buttonSimMethod3);
     if (gameOptions.get("SimMethod") == 3) fill(255, 0, 0);
     else fill(0);
-    fill(200, 200, 200);
+    //fill(200, 200, 200);
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
@@ -477,7 +477,7 @@ void showContents() {
       else fill(0);
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
-    } else {//if (gameOptions.get("SimMethod") == 2){//[UCT-MC]
+    } else {//if (gameOptions.get("SimMethod") == 2 or 3){//[UCT-MC]
       top += utils.vStep;
       left=utils.hOffset;
       captionText = "Time:";
