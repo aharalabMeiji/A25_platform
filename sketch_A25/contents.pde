@@ -71,7 +71,7 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    buttonText = "[UCT]";
+    buttonText = "[UCB-MC]";
     button buttonUCT1=new button();
     buttonUCT1.setLT(left, top, buttonText);
     buttonUCT1.setItem("Player1", 3);
@@ -81,34 +81,17 @@ void showContents() {
     //fill(200, 200, 200);
     text(buttonText, left, top);
     left += (textWidth(buttonText)+10);
-    if (gameOptions.get("Player1")%10 == 3){
-      top += utils.vStep;
-      left=utils.hOffset;
-      captionText = "    UCT:";
-      fill(0);
-      text(captionText, left, top);
-      left += (textWidth(captionText)+utils.hSpace);
-      //
-      buttonText = "[MC]";
-      button buttonUCT1MC1=new button();
-      buttonUCT1MC1.setLT(left, top, buttonText);
-      buttonUCT1MC1.setItem("Player1", 3);
-      buttons.add(buttonUCT1MC1);
-      if (gameOptions.get("Player1")==3) fill(255, 0, 0);
-      else fill(0);
-      text(buttonText, left, top);
-      left += (textWidth(buttonText)+utils.hSpace);
     //
-      buttonText = "[MCTS]";
+      buttonText = "[UCT-MCTS]";
       button buttonUCT1MC2=new button();
       buttonUCT1MC2.setLT(left, top, buttonText);
-      buttonUCT1MC2.setItem("Player1", 13);
+      buttonUCT1MC2.setItem("Player1", 4);
       buttons.add(buttonUCT1MC2);
-      if (gameOptions.get("Player1")==13) fill(255, 0, 0);
+      if (gameOptions.get("Player1")%10==4) fill(255, 0, 0);
       else fill(0);
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
-    }
+
     // Player2
     top += utils.vStep;
     left=utils.hOffset;
@@ -367,28 +350,30 @@ void showContents() {
     left=utils.hOffset;
     int total = simulatorStartBoard.size();
     if (total>0) {
+      float smallBoardDispSize = utils.fontSize; 
+      float boardDispSize = smallBoardDispSize*1.5;
       int now = (simulatorStartBoardId) % total;
       int prev = (simulatorStartBoardId + total -1 ) % total;
       int next = (simulatorStartBoardId + 1 ) % total;
       buttonPrevBoard = new button();
-      buttonPrevBoard.setLT(int(left), int(top+utils.fontSize*1.3), " ");
-      buttonPrevBoard.wid=utils.fontSize*2.5;
-      buttonPrevBoard.hei=utils.fontSize*2.5;
-      simulatorStartBoard.get(prev).display(0, int(left), int(top+int(utils.fontSize*0.42)), int(utils.fontSize*0.5), int(utils.fontSize*0.5));
+      buttonPrevBoard.setLT(int(left), int(top+boardDispSize*1.5+smallBoardDispSize*2.5), " ");
+      buttonPrevBoard.wid=smallBoardDispSize*5;
+      buttonPrevBoard.hei=smallBoardDispSize*5;
+      simulatorStartBoard.get(prev).display(0, int(left), int(top+boardDispSize*1.5), int(smallBoardDispSize), int(smallBoardDispSize));
       textAlign(LEFT, CENTER);
       fill(0);
-      text(prev, left, top+utils.fontSize*4.5);
-      simulatorStartBoard.get(now).display(0, int(left+utils.fontSize*125/30), int(top), int(utils.fontSize/30*20), int(utils.fontSize/30*20));
+      text(prev, left, top+boardDispSize*7);
+      simulatorStartBoard.get(now).display(0, int(left+smallBoardDispSize*7), int(top), int(boardDispSize), int(boardDispSize));
       fill(0);
-      text(now, left+utils.fontSize*125/30, top+utils.fontSize*4.5);
+      text(now, left+smallBoardDispSize*7, top+boardDispSize*7);
       buttonNextBoard = new button();
-      buttonNextBoard.setLT(int(left+utils.fontSize*275/30), int(top+utils.fontSize*60/30), " ");
-      buttonNextBoard.wid=utils.fontSize*2.5;
-      buttonNextBoard.hei=utils.fontSize*2.5;
-      simulatorStartBoard.get(next).display(0, int(left+utils.fontSize*275/30), int(top+utils.fontSize/30*12.5), int(utils.fontSize*0.5), int(utils.fontSize*0.5));
+      buttonNextBoard.setLT(int(left+boardDispSize*5+smallBoardDispSize*9), int(top+boardDispSize*1.5+smallBoardDispSize*2.5), " ");
+      buttonNextBoard.wid=smallBoardDispSize*5;
+      buttonNextBoard.hei=smallBoardDispSize*5;
+      simulatorStartBoard.get(next).display(0, int(left+boardDispSize*5+smallBoardDispSize*9), int(top+boardDispSize*1.5), int(smallBoardDispSize), int(smallBoardDispSize));
       fill(0);
-      text(next, left+utils.fontSize*275/30, top+utils.fontSize*4.5);
-      top += utils.vStep*2.5;
+      text(next, left+boardDispSize*5+smallBoardDispSize*9, top+boardDispSize*7);
+      top += utils.vStep*7;
     }
     // Start
     top += utils.vStep;
@@ -407,7 +392,7 @@ void showContents() {
     text(captionText, left, top);
     left += (textWidth(captionText)+utils.hSpace);
     //
-    buttonText = "[Random-MC]";
+    buttonText = "[MC]";
     button buttonSimMethod1=new button();
     buttonSimMethod1.setLT(left, top, buttonText);
     buttonSimMethod1.setItem("SimMethod", 1);
@@ -417,7 +402,7 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    buttonText = "[UCT-MC]";
+    buttonText = "[UCB1-MC]";
     button buttonSimMethod2=new button();
     buttonSimMethod2.setLT(left, top, buttonText);
     buttonSimMethod2.setItem("SimMethod", 2);
@@ -569,28 +554,52 @@ void showContents() {
     left=utils.hOffset;
     int total = simulatorStartBoard.size();
     if (total>0) {
+      float smallBoardDispSize = utils.fontSize; 
+      float boardDispSize = smallBoardDispSize*1.5;
       int now = (simulatorStartBoardId) % total;
       int prev = (simulatorStartBoardId + total -1 ) % total;
       int next = (simulatorStartBoardId + 1 ) % total;
       buttonPrevBoard = new button();
-      buttonPrevBoard.setLT(int(left), int(top+utils.fontSize*1.3), " ");
-      buttonPrevBoard.wid=utils.fontSize*2.5;
-      buttonPrevBoard.hei=utils.fontSize*2.5;
-      simulatorStartBoard.get(prev).display(0, int(left), int(top+utils.fontSize*0.42), int(utils.fontSize*0.5), int(utils.fontSize*0.5));
+      buttonPrevBoard.setLT(int(left), int(top+boardDispSize*1.5+smallBoardDispSize*2.5), " ");
+      buttonPrevBoard.wid=smallBoardDispSize*5;
+      buttonPrevBoard.hei=smallBoardDispSize*5;
+      simulatorStartBoard.get(prev).display(0, int(left), int(top+boardDispSize*1.5), int(smallBoardDispSize), int(smallBoardDispSize));
       textAlign(LEFT, CENTER);
       fill(0);
-      text(prev, left, top+utils.fontSize*0.5*9);
-      simulatorStartBoard.get(now).display(0, int(left+utils.fontSize*4), int(top), int(utils.fontSize*0.67), int(utils.fontSize*0.67));
+      text(prev, left, top+boardDispSize*7);
+      simulatorStartBoard.get(now).display(0, int(left+smallBoardDispSize*7), int(top), int(boardDispSize), int(boardDispSize));
       fill(0);
-      text(now, left+utils.fontSize*4.08, top+utils.fontSize*4.5);
+      text(now, left+smallBoardDispSize*7, top+boardDispSize*7);
       buttonNextBoard = new button();
-      buttonNextBoard.setLT(int(left+utils.fontSize*9.17), int(top+utils.fontSize*1.67), " ");
-      buttonNextBoard.wid=utils.fontSize*2.5;
-      buttonNextBoard.hei=utils.fontSize*2.5;
-      simulatorStartBoard.get(next).display(0, int(left+utils.fontSize*9.17), int(top+utils.fontSize*0.4), int(utils.fontSize*0.5), int(utils.fontSize*0.5));
+      buttonNextBoard.setLT(int(left+boardDispSize*5+smallBoardDispSize*9), int(top+boardDispSize*1.5+smallBoardDispSize*2.5), " ");
+      buttonNextBoard.wid=smallBoardDispSize*5;
+      buttonNextBoard.hei=smallBoardDispSize*5;
+      simulatorStartBoard.get(next).display(0, int(left+boardDispSize*5+smallBoardDispSize*9), int(top+boardDispSize*1.5), int(smallBoardDispSize), int(smallBoardDispSize));
       fill(0);
-      text(next, left+utils.fontSize*9.17, top+utils.fontSize*4.5);
-      top += utils.vStep*2.5;
+      text(next, left+boardDispSize*5+smallBoardDispSize*9, top+boardDispSize*7);
+      top += utils.vStep*7;
+      //int now = (simulatorStartBoardId) % total;
+      //int prev = (simulatorStartBoardId + total -1 ) % total;
+      //int next = (simulatorStartBoardId + 1 ) % total;
+      //buttonPrevBoard = new button();
+      //buttonPrevBoard.setLT(int(left), int(top+utils.fontSize*1.3), " ");
+      //buttonPrevBoard.wid=utils.fontSize*2.5;
+      //buttonPrevBoard.hei=utils.fontSize*2.5;
+      //simulatorStartBoard.get(prev).display(0, int(left), int(top+utils.fontSize*0.42), int(utils.fontSize*0.5), int(utils.fontSize*0.5));
+      //textAlign(LEFT, CENTER);
+      //fill(0);
+      //text(prev, left, top+utils.fontSize*0.5*9);
+      //simulatorStartBoard.get(now).display(0, int(left+utils.fontSize*4), int(top), int(utils.fontSize*0.67), int(utils.fontSize*0.67));
+      //fill(0);
+      //text(now, left+utils.fontSize*4.08, top+utils.fontSize*4.5);
+      //buttonNextBoard = new button();
+      //buttonNextBoard.setLT(int(left+utils.fontSize*9.17), int(top+utils.fontSize*1.67), " ");
+      //buttonNextBoard.wid=utils.fontSize*2.5;
+      //buttonNextBoard.hei=utils.fontSize*2.5;
+      //simulatorStartBoard.get(next).display(0, int(left+utils.fontSize*9.17), int(top+utils.fontSize*0.4), int(utils.fontSize*0.5), int(utils.fontSize*0.5));
+      //fill(0);
+      //text(next, left+utils.fontSize*9.17, top+utils.fontSize*4.5);
+      //top += utils.vStep*2.5;
     }
     // Start
     top += utils.vStep;

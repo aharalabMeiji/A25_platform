@@ -1,7 +1,5 @@
 import javax.swing.JOptionPane; //
 
-
-
 void setup() {
   size(960, 960);
   frameRate(10000);//draw()の実行をできるだけ早く繰り返す
@@ -13,10 +11,10 @@ void setup() {
   utils.mainH = utils.mainU*2;
   utils.subL = utils.mainL;
   utils.subU = int(utils.mainU*1.5)+utils.mainH*5;
-  utils.fontSize=utils.unitSize/30;
+  utils.fontSize=utils.unitSize/35;
   utils.hOffset=utils.fontSize;
   utils.hSpace=10;
-  utils.vStep=utils.fontSize*1.8;
+  utils.vStep=utils.fontSize*1.6;
 
 
   utils.gameMainBoard = new board();

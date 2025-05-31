@@ -59,21 +59,20 @@ class player {
     if (myBrain==brain.Random){
       myBoard.buildVP(position);
       if (myBoard.attackChanceP()){
-        // 本当は、置く場所と、をセットで回答させたい。
-        yellow=-1;//消す場所をここに入れておけば、あとでそのように処理をする。
+        yellow=-1;//黄色にするパネルをこの変数に入れておけば、あとでそのように処理をする。
         return chooseOne(myBoard.vp);
       } else {
         return chooseOne(myBoard.vp);
       }
     } else if (myBrain==brain.UCT1){
-      return uctMcBrain(this);
+      return ucbMcBrain(this);
     } else if (myBrain==brain.UCT2){
-      return uctMcBrain(this);
+      return uctMctsBrain(this);
     }
     return -1; // error    
   }
   int callAttackChance(){// すでにある色を黄色へ変更するアルゴリズム
-    if (yellow!=-1) return yellow;// すでに決定済みであれば、それを回答する。
+    if (yellow!=-1) return yellow;// 黄色にするパネルをすでに決定済みであれば、それを回答する。
     if (myBrain==brain.Random || myBrain==brain.UCT1 || myBrain==brain.UCT2 ){
       int[] ac = new int[25];
       for (int i=0; i<25; i++){

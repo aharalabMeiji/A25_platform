@@ -79,7 +79,7 @@ void showGames() {
       participants[1] = new player(1, "human1", brain.Human);
     } else if (gameOptions.get("Player1")==3) {
       participants[1] = new player(1, "uct-mc1", brain.UCT1);
-    } else if (gameOptions.get("Player1")==13) {
+    } else if (gameOptions.get("Player1")==4) {
       participants[1] = new player(1, "uct-mcts1", brain.UCT2);
     } else {
       participants[1] = new player(1, "random1", brain.Random);
@@ -229,7 +229,17 @@ void showGames() {
         //
         managerPhase = mP.AfterMoving;
       } else {
-        print("ERROR:OnMoving@draw");
+        println("ERROR:OnMoving@draw");
+        print("ボード：");
+        for (int kki=0;kki<5;kki++){
+          for (int kkj=0;kkj<5;kkj++){
+            print(" "+utils.gameMainBoard.s[kkj+kki*5].col);
+          }
+          print(":");
+        }
+        println();
+        println("kifu: "+kifu.string);
+        println("attack: "+attack);
         managerPhase = mP.ErrorStop;
       }
     }
