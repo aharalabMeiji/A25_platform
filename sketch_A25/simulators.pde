@@ -74,13 +74,6 @@ winPoints playSimulatorToEnd(board sub, player[] _participants) {// 引数名か
     if (sub.s[i].col==0 || sub.s[i].col==5) remaining ++;// 黄色パネルは空欄あつかい
   }
   //println("playSimulatorToEnd:残り枚数は"+remaining);
-  //for (int k=0; k<5; k++) {
-  //  for (int j=0; j<5; j++) {
-  //    print(" "+sub.s[5*k+j].col);
-  //  }
-  //  print(" |");
-  //}
-  //println();
   if (remaining>0) {
     //println("playSimulatorToEnd:ループ開始");
     do {

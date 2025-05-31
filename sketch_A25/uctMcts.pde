@@ -9,9 +9,12 @@ int uctMctsBrain(player pl) {
   }
 
   println("uctMctsBrain:着手可能点を計算しておく");
-  pl.myBoard.buildVP(pl.position);
+  boolean stillOnGame = pl.myBoard.buildVP(pl.position);
   //pl.myBoard.vp に、候補を整数値（大きい値ほど選ばれる確率が大きい）で入れておく。
-
+  if (!stillOnGame){
+    return -1;
+  }
+  
   //println("uctMctsBrain:pl の変数の初期化");
   for (int k=0; k<=25; k++) {
     pl.myBoard.sv[k]=0;
@@ -150,7 +153,7 @@ int uctMctsBrain(player pl) {
           }
         } while(true);
         //println("uctMctsBrain:",uctMaxNode.na, uctMaxNode.wa[uctMaxNode.player], uctMaxNode.pa[uctMaxNode.player]);
-        if (uctMaxNode.na >= 50) {// 50は調整可能なパラメータの一つ
+        if (uctMaxNode.na >= 1000 && uctMaxNode.id.length()<10) {// 50は調整可能なパラメータの一つ
           println("uctMctsBrain:展開　"+uctMaxNode.id);
           // uctMaxNodeの下にノードをぶら下げる
           newNode=null;          
@@ -217,7 +220,7 @@ int uctMctsBrain(player pl) {
                   newNode.uct[pp] = newNode.UCTa(pp, 1);// シミュレーション回数は１
                   //println("uctMctsBrain:"+pp,newNode.wa[p], newNode.pa[p], newNode.uct[p]);
                 }
-                println("uctMctsBrain:ノード"+"のデータ("+newNode.wa[1]+","+newNode.wa[2]+","+newNode.wa[3]+","+newNode.wa[4]+")/"+newNode.na);
+                //println("uctMctsBrain:ノード"+"のデータ("+newNode.wa[1]+","+newNode.wa[2]+","+newNode.wa[3]+","+newNode.wa[4]+")/"+newNode.na);
                 // バックプロパゲート
                 //println("親にさかのぼってデータを更新する");
                 nd0 = newNode;
@@ -244,7 +247,7 @@ int uctMctsBrain(player pl) {
             }// 子ノードをぶら下げるここまで
           }
         }
-        if (pl.myBoard.simulatorNumber >= 10000) {// 1000は調整可能なパラメータの一つ
+        if (pl.myBoard.simulatorNumber >= 50000) {// 1000は調整可能なパラメータの一つ
           // 正常終了 uct最大は、最も勝率の良い手
           // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする。
           float bestWr=0;

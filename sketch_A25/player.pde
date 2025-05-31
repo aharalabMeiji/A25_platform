@@ -69,7 +69,7 @@ class player {
     } else if (myBrain==brain.UCT2){
       return uctMctsBrain(this);
     }
-    return -1; // error    
+    return -1; // error or gameEnd
   }
   int callAttackChance(){// すでにある色を黄色へ変更するアルゴリズム
     if (yellow!=-1) return yellow;// 黄色にするパネルをすでに決定済みであれば、それを回答する。
