@@ -96,8 +96,13 @@ class board {
   boolean buildVP(int pn) {//
     boolean ret = false;
     boolean opP = buildOP(pn);
-    for (int i = 0; i < 25; i ++)
+    boolean starting = true;
+    for (int i = 0; i < 25; i ++){
       vp[i] = 0;
+      if (s[i].col>0){
+        starting = false;
+      }
+    }
     if (opP) {// There is a panel with othello move
       for (int i = 0; i < 25; i ++) {
         if (op[i]>0) {
@@ -140,7 +145,7 @@ class board {
         }
       }
     }
-    if (ret==false) {// the start board
+    if (/* ret==false && */starting) {// the start board
       vp[12]=1;
     }
     return ret;
