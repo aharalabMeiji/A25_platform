@@ -214,6 +214,7 @@ void showGames() {
     if (participants[nextPlayer].myBrain!=brain.Human) {// call strategy algorithm
       utils.gameMainBoard.copyBoard(participants[nextPlayer].myBoard);// copy a current board to the player's.
       int attack = participants[nextPlayer].callBrain();
+      //print("["+attack+"]");
       String strAttack=str(attack+1);
       if (strAttack.length()<2) {
         kifu.string += (kifu.playerColCode[nextPlayer]+"0"+strAttack);

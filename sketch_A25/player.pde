@@ -67,7 +67,7 @@ class player {
     } else if (myBrain==brain.UCT1){
       return ucbMcBrain(this);
     } else if (myBrain==brain.UCT2){
-      return uctMctsBrain(this);
+      return uctMctsBrain(this, 1000, 1000000, 3);
     }
     return -1; // error or gameEnd
   }

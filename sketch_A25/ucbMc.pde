@@ -216,7 +216,7 @@ int ucbMcBrain(player pl) {
         if (uctMaxNode.na >= 1000) {// 100は調整可能なパラメータの一つ
           // 正常終了 uct最大は、最も勝率の良い手
           float bestWr=0;
-          int bestMove=-1;
+          int bestMove=25;
           for (uctNode nd1 : ucbMcNodes){
             if (bestWr<nd1.wa[pl.position]){
               bestWr=nd1.wa[pl.position];

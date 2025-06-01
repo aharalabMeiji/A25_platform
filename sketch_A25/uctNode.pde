@@ -34,7 +34,9 @@ class uctNode {
   }
   float UCTa(int player, int NN) {// NN:　累計試行回数
     float u1 = wa[player]/na;
+    //float u2 = 1.0*sqrt(log(NN)/na);
     float u2 = 1.41421356*sqrt(log(NN)/na);
+    //float u2 = 2.0*sqrt(log(NN)/na);
     return u1 + u2;
   }
   float UCTb(int player, int NN) {// for MCTS
