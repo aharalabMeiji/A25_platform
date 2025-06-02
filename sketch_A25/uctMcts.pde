@@ -1,4 +1,4 @@
-int uctMctsBrain(player pl, int expandThreshold, int terminateThreshold, int depth) { //<>// //<>//
+int uctMctsBrain(player pl, int expandThreshold, int terminateThreshold, int depth) { //
   //候補を一つに絞ってもよいが、いつでも同じ動作になってしまうので、複数個の候補を重みをつけておくとよい。
   //ここから
 
@@ -107,7 +107,12 @@ int uctMctsBrain(player pl, int expandThreshold, int terminateThreshold, int dep
         //    println(nd.id, nd.wa[nd.player]/nd.na, nd.uct[nd.player]);
         //  }
         //  println("This is here.");
-        print(" "+(pl.myBoard.simulatorNumber/10000)+":"+kifu.playerColCode[pl.position]+nf(returnBestChildFromRoot(pl, rootNode)+1,2));        
+        int bestChildren = returnBest2ChildrenFromRoot(pl, rootNode);
+        int best1 = int(bestChildren/100);
+        int best2 = bestChildren % 100;
+        String best1Str = kifu.playerColCode[pl.position]+nf(best1+1,2);
+        String best2Str = kifu.playerColCode[pl.position]+nf(best2+1,2);
+        print(" "+(pl.myBoard.simulatorNumber/10000)+":("+best1Str+","+best2Str+")");        
       }
       //println("uctMctsBrain:シミュレーション回数"+pl.myBoard.simulatorNumber);
 
@@ -297,6 +302,28 @@ int returnBestChildFromRoot(player pl, uctNode root) {
     }
   }
   return bestMove;//
+}
+
+int returnBest2ChildrenFromRoot(player pl, uctNode root) {
+  // rootに直接ぶら下がっているノードの中から、最も勝率が良いものから２つをリターンする。
+  float bestWr=0;//<>//
+  int bestMove=-1;
+  float secondWr=0;//<>//
+  int secondMove=-1;
+  for (uctNode nd1 : root.children) {
+    float tmpWe = nd1.wa[pl.position] / nd1.na;
+    if (bestWr<tmpWe) {
+      secondWr = bestWr;
+      secondMove = bestMove;
+      bestWr = tmpWe;
+      bestMove = nd1.move;
+    } else
+    if (secondWr<tmpWe) {
+      secondWr = tmpWe;
+      secondMove = nd1.move;
+    }
+  }
+  return bestMove*100+secondMove;//
 }
 
 int uctMctsAttackChance(player pl) {

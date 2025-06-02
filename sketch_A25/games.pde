@@ -78,7 +78,7 @@ void showGames() {
     if (gameOptions.get("Player1")==0) {
       participants[1] = new player(1, "human1", brain.Human);
     } else if (gameOptions.get("Player1")==3) {
-      participants[1] = new player(1, "uct-mc1", brain.UCT1);
+      participants[1] = new player(1, "ucb-mc1", brain.UCT1);
     } else if (gameOptions.get("Player1")==4) {
       participants[1] = new player(1, "uct-mcts1", brain.UCT2);
     } else {
@@ -87,7 +87,9 @@ void showGames() {
     if (gameOptions.get("Player2")==0) {
       participants[2] = new player(2, "human2", brain.Human);
     } else if (gameOptions.get("Player2")==3) {
-      participants[2] = new player(2, "uct-mc2", brain.UCT1);
+      participants[2] = new player(2, "ucb-mc2", brain.UCT1);
+    } else if (gameOptions.get("Player2")==4) {
+      participants[2] = new player(2, "uct-mcts2", brain.UCT2);
     } else {
       participants[2] = new player(2, "random2", brain.Random);
     }
@@ -95,6 +97,8 @@ void showGames() {
       participants[3] = new player(3, "human3", brain.Human);
     } else if (gameOptions.get("Player3")==3) {
       participants[3] = new player(3, "uct-mc3", brain.UCT1);
+    } else if (gameOptions.get("Player3")==4) {
+      participants[3] = new player(3, "uct-mcts3", brain.UCT2);
     } else {
       participants[3] = new player(3, "random3", brain.Random);
     }
@@ -102,6 +106,8 @@ void showGames() {
       participants[4] = new player(4, "human4", brain.Human);
     } else if (gameOptions.get("Player4")==3) {
       participants[4] = new player(4, "uct-mc4", brain.UCT1);
+    } else if (gameOptions.get("Player4")==4) {
+      participants[4] = new player(4, "uct-mcts4", brain.UCT2);
     } else {
       participants[4] = new player(4, "random4", brain.Random);
     }

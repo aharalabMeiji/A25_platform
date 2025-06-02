@@ -54,6 +54,9 @@ IntList attackChanceValidNodes = new IntList();
 int attackChanceCursor=0;
 int startTime;//時間計測のため
 button buttonPrevSV=new button(), buttonNextSV=new button();// これはボタン
+  boolean WrConv, PrConv;
+  float best1WrP=0, best2WrP=0, best1PrP=0, best2PrP=0;
+  float best1Wr=0, best2Wr=0, best1Pr=0, best2Pr=0;
 
 // 棋譜
 kifu kifu=new kifu();

@@ -385,6 +385,8 @@ void UCT1() {
     attackChanceSV = new float[625];//アタックチャンス時の評価値の表
     attackChanceSV2 = new float[625];//アタックチャンス時の評価値の表
     attackChanceVP = new int[625];//アタックチャンス時の合法手のフラグ
+    WrConv=false; 
+    PrConv=false;
     // プレーヤーをランダムに設定
     for (int p=1; p<5; p++) {
       simulatorParticipants[p] = new player(p, "random", brain.Random);
@@ -510,20 +512,16 @@ void UCT1() {
           maxNd.pa[p] += wp.panels[p];//
         }
 
-        if (gameOptions.get("SimTimes")==11) {// 1sec
-          if (millis()-startTime>=1000) {
-            simulationManager=sP.GameEnd;
-          }
-        } else if (gameOptions.get("SimTimes")==12) {// 10sec
+        if (gameOptions.get("SimTimes")==11) {// 10sec
           if (millis()-startTime>=10000) {
             simulationManager=sP.GameEnd;
           }
-        } else if (gameOptions.get("SimTimes")==13) {// 60sec
+        } else if (gameOptions.get("SimTimes")==12) {// 60sec
           if (millis()-startTime>=60000) {
             simulationManager=sP.GameEnd;
           }
-        } else {/// gameOptions.get("SimTimes")==14
-          if (maxNd.na>=50000) {// 50000 の根拠はなし。十分に多い、という意味。
+        } else if (gameOptions.get("SimTimes")==13) {// limit
+          if(WrConv && PrConv){
             simulationManager=sP.GameEnd;
           }
         }
@@ -575,6 +573,14 @@ void UCT1() {
         text(msg3, utils.subL, utils.subU+utils.fontSize*4.5 );
         showReturnButton();
         showScreenCapture();
+        best1WrP=best1Wr; best2WrP=best2Wr; best1PrP = best1Pr;  best2PrP=best2Pr;
+        best1Wr=p1; best2Wr=p2; best1Pr=q1; best2Pr=q2;
+        if (abs(best1WrP-best1Wr)<0.001 && abs(best2WrP-best2Wr)<0.001 )
+          WrConv=true;
+        else WrConv=false;
+        if (abs(best1PrP-best1Pr)<0.001 && abs(best2PrP-best2Pr)<0.001 )
+          PrConv=true;
+        else PrConv=false;
       }
     } else {//通常の場合// UCT1ループ部分
       float maxUct=-100;
@@ -606,21 +612,42 @@ void UCT1() {
         utils.simulatorBoard.sv[maxNd.move] = maxNd.wa[maxNd.player]/maxNd.na;
         utils.simulatorBoard.sv2[maxNd.move] = maxNd.pa[maxNd.player]/maxNd.na;
         //maxNd.UCTa(maxNd.player, utils.simulatorBoard.simulatorNumber) ;
-        if (gameOptions.get("SimTimes")==11) {// 1sec
-          if (millis()-startTime>=1000) {
-            simulationManager=sP.GameEnd;
-          }
-        } else if (gameOptions.get("SimTimes")==12) {// 10sec
+        if (gameOptions.get("SimTimes")==11) {// 10sec
           if (millis()-startTime>=10000) {
             simulationManager=sP.GameEnd;
           }
-        } else if (gameOptions.get("SimTimes")==13) {// 60sec
+        } else if (gameOptions.get("SimTimes")==12) {// 60sec
           if (millis()-startTime>=60000) {
             simulationManager=sP.GameEnd;
           }
-        } else {/// gameOptions.get("SimTimes")==14
-          if (maxNd.na>=50000) {// 50000 の根拠はなし。十分に多い、という意味。
-            simulationManager=sP.GameEnd;
+        } else {/// gameOptions.get("SimTimes")==13
+          if (utils.simulatorBoard.simulatorNumber%1000==0) {//収束しているかを判定する
+            WrConv=false; PrConv=false;
+            best1WrP=best1Wr; best2WrP=best2Wr; best1PrP = best1Pr;  best2PrP=best2Pr;
+            best1Wr=0; best2Wr=0; best1Pr=0; best2Pr=0;
+            for(int kk=0; kk<=25; kk++){
+              if (utils.simulatorBoard.sv[kk]>0 || utils.simulatorBoard.sv2[kk]>0){
+                if (utils.simulatorBoard.sv[kk]>best1Wr ||(utils.simulatorBoard.sv[kk]==best1Wr && utils.simulatorBoard.sv2[kk]>best1Pr)){
+                  best2Wr = best1Wr; best2Pr=best2Wr;
+                  best1Wr = utils.simulatorBoard.sv[kk];
+                  best1Pr = utils.simulatorBoard.sv2[kk];
+                } else 
+                if (utils.simulatorBoard.sv[kk]>best2Wr ||(utils.simulatorBoard.sv[kk]==best2Wr && utils.simulatorBoard.sv2[kk]>best2Pr)){
+                  best2Wr = utils.simulatorBoard.sv[kk];
+                  best2Pr = utils.simulatorBoard.sv2[kk];
+                }
+              }
+            }
+            //println(best1WrP,best1Wr,best2WrP,best2Wr);
+            if (abs(best1WrP-best1Wr)<0.001 && abs(best2WrP-best2Wr)<0.001 )
+              WrConv=true;
+            else WrConv=false;
+            if (abs(best1PrP-best1Pr)<0.02 && abs(best2PrP-best2Pr)<0.02 )
+              PrConv=true;
+            else PrConv=false;
+            if(WrConv && PrConv){
+              simulationManager=sP.GameEnd;
+            }
           }
         }
       }
