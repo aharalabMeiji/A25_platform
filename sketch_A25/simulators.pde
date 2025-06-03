@@ -216,8 +216,8 @@ void fullRandomMC() {
     simulator.Participants = new player[5];
     simulator.rootNode = new uctNode();
     simulator.rootNode.children = new ArrayList<uctNode>();
-    attackChanceSV = new float[625];//いらなくなる
-    attackChanceSV2 = new float[625];//いらなくなる
+    //attackChanceSV = new float[625];//いらなくなる
+    //attackChanceSV2 = new float[625];//いらなくなる
     attackChanceVP = new int[625];//
     // プレーヤーをランダムプレーヤーに設定
     for (int p=1; p<5; p++) {
@@ -238,10 +238,10 @@ void fullRandomMC() {
     
     // 着手可能点を計算しておく。
     simulator.mainBoard.buildVP(nextSimulatorPlayer);// 0~24の話
-    for (int k=0; k<625; k++) {//いらなくなる
-      attackChanceSV[k]=0;//いらなくなる
-      attackChanceSV2[k]=0;//いらなくなる
-    }//いらなくなる
+    //for (int k=0; k<625; k++) {//いらなくなる
+    //  attackChanceSV[k]=0;//いらなくなる
+    //  attackChanceSV2[k]=0;//いらなくなる
+    //}//いらなくなる
     simulator.mainBoard.simulatorNumber=0;
     simulationManager=sP.setStartBoard;
   } else if (simulationManager == sP.setStartBoard) {
@@ -323,21 +323,6 @@ void fullRandomMC() {
         simulator.mainBoard.display(10);
         prize prize=new prize();
         prize.getPrize3FromNodeList(nextSimulatorPlayer, simulator.rootNode.children);
-        //textAlign(LEFT, CENTER);
-        //textSize(utils.fontSize);
-        //fill(255, 0, 0);
-        //text("BEST 3", utils.subL, utils.subU);
-        //fill(0);
-        //for(int pr=1; pr<=3; pr++){
-        //  int move = prize.getMove(pr).move;
-        //  float winrate = prize.getWinrate(pr);
-        //  float panels = prize.getPanels(pr);
-        //  String msg = "("+(move%25+1)+"-"+(int(move/25)+1)+") "+nf(winrate,1,3)+" : "+ nf(panels, 2, 3);
-        //  text(msg, utils.subL, utils.subU+utils.fontSize*1.5*pr );
-        //}
-        //fill(255, 0, 0);
-        //text("ALL(click to slide)", utils.unitSize/2, utils.subU);
-        //fill(0);
         displayBestStats(prize);
         displayAllStats(attackChanceCursor, nextSimulatorPlayer);
         
@@ -384,11 +369,12 @@ void fullRandomMC() {
           simulationManager=sP.GameEnd;
         }
       } else {// gameOptions.get("SimTimes")==3 // 50000 times
+        // 収束するまで、へと変更
         if (simulator.mainBoard.simulatorNumber>=50000) {
           simulationManager=sP.GameEnd;
         }
       }
-      if (simulator.mainBoard.simulatorNumber%50==0) {
+      if (simulator.mainBoard.simulatorNumber%500==0) {
         simulator.mainBoard.display(10);
         showReturnButton();
         showScreenCapture();
@@ -407,8 +393,8 @@ void UCT1() {
     // シミュレーション開始
     startTime=millis();
     simulator.Participants = new player[5];
-    attackChanceSV = new float[625];//アタックチャンス時の評価値の表
-    attackChanceSV2 = new float[625];//アタックチャンス時の評価値の表
+    //attackChanceSV = new float[625];//アタックチャンス時の評価値の表
+    //attackChanceSV2 = new float[625];//アタックチャンス時の評価値の表
     attackChanceVP = new int[625];//アタックチャンス時の合法手のフラグ
     WrConv=false; 
     PrConv=false;
@@ -432,10 +418,6 @@ void UCT1() {
       uctRoot.bd[j] = simulator.mainBoard.s[j].col;
     }
     if (simulator.mainBoard.attackChanceP()) {//アタックチャンスのための１世代めの追加
-      //アタックチャンスのための初期化
-      for (int k=0; k<625; k++) {
-        attackChanceSV[k]=0;
-      }
       simulator.mainBoard.buildVP(nextSimulatorPlayer);// そもそもの着手可能パネル
       //アタックチャンス時の合法手の決定
       for (int j=0; j<25; j++) { //加えるほう

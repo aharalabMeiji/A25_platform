@@ -52,10 +52,6 @@ class simulator {
 }
 
 int nextSimulatorPlayer=1;//1~4
-
-
-float[] attackChanceSV;// とりま、これを廃止する。
-float[] attackChanceSV2;// とりま、これを廃止する。
 int[] attackChanceVP;// そもそも、アタックチャンスのためのVPはここにあるべきではない。というか、これから廃止の方向にする。
 int attackChanceCursor=0;//これは表示のために必要。
 int startTime;//時間計測のため
