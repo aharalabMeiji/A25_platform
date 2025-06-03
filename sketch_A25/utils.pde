@@ -37,27 +37,31 @@ button buttonReturnToMenu, buttonMenuGame, buttonMenuSimulation, buttonPass;
 button buttonSaveScreenShot;// スクショのボタン
 button buttonSaveBoard;// 盤面保存のボタン
 
-
-int nextPlayer;//1~4 // これは整理したい
-player[] participants; // これは整理したい。
+// games
+games game = new games();
+class games{
+  int nextPlayer;//1~4 // これは整理したい
+  player[] participants; // これは整理したい。
+}
 
 // simulators
-simulator simulator=new simulator();
-class simulator {
+simulators simulator=new simulators();
+class simulators {
   int StartBoardId=0;
   player[] Participants;//これは残す
   board mainBoard;
   board subBoard;
   uctNode rootNode=null;
+  int nextPlayer=1;//1~4
 }
 
-int nextSimulatorPlayer=1;//1~4
+//int simulator.nextPlayer=1;//1~4
 int[] attackChanceVP;// そもそも、アタックチャンスのためのVPはここにあるべきではない。というか、これから廃止の方向にする。
 int attackChanceCursor=0;//これは表示のために必要。
 int startTime;//時間計測のため
 button buttonPrevSV=new button(), buttonNextSV=new button();// これはボタン
   boolean WrConv, PrConv;
-  float best1WrP=0, best2WrP=0, best1PrP=0, best2PrP=0;
+  float prevWinrate1=0, prevWinrate2=0, prevPasanels1=0, prevPasanels2=0;
   float best1Wr=0, best2Wr=0, best1Pr=0, best2Pr=0;
 
 // 棋譜

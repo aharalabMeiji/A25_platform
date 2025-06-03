@@ -21,8 +21,8 @@ void setup() {
   utils.gameSubBoard = new board();
   simulator.mainBoard = new board();
   simulator.subBoard = new board();
-  participants = new player[5];
-  participants[0] = null;
+  game.participants = new player[5];
+  game.participants[0] = null;
   managerPhase = mP.GameStart;
 
   gameOptions.set("gameMode", 0);
@@ -30,7 +30,7 @@ void setup() {
   gameOptions.set("Player2", 0);
   gameOptions.set("Player3", 0);
   gameOptions.set("Player4", 0);
-  gameOptions.set("Order", 0);// 0 Auto, 1:Manual
+  gameOptions.set("Order", 0);// 0 Random, 1:Manual, 2:Conditional random, 3:in order
   gameOptions.set("Times", 1);// 1:once, 100:100 times, 10000:10000 times
   gameOptions.set("SimTimes", 2);
   gameOptions.set("SimMethod", 1);

@@ -76,47 +76,47 @@ void showGames() {
   if (managerPhase==mP.GameStart) {
     //println("ゲームモードのプレイヤー初期化");
     if (gameOptions.get("Player1")==0) {
-      participants[1] = new player(1, "human1", brain.Human);
+      game.participants[1] = new player(1, "human1", brain.Human);
     } else if (gameOptions.get("Player1")==3) {
-      participants[1] = new player(1, "ucb-mc1", brain.UCB1);
+      game.participants[1] = new player(1, "ucb-mc1", brain.UCB1);
     } else if (gameOptions.get("Player1")==4) {
-      participants[1] = new player(1, "uct-mcts1", brain.UCT2);
+      game.participants[1] = new player(1, "uct-mcts1", brain.UCT2);
     } else {
-      participants[1] = new player(1, "random1", brain.Random);
+      game.participants[1] = new player(1, "random1", brain.Random);
     }
     if (gameOptions.get("Player2")==0) {
-      participants[2] = new player(2, "human2", brain.Human);
+      game.participants[2] = new player(2, "human2", brain.Human);
     } else if (gameOptions.get("Player2")==3) {
-      participants[2] = new player(2, "ucb-mc2", brain.UCB1);
+      game.participants[2] = new player(2, "ucb-mc2", brain.UCB1);
     } else if (gameOptions.get("Player2")==4) {
-      participants[2] = new player(2, "uct-mcts2", brain.UCT2);
+      game.participants[2] = new player(2, "uct-mcts2", brain.UCT2);
     } else {
-      participants[2] = new player(2, "random2", brain.Random);
+      game.participants[2] = new player(2, "random2", brain.Random);
     }
     if (gameOptions.get("Player3")==0) {
-      participants[3] = new player(3, "human3", brain.Human);
+      game.participants[3] = new player(3, "human3", brain.Human);
     } else if (gameOptions.get("Player3")==3) {
-      participants[3] = new player(3, "uct-mc3", brain.UCB1);
+      game.participants[3] = new player(3, "uct-mc3", brain.UCB1);
     } else if (gameOptions.get("Player3")==4) {
-      participants[3] = new player(3, "uct-mcts3", brain.UCT2);
+      game.participants[3] = new player(3, "uct-mcts3", brain.UCT2);
     } else {
-      participants[3] = new player(3, "random3", brain.Random);
+      game.participants[3] = new player(3, "random3", brain.Random);
     }
     if (gameOptions.get("Player4")==0) {
-      participants[4] = new player(4, "human4", brain.Human);
+      game.participants[4] = new player(4, "human4", brain.Human);
     } else if (gameOptions.get("Player4")==3) {
-      participants[4] = new player(4, "uct-mc4", brain.UCB1);
+      game.participants[4] = new player(4, "uct-mc4", brain.UCB1);
     } else if (gameOptions.get("Player4")==4) {
-      participants[4] = new player(4, "uct-mcts4", brain.UCT2);
+      game.participants[4] = new player(4, "uct-mcts4", brain.UCT2);
     } else {
-      participants[4] = new player(4, "random4", brain.Random);
+      game.participants[4] = new player(4, "random4", brain.Random);
     }
     utils.gameMainBoard.attackChanceP=false;//アタックチャンス終了フラグはいったん寝せておく
     //println("gameモードの盤面初期化");
     if (simulator.StartBoardId==0) {// カラ盤面から始める
       utils.gameMainBoard.clearCol();
       utils.gameMainBoard.clearMarked();
-      nextPlayer=0;//最初のプレーヤーは決めない。
+      game.nextPlayer=0;//最初のプレーヤーは決めない。
       kifu.kifuValid=true;// １つ１つの棋譜ファイルを出力します。
       if (kifu.kifuFullPath=="") {
         kifu.mmddhhmm = nf(month(), 2) + nf(day(), 2) + "-" + nf(hour(), 2) + nf(minute(), 2);
@@ -147,7 +147,7 @@ void showGames() {
         utils.gameMainBoard.attackChanceP=true;//アタックチャンス終了フラグをたてる
       }
       utils.gameMainBoard.clearMarked();
-      nextPlayer = simulatorStartBoard.get(now).nextPlayer;//最初のプレーヤーは事前に決まっている。
+      game.nextPlayer = simulatorStartBoard.get(now).nextPlayer;//最初のプレーヤーは事前に決まっている。
       kifu.kifuValid=false;
       kifu.kifuFullPath="";
       // この場合には、初期盤面以前の着手は存在しない。（想定もしない。）
@@ -168,7 +168,7 @@ void showGames() {
     background(255);
     utils.gameMainBoard.display(0);
     for (int p = 1; p<=4; p++) {
-      participants[p].display(0);//
+      game.participants[p].display(0);//
     }
     showReturnButton();
     showScreenCapture();
@@ -176,31 +176,31 @@ void showGames() {
     managerPhase=mP.WaitChoosePlayer;// show setting and wait start
   } else if (managerPhase==mP.WaitChoosePlayer) {
     if (gameOptions.get("Order") == 0) {
-      nextPlayer = getRandomOrder();// 次の手番をランダムに決める //
+      game.nextPlayer = getRandomOrder();// 次の手番をランダムに決める //
       for (int p = 1; p<=4; p++) {
-        participants[p].turn = false;
+        game.participants[p].turn = false;
       }
-      participants[nextPlayer].turn = true;
+      game.participants[game.nextPlayer].turn = true;
       managerPhase = mP.AfterChoosePlayer;
     }
   } else if (managerPhase==mP.AfterChoosePlayer) {
-    // from nextPlayer, set the player's turn
+    // from game.nextPlayer, set the player's turn
     // 特にすることはなし。
-    if (1<= nextPlayer && nextPlayer<=4 ) {
+    if (1<= game.nextPlayer && game.nextPlayer<=4 ) {
       managerPhase = mP.BeforeMoving;
     } else {
       print("ERROR:WaitChoosePlayer@draw");
       managerPhase = mP.ErrorStop;
     }
   } else if (managerPhase==mP.BeforeMoving) {
-    if (participants[nextPlayer].myBrain!=brain.Human) {// non-human player uses algorithm
+    if (game.participants[game.nextPlayer].myBrain!=brain.Human) {// non-human player uses algorithm
       managerPhase = mP.OnMoving;
-    } else if (participants[nextPlayer].myBrain==brain.Human) {// Human player uses mouse click
+    } else if (game.participants[game.nextPlayer].myBrain==brain.Human) {// Human player uses mouse click
       // 着手可能地点にマークを表示する
-      utils.gameMainBoard.buildVP(nextPlayer);
+      utils.gameMainBoard.buildVP(game.nextPlayer);
       for (int i=0; i<25; i++) {
         if (utils.gameMainBoard.vp[i]>0) {
-          utils.gameMainBoard.s[i].marked=nextPlayer;
+          utils.gameMainBoard.s[i].marked=game.nextPlayer;
         }
       }
       managerPhase = mP.OnMoving;
@@ -210,29 +210,29 @@ void showGames() {
     background(255);
     utils.gameMainBoard.display(0);
     for (int p = 1; p<=4; p++) {
-      participants[p].display(0);//
+      game.participants[p].display(0);//
     }
     showReturnButton();
     showScreenCapture();
     showSaveBoard();
     showPassButton();
     // CPUのときのムーブ処理
-    if (participants[nextPlayer].myBrain!=brain.Human) {// call strategy algorithm
-      utils.gameMainBoard.copyBoard(participants[nextPlayer].myBoard);// copy a current board to the player's.
-      int attack = participants[nextPlayer].callBrain();
+    if (game.participants[game.nextPlayer].myBrain!=brain.Human) {// call strategy algorithm
+      utils.gameMainBoard.copyBoard(game.participants[game.nextPlayer].myBoard);// copy a current board to the player's.
+      int attack = game.participants[game.nextPlayer].callBrain();
       //print("["+attack+"]");
       String strAttack=str(attack+1);
       if (strAttack.length()<2) {
-        kifu.string += (kifu.playerColCode[nextPlayer]+"0"+strAttack);
+        kifu.string += (kifu.playerColCode[game.nextPlayer]+"0"+strAttack);
       } else {
-        kifu.string += (kifu.playerColCode[nextPlayer]+strAttack);
+        kifu.string += (kifu.playerColCode[game.nextPlayer]+strAttack);
       }
-      utils.gameMainBoard.buildVP(nextPlayer);
+      utils.gameMainBoard.buildVP(game.nextPlayer);
       if (attack==25) {
         // パスを選択
         managerPhase = mP.AfterMoving;
       } else if (utils.gameMainBoard.vp[attack]>0) {
-        utils.gameMainBoard.move(nextPlayer, attack);// 着手可能ならば着手する
+        utils.gameMainBoard.move(game.nextPlayer, attack);// 着手可能ならば着手する
         //
         managerPhase = mP.AfterMoving;
       } else {
@@ -255,7 +255,7 @@ void showGames() {
     background(255);
     utils.gameMainBoard.display(0);
     for (int p = 1; p<=4; p++) {
-      participants[p].display(0);//
+      game.participants[p].display(0);//
     }
     showReturnButton();
     showScreenCapture();
@@ -282,7 +282,7 @@ void showGames() {
   } else if (managerPhase==mP.GameEnd) {///////mP.GameEnd
     background(255);
     for (int p = 1; p<=4; p++) {
-      participants[p].display(0);
+      game.participants[p].display(0);
     }
     showReturnButton();
     showScreenCapture();
@@ -306,7 +306,7 @@ void showGames() {
     }
     for (int p = 1; p <= 4; p ++) {
       if (Pt2[p]==4) {// win
-        participants[p].score += (1.0/ (Pt2[p]-Pt1[p]));
+        game.participants[p].score += (1.0/ (Pt2[p]-Pt1[p]));
       }
     }
     // 棋譜を保存
@@ -322,7 +322,7 @@ void showGames() {
         //PrintWriter writer = new PrintWriter(new FileWriter(kifu.csvPath, true)); // 追記モード
         try {
           FileWriter writer = new FileWriter(kifu.csvPath, true);
-          writer.write(kifu.string+","+count[nextPlayer]+","+(Pt2[nextPlayer]==4)+"\n");
+          writer.write(kifu.string+","+count[game.nextPlayer]+","+(Pt2[game.nextPlayer]==4)+"\n");
           writer.close();
         }
         catch (IOException e) {
@@ -330,7 +330,7 @@ void showGames() {
         }
       }
     }
-    nextPlayer = simulatorStartBoard.get(simulator.StartBoardId).nextPlayer;
+    game.nextPlayer = simulatorStartBoard.get(simulator.StartBoardId).nextPlayer;
     // 棋譜文字列の初期化
     kifu.string="";
     // 繰り返し判定
@@ -340,7 +340,7 @@ void showGames() {
       if (simulator.StartBoardId==0) {
         utils.gameMainBoard.clearCol();
         utils.gameMainBoard.clearMarked();
-        nextPlayer=0;
+        game.nextPlayer=0;
         kifu.kifuValid=true;
         utils.gameMainBoard.attackChanceP=false;
       } else {
@@ -362,17 +362,17 @@ void showGames() {
         if (remaining<=4) {
           utils.gameMainBoard.attackChanceP=true;
         }
-        nextPlayer = simulatorStartBoard.get(now).nextPlayer;
+        game.nextPlayer = simulatorStartBoard.get(now).nextPlayer;
         kifu.kifuValid=false;
       }
       managerPhase = mP.WaitChoosePlayer;
     }
   } else if (managerPhase==mP.BeforeAttackChance) {///////mP.BeforeAttackChance
     //人間のプレーのときには、アタックチャンスで消せる枠にマークを付ける
-    if (participants[nextPlayer].myBrain==brain.Human) {
+    if (game.participants[game.nextPlayer].myBrain==brain.Human) {
       for (int i=0; i<25; i++) {
         if (1 <= utils.gameMainBoard.s[i].col && utils.gameMainBoard.s[i].col <= 4) {
-          utils.gameMainBoard.s[i].marked=nextPlayer;
+          utils.gameMainBoard.s[i].marked=game.nextPlayer;
         } else {
           utils.gameMainBoard.s[i].marked=0;
         }
@@ -384,9 +384,9 @@ void showGames() {
     // CPU ならば、callAttackChanceを実行
     // 選ばれた箇所を黄色（コード５）へ変更
     // 人ならば、マウスクリック入力待ち
-    if (participants[nextPlayer].myBrain!=brain.Human) {
-      utils.gameMainBoard.copyBoard(participants[nextPlayer].myBoard);
-      int attack = participants[nextPlayer].callAttackChance();
+    if (game.participants[game.nextPlayer].myBrain!=brain.Human) {
+      utils.gameMainBoard.copyBoard(game.participants[game.nextPlayer].myBoard);
+      int attack = game.participants[game.nextPlayer].callAttackChance();
       if (1 <= utils.gameMainBoard.s[attack].col && utils.gameMainBoard.s[attack].col <= 4) {
         utils.gameMainBoard.s[attack].col=5;
       }
@@ -400,7 +400,7 @@ void showGames() {
       background(255);
       utils.gameMainBoard.display(0);
       for (int p = 1; p<=4; p++) {
-        participants[p].display(0);
+        game.participants[p].display(0);
       }
       showReturnButton();
       showScreenCapture();
@@ -417,7 +417,7 @@ void showGames() {
     background(255);
     utils.gameMainBoard.display(0);
     for (int p = 1; p<=4; p++) {
-      participants[p].display(0);
+      game.participants[p].display(0);
     }
     showReturnButton();
     showScreenCapture();
@@ -437,77 +437,77 @@ void mousePreesedGame() {// ゲーム中のキーボード待ちの処理
     for (int k=0; k<25; k++) {
       tmpBoard[k]=utils.gameMainBoard.s[k].col;
     }
-    simulatorStartBoard.add (new startBoard(tmpBoard, nextPlayer));
+    simulatorStartBoard.add (new startBoard(tmpBoard, game.nextPlayer));
     float dx=utils.subL+textWidth("[Return to menu]")+utils.hSpace+textWidth("[Save screenshot]")+utils.hSpace+textWidth("[Save board]")+utils.hSpace, dy=utils.subU+utils.mainH+30;
     text("saved", dx, dy);
   } else if (managerPhase==mP.WaitChoosePlayer) {// 次の手番がマニュアルのとき
     if (gameOptions.get("Order") == 1) {// マウスクリックで次の手番を指定する
       for (int p = 1; p<=4; p++) { //
-        if (participants[p].mouseOn(0)) {
-          nextPlayer = p;
+        if (game.participants[p].mouseOn(0)) {
+          game.nextPlayer = p;
         }
       }
-      if (1<=nextPlayer && nextPlayer<=4) {
+      if (1<=game.nextPlayer && game.nextPlayer<=4) {
         for (int p = 1; p<=4; p++) {
-          participants[p].turn = false;
+          game.participants[p].turn = false;
         }
-        participants[nextPlayer].turn = true;
+        game.participants[game.nextPlayer].turn = true;
         managerPhase = mP.AfterChoosePlayer;
         utils.gameMainBoard.display(0);
       }
     }
-  } else if (managerPhase==mP.OnMoving && participants[nextPlayer].myBrain==brain.Human) {// 人がプレイするとき
+  } else if (managerPhase==mP.OnMoving && game.participants[game.nextPlayer].myBrain==brain.Human) {// 人がプレイするとき
     int attack=0;
     int mx = int((mouseX-utils.mainL)/utils.mainW);
     int my = int((mouseY-utils.mainU)/utils.mainH);
     if ((0<=mx && mx<=4) && (0<=my && my<=4)) {
       attack= mx+my*5;
-      utils.gameMainBoard.buildVP(nextPlayer);
+      utils.gameMainBoard.buildVP(game.nextPlayer);
       if (utils.gameMainBoard.vp[attack]>0) {
         String strAttack=str(attack+1);
         if (strAttack.length()<2) {
-          kifu.string += (kifu.playerColCode[nextPlayer]+"0"+strAttack);
+          kifu.string += (kifu.playerColCode[game.nextPlayer]+"0"+strAttack);
         } else {
-          kifu.string += (kifu.playerColCode[nextPlayer]+strAttack);
+          kifu.string += (kifu.playerColCode[game.nextPlayer]+strAttack);
         }
-        utils.gameMainBoard.move(nextPlayer, attack);
+        utils.gameMainBoard.move(game.nextPlayer, attack);
         //
         for (int i=0; i<25; i++) {
           utils.gameMainBoard.s[i].marked=0;
         }
         managerPhase = mP.AfterMoving;
         for (int p = 1; p<=4; p++) {
-          participants[p].turn = false;
+          game.participants[p].turn = false;
         }
         background(255);
         utils.gameMainBoard.display(0);
         for (int p = 1; p<=4; p++) {
-          participants[p].display(0);//
+          game.participants[p].display(0);//
         }
         showReturnButton();
         showScreenCapture();
         showPassButton();
       }
     } else if (buttonPass.mouseOn()) {
-      kifu.string += (kifu.playerColCode[nextPlayer]+"26");
+      kifu.string += (kifu.playerColCode[game.nextPlayer]+"26");
       for (int i=0; i<25; i++) {
         utils.gameMainBoard.s[i].marked=0;
       }
       managerPhase = mP.AfterMoving;
       for (int p = 1; p<=4; p++) {
-        participants[p].turn = false;
+        game.participants[p].turn = false;
       }
       background(255);
       utils.gameMainBoard.display(0);
       for (int p = 1; p<=4; p++) {
-        participants[p].display(0);//
+        game.participants[p].display(0);//
       }
       showReturnButton();
       showScreenCapture();
       showPassButton();
     }
   } else if (managerPhase==mP.OnAttackChance) {
-    if (participants[nextPlayer].myBrain==brain.Human) {// 人がアタックチャンスで消すとき
+    if (game.participants[game.nextPlayer].myBrain==brain.Human) {// 人がアタックチャンスで消すとき
       int mx = int((mouseX-utils.mainL)/utils.mainW);
       int my = int((mouseY-utils.mainU)/utils.mainH);
       if ((0<=mx && mx<=4) && (0<=my && my<=4)) {

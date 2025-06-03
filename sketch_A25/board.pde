@@ -38,7 +38,7 @@ class board {
       text("("+simulatorNumber+")", utils.mainL+utils.fontSize*7, utils.mainU-utils.fontSize);
       text("player:", utils.mainL+utils.fontSize*10, utils.mainU-utils.fontSize);
       stroke(0);
-      fill(utils.playerColor[nextSimulatorPlayer]);
+      fill(utils.playerColor[simulator.nextPlayer]);
       rect(utils.mainL+utils.fontSize*12, utils.mainU-utils.fontSize*1.3, utils.fontSize*3, utils.fontSize*0.8);
     } else if (mode==11) {// Uct1 ディスプレイ
       //if (simulatorNumber%100==0) {
@@ -52,7 +52,7 @@ class board {
       text(simulatorNumber, utils.mainL+utils.fontSize*3, utils.mainU-utils.fontSize);
       text("player:", utils.mainL+utils.fontSize*6, utils.mainU-utils.fontSize);
       stroke(0);
-      fill(utils.playerColor[nextSimulatorPlayer]);
+      fill(utils.playerColor[simulator.nextPlayer]);
       rect(utils.mainL+utils.fontSize*9, utils.mainU-utils.fontSize*1.3, utils.fontSize*3, utils.fontSize*0.8);
       //}
     }

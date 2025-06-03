@@ -67,7 +67,7 @@ class winPoints {
 
 winPoints playSimulatorToEnd(board sub, player[] _participants) {// 引数名かぶり
   // TODO アタックチャンスの判定と処理
-  // n(0)=4 -> AC_flag==false -> アタックチャンス, AC_flag=true
+  // n(0)=4 -> AC_flag==false -> アタックチャンス, AC_flag=true 
   //
   int remaining=0;
   for (int i=0; i<25; i++) {
@@ -126,7 +126,7 @@ winPoints playSimulatorToEnd(board sub, player[] _participants) {// 引数名か
   winPoints wp=new winPoints();
   for (int p=1; p<5; p++) {
     wp.panels[p] = 1.0*noP[p];
-    //int p = nextSimulatorPlayer-1;
+    //int p = simulator.nextPlayer-1;
     int Pt1=0, Pt2=0;
     for (int q=1; q<5; q++) {
       if (noP[p]>noP[q]) Pt1 ++;
@@ -200,7 +200,7 @@ void showSimulator() {
   if (gameOptions.get("SimMethod")==1) {
     fullRandomMC();
   } else if (gameOptions.get("SimMethod")==2) {
-    UCT1();
+    UCB1();
   //} else if (gameOptions.get("SimMethod")==3) {
   //  UCT2();
   } else {
@@ -234,10 +234,10 @@ void fullRandomMC() {
       simulator.mainBoard.s[i].marked = 0;
     }
     //次の手番の指定
-    nextSimulatorPlayer = simulatorStartBoard.get(simulator.StartBoardId).nextPlayer;
+    simulator.nextPlayer = simulatorStartBoard.get(simulator.StartBoardId).nextPlayer;
     
     // 着手可能点を計算しておく。
-    simulator.mainBoard.buildVP(nextSimulatorPlayer);// 0~24の話
+    simulator.mainBoard.buildVP(simulator.nextPlayer);// 0~24の話
     //for (int k=0; k<625; k++) {//いらなくなる
     //  attackChanceSV[k]=0;//いらなくなる
     //  attackChanceSV2[k]=0;//いらなくなる
@@ -249,7 +249,7 @@ void fullRandomMC() {
     if (simulator.mainBoard.attackChanceP()) {
       // ///////////////////////////////////////////////////////////////////問題がアタックチャンス問題のときの「準備」
       // vpの初期化と、svの初期化
-      simulator.mainBoard.buildVP(nextSimulatorPlayer);
+      simulator.mainBoard.buildVP(simulator.nextPlayer);
       simulator.rootNode.children.clear();
       attackChanceCursor=1;
       for (int j=0; j<25; j++) { //加えるほう
@@ -258,19 +258,17 @@ void fullRandomMC() {
           if (simulator.mainBoard.vp[j]>0 && (simulator.mainBoard.s[i].col>=1 && simulator.mainBoard.s[i].col<=4)) {
             attackChanceVP[k]=1;
             uctNode newNode = new uctNode();
-            newNode.setItem(nextSimulatorPlayer, k);
+            newNode.setItem(simulator.nextPlayer, k);
             //newNodeに盤面情報を入れるならここ
             simulator.rootNode.children.add(newNode);
-            newNode.parent = simulator.rootNode;
-            
+            newNode.parent = simulator.rootNode;            
           } else if (simulator.mainBoard.vp[j]>0 && i==j) {//　ルール上これも許される。
             attackChanceVP[k]=1;
             uctNode newNode = new uctNode();
-            newNode.setItem(nextSimulatorPlayer, k);
+            newNode.setItem(simulator.nextPlayer, k);
             //newNodeに盤面情報を入れるならここ
             simulator.rootNode.children.add(newNode);
-            newNode.parent = simulator.rootNode;
-            
+            newNode.parent = simulator.rootNode;            
           } else {
             attackChanceVP[k]=0;
           }
@@ -278,6 +276,23 @@ void fullRandomMC() {
       }
       simulationManager = sP.runMC;
     } else {
+      // ///////////////////////////////////////////////////////////////////問題がアタックチャンスでないときの「準備」
+      simulator.mainBoard.buildVP(simulator.nextPlayer);
+      simulator.rootNode.children.clear();
+      for (int k=0; k<25; k++) {
+        if (simulator.mainBoard.vp[k]>0 ){
+          uctNode newNode = new uctNode();
+          newNode.setItem(simulator.nextPlayer, k);
+          //newNodeに盤面情報を入れるならここ
+          simulator.rootNode.children.add(newNode);
+          newNode.parent = simulator.rootNode;            
+        }
+      }
+      uctNode newNode = new uctNode();
+      newNode.setItem(simulator.nextPlayer, 25);
+      //newNodeに盤面情報を入れるならここ
+      simulator.rootNode.children.add(newNode);
+      newNode.parent = simulator.rootNode; 
       simulationManager = sP.runMC;
     }
   } else if (simulationManager == sP.runMC) {
@@ -291,7 +306,7 @@ void fullRandomMC() {
         int k = nd.move;
         int j = k%25;
         int i = int(k/25);
-        simulator.subBoard.move(nextSimulatorPlayer, j);// 1手着手する
+        simulator.subBoard.move(simulator.nextPlayer, j);// 1手着手する
         simulator.subBoard.setCol(i,5);// 黄色を置く
         winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants);//そこから最後までシミュレーションを行う。
         nd.na ++;
@@ -322,44 +337,50 @@ void fullRandomMC() {
       if (simulator.mainBoard.simulatorNumber%500==0) {
         simulator.mainBoard.display(10);
         prize prize=new prize();
-        prize.getPrize3FromNodeList(nextSimulatorPlayer, simulator.rootNode.children);
+        prize.getPrize3FromNodeList(simulator.nextPlayer, simulator.rootNode.children);
         displayBestStats(prize);
-        displayAllStats(attackChanceCursor, nextSimulatorPlayer);
+        displayAllStats(attackChanceCursor, simulator.nextPlayer);
         
         showReturnButton();
         showScreenCapture();
       }
     } else {// 通常時
-      for (int j=0; j<=25; j++) {
+      ///////////////////////////////////////////////////////////////////問題がアタックチャンスでないのときの「ループ」
+      for (uctNode nd : simulator.rootNode.children) {
         // 問題画面をsimulatorSubにコピー
-        for (int i=0; i<25; i++) {
-          simulator.subBoard.s[i].col = simulatorStartBoard.get(simulator.StartBoardId).theArray[i];
+        for (int k=0; k<25; k++) {
+          simulator.subBoard.s[k].col = simulatorStartBoard.get(simulator.StartBoardId).theArray[k];         
         }
-        if (j<25) {
-          if (simulator.mainBoard.vp[j]>0) {// 着手できる箇所ごとに
-            simulator.subBoard.move(nextSimulatorPlayer, j);// 1手着手する
-            //println(nextSimulatorPlayer, j, "*");
-            winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants);//そこから最後までシミュレーションを行う。
-            float winPoint = wp.points[nextSimulatorPlayer];
-            simulator.mainBoard.sv[j] += winPoint;//　その着手点はちょっと優秀ということになる。
-            simulator.mainBoard.sv2[j] += 1.0*wp.panels[nextSimulatorPlayer];// 最終パネル数の累積
-            simulator.mainBoard.s[j].marked=nextSimulatorPlayer;// svを表示する意味
+        if (nd.move<25) {
+          simulator.subBoard.move(simulator.nextPlayer, nd.move);// 1手着手する
+          for(int k=0; k<25; k++) {
+            nd.bd[k] = simulator.subBoard.s[k].col;
           }
-        } else {// あえて着手しなかった場合
+          //println(simulator.nextPlayer, j, "*");
           winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants);//そこから最後までシミュレーションを行う。
-          float winPoint = wp.points[nextSimulatorPlayer];
-          simulator.mainBoard.sv[j] += winPoint;
-          simulator.mainBoard.sv2[j] += 1.0*wp.panels[nextSimulatorPlayer];
+          for (int p=1; p<=4; p++){
+            nd.na ++;
+            nd.wa[p] += wp.points[p];
+            nd.pa[p] += wp.panels[p];
+          }
+          simulator.mainBoard.sv[nd.move] = nd.wa[simulator.nextPlayer]/nd.na;//　その着手点はちょっと優秀ということになる。
+          simulator.mainBoard.sv2[nd.move] = nd.pa[simulator.nextPlayer]/nd.na;// 最終パネル数の累積
+          simulator.mainBoard.s[nd.move].marked=simulator.nextPlayer;// svを表示する意味
+        } else {// あえて着手しなかった場合
+          for(int k=0; k<25; k++) {
+            nd.bd[k] = simulator.subBoard.s[k].col;
+          }
+          winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants);//そこから最後までシミュレーションを行う。
+          for (int p=1; p<=4; p++){
+            nd.na ++;
+            nd.wa[p] += wp.points[p];
+            nd.pa[p] += wp.panels[p];
+          }
+          simulator.mainBoard.sv[nd.move] = nd.wa[simulator.nextPlayer]/nd.na;//　その着手点はちょっと優秀ということになる。
+          simulator.mainBoard.sv2[nd.move] = nd.pa[simulator.nextPlayer]/nd.na;// 最終パネル数の累積
         }
       }
       simulator.mainBoard.simulatorNumber ++;//シミュレーション回数（分母）
-      for (int j=0; j<25; j++) {
-        simulator.mainBoard.s[j].sv = simulator.mainBoard.sv[j]/simulator.mainBoard.simulatorNumber;
-        simulator.mainBoard.s[j].sv2 = simulator.mainBoard.sv2[j]/simulator.mainBoard.simulatorNumber;
-        if (simulator.mainBoard.vp[j]>0) {
-          simulator.mainBoard.s[j].marked = 1;
-        }
-      }
       if (gameOptions.get("SimTimes")==1) {// 1000 times
         if (simulator.mainBoard.simulatorNumber>=1000) {
           simulationManager=sP.GameEnd;
@@ -387,7 +408,7 @@ void fullRandomMC() {
 }
 
 
-void UCT1() {
+void UCB1() {
   // UCT1手読み
   if (simulationManager==sP.GameStart) {
     // シミュレーション開始
@@ -411,14 +432,14 @@ void UCT1() {
       simulator.mainBoard.s[i].col = simulatorStartBoard.get(simulator.StartBoardId).theArray[i];
       simulator.mainBoard.s[i].marked = 0;
     }
-    nextSimulatorPlayer = simulatorStartBoard.get(simulator.StartBoardId).nextPlayer;
+    simulator.nextPlayer = simulatorStartBoard.get(simulator.StartBoardId).nextPlayer;
     // root nodeの設置と、
     uctRoot = new uctNode();
     for (int j=0; j<25; j++) {
       uctRoot.bd[j] = simulator.mainBoard.s[j].col;
     }
     if (simulator.mainBoard.attackChanceP()) {//アタックチャンスのための１世代めの追加
-      simulator.mainBoard.buildVP(nextSimulatorPlayer);// そもそもの着手可能パネル
+      simulator.mainBoard.buildVP(simulator.nextPlayer);// そもそもの着手可能パネル
       //アタックチャンス時の合法手の決定
       for (int j=0; j<25; j++) { //加えるほう
         for (int i=0; i<25; i++) { //黄色にするほう
@@ -439,11 +460,11 @@ void UCT1() {
           uctNode newNode = new uctNode();
           uctRoot.children.add(newNode);
           fullUctNode.add(newNode);
-          newNode.setItem(nextSimulatorPlayer, k);
+          newNode.setItem(simulator.nextPlayer, k);
           simulator.mainBoard.copyBoard(simulator.subBoard);
           int j=k%25;
           int i=int(k/25);
-          simulator.subBoard.move(nextSimulatorPlayer, j);// 1手着手する
+          simulator.subBoard.move(simulator.nextPlayer, j);// 1手着手する
           simulator.subBoard.s[i].col = 5;// 黄色を置く
           for (int l=0; l<25; l++) {
             newNode.bd[l] = simulator.subBoard.s[l].col;
@@ -461,7 +482,7 @@ void UCT1() {
         }
       }
     } else {// 通常時の１世代めの追加 // UCT1
-      simulator.mainBoard.buildVP(nextSimulatorPlayer);
+      simulator.mainBoard.buildVP(simulator.nextPlayer);
       simulator.mainBoard.simulatorNumber=0;
       uctRoot.children=new ArrayList<uctNode>();
       for (int j=0; j<25; j++) {
@@ -469,9 +490,9 @@ void UCT1() {
           uctNode newNode = new uctNode();
           uctRoot.children.add(newNode);
           fullUctNode.add(newNode);
-          newNode.setItem(nextSimulatorPlayer, j);
+          newNode.setItem(simulator.nextPlayer, j);
           simulator.mainBoard.copyBoard(simulator.subBoard);
-          simulator.subBoard.move(nextSimulatorPlayer, j);
+          simulator.subBoard.move(simulator.nextPlayer, j);
           for (int k=0; k<25; k++) {
             newNode.bd[k] = simulator.subBoard.s[k].col;
           }
@@ -537,36 +558,20 @@ void UCT1() {
         // 間歇的に表示を更新する。
         simulator.mainBoard.display(11);// Uct1 ディスプレイ
         prize prize=new prize();
-        prize.getPrize3FromNodeList(nextSimulatorPlayer,uctRoot.children); 
+        prize.getPrize3FromNodeList(simulator.nextPlayer,uctRoot.children); 
         displayBestStats(prize);
-        //textAlign(LEFT, CENTER);
-        //textSize(utils.fontSize);
-        //fill(255, 0, 0);
-        //text("BEST 3", utils.subL, utils.subU );
-        //fill(0);
-        //float y=utils.subU+utils.fontSize*1.5;
-        //int len = min(3, prize.getLength());
-        //for (int pr=1; pr<=len; pr++){
-        //  uctNode nd = prize.getMove(pr);
-        //  float winrate = prize.getWinrate(pr);
-        //  float panels = prize.getPanels(pr);
-        //  int move = nd.move;
-        //  String msg = "("+(move%25+1)+"-"+(int(move/25)+1)+") "+nf(winrate, 1, 5)+" : "+ nf(panels, 2, 3);
-        //  text(msg, utils.subL, y);
-        //  y+= utils.fontSize*1.5;
-        //}
         showReturnButton();
         showScreenCapture();
-        if (abs(best1WrP-prize.getWinrate(1))<0.001 && abs(best2WrP-prize.getWinrate(2))<0.001 )
+        if (abs(prevWinrate1-prize.getWinrate(1))<0.001 && abs(prevWinrate2-prize.getWinrate(2))<0.001 )
           WrConv=true;
         else 
           WrConv=false;
-        best1WrP=prize.getWinrate(1); best2WrP=prize.getWinrate(2);
-        if (abs(best1PrP-prize.getPanels(1))<0.001 && abs(best2PrP-prize.getPanels(2))<0.001 )
+        prevWinrate1=prize.getWinrate(1); prevWinrate2=prize.getWinrate(2);
+        if (abs(prevPasanels1-prize.getPanels(1))<0.001 && abs(prevPasanels2-prize.getPanels(2))<0.001 )
           PrConv=true;
         else 
           PrConv=false;
-        best1PrP = prize.getPanels(1);  best2PrP=prize.getPanels(2);
+        prevPasanels1 = prize.getPanels(1);  prevPasanels2=prize.getPanels(2);
         
       }
     } else {//通常の場合// UCT1ループ部分
@@ -610,7 +615,7 @@ void UCT1() {
         } else {/// gameOptions.get("SimTimes")==13
           if (simulator.mainBoard.simulatorNumber%1000==0) {//収束しているかを判定する
             WrConv=false; PrConv=false;
-            best1WrP=best1Wr; best2WrP=best2Wr; best1PrP = best1Pr;  best2PrP=best2Pr;
+            prevWinrate1=best1Wr; prevWinrate2=best2Wr; prevPasanels1 = best1Pr;  prevPasanels2=best2Pr;
             best1Wr=0; best2Wr=0; best1Pr=0; best2Pr=0;
             for(int kk=0; kk<=25; kk++){
               if (simulator.mainBoard.sv[kk]>0 || simulator.mainBoard.sv2[kk]>0){
@@ -625,11 +630,11 @@ void UCT1() {
                 }
               }
             }
-            //println(best1WrP,best1Wr,best2WrP,best2Wr);
-            if (abs(best1WrP-best1Wr)<0.001 && abs(best2WrP-best2Wr)<0.001 )
+            //println(prevWinrate1,best1Wr,prevWinrate2,best2Wr);
+            if (abs(prevWinrate1-best1Wr)<0.001 && abs(prevWinrate2-best2Wr)<0.001 )
               WrConv=true;
             else WrConv=false;
-            if (abs(best1PrP-best1Pr)<0.02 && abs(best2PrP-best2Pr)<0.02 )
+            if (abs(prevPasanels1-best1Pr)<0.02 && abs(prevPasanels2-best2Pr)<0.02 )
               PrConv=true;
             else PrConv=false;
             if(WrConv && PrConv){
@@ -667,9 +672,9 @@ void mousePreesedSimulator() {
       attackChanceCursor = (attackChanceCursor+loopSize-1)%loopSize;
       simulator.mainBoard.display(10);
       prize prize=new prize();
-      prize.getPrize3FromNodeList(nextSimulatorPlayer, simulator.rootNode.children);        
+      prize.getPrize3FromNodeList(simulator.nextPlayer, simulator.rootNode.children);        
       displayBestStats(prize);
-      displayAllStats(attackChanceCursor, nextSimulatorPlayer);
+      displayAllStats(attackChanceCursor, simulator.nextPlayer);
       showReturnButton();
       showScreenCapture();
     } else if (buttonNextSV.mouseOn()) {
@@ -677,9 +682,9 @@ void mousePreesedSimulator() {
       attackChanceCursor = (attackChanceCursor+1)%loopSize;
       simulator.mainBoard.display(10);
       prize prize=new prize();
-      prize.getPrize3FromNodeList(nextSimulatorPlayer, simulator.rootNode.children);        
+      prize.getPrize3FromNodeList(simulator.nextPlayer, simulator.rootNode.children);        
       displayBestStats(prize);
-      displayAllStats(attackChanceCursor, nextSimulatorPlayer);
+      displayAllStats(attackChanceCursor, simulator.nextPlayer);
       showReturnButton();
       showScreenCapture();
     }
