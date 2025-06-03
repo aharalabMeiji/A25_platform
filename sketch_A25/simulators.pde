@@ -148,9 +148,7 @@ winPoints playSimulatorToEnd(board sub, player[] _participants) {// 引数名か
   return wp;//
 }
 
-void displayBestStats(int player){
-  prize prize=new prize();
-  prize.getPrize3FromNodeList(player, simulator.rootNode.children);
+void displayBestStats(prize prize){
   textAlign(LEFT, CENTER);
   textSize(utils.fontSize);
   fill(255, 0, 0);
@@ -174,23 +172,23 @@ void displayAllStats(int cursor, int player) {
   int prev= (cursor+loopSize-1)%loopSize;
   uctNode tmpNd = simulator.rootNode.children.get(prev);
   int move=tmpNd.move;
-  float winrate=tmpNd.wa[player];
-  float panels=tmpNd.pa[player];
+  float winrate=tmpNd.wa[player]/tmpNd.na;
+  float panels=tmpNd.pa[player]/tmpNd.na;
   String msg = "("+(move%25+1)+"-"+(int(move/25)+1)+") "+nf(winrate,1,3)+" : "+ nf(panels, 2, 3);
   text(msg, utils.unitSize/2, utils.subU+utils.fontSize*1.5);
   buttonPrevSV.setLT(utils.unitSize/2, utils.subU+utils.fontSize*1.5, msg);
   int now = cursor%loopSize;
   tmpNd = simulator.rootNode.children.get(now);
   move=tmpNd.move;
-  winrate=tmpNd.wa[player];
-  panels=tmpNd.pa[player];
+  winrate=tmpNd.wa[player]/tmpNd.na;
+  panels=tmpNd.pa[player]/tmpNd.na;
   msg = "("+(move%25+1)+"-"+(int(move/25)+1)+") "+nf(winrate,1,3)+" : "+ nf(panels, 2, 3);
   text(msg, utils.unitSize/2, utils.subU+utils.fontSize*3);
   int next= (cursor+1)%loopSize;
   tmpNd = simulator.rootNode.children.get(next);
   move=tmpNd.move;
-  winrate=tmpNd.wa[player];
-  panels=tmpNd.pa[player];
+  winrate=tmpNd.wa[player]/tmpNd.na;
+  panels=tmpNd.pa[player]/tmpNd.na;
   msg = "("+(move%25+1)+"-"+(int(move/25)+1)+") "+nf(winrate,1,3)+" : "+ nf(panels, 2, 3);
   text(msg, utils.unitSize/2, utils.subU+utils.fontSize*4.5);
   buttonNextSV.setLT(utils.unitSize/2, utils.subU+utils.fontSize*4.5, msg);
@@ -323,8 +321,8 @@ void fullRandomMC() {
       //print(",");
       if (simulator.mainBoard.simulatorNumber%500==0) {
         simulator.mainBoard.display(10);
-        //prize prize=new prize();
-        //prize.getPrize3FromNodeList(nextSimulatorPlayer, simulator.rootNode.children);
+        prize prize=new prize();
+        prize.getPrize3FromNodeList(nextSimulatorPlayer, simulator.rootNode.children);
         //textAlign(LEFT, CENTER);
         //textSize(utils.fontSize);
         //fill(255, 0, 0);
@@ -340,7 +338,7 @@ void fullRandomMC() {
         //fill(255, 0, 0);
         //text("ALL(click to slide)", utils.unitSize/2, utils.subU);
         //fill(0);
-        displayBestStats(nextSimulatorPlayer);
+        displayBestStats(prize);
         displayAllStats(attackChanceCursor, nextSimulatorPlayer);
         
         showReturnButton();
@@ -558,24 +556,23 @@ void UCT1() {
         simulator.mainBoard.display(11);// Uct1 ディスプレイ
         prize prize=new prize();
         prize.getPrize3FromNodeList(nextSimulatorPlayer,uctRoot.children); 
-        //background(255);
-        //simulator.mainBoard.display(0);
-        textAlign(LEFT, CENTER);
-        textSize(utils.fontSize);
-        fill(255, 0, 0);
-        text("BEST 3", utils.subL, utils.subU );
-        fill(0);
-        float y=utils.subU+utils.fontSize*1.5;
-        int len = min(3, prize.getLength());
-        for (int pr=1; pr<=len; pr++){
-          uctNode nd = prize.getMove(pr);
-          float winrate = prize.getWinrate(pr);
-          float panels = prize.getPanels(pr);
-          int move = nd.move;
-          String msg = "("+(move%25+1)+"-"+(int(move/25)+1)+") "+nf(winrate, 1, 5)+" : "+ nf(panels, 2, 3);
-          text(msg, utils.subL, y);
-          y+= utils.fontSize*1.5;
-        }
+        displayBestStats(prize);
+        //textAlign(LEFT, CENTER);
+        //textSize(utils.fontSize);
+        //fill(255, 0, 0);
+        //text("BEST 3", utils.subL, utils.subU );
+        //fill(0);
+        //float y=utils.subU+utils.fontSize*1.5;
+        //int len = min(3, prize.getLength());
+        //for (int pr=1; pr<=len; pr++){
+        //  uctNode nd = prize.getMove(pr);
+        //  float winrate = prize.getWinrate(pr);
+        //  float panels = prize.getPanels(pr);
+        //  int move = nd.move;
+        //  String msg = "("+(move%25+1)+"-"+(int(move/25)+1)+") "+nf(winrate, 1, 5)+" : "+ nf(panels, 2, 3);
+        //  text(msg, utils.subL, y);
+        //  y+= utils.fontSize*1.5;
+        //}
         showReturnButton();
         showScreenCapture();
         if (abs(best1WrP-prize.getWinrate(1))<0.001 && abs(best2WrP-prize.getWinrate(2))<0.001 )
@@ -687,7 +684,9 @@ void mousePreesedSimulator() {
       int loopSize=simulator.rootNode.children.size();
       attackChanceCursor = (attackChanceCursor+loopSize-1)%loopSize;
       simulator.mainBoard.display(10);
-      displayBestStats(nextSimulatorPlayer);
+      prize prize=new prize();
+      prize.getPrize3FromNodeList(nextSimulatorPlayer, simulator.rootNode.children);        
+      displayBestStats(prize);
       displayAllStats(attackChanceCursor, nextSimulatorPlayer);
       showReturnButton();
       showScreenCapture();
@@ -695,7 +694,9 @@ void mousePreesedSimulator() {
       int loopSize=simulator.rootNode.children.size();
       attackChanceCursor = (attackChanceCursor+1)%loopSize;
       simulator.mainBoard.display(10);
-      displayBestStats(nextSimulatorPlayer);
+      prize prize=new prize();
+      prize.getPrize3FromNodeList(nextSimulatorPlayer, simulator.rootNode.children);        
+      displayBestStats(prize);
       displayAllStats(attackChanceCursor, nextSimulatorPlayer);
       showReturnButton();
       showScreenCapture();
