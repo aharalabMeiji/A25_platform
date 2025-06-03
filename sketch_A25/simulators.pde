@@ -527,37 +527,10 @@ void UCT1() {
         }
       }
       if (utils.simulatorBoard.simulatorNumber%500==0) {
+        // 間歇的に表示を更新する。
         utils.simulatorBoard.display(11);// Uct1 ディスプレイ
-
-        int b1=0, b2=0, b3=0;
-        float p1=0, p2=0, p3=0;
-        float q1=0, q2=0, q3=0;
-        for (uctNode nd : uctRoot.children) {
-          float P=nd.wa[nextSimulatorPlayer]/nd.na;
-          float Q=nd.pa[nextSimulatorPlayer]/nd.na;
-          int K=nd.move;
-          if ( P > p3 || (P == p3 && Q >= q3) ) {
-            b3=K;
-            p3=P;
-            q3=Q;
-            if ( P > p2 || (P == p2 && Q >= q2)) {
-              b3=b2;
-              p3=p2;
-              q3=q2;
-              b2=K;
-              p2=P;
-              q2=Q;
-              if ( P > p1 || (P == p1 && Q >= q1) ) {
-                b2=b1;
-                p2=p1;
-                q2=q1;
-                b1=K;
-                p1=P;
-                q1=Q;
-              }
-            }
-          }
-        }
+        prize prize=new prize();
+        prize.getPrize3FromNodeList(nextSimulatorPlayer,uctRoot.children); 
         //background(255);
         //utils.simulatorBoard.display(0);
         textAlign(LEFT, CENTER);
@@ -565,22 +538,30 @@ void UCT1() {
         fill(255, 0, 0);
         text("BEST 3", utils.subL, utils.subU );
         fill(0);
-        String msg1 = "("+(b1%25+1)+"-"+(int(b1/25)+1)+") "+nf(p1, 1, 5)+" : "+ nf(q1, 2, 3);
-        text(msg1, utils.subL, utils.subU+utils.fontSize*1.5);
-        String msg2 = "("+(b2%25+1)+"-"+(int(b2/25)+1)+") "+nf(p2, 1, 5)+" : "+ nf(q2, 2, 3);
-        text(msg2, utils.subL, utils.subU+utils.fontSize*3);
-        String msg3 = "("+(b3%25+1)+"-"+(int(b3/25)+1)+") "+nf(p3, 1, 5)+" : "+ nf(q2, 2, 3);
-        text(msg3, utils.subL, utils.subU+utils.fontSize*4.5 );
+        float y=utils.subU+utils.fontSize*1.5;
+        int len = min(3, prize.getLength());
+        for (int pr=1; pr<=len; pr++){
+          uctNode nd = prize.getMove(pr);
+          float winrate = prize.getWinrate(pr);
+          float panels = prize.getPanels(pr);
+          int move = nd.move;
+          String msg = "("+(move%25+1)+"-"+(int(move/25)+1)+") "+nf(winrate, 1, 5)+" : "+ nf(panels, 2, 3);
+          text(msg, utils.subL, y);
+          y+= utils.fontSize*1.5;
+        }
         showReturnButton();
         showScreenCapture();
-        best1WrP=best1Wr; best2WrP=best2Wr; best1PrP = best1Pr;  best2PrP=best2Pr;
-        best1Wr=p1; best2Wr=p2; best1Pr=q1; best2Pr=q2;
-        if (abs(best1WrP-best1Wr)<0.001 && abs(best2WrP-best2Wr)<0.001 )
+        if (abs(best1WrP-prize.getWinrate(1))<0.001 && abs(best2WrP-prize.getWinrate(2))<0.001 )
           WrConv=true;
-        else WrConv=false;
-        if (abs(best1PrP-best1Pr)<0.001 && abs(best2PrP-best2Pr)<0.001 )
+        else 
+          WrConv=false;
+        best1WrP=prize.getWinrate(1); best2WrP=prize.getWinrate(2);
+        if (abs(best1PrP-prize.getPanels(1))<0.001 && abs(best2PrP-prize.getPanels(2))<0.001 )
           PrConv=true;
-        else PrConv=false;
+        else 
+          PrConv=false;
+        best1PrP = prize.getPanels(1);  best2PrP=prize.getPanels(2);
+        
       }
     } else {//通常の場合// UCT1ループ部分
       float maxUct=-100;
