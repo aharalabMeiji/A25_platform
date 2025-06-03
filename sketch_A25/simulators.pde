@@ -232,10 +232,10 @@ void fullRandomMC() {
     attackChanceSV = new float[625];
     attackChanceSV2 = new float[625];
     attackChanceVP = new int[625];
-    // プレーヤーをランダムに設定
+    // プレーヤーをランダムプレーヤーに設定
     for (int p=1; p<5; p++) {
       simulatorParticipants[p] = new player(p, "random", brain.Random);
-      //simulatorParticipants[p] = new player(p, "random", brain.UCT1);//
+      //simulatorParticipants[p] = new player(p, "random", brain.UCB1);//
     }
     for (int j=0; j<=25; j++) {
       utils.simulatorBoard.sv[j]=0;
