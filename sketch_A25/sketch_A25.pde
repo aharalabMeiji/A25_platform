@@ -19,8 +19,8 @@ void setup() {
 
   utils.gameMainBoard = new board();
   utils.gameSubBoard = new board();
-  utils.simulatorBoard = new board();
-  utils.simulatorSubBoard = new board();
+  simulator.mainBoard = new board();
+  simulator.subBoard = new board();
   participants = new player[5];
   participants[0] = null;
   managerPhase = mP.GameStart;
@@ -81,10 +81,10 @@ void mousePressed() {
         utils.gameMainBoard.simulatorNumber=0;
       } else if (buttonPrevBoard.mouseOn()) {
         int total = simulatorStartBoard.size();
-        simulatorStartBoardId = (simulatorStartBoardId + total - 1)% total;
+        simulator.StartBoardId = (simulator.StartBoardId + total - 1)% total;
       } else if (buttonNextBoard.mouseOn()) {
         int total = simulatorStartBoard.size();
-        simulatorStartBoardId = (simulatorStartBoardId + 1)% total;
+        simulator.StartBoardId = (simulator.StartBoardId + 1)% total;
       } else if (buttonSaveFile.mouseOn()) {
         selectOutput("保存先を選択してください", "saveFileSelected");
       } else if (buttonOpenFile.mouseOn()) {
@@ -93,12 +93,12 @@ void mousePressed() {
         simulatorStartBoard.clear();
         simulatorStartBoard.add(startBoard0);
       } else if (buttonDeleteFromList.mouseOn()) {
-        if (simulatorStartBoardId!=0) {
+        if (simulator.StartBoardId!=0) {
           // イエス・ノーダイアログを表示
-          int response = JOptionPane.showConfirmDialog(null, "盤面 "+(simulatorStartBoardId)+" を消去しますか？", "消去の確認", JOptionPane.YES_NO_OPTION);
+          int response = JOptionPane.showConfirmDialog(null, "盤面 "+(simulator.StartBoardId)+" を消去しますか？", "消去の確認", JOptionPane.YES_NO_OPTION);
           // ユーザーの応答を確認
           if (response == JOptionPane.YES_OPTION) {
-            simulatorStartBoard.remove(simulatorStartBoardId);
+            simulatorStartBoard.remove(simulator.StartBoardId);
           }
         }
       } else if (buttonKifuFolder.mouseOn()) {
@@ -127,10 +127,10 @@ void mousePressed() {
         simulationManager = sP.GameStart;
       } else if (buttonPrevBoard.mouseOn()) {
         int total = simulatorStartBoard.size();
-        simulatorStartBoardId = (simulatorStartBoardId + total - 1)% total;
+        simulator.StartBoardId = (simulator.StartBoardId + total - 1)% total;
       } else if (buttonNextBoard.mouseOn()) {
         int total = simulatorStartBoard.size();
-        simulatorStartBoardId = (simulatorStartBoardId + 1)% total;
+        simulator.StartBoardId = (simulator.StartBoardId + 1)% total;
       } else if (buttonSaveFile.mouseOn()) {
         selectOutput("保存先を選択してください", "saveFileSelected");
       } else if (buttonOpenFile.mouseOn()) {
@@ -141,12 +141,12 @@ void mousePressed() {
         simulatorStartBoard.clear();
         simulatorStartBoard.add(startBoard0);
       } else if (buttonDeleteFromList.mouseOn()) {
-        if (simulatorStartBoardId!=0) {
+        if (simulator.StartBoardId!=0) {
           // イエス・ノーダイアログを表示
-          int response = JOptionPane.showConfirmDialog(null, "盤面 "+(simulatorStartBoardId)+" を消去しますか？", "消去の確認", JOptionPane.YES_NO_OPTION);
+          int response = JOptionPane.showConfirmDialog(null, "盤面 "+(simulator.StartBoardId)+" を消去しますか？", "消去の確認", JOptionPane.YES_NO_OPTION);
           // ユーザーの応答を確認
           if (response == JOptionPane.YES_OPTION) {
-            simulatorStartBoard.remove(simulatorStartBoardId);
+            simulatorStartBoard.remove(simulator.StartBoardId);
           }
         }
       } else if (buttonKifuFolder.mouseOn()) {

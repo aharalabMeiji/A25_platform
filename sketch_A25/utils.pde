@@ -4,8 +4,6 @@ globals utils=new globals();
 class globals{
   board gameMainBoard;// use in games
   board gameSubBoard;// use in board.buildVP
-  board simulatorBoard;
-  board simulatorSubBoard;
   //playerColor
   color[] playerColor =  {
   color(128, 128, 128),
@@ -44,14 +42,22 @@ int nextPlayer;//1~4 // これは整理したい
 player[] participants; // これは整理したい。
 
 // simulators
+simulator simulator=new simulator();
+class simulator {
+  int StartBoardId=0;
+  player[] Participants;//これは残す
+  board mainBoard;
+  board subBoard;
+  uctNode rootNode=null;
+}
+
 int nextSimulatorPlayer=1;//1~4
-int simulatorStartBoardId=0;
-player[] simulatorParticipants;
-float[] attackChanceSV;
-float[] attackChanceSV2;
-int[] attackChanceVP;// そもそも、アタックチャンスのためのVPはここにあるべきではない。
-IntList attackChanceValidNodes = new IntList();
-int attackChanceCursor=0;
+
+
+float[] attackChanceSV;// とりま、これを廃止する。
+float[] attackChanceSV2;// とりま、これを廃止する。
+int[] attackChanceVP;// そもそも、アタックチャンスのためのVPはここにあるべきではない。というか、これから廃止の方向にする。
+int attackChanceCursor=0;//これは表示のために必要。
 int startTime;//時間計測のため
 button buttonPrevSV=new button(), buttonNextSV=new button();// これはボタン
   boolean WrConv, PrConv;

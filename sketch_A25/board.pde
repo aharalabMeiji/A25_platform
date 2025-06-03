@@ -1,8 +1,8 @@
-class board {    
+class board {
   panel[] s;
 
   int[] vp;// valid panel
-  int[] op;// othello move panel 
+  int[] op;// othello move panel
   float[] sv;// simulation value
   float[] sv2;
   int simulatorNumber;
@@ -37,8 +37,9 @@ class board {
       text(1.0*sv2[25]/simulatorNumber, utils.mainL+utils.fontSize*3.5, utils.mainU-utils.fontSize);
       text("("+simulatorNumber+")", utils.mainL+utils.fontSize*7, utils.mainU-utils.fontSize);
       text("player:", utils.mainL+utils.fontSize*10, utils.mainU-utils.fontSize);
-      stroke(0);fill(utils.playerColor[nextSimulatorPlayer]);
-      rect(utils.mainL+utils.fontSize*12, utils.mainU-utils.fontSize*1.3,utils.fontSize*3,utils.fontSize*0.8);
+      stroke(0);
+      fill(utils.playerColor[nextSimulatorPlayer]);
+      rect(utils.mainL+utils.fontSize*12, utils.mainU-utils.fontSize*1.3, utils.fontSize*3, utils.fontSize*0.8);
     } else if (mode==11) {// Uct1 ディスプレイ
       //if (simulatorNumber%100==0) {
       background(255);
@@ -50,8 +51,9 @@ class board {
       textSize(utils.fontSize);
       text(simulatorNumber, utils.mainL+utils.fontSize*3, utils.mainU-utils.fontSize);
       text("player:", utils.mainL+utils.fontSize*6, utils.mainU-utils.fontSize);
-      stroke(0);fill(utils.playerColor[nextSimulatorPlayer]);
-      rect(utils.mainL+utils.fontSize*9, utils.mainU-utils.fontSize*1.3,utils.fontSize*3,utils.fontSize*0.8);
+      stroke(0);
+      fill(utils.playerColor[nextSimulatorPlayer]);
+      rect(utils.mainL+utils.fontSize*9, utils.mainU-utils.fontSize*1.3, utils.fontSize*3, utils.fontSize*0.8);
       //}
     }
     return true;
@@ -97,9 +99,9 @@ class board {
     boolean ret = false;
     boolean opP = buildOP(pn);
     boolean starting = true;
-    for (int i = 0; i < 25; i ++){
+    for (int i = 0; i < 25; i ++) {
       vp[i] = 0;
-      if (s[i].col>0){
+      if (s[i].col>0) {
         starting = false;
       }
     }
@@ -204,6 +206,16 @@ class board {
     }
     return false;
   }
+  boolean afterAttackChanceP() {
+    int count=0;
+    for (int i=0; i<25; i++) {
+      if (s[i].col==0) count ++;
+    }
+    if (count<=4) {
+      return true;
+    }
+    return false;
+  }
   void printLn() {
     for (int i=0; i<25; i++) {
       print(s[i].col);
@@ -218,27 +230,27 @@ class board {
     }
     println();
   }
-  int getCol(int k){
-    if (0<=k && k<25) 
+  int getCol(int k) {
+    if (0<=k && k<25)
       return s[k].col;
     return -1;
   }
-  void setCol(int k, int c){
-    if (0<=k && k<25){
-      if (0<=c && c<=5){
+  void setCol(int k, int c) {
+    if (0<=k && k<25) {
+      if (0<=c && c<=5) {
         s[k].col = c;
         return ;
       }
     }
     println("Error. board.setCol("+k+","+c+")");
   }
-  void clearCol(){
-    for (int k=0; k<25; k++){ 
+  void clearCol() {
+    for (int k=0; k<25; k++) {
       s[k].col=0;
     }
   }
-  void clearMarked(){
-    for (int k=0; k<25; k++){ 
+  void clearMarked() {
+    for (int k=0; k<25; k++) {
       s[k].marked=0;
     }
   }
@@ -284,7 +296,7 @@ class panel {
         text(sv, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*0.7);
         text(sv2, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*1.4);
       }
-    }  else if (mode==11) {// Uct1 ディスプレイ
+    } else if (mode==11) {// Uct1 ディスプレイ
       int dx = utils.mainL + utils.mainW * x;
       int dy = utils.mainU + utils.mainH * y;
       fill(utils.playerColor[col]);//

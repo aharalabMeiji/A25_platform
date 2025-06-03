@@ -71,8 +71,8 @@ int getRandomOrder() {
     return int(random(4)+1);
   }
 }
-void showGames() {
 
+void showGames() {
   if (managerPhase==mP.GameStart) {
     //println("ゲームモードのプレイヤー初期化");
     if (gameOptions.get("Player1")==0) {
@@ -113,7 +113,7 @@ void showGames() {
     }
     utils.gameMainBoard.attackChanceP=false;//アタックチャンス終了フラグはいったん寝せておく
     //println("gameモードの盤面初期化");
-    if (simulatorStartBoardId==0) {// カラ盤面から始める
+    if (simulator.StartBoardId==0) {// カラ盤面から始める
       utils.gameMainBoard.clearCol();
       utils.gameMainBoard.clearMarked();
       nextPlayer=0;//最初のプレーヤーは決めない。
@@ -129,7 +129,7 @@ void showGames() {
         kifu.kifuFullPath = folder.getAbsolutePath() + "\\" + kifu.mmddhhmm+"_";
       }
     } else {// 途中盤面から始める
-      int now = simulatorStartBoardId%simulatorStartBoard.size();
+      int now = simulator.StartBoardId%simulatorStartBoard.size();
       // println("mP.GameStart:盤面をDBからコピーする");
       int remaining=0;
       for (int k=0; k<25; k++) {
@@ -330,14 +330,14 @@ void showGames() {
         }
       }
     }
-    nextPlayer = simulatorStartBoard.get(simulatorStartBoardId).nextPlayer;
+    nextPlayer = simulatorStartBoard.get(simulator.StartBoardId).nextPlayer;
     // 棋譜文字列の初期化
     kifu.string="";
     // 繰り返し判定
     if (utils.gameMainBoard.simulatorNumber == gameOptions.get("Times") ) {
       managerPhase = mP.Halt;
     } else {
-      if (simulatorStartBoardId==0) {
+      if (simulator.StartBoardId==0) {
         utils.gameMainBoard.clearCol();
         utils.gameMainBoard.clearMarked();
         nextPlayer=0;
@@ -346,7 +346,7 @@ void showGames() {
       } else {
         // utils.gameMainBoard.clearCol();
         int remaining=0;
-        int now = simulatorStartBoardId%simulatorStartBoard.size();
+        int now = simulator.StartBoardId%simulatorStartBoard.size();
         utils.gameMainBoard.attackChanceP=false;
         utils.gameMainBoard.clearMarked();
         for (int k=0; k<25; k++) {

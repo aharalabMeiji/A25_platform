@@ -408,9 +408,9 @@ void showContents() {
     if (total>0) {
       float smallBoardDispSize = utils.fontSize; 
       float boardDispSize = smallBoardDispSize*1.5;
-      int now = (simulatorStartBoardId) % total;
-      int prev = (simulatorStartBoardId + total -1 ) % total;
-      int next = (simulatorStartBoardId + 1 ) % total;
+      int now = (simulator.StartBoardId) % total;
+      int prev = (simulator.StartBoardId + total -1 ) % total;
+      int next = (simulator.StartBoardId + 1 ) % total;
       buttonPrevBoard = new button();
       buttonPrevBoard.setLT(int(left), int(top+boardDispSize*1.5+smallBoardDispSize*2.5), " ");
       buttonPrevBoard.wid=smallBoardDispSize*5;
@@ -603,9 +603,9 @@ void showContents() {
     if (total>0) {
       float smallBoardDispSize = utils.fontSize; 
       float boardDispSize = smallBoardDispSize*1.5;
-      int now = (simulatorStartBoardId) % total;
-      int prev = (simulatorStartBoardId + total -1 ) % total;
-      int next = (simulatorStartBoardId + 1 ) % total;
+      int now = (simulator.StartBoardId) % total;
+      int prev = (simulator.StartBoardId + total -1 ) % total;
+      int next = (simulator.StartBoardId + 1 ) % total;
       buttonPrevBoard = new button();
       buttonPrevBoard.setLT(int(left), int(top+boardDispSize*1.5+smallBoardDispSize*2.5), " ");
       buttonPrevBoard.wid=smallBoardDispSize*5;
@@ -625,9 +625,9 @@ void showContents() {
       fill(0);
       text(next, left+boardDispSize*5+smallBoardDispSize*9, top+boardDispSize*7);
       top += utils.vStep*7;
-      //int now = (simulatorStartBoardId) % total;
-      //int prev = (simulatorStartBoardId + total -1 ) % total;
-      //int next = (simulatorStartBoardId + 1 ) % total;
+      //int now = (simulator.StartBoardId) % total;
+      //int prev = (simulator.StartBoardId + total -1 ) % total;
+      //int next = (simulator.StartBoardId + 1 ) % total;
       //buttonPrevBoard = new button();
       //buttonPrevBoard.setLT(int(left), int(top+utils.fontSize*1.3), " ");
       //buttonPrevBoard.wid=utils.fontSize*2.5;
