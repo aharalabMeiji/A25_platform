@@ -345,7 +345,7 @@ void fullRandomMC() {
         showScreenCapture();
       }
     } else {// 通常時
-      ///////////////////////////////////////////////////////////////////問題がアタックチャンスでないのときの「ループ」
+      ///////////////////////////////////////////////////////////////////通常営業の「ループ」
       for (uctNode nd : simulator.rootNode.children) {
         // 問題画面をsimulatorSubにコピー
         for (int k=0; k<25; k++) {
@@ -358,11 +358,13 @@ void fullRandomMC() {
           }
           //println(simulator.nextPlayer, j, "*");
           winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants);//そこから最後までシミュレーションを行う。
+          nd.na ++;
           for (int p=1; p<=4; p++){
-            nd.na ++;
             nd.wa[p] += wp.points[p];
             nd.pa[p] += wp.panels[p];
           }
+          //println(nd.move,nd.wa[1], nd.na);
+          //画面表示指示
           simulator.mainBoard.sv[nd.move] = nd.wa[simulator.nextPlayer]/nd.na;//　その着手点はちょっと優秀ということになる。
           simulator.mainBoard.sv2[nd.move] = nd.pa[simulator.nextPlayer]/nd.na;// 最終パネル数の累積
           simulator.mainBoard.s[nd.move].marked=simulator.nextPlayer;// svを表示する意味
@@ -371,8 +373,8 @@ void fullRandomMC() {
             nd.bd[k] = simulator.subBoard.s[k].col;
           }
           winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants);//そこから最後までシミュレーションを行う。
+          nd.na ++;
           for (int p=1; p<=4; p++){
-            nd.na ++;
             nd.wa[p] += wp.points[p];
             nd.pa[p] += wp.panels[p];
           }

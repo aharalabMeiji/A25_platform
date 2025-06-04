@@ -30,6 +30,8 @@ class board {
     } else if (mode==10) {// Simulator ディスプレイ
       background(255);
       for (int i = 0; i < 25; i ++) {
+        s[i].sv=sv[i];
+        s[i].sv2=sv2[i];
         s[i].display(mode);
       }
       textSize(utils.fontSize);
