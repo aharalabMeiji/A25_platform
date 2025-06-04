@@ -16,7 +16,6 @@ void setup() {
   utils.hSpace=10;
   utils.vStep=utils.fontSize*1.6;
 
-
   utils.gameMainBoard = new board();
   utils.gameSubBoard = new board();
   simulator.mainBoard = new board();
