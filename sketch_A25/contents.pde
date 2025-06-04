@@ -71,7 +71,7 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    buttonText = "[UCB-MC]";
+    buttonText = "[UCB]";
     button buttonUCT1=new button();
     buttonUCT1.setLT(left, top, buttonText);
     buttonUCT1.setItem("Player1", 3);
@@ -81,7 +81,7 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+10);
     //
-    buttonText = "[UCT-MCTS]";
+    buttonText = "[UCT]";
     button buttonUCTMCTS1=new button();
     buttonUCTMCTS1.setLT(left, top, buttonText);
     buttonUCTMCTS1.setItem("Player1", 4);
@@ -129,7 +129,7 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    buttonText = "[UCB-MC]";
+    buttonText = "[UCB]";
     buttonUCT1=new button();
     buttonUCT1.setLT(left, top, buttonText);
     buttonUCT1.setItem("Player2", 3);
@@ -140,7 +140,7 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    buttonText = "[UCT-MCTS]";
+    buttonText = "[UCT]";
     buttonUCTMCTS1=new button();
     buttonUCTMCTS1.setLT(left, top, buttonText);
     buttonUCTMCTS1.setItem("Player2", 4);
@@ -188,7 +188,7 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    buttonText = "[UCB-MC]";
+    buttonText = "[UCB]";
     buttonUCT1=new button();
     buttonUCT1.setLT(left, top, buttonText);
     buttonUCT1.setItem("Player3", 3);
@@ -199,7 +199,7 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    buttonText = "[UCT-MCTS]";
+    buttonText = "[UCT]";
     buttonUCTMCTS1=new button();
     buttonUCTMCTS1.setLT(left, top, buttonText);
     buttonUCTMCTS1.setItem("Player3", 4);
@@ -247,7 +247,7 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    buttonText = "[UCB-MC]";
+    buttonText = "[UCB]";
     buttonUCT1=new button();
     buttonUCT1.setLT(left, top, buttonText);
     buttonUCT1.setItem("Player4", 3);
@@ -258,7 +258,7 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    buttonText = "[UCT-MCTS]";
+    buttonText = "[UCT]";
     buttonUCTMCTS1=new button();
     buttonUCTMCTS1.setLT(left, top, buttonText);
     buttonUCTMCTS1.setItem("Player4", 4);
@@ -458,7 +458,7 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    buttonText = "[UCB1-MC]";
+    buttonText = "[UCB1]";
     button buttonSimMethod2=new button();
     buttonSimMethod2.setLT(left, top, buttonText);
     buttonSimMethod2.setItem("SimMethod", 2);
@@ -468,7 +468,7 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    buttonText = "[UCT-MCTS]";
+    buttonText = "[UCT]";
     button buttonSimMethod3=new button();
     buttonSimMethod3.setLT(left, top, buttonText);
     buttonSimMethod3.setItem("SimMethod", 3);

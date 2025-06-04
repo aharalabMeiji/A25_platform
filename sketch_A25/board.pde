@@ -27,7 +27,7 @@ class board {
       for (int i = 0; i < 25; i ++) {
         s[i].display(mode);
       }
-    } else if (mode==10) {// Simulator ディスプレイ
+    } else if (mode==10) {// Simulator ランダムディスプレイ
       background(255);
       for (int i = 0; i < 25; i ++) {
         s[i].sv=sv[i];
@@ -35,13 +35,15 @@ class board {
         s[i].display(mode);
       }
       textSize(utils.fontSize);
-      text(1.0*sv[25]/simulatorNumber, utils.mainL, utils.mainU-utils.fontSize);
-      text(1.0*sv2[25]/simulatorNumber, utils.mainL+utils.fontSize*3.5, utils.mainU-utils.fontSize);
+      if (!attackChanceP){
+        text(1.0*sv[25], utils.mainL, utils.mainU-utils.fontSize);
+        text(1.0*sv2[25], utils.mainL+utils.fontSize*3.5, utils.mainU-utils.fontSize);
+      }
       text("("+simulatorNumber+")", utils.mainL+utils.fontSize*7, utils.mainU-utils.fontSize);
-      text("player:", utils.mainL+utils.fontSize*10, utils.mainU-utils.fontSize);
+      text("player:", utils.mainL+utils.fontSize*12, utils.mainU-utils.fontSize);
       stroke(0);
       fill(utils.playerColor[simulator.nextPlayer]);
-      rect(utils.mainL+utils.fontSize*12, utils.mainU-utils.fontSize*1.3, utils.fontSize*3, utils.fontSize*0.8);
+      rect(utils.mainL+utils.fontSize*14, utils.mainU-utils.fontSize*1.3, utils.fontSize*3, utils.fontSize*0.8);
     } else if (mode==11) {// Uct1 ディスプレイ
       //if (simulatorNumber%100==0) {
       background(255);
@@ -51,11 +53,11 @@ class board {
         s[i].display(mode);
       }
       textSize(utils.fontSize);
-      text(simulatorNumber, utils.mainL+utils.fontSize*3, utils.mainU-utils.fontSize);
-      text("player:", utils.mainL+utils.fontSize*6, utils.mainU-utils.fontSize);
+      text("("+simulatorNumber+")", utils.mainL+utils.fontSize*7, utils.mainU-utils.fontSize);
+      text("player:", utils.mainL+utils.fontSize*12, utils.mainU-utils.fontSize);
       stroke(0);
       fill(utils.playerColor[simulator.nextPlayer]);
-      rect(utils.mainL+utils.fontSize*9, utils.mainU-utils.fontSize*1.3, utils.fontSize*3, utils.fontSize*0.8);
+      rect(utils.mainL+utils.fontSize*14, utils.mainU-utils.fontSize*1.3, utils.fontSize*3, utils.fontSize*0.8);
       //}
     }
     return true;

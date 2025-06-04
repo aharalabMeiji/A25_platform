@@ -211,7 +211,7 @@ void showSimulator() {
 void fullRandomMC() {
   // 完全ランダム＝モンテカルロ1手読み
   if (simulationManager==sP.GameStart) {
-    // シミュレーション開始
+    ///////////////////////////////////////////// シミュレーション開始。共通の準備
     startTime=millis();
     simulator.Participants = new player[5];
     simulator.rootNode = new uctNode();
@@ -219,6 +219,7 @@ void fullRandomMC() {
     //attackChanceSV = new float[625];//いらなくなる
     //attackChanceSV2 = new float[625];//いらなくなる
     attackChanceVP = new int[625];//
+    prevWinrate1=prevWinrate2=prevPanels1=prevPanels2=0;//収束の計算
     // プレーヤーをランダムプレーヤーに設定
     for (int p=1; p<5; p++) {
       simulator.Participants[p] = new player(p, "random", brain.Random);
@@ -249,6 +250,7 @@ void fullRandomMC() {
     if (simulator.mainBoard.attackChanceP()) {
       // ///////////////////////////////////////////////////////////////////問題がアタックチャンス問題のときの「準備」
       // vpの初期化と、svの初期化
+      simulator.mainBoard.attackChanceP=true;
       simulator.mainBoard.buildVP(simulator.nextPlayer);
       simulator.rootNode.children.clear();
       attackChanceCursor=1;
@@ -277,6 +279,7 @@ void fullRandomMC() {
       simulationManager = sP.runMC;
     } else {
       // ///////////////////////////////////////////////////////////////////問題がアタックチャンスでないときの「準備」
+      simulator.mainBoard.attackChanceP=false;
       simulator.mainBoard.buildVP(simulator.nextPlayer);
       simulator.rootNode.children.clear();
       for (int k=0; k<25; k++) {
@@ -298,7 +301,7 @@ void fullRandomMC() {
   } else if (simulationManager == sP.runMC) {
     if (simulator.mainBoard.attackChanceP()) {
       // ///////////////////////////////////////////////////////////////////問題がアタックチャンス問題のときの「ループ」
-      //int roopLen = simulator.rootNode.children.size();
+      //int loopLen = simulator.rootNode.children.size();
       for (uctNode nd : simulator.rootNode.children) {
         for (int i=0; i<25; i++) {// 問題画面をsimulatorSubにコピー
           simulator.subBoard.s[i].col = simulator.mainBoard.s[i].col;
@@ -328,19 +331,27 @@ void fullRandomMC() {
           simulationManager=sP.GameEnd;
         }
       } else {// gameOptions.get("SimTimes")==3 // 収束するまで
-        // TODO::収束するまでにかきなおす。
-        if (simulator.mainBoard.simulatorNumber>=50000) {
+        if (winrateConvergents && panelsConvergent) {
           simulationManager=sP.GameEnd;
         }
       }
-      //print(",");
       if (simulator.mainBoard.simulatorNumber%500==0) {
         simulator.mainBoard.display(10);
         prize prize=new prize();
         prize.getPrize3FromNodeList(simulator.nextPlayer, simulator.rootNode.children);
+        if (abs(prevWinrate1-prize.getWinrate(1))<0.0005 && abs(prevWinrate2-prize.getWinrate(2))<0.0005 )
+          winrateConvergents=true;
+        else 
+          winrateConvergents=false;
+        prevWinrate1=prize.getWinrate(1); prevWinrate2=prize.getWinrate(2);
+        if (abs(prevPanels1-prize.getPanels(1))<0.005 && abs(prevPanels2-prize.getPanels(2))<0.005 )
+          panelsConvergent=true;
+        else 
+          panelsConvergent=false;
+        prevPanels1 = prize.getPanels(1);  prevPanels2=prize.getPanels(2);
+
         displayBestStats(prize);
         displayAllStats(attackChanceCursor, simulator.nextPlayer);
-        
         showReturnButton();
         showScreenCapture();
       }
@@ -391,13 +402,25 @@ void fullRandomMC() {
         if (simulator.mainBoard.simulatorNumber>=10000) {
           simulationManager=sP.GameEnd;
         }
-      } else {// gameOptions.get("SimTimes")==3 // 50000 times
-        // 収束するまで、へと変更
-        if (simulator.mainBoard.simulatorNumber>=50000) {
+      } else {// gameOptions.get("SimTimes")==3 // 
+        // 収束するまで
+        if (winrateConvergents && panelsConvergent) {
           simulationManager=sP.GameEnd;
         }
       }
       if (simulator.mainBoard.simulatorNumber%500==0) {
+        prize prize=new prize();
+        prize.getPrize3FromNodeList(simulator.nextPlayer, simulator.rootNode.children);
+        if (abs(prevWinrate1-prize.getWinrate(1))<0.0005 && abs(prevWinrate2-prize.getWinrate(2))<0.0005 )
+          winrateConvergents=true;
+        else 
+          winrateConvergents=false;
+        prevWinrate1=prize.getWinrate(1); prevWinrate2=prize.getWinrate(2);
+        if (abs(prevPanels1-prize.getPanels(1))<0.005 && abs(prevPanels2-prize.getPanels(2))<0.005 )
+          panelsConvergent=true;
+        else 
+          panelsConvergent=false;
+        prevPanels1 = prize.getPanels(1);  prevPanels2=prize.getPanels(2);
         simulator.mainBoard.display(10);
         showReturnButton();
         showScreenCapture();
@@ -419,8 +442,8 @@ void UCB1() {
     //attackChanceSV = new float[625];//アタックチャンス時の評価値の表
     //attackChanceSV2 = new float[625];//アタックチャンス時の評価値の表
     attackChanceVP = new int[625];//アタックチャンス時の合法手のフラグ
-    WrConv=false; 
-    PrConv=false;
+    winrateConvergents=false; 
+    panelsConvergent=false;
     // プレーヤーをランダムに設定
     for (int p=1; p<5; p++) {
       simulator.Participants[p] = new player(p, "random", brain.Random);
@@ -441,6 +464,7 @@ void UCB1() {
       uctRoot.bd[j] = simulator.mainBoard.s[j].col;
     }
     if (simulator.mainBoard.attackChanceP()) {//アタックチャンスのための１世代めの追加
+      simulator.mainBoard.attackChanceP=true;
       simulator.mainBoard.buildVP(simulator.nextPlayer);// そもそもの着手可能パネル
       //アタックチャンス時の合法手の決定
       for (int j=0; j<25; j++) { //加えるほう
@@ -484,6 +508,7 @@ void UCB1() {
         }
       }
     } else {// 通常時の１世代めの追加 // UCT1
+      simulator.mainBoard.attackChanceP=false;
       simulator.mainBoard.buildVP(simulator.nextPlayer);
       simulator.mainBoard.simulatorNumber=0;
       uctRoot.children=new ArrayList<uctNode>();
@@ -551,7 +576,7 @@ void UCB1() {
             simulationManager=sP.GameEnd;
           }
         } else if (gameOptions.get("SimTimes")==13) {// limit
-          if(WrConv && PrConv){
+          if(winrateConvergents && panelsConvergent){
             simulationManager=sP.GameEnd;
           }
         }
@@ -564,16 +589,16 @@ void UCB1() {
         displayBestStats(prize);
         showReturnButton();
         showScreenCapture();
-        if (abs(prevWinrate1-prize.getWinrate(1))<0.001 && abs(prevWinrate2-prize.getWinrate(2))<0.001 )
-          WrConv=true;
+        if (abs(prevWinrate1-prize.getWinrate(1))<0.0005 && abs(prevWinrate2-prize.getWinrate(2))<0.0005 )
+          winrateConvergents=true;
         else 
-          WrConv=false;
+          winrateConvergents=false;
         prevWinrate1=prize.getWinrate(1); prevWinrate2=prize.getWinrate(2);
-        if (abs(prevPasanels1-prize.getPanels(1))<0.001 && abs(prevPasanels2-prize.getPanels(2))<0.001 )
-          PrConv=true;
+        if (abs(prevPanels1-prize.getPanels(1))<0.005 && abs(prevPanels2-prize.getPanels(2))<0.005 )
+          panelsConvergent=true;
         else 
-          PrConv=false;
-        prevPasanels1 = prize.getPanels(1);  prevPasanels2=prize.getPanels(2);
+          panelsConvergent=false;
+        prevPanels1 = prize.getPanels(1);  prevPanels2=prize.getPanels(2);
         
       }
     } else {//通常の場合// UCT1ループ部分
@@ -616,8 +641,8 @@ void UCB1() {
           }
         } else {/// gameOptions.get("SimTimes")==13
           if (simulator.mainBoard.simulatorNumber%1000==0) {//収束しているかを判定する
-            WrConv=false; PrConv=false;
-            prevWinrate1=best1Wr; prevWinrate2=best2Wr; prevPasanels1 = best1Pr;  prevPasanels2=best2Pr;
+            winrateConvergents=false; panelsConvergent=false;
+            prevWinrate1=best1Wr; prevWinrate2=best2Wr; prevPanels1 = best1Pr;  prevPanels2=best2Pr;
             best1Wr=0; best2Wr=0; best1Pr=0; best2Pr=0;
             for(int kk=0; kk<=25; kk++){
               if (simulator.mainBoard.sv[kk]>0 || simulator.mainBoard.sv2[kk]>0){
@@ -633,13 +658,13 @@ void UCB1() {
               }
             }
             //println(prevWinrate1,best1Wr,prevWinrate2,best2Wr);
-            if (abs(prevWinrate1-best1Wr)<0.001 && abs(prevWinrate2-best2Wr)<0.001 )
-              WrConv=true;
-            else WrConv=false;
-            if (abs(prevPasanels1-best1Pr)<0.02 && abs(prevPasanels2-best2Pr)<0.02 )
-              PrConv=true;
-            else PrConv=false;
-            if(WrConv && PrConv){
+            if (abs(prevWinrate1-best1Wr)<0.0005 && abs(prevWinrate2-best2Wr)<0.0005 )
+              winrateConvergents=true;
+            else winrateConvergents=false;
+            if (abs(prevPanels1-best1Pr)<0.005 && abs(prevPanels2-best2Pr)<0.005 )
+              panelsConvergent=true;
+            else panelsConvergent=false;
+            if(winrateConvergents && panelsConvergent){
               simulationManager=sP.GameEnd;
             }
           }

@@ -60,8 +60,8 @@ int[] attackChanceVP;// そもそも、アタックチャンスのためのVPは
 int attackChanceCursor=0;//これは表示のために必要。
 int startTime;//時間計測のため
 button buttonPrevSV=new button(), buttonNextSV=new button();// これはボタン
-  boolean WrConv, PrConv;
-  float prevWinrate1=0, prevWinrate2=0, prevPasanels1=0, prevPasanels2=0;
+boolean winrateConvergents, panelsConvergent;
+  float prevWinrate1=0, prevWinrate2=0, prevPanels1=0, prevPanels2=0;
   float best1Wr=0, best2Wr=0, best1Pr=0, best2Pr=0;
 
 // 棋譜
