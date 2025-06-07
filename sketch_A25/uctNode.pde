@@ -52,6 +52,27 @@ class uctNode {
     float u2 = 1.41421356*sqrt(log(NN)/na);
     return u1 + u2;
   }
+  //boolean attackChanceP(){
+  //  int count=0;
+  //  for (int i=0; i<25; i++) {
+  //    if (bd[i]==0) count ++;
+  //  }
+  //  if (count==5) {
+  //    return true;
+  //  }
+  //  return false;
+  //}    
+
+  //void buildChildren(){
+  //  if (attackChanceP()) {
+      
+  //  } else 
+  //  {
+      
+      
+  //  }
+    
+  //}
 }
 
 int XXXBrain(player pl) {
