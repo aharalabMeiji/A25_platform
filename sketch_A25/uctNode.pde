@@ -5,7 +5,7 @@ class uctNode {
   float na=1;// このノードの試行回数
   float[] wa;// このノードの（誰にとっての）勝利回数
   float[] pa;// このノードの（誰にとっての）累積パネル数
-  int []bd;// 盤面
+  int []bd;// 盤面// ここをboard 型にするかどうか。
   //float NN=1;// 累計試行回数
   float[] uct;
   int player=0;
@@ -13,6 +13,7 @@ class uctNode {
   ArrayList<uctNode> children=null;
   String id;
   uctNode parent=null;//不要なら後でやめる
+  boolean attackChanceNode=false;
 
   uctNode() {
     na=1;
@@ -26,6 +27,7 @@ class uctNode {
     for (int p=0; p<5; p++) uct[p]=0;
     children = null;
     id="R";
+    attackChanceNode=false;
   }
   boolean setItem(int _p, int _m) {
     player=_p;

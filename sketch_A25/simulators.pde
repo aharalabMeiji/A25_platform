@@ -448,7 +448,7 @@ void UCB1() {
     for (int p=1; p<5; p++) {
       simulator.Participants[p] = new player(p, "random", brain.Random);
     }
-    fullUctNode = new ArrayList<uctNode>();
+    uct.fullNodes = new ArrayList<uctNode>();
     // 評価値のクリア
     for (int j=0; j<=25; j++) {
       simulator.mainBoard.sv[j]=0;// ここにUCT値を代入する。
@@ -459,9 +459,9 @@ void UCB1() {
     }
     simulator.nextPlayer = simulatorStartBoard.get(simulator.StartBoardId).nextPlayer;
     // root nodeの設置と、
-    uctRoot = new uctNode();
+    uct.rootNode = new uctNode();
     for (int j=0; j<25; j++) {
-      uctRoot.bd[j] = simulator.mainBoard.s[j].col;
+      uct.rootNode.bd[j] = simulator.mainBoard.s[j].col;
     }
     if (simulator.mainBoard.attackChanceP()) {//アタックチャンスのための１世代めの追加
       simulator.mainBoard.attackChanceP=true;
@@ -480,12 +480,12 @@ void UCB1() {
         }
       }
       simulator.mainBoard.simulatorNumber=0;
-      uctRoot.children=new ArrayList<uctNode>();
+      uct.rootNode.children=new ArrayList<uctNode>();
       for (int k=0; k<625; k++) {//アタックチャンス時の合法手のノードを追加する
         if (attackChanceVP[k]>0) {
           uctNode newNode = new uctNode();
-          uctRoot.children.add(newNode);
-          fullUctNode.add(newNode);
+          uct.rootNode.children.add(newNode);
+          uct.fullNodes.add(newNode);
           newNode.setItem(simulator.nextPlayer, k);
           simulator.mainBoard.copyBoard(simulator.subBoard);
           int j=k%25;
@@ -495,7 +495,7 @@ void UCB1() {
           for (int l=0; l<25; l++) {
             newNode.bd[l] = simulator.subBoard.s[l].col;
           }
-          newNode.parent = uctRoot;
+          newNode.parent = uct.rootNode;
           newNode.children = null;
           //とりあえず、最初の１シミュレーションはここで行うのがよさそう。
           winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants);//そこから最後までシミュレーションを行う。
@@ -511,19 +511,19 @@ void UCB1() {
       simulator.mainBoard.attackChanceP=false;
       simulator.mainBoard.buildVP(simulator.nextPlayer);
       simulator.mainBoard.simulatorNumber=0;
-      uctRoot.children=new ArrayList<uctNode>();
+      uct.rootNode.children=new ArrayList<uctNode>();
       for (int j=0; j<25; j++) {
         if (simulator.mainBoard.vp[j]>0) {
           uctNode newNode = new uctNode();
-          uctRoot.children.add(newNode);
-          fullUctNode.add(newNode);
+          uct.rootNode.children.add(newNode);
+          uct.fullNodes.add(newNode);
           newNode.setItem(simulator.nextPlayer, j);
           simulator.mainBoard.copyBoard(simulator.subBoard);
           simulator.subBoard.move(simulator.nextPlayer, j);
           for (int k=0; k<25; k++) {
             newNode.bd[k] = simulator.subBoard.s[k].col;
           }
-          newNode.parent = uctRoot;
+          newNode.parent = uct.rootNode;
           //とりあえず、最初の１シミュレーションはここで行うのがよさそう。
           winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants);//そこから最後までシミュレーションを行う。
           simulator.mainBoard.simulatorNumber ++;
@@ -542,7 +542,7 @@ void UCB1() {
     if (simulator.mainBoard.attackChanceP()) {//アタックチャンスの場合// UCT1ループ部分
       float maxUct=-100;
       uctNode maxNd=null;
-      for (uctNode nd : fullUctNode) {
+      for (uctNode nd : uct.fullNodes) {
         if (nd.children==null) {
           float newUct = nd.UCTa(nd.player, simulator.mainBoard.simulatorNumber) ;
           if (newUct>maxUct) {
@@ -585,7 +585,7 @@ void UCB1() {
         // 間歇的に表示を更新する。
         simulator.mainBoard.display(11);// Uct1 ディスプレイ
         prize prize=new prize();
-        prize.getPrize3FromNodeList(simulator.nextPlayer,uctRoot.children); 
+        prize.getPrize3FromNodeList(simulator.nextPlayer,uct.rootNode.children); 
         displayBestStats(prize);
         showReturnButton();
         showScreenCapture();
@@ -604,7 +604,7 @@ void UCB1() {
     } else {//通常の場合// UCT1ループ部分
       float maxUct=-100;
       uctNode maxNd=null;
-      for (uctNode nd : fullUctNode) {
+      for (uctNode nd : uct.fullNodes) {
         if (nd.children==null) {
           float newUct = nd.UCTa(nd.player, simulator.mainBoard.simulatorNumber) ;
           if (newUct>maxUct) {

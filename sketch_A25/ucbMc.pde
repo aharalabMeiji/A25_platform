@@ -151,7 +151,7 @@ int ucbMcBrain(player pl) {
       //pl.myBoard.s[i].col ;
       pl.myBoard.s[i].marked = 0;
     }
-    //println("まずは一とおり、可能性のあるノードについてUCTを発動");
+    //println("まずは一とおり、可能性のあるノードについてUCBを発動");
     for (uctNode nd : ucbMcNodes) {
       //println(pl.position, nd.move);
       // 問題画面をsimulatorSubにコピー

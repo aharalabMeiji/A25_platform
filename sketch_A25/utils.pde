@@ -80,5 +80,14 @@ int[] randomOrder=new int[28];
 int randomOrderCount=0;
 
 // UCT
-uctNode uctRoot=null;
-ArrayList<uctNode> fullUctNode=null;
+uctClass uct = new uctClass();
+class uctClass{
+  board subBoard;
+  board subsubBoard;
+  uctNode rootNode=null;
+  ArrayList<uctNode> fullNodes=null;
+  uctClass(){
+    subBoard=new board();
+    subsubBoard=new board();
+  }
+}

@@ -120,7 +120,7 @@ class board {
     } else {// There isn't a panel with othello move
       for (int i = 0; i < 25; i ++) {
         if (s[i].col==0 || s[i].col==5) {// This is a vacant
-          copyBoard(utils.gameSubBoard);
+          copyBoardToSub(utils.gameSubBoard);
           utils.gameSubBoard.s[i].col = pn;
           boolean subOpP = utils.gameSubBoard.buildOP(pn);
           if (subOpP) {// If the move i occurs a new othello move
@@ -156,13 +156,28 @@ class board {
     }
     return ret;
   }
-  boolean copyBoard(board sub) {// 'sub' must be already assigned
+  boolean copyBoardToSub(board sub) {// 'sub' must be already assigned
     for (int i=0; i<25; i++) {
       sub.s[i].col = s[i].col;
-      //sub.vp[i] = vp[i];
-      //sub.op[i] = op[i];
     }
     return true;
+  }
+  boolean copyBoardToBd(int[] sub) {// 'sub' must be already assigned as length 25
+    for (int i=0; i<25; i++) {
+      sub[i] = s[i].col;
+    }
+    return true;
+  }
+  boolean copyBdToBoard(int[] sub) {// 'sub' must be already assigned as length 25
+    for (int i=0; i<25; i++) {
+      s[i].col = sub[i];
+    }
+    return true;
+  }
+  void ClearSv(){
+    for (int i=0; i<25; i++) {
+      sv[i]=sv2[i]=0;
+    }    
   }
   boolean move(int pn, int attack) {// including othello moves
     s[attack].col = pn;
