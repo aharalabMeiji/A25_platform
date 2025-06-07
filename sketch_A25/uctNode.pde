@@ -41,10 +41,15 @@ class uctNode {
     //float u2 = 2.0*sqrt(log(NN)/na);
     return u1 + u2;
   }
+  float UCTwp(int player, int NN) {// NN:　累計試行回数
+    float u1 = (wa[player]+pa[player]*0.04)/na;
+    float u2 = 1.41421356*sqrt(log(NN)/na);
+    return u1 + u2;
+  }
   float UCTb(int player, int NN) {// for MCTS
     float u1=0;
-    for(int p=1; p>5; p++){
-      if (p==player){
+    for (int p=1; p>5; p++) {
+      if (p==player) {
         u1 += wa[player];
       } else {
         u1 -= wa[p];
@@ -63,18 +68,31 @@ class uctNode {
   //    return true;
   //  }
   //  return false;
-  //}    
+  //}
 
   //void buildChildren(){
   //  if (attackChanceP()) {
-      
-  //  } else 
+
+  //  } else
   //  {
-      
-      
+
+
   //  }
-    
+
   //}
+}
+
+uctNode getMaxUcbFromNodeList(int player, ArrayList<uctNode> nds, int NN) {
+  float best = 0;
+  uctNode bestNd=null;
+  for (uctNode nd : nds) {
+    float tmpUcb = nd.UCTa(player, NN);
+    if (best < tmpUcb) {
+      best = tmpUcb;
+      bestNd=nd;
+    }
+  }
+  return bestNd;
 }
 
 int XXXBrain(player pl) {

@@ -80,7 +80,7 @@ winPoints playSimulatorToEnd(board sub, player[] _participants) {// 引数名か
       int simulatorNextPlayer = int(random(4))+1;
       if (1<= simulatorNextPlayer && simulatorNextPlayer<=4 ) {
         //println("playSimulatorToEnd:player変数が持っている盤面をsubにコピーする。");
-        sub.copyBoard(_participants[simulatorNextPlayer].myBoard);
+        sub.copyBoardToSub(_participants[simulatorNextPlayer].myBoard);
         int attack = -1;
         if (sub.attackChanceP()) {
           //println("playSimulatorToEnd:if attack chance");
@@ -487,7 +487,7 @@ void UCB1() {
           uct.rootNode.children.add(newNode);
           uct.fullNodes.add(newNode);
           newNode.setItem(simulator.nextPlayer, k);
-          simulator.mainBoard.copyBoard(simulator.subBoard);
+          simulator.mainBoard.copyBoardToSub(simulator.subBoard);
           int j=k%25;
           int i=int(k/25);
           simulator.subBoard.move(simulator.nextPlayer, j);// 1手着手する
@@ -518,7 +518,7 @@ void UCB1() {
           uct.rootNode.children.add(newNode);
           uct.fullNodes.add(newNode);
           newNode.setItem(simulator.nextPlayer, j);
-          simulator.mainBoard.copyBoard(simulator.subBoard);
+          simulator.mainBoard.copyBoardToSub(simulator.subBoard);
           simulator.subBoard.move(simulator.nextPlayer, j);
           for (int k=0; k<25; k++) {
             newNode.bd[k] = simulator.subBoard.s[k].col;

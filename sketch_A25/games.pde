@@ -78,7 +78,7 @@ void showGames() {
     if (gameOptions.get("Player1")==0) {
       game.participants[1] = new player(1, "human1", brain.Human);
     } else if (gameOptions.get("Player1")==3) {
-      game.participants[1] = new player(1, "ucb-mc1", brain.UCB1);
+      game.participants[1] = new player(1, "ucb-mc1", brain.UCBFast);
     } else if (gameOptions.get("Player1")==4) {
       game.participants[1] = new player(1, "uct-mcts1", brain.UCT2);
     } else {
@@ -218,7 +218,7 @@ void showGames() {
     showPassButton();
     // CPUのときのムーブ処理
     if (game.participants[game.nextPlayer].myBrain!=brain.Human) {// call strategy algorithm
-      utils.gameMainBoard.copyBoard(game.participants[game.nextPlayer].myBoard);// copy a current board to the player's.
+      utils.gameMainBoard.copyBoardToSub(game.participants[game.nextPlayer].myBoard);// copy a current board to the player's.
       int attack = game.participants[game.nextPlayer].callBrain();
       //print("["+attack+"]");
       String strAttack=str(attack+1);
@@ -385,7 +385,7 @@ void showGames() {
     // 選ばれた箇所を黄色（コード５）へ変更
     // 人ならば、マウスクリック入力待ち
     if (game.participants[game.nextPlayer].myBrain!=brain.Human) {
-      utils.gameMainBoard.copyBoard(game.participants[game.nextPlayer].myBoard);
+      utils.gameMainBoard.copyBoardToSub(game.participants[game.nextPlayer].myBoard);
       int attack = game.participants[game.nextPlayer].callAttackChance();
       if (1 <= utils.gameMainBoard.s[attack].col && utils.gameMainBoard.s[attack].col <= 4) {
         utils.gameMainBoard.s[attack].col=5;
