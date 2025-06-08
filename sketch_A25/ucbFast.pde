@@ -1,11 +1,17 @@
 /// ucbFast
 
-int ucbFastBrain(player pl) {
+int ucbFastBrain(player pl, uctClass uct) {
   player[] ucbMcParticipants = new player[5];
-  for (int p=1; p<5; p++) {
-    ucbMcParticipants[p] = new player(p, "random", brain.Random);
+  if (uct == uct1){
+    for (int p=1; p<5; p++) {
+      ucbMcParticipants[p] = new player(p, "random", brain.UCB2);
+    }
+  }else {
+    for (int p=1; p<5; p++) {
+      ucbMcParticipants[p] = new player(p, "random", brain.Random);
+    }
+    
   }
-
   //println("pl の変数の初期化");
   pl.myBoard.ClearSv();
   pl.yellow=-1;
@@ -45,7 +51,7 @@ int ucbFastBrain(player pl) {
           for (int p=1; p<=4; p++) {
             newNode.wa[p] = wp.points[p];//初回は代入
             newNode.pa[p] = 1.0*wp.panels[p];//初回は代入
-            newNode.uct[p] = newNode.UCTa(p, 1);// シミュレーション回数は１
+            newNode.uct[p] = newNode.UCTwp(p, 1);// シミュレーション回数は１
           }
         }
       }
@@ -67,7 +73,7 @@ int ucbFastBrain(player pl) {
         for (int p=1; p<=4; p++) {
           newNode.wa[p] = wp.points[p];//初回は代入
           newNode.pa[p] = 1.0*wp.panels[p];//初回は代入
-          newNode.uct[p] = newNode.UCTa(p, 1);// シミュレーション回数は１
+          newNode.uct[p] = newNode.UCTwp(p, 1);// シミュレーション回数は１
         }
         // subBoardはここで捨てる。
       }
@@ -85,17 +91,20 @@ int ucbFastBrain(player pl) {
     for (int p=1; p<=4; p++) {
       newNode.wa[p] = wp.points[p];//初回は代入
       newNode.pa[p] = 1.0*wp.panels[p];//初回は代入
-      newNode.uct[p] = newNode.UCTa(p, 1);// シミュレーション回数は１
+      newNode.uct[p] = newNode.UCTwp(p, 1);// シミュレーション回数は１
     }
     // subBoardはここで捨てる。
   }
-  // １万回UCBを試して成績の悪いものをカットする。
+  // １万回UCBを試して成績の悪いものをカットする。 //<>//
   int count=2;
   do{
     uctNode maxNode = getMaxUcbFromNodeList(pl.position, uct.rootNode.children, count);
-    if (maxNode.na >= 500) {
-      break;
+    if (uct == uct1){
+      print(":"+maxNode.na+"("+maxNode.move+")");
     }
+      if (maxNode.na >= 300) {
+        break;
+      }
     uct.subsubBoard.copyBdToBoard(maxNode.bd);
     //1回実行する
     winPoints wp = playSimulatorToEnd(uct.subsubBoard, ucbMcParticipants);
@@ -111,8 +120,22 @@ int ucbFastBrain(player pl) {
     }
     count++;
   } while(count<10000);
+  if (uct == uct1) println("half");
   prize prz=new prize();
-  prz.getPrize5FromNodeList(pl.position, uct.rootNode.children);
+  if (uct.rootNode.children.size()>=10){  
+    prz.getPrize5FromNodeList(pl.position, uct.rootNode.children);
+  } else if (uct.rootNode.children.size()>=4){ 
+    prz.getPrize3FromNodeList(pl.position, uct.rootNode.children);
+  } else {    
+    prz.getPrize1FromNodeList(pl.position, uct.rootNode.children);
+    if (pl.myBoard.attackChanceP()) {
+      int k=prz.getMove(1).move;
+      pl.yellow=int(k/25);//黄色にするパネルをこの変数に入れておけば、あとでそのように処理をする。
+      return (k%25);
+    } else {
+      return prz.getMove(1).move;
+    }
+  }
   for (int id=uct.rootNode.children.size()-1; id>=0; id--){
     uctNode nd =uct.rootNode.children.get(id);
     if(nd!=prz.getMove(1) && nd!=prz.getMove(2) && nd!=prz.getMove(3) && nd!=prz.getMove(4) && nd!=prz.getMove(5)){
@@ -121,6 +144,9 @@ int ucbFastBrain(player pl) {
   }
   do{
     uctNode maxNode = getMaxUcbFromNodeList(pl.position, uct.rootNode.children, count);
+    if (uct == uct1){
+      print(":"+maxNode.na+"("+maxNode.move+")");
+    }
     if (maxNode.na >= 1000) {
       break;
     }
@@ -140,7 +166,7 @@ int ucbFastBrain(player pl) {
     count++;
   } while(count<20000);
   prz.getPrize1FromNodeList(pl.position, uct.rootNode.children);
-  
+  if (uct == uct1) println("goal="+prz.getMove(1).move);
   if (pl.myBoard.attackChanceP()) {
     int k=prz.getMove(1).move;
     pl.yellow=int(k/25);//黄色にするパネルをこの変数に入れておけば、あとでそのように処理をする。

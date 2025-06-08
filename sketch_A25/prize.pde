@@ -3,6 +3,7 @@ class prize {
   float p1, p2, p3, p4, p5;
   uctNode m1, m2, m3, m4, m5;
   prize() {
+    m1=m2=m3=m4=m5=null;
   }
   float getWinrate(int i) {
     switch(i) {

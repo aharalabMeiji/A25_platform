@@ -80,7 +80,8 @@ int[] randomOrder=new int[28];
 int randomOrderCount=0;
 
 // UCT
-uctClass uct = new uctClass();
+uctClass uct1 = new uctClass();
+uctClass uct2 = new uctClass();
 class uctClass{
   board subBoard;
   board subsubBoard;

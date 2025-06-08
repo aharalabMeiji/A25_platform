@@ -74,8 +74,15 @@ winPoints playSimulatorToEnd(board sub, player[] _participants) {// 引数名か
     if (sub.s[i].col==0 || sub.s[i].col==5) remaining ++;// 黄色パネルは空欄あつかい
   }
   //println("playSimulatorToEnd:残り枚数は"+remaining);
+  //int count=0;
+  
   if (remaining>0) {
     //println("playSimulatorToEnd:ループ開始");
+    //if (count==4){
+    //  for (int p=1; p<5; p++) {
+    //    _participants[p] = new player(p, "random", brain.Random);
+    //  }
+    //}
     do {
       int simulatorNextPlayer = int(random(4))+1;
       if (1<= simulatorNextPlayer && simulatorNextPlayer<=4 ) {
@@ -115,6 +122,7 @@ winPoints playSimulatorToEnd(board sub, player[] _participants) {// 引数名か
         //println("playSimulatorToEnd:残り枚数は"+remaining);
         //println(simulatorNextPlayer, attack, remaining);
       }
+      //count ++;
     } while (remaining >0);
     //println("playSimulatorToEnd:ループ終了");
   }
@@ -200,7 +208,7 @@ void showSimulator() {
   if (gameOptions.get("SimMethod")==1) {
     fullRandomMC();
   } else if (gameOptions.get("SimMethod")==2) {
-    UCB1();
+    UCB1(uct1);
   //} else if (gameOptions.get("SimMethod")==3) {
   //  UCT2();
   } else {
@@ -433,7 +441,7 @@ void fullRandomMC() {
 }
 
 
-void UCB1() {
+void UCB1(uctClass uct) {
   // UCT1手読み
   if (simulationManager==sP.GameStart) {
     // シミュレーション開始
