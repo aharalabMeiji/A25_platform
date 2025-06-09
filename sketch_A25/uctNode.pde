@@ -12,6 +12,7 @@ class uctNode {
   int move=-1;// attack chance時には、625までの数が入る。
   ArrayList<uctNode> children=null;
   String id;
+  int depth;
   uctNode parent=null;//不要なら後でやめる
   boolean attackChanceNode=false;
 
@@ -27,6 +28,7 @@ class uctNode {
     for (int p=0; p<5; p++) uct[p]=0;
     children = null;
     id="R";
+    depth=0;
     attackChanceNode=false;
   }
   boolean setItem(int _p, int _m) {
@@ -59,27 +61,27 @@ class uctNode {
     float u2 = 1.41421356*sqrt(log(NN)/na);
     return u1 + u2;
   }
-  //boolean attackChanceP(){
-  //  int count=0;
-  //  for (int i=0; i<25; i++) {
-  //    if (bd[i]==0) count ++;
-  //  }
-  //  if (count==5) {
-  //    return true;
-  //  }
-  //  return false;
-  //}
+  boolean attackChanceP(){
+    int count=0;
+    for (int i=0; i<25; i++) {
+      if (bd[i]==0) count ++;
+    }
+    if (count==5) {
+      return true;
+    }
+    return false;
+  }
 
-  //void buildChildren(){
-  //  if (attackChanceP()) {
-
-  //  } else
-  //  {
-
-
-  //  }
-
-  //}
+  void printlnBd(){
+    print("ボード：");
+    for (int kki=0; kki<5; kki++) {
+      for (int kkj=0; kkj<5; kkj++) {
+        print(" "+bd[kkj+kki*5]);
+      }
+      print(":");
+    }
+    println();   
+  }
 }
 
 uctNode getMaxUcbFromNodeList(int player, ArrayList<uctNode> nds, int NN) {
