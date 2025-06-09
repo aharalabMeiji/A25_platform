@@ -78,36 +78,36 @@ void showGames() {
     if (gameOptions.get("Player1")==0) {
       game.participants[1] = new player(1, "human1", brain.Human);
     } else if (gameOptions.get("Player1")==3) {
-      game.participants[1] = new player(1, "ucb-mc1", brain.UCB1);
+      game.participants[1] = new player(1, "ucb-1", brain.UCB1);
     } else if (gameOptions.get("Player1")==4) {
-      game.participants[1] = new player(1, "uct-mcts1", brain.UCT2);
+      game.participants[1] = new player(1, "uct-1", brain.UCT334);
     } else {
       game.participants[1] = new player(1, "random1", brain.Random);
     }
     if (gameOptions.get("Player2")==0) {
       game.participants[2] = new player(2, "human2", brain.Human);
     } else if (gameOptions.get("Player2")==3) {
-      game.participants[2] = new player(2, "ucb-mc2", brain.UCB1);
+      game.participants[2] = new player(2, "ucb-2", brain.UCB1);
     } else if (gameOptions.get("Player2")==4) {
-      game.participants[2] = new player(2, "uct-mcts2", brain.UCT2);
+      game.participants[2] = new player(2, "uct-2", brain.UCT334);
     } else {
       game.participants[2] = new player(2, "random2", brain.Random);
     }
     if (gameOptions.get("Player3")==0) {
       game.participants[3] = new player(3, "human3", brain.Human);
     } else if (gameOptions.get("Player3")==3) {
-      game.participants[3] = new player(3, "uct-mc3", brain.UCB1);
+      game.participants[3] = new player(3, "ucb-3", brain.UCB1);
     } else if (gameOptions.get("Player3")==4) {
-      game.participants[3] = new player(3, "uct-mcts3", brain.UCT2);
+      game.participants[3] = new player(3, "uct-3", brain.UCT334);
     } else {
       game.participants[3] = new player(3, "random3", brain.Random);
     }
     if (gameOptions.get("Player4")==0) {
       game.participants[4] = new player(4, "human4", brain.Human);
     } else if (gameOptions.get("Player4")==3) {
-      game.participants[4] = new player(4, "uct-mc4", brain.UCB1);
+      game.participants[4] = new player(4, "ucb-4", brain.UCB1);
     } else if (gameOptions.get("Player4")==4) {
-      game.participants[4] = new player(4, "uct-mcts4", brain.UCT2);
+      game.participants[4] = new player(4, "uct-4", brain.UCT334);
     } else {
       game.participants[4] = new player(4, "random4", brain.Random);
     }

@@ -80,7 +80,7 @@ int ucbMcBrain(player pl) {
         for (int p=1; p<=4; p++) {
           newNode.wa[p] = wp.points[p];//初回は代入
           newNode.pa[p] = 1.0*wp.panels[p];//初回は代入
-          newNode.uct[p] = newNode.UCTa(p, 1);// シミュレーション回数は１
+          newNode.uct[p] = newNode.UCTwp(p, 1);// シミュレーション回数は１
           //println(newNode.wa[p], newNode.pa[p], newNode.uct[p]);
         }
       }
@@ -118,7 +118,7 @@ int ucbMcBrain(player pl) {
       }
       for (uctNode nd : ucbMcNodes) {
         for (int p=1; p<=4; p++) {
-          nd.uct[p] = nd.UCTa(p, pl.myBoard.simulatorNumber);// シミュレーション総回数はpl.myBoard.simulatorNumber
+          nd.uct[p] = nd.UCTwp(p, pl.myBoard.simulatorNumber);// シミュレーション総回数はpl.myBoard.simulatorNumber
         }
       }
       //println(uctMaxNode.na, uctMaxNode.wa[uctMaxNode.player], uctMaxNode.pa[uctMaxNode.player], uctMaxNode.uct[uctMaxNode.player]);
@@ -175,7 +175,7 @@ int ucbMcBrain(player pl) {
       for (int p=1; p<=4; p++) {
         nd.wa[p] = wp.points[p];//初回は代入
         nd.pa[p] = 1.0*wp.panels[p];//初回は代入
-        nd.uct[p] = nd.UCTa(p, 1);// シミュレーション回数は１
+        nd.uct[p] = nd.UCTwp(p, 1);// シミュレーション回数は１
         //println(nd.wa[p], nd.pa[p], nd.uct[p]);
       }
     }
@@ -209,7 +209,7 @@ int ucbMcBrain(player pl) {
         }
         for (uctNode nd : ucbMcNodes) {
           for (int p=1; p<=4; p++) {
-            nd.uct[p] = nd.UCTa(p, pl.myBoard.simulatorNumber);// シミュレーション総回数はpl.myBoard.simulatorNumber
+            nd.uct[p] = nd.UCTwp(p, pl.myBoard.simulatorNumber);// シミュレーション総回数はpl.myBoard.simulatorNumber
           }
         }
         //println(uctMaxNode.na, uctMaxNode.wa[uctMaxNode.player], uctMaxNode.pa[uctMaxNode.player], uctMaxNode.uct[uctMaxNode.player]);

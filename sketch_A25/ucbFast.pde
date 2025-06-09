@@ -160,7 +160,7 @@ int ucbFastBrain(player pl, uctClass uct) {
     }
     for(uctNode nd : uct.rootNode.children){
       for (int p=1; p<=4; p++) {
-        nd.uct[p] = nd.UCTa(p, count);
+        nd.uct[p] = nd.UCTwp(p, count);
       }
     }
     count++;
