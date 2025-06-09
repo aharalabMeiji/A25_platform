@@ -86,7 +86,7 @@ uctNode getMaxUcbFromNodeList(int player, ArrayList<uctNode> nds, int NN) {
   float best = 0;
   uctNode bestNd=null;
   for (uctNode nd : nds) {
-    float tmpUcb = nd.UCTa(player, NN);
+    float tmpUcb = nd.UCTwp(player, NN);
     if (best < tmpUcb) {
       best = tmpUcb;
       bestNd=nd;
