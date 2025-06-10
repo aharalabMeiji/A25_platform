@@ -156,7 +156,7 @@ int uctMctsBrain(player pl, int expandThreshold, int terminateThreshold, int _de
   if (rootNode.children.size()==1){
     /// 選択肢が一つの時には、それを答える。
     int ret=rootNode.children.get(0).move;
-    println("["+ret+"]");
+    println("["+rootNode.children.get(0).id+"]");
     if (pl.myBoard.attackChanceP()){
       pl.yellow = int(ret/25);
       return ret%25;
@@ -193,7 +193,7 @@ int uctMctsBrain(player pl, int expandThreshold, int terminateThreshold, int _de
       float lowerBound = winrate1 - sqrt(winrate1*(1.0-winrate1)/nd1.na)*3.0;
       if (winrate2 < lowerBound){
         int ret = nd1.move;
-        println("大差["+(ret+1)+"]");
+        println("大差["+nd1.id+"]");
         if (pl.myBoard.attackChanceP()){
           pl.yellow = int(ret/25);
           return ret%25;
