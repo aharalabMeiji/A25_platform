@@ -153,6 +153,19 @@ int uctMctsBrain(player pl, int expandThreshold, int terminateThreshold, int _de
   for (uctNode nd : rootNode.children) {
     uctMctsNodes.add(nd);
   }
+  if (rootNode.children.size()==1){
+    /// 選択肢が一つの時には、それを答える。
+    int ret=rootNode.children.get(0).move;
+    println("["+ret+"]");
+    if (pl.myBoard.attackChanceP()){
+      pl.yellow = int(ret/25);
+      return ret%25;
+    }
+    else {
+      return ret;
+    }
+
+  }
   println("ここからループ");
   int simulatorTag=10000;
   while (true) {
@@ -160,16 +173,36 @@ int uctMctsBrain(player pl, int expandThreshold, int terminateThreshold, int _de
     pl.myBoard.simulatorNumber ++;
     if (pl.myBoard.simulatorNumber>=simulatorTag) {
       uctPrize.getPrize3FromNodeList(pl.position, rootNode.children);
-      print(" "+(simulatorTag/10000)+":(");
+      String str="";
+      str = " "+(simulatorTag/10000)+":(";
       if (uctPrize.getMove(1)!=null){
-        print(" "+uctPrize.getMove(1).id);
+        str += (" "+uctPrize.getMove(1).id);
       }
-      print(",");
+      str += ",";
       if (uctPrize.getMove(2)!=null){
-        print(uctPrize.getMove(2).id);
+        str += (uctPrize.getMove(2).id);
       } 
-      print(")");
+      str += ")";
+      print(str);
       simulatorTag += 10000;
+      // １位と２位が大差であれば、ここで打ち切る。
+      uctNode nd1 = uctPrize.getMove(1);
+      uctNode nd2 = uctPrize.getMove(2);
+      float winrate1=nd1.wa[pl.position]/nd1.na;
+      float winrate2=nd2.wa[pl.position]/nd2.na;
+      float lowerBound = winrate1 - sqrt(winrate1*(1.0-winrate1)/nd1.na)*3.0;
+      if (winrate2 < lowerBound){
+        int ret = nd1.move;
+        println("大差["+(ret+1)+"]");
+        if (pl.myBoard.attackChanceP()){
+          pl.yellow = int(ret/25);
+          return ret%25;
+        }
+        else {
+          return ret;
+        }
+      }
+      
     }
     //println("uctMctsBrain:シミュレーション回数"+pl.myBoard.simulatorNumber);
 
@@ -201,7 +234,7 @@ int uctMctsBrain(player pl, int expandThreshold, int terminateThreshold, int _de
       println("time=",millis()-startTime,"(ms)");
       //println("ループ終了（計算すべきノードが尽きた時）");
       // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする
-      int ret = returnBestChildFromRoot(pl, rootNode); //<>//
+      int ret = returnBestChildFromRoot(pl, rootNode);
       if (pl.myBoard.attackChanceP()){
         pl.yellow = int(ret/25);
         return ret%25;
@@ -399,7 +432,7 @@ int returnBestChildFromRoot(player pl, uctNode root) {
   int bestMove=-1;
   for (uctNode nd1 : root.children) {
     float tmpWe = (nd1.wa[pl.position]+nd1.pa[pl.position]*0.04 )/ nd1.na;
-    if (bestWr<tmpWe) {
+    if (bestWr<=tmpWe) {
       bestWr = tmpWe;
       bestMove = nd1.move;
     }

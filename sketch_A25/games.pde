@@ -72,6 +72,19 @@ int getRandomOrder() {
   }
 }
 
+void backgroundHeader(){
+  stroke(255);fill(255);
+  rect(0,0,utils.mainU-1, utils.mainW*10);
+}
+
+void showHeader(){
+  backgroundHeader();
+  stroke(0);fill(0);
+  textSize(utils.fontSize);
+  textAlign(LEFT, CENTER);
+  text(utils.headerText,utils.mainL, utils.mainU*0.5);
+}
+
 void showGames() {
   if (managerPhase==mP.GameStart) {
     //println("ゲームモードのプレイヤー初期化");

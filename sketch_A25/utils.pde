@@ -16,6 +16,7 @@ class globals{
   float unitSize;
   int mainL, mainU, mainW, mainH, subL, subU;
   float fontSize, hOffset, hSpace, vStep;
+  String headerText="";
 };
 
 
