@@ -95,7 +95,7 @@ int ucbFastBrain(player pl, uctClass uct) {
     }
     // subBoardはここで捨てる。
   }
-  // １万回UCBを試して成績の悪いものをカットする。 //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
+  // １万回UCBを試して成績の悪いものをカットする。 //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
   int count=2;
   do{
     uctNode maxNode = getMaxUcbFromNodeList(pl.position, uct.rootNode.children, count);
