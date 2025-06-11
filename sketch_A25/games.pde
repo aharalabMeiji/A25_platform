@@ -47,29 +47,33 @@ void showPassButton() { //
 }
 
 void initRandomOrder() {
-  for (int i=0; i<28; i++) {
-    randomOrder[i] = (i%4)+1;
-  }
-  for (int i=0; i<500; i++) {
-    int j=int(random(28));
-    int k=int(random(28));
-    if (j!=k) {
-      int tmp=randomOrder[j];
-      randomOrder[j] = randomOrder[k];
-      randomOrder[k] = tmp;
+
+    randomOrderCount=0;
+    for (int i=0; i<28; i++) {
+      randomOrder[i] = (i%4)+1;
     }
-  }
+    for (int i=0; i<500; i++) {
+      int j=int(random(28));
+      int k=int(random(28));
+      if (j!=k) {
+        int tmp=randomOrder[j];
+        randomOrder[j] = randomOrder[k];
+        randomOrder[k] = tmp;
+      }
+    }
+
 }
 
 int getRandomOrder() {
-  if (randomOrderCount<28) {
-    int ret = randomOrder[randomOrderCount];
-    randomOrderCount ++;
-    return ret;
-  } else {
-    randomOrderCount ++;
-    return int(random(4)+1);
-  }
+    if (randomOrderCount<28) {
+      int ret = randomOrder[randomOrderCount];
+      randomOrderCount ++;
+      return ret;
+    } else {
+      randomOrderCount ++;
+      return int(random(4)+1);
+    }
+
 }
 
 void backgroundHeader(){
@@ -125,6 +129,7 @@ void showGames() {
       game.participants[4] = new player(4, "random4", brain.Random);
     }
     utils.gameMainBoard.attackChanceP=false;//アタックチャンス終了フラグはいったん寝せておく
+    game.previousPlayer=0;
     //println("gameモードの盤面初期化");
     if (simulator.StartBoardId==0) {// カラ盤面から始める
       utils.gameMainBoard.clearCol();
@@ -188,14 +193,25 @@ void showGames() {
     showPassButton();
     managerPhase=mP.WaitChoosePlayer;// show setting and wait start
   } else if (managerPhase==mP.WaitChoosePlayer) {
-    if (gameOptions.get("Order") == 0) {
+    
+    if (gameOptions.get("Order") == 3) {
       game.nextPlayer = getRandomOrder();// 次の手番をランダムに決める //
-      for (int p = 1; p<=4; p++) {
-        game.participants[p].turn = false;
-      }
-      game.participants[game.nextPlayer].turn = true;
-      managerPhase = mP.AfterChoosePlayer;
+    } else if (gameOptions.get("Order") == 4){
+      if (game.previousPlayer==0){
+        game.previousPlayer = game.nextPlayer = int(random(4))+1;
+      } else {
+        game.nextPlayer = (game.previousPlayer%4)+1;
+        game.previousPlayer = game.nextPlayer;
+      }      
+    } else {
+      game.nextPlayer = int(random(4))+1; 
     }
+    for (int p = 1; p<=4; p++) {
+      game.participants[p].turn = false;
+    }
+    game.participants[game.nextPlayer].turn = true;
+    managerPhase = mP.AfterChoosePlayer;
+
   } else if (managerPhase==mP.AfterChoosePlayer) {
     // from game.nextPlayer, set the player's turn
     // 特にすることはなし。
@@ -348,6 +364,15 @@ void showGames() {
     kifu.string="";
     // 繰り返し判定
     if (utils.gameMainBoard.simulatorNumber == gameOptions.get("Times") ) {
+      // 結果の表示
+      background(255);
+      utils.gameMainBoard.display(0);
+      for (int p = 1; p<=4; p++) {
+        game.participants[p].display(0);
+      }
+      showReturnButton();
+      showScreenCapture();
+
       managerPhase = mP.Halt;
     } else {
       if (simulator.StartBoardId==0) {
@@ -426,14 +451,7 @@ void showGames() {
     //
     managerPhase=mP.WaitChoosePlayer;
   } else if (managerPhase==mP.Halt) {// 停止状態
-    // 結果の表示
-    background(255);
-    utils.gameMainBoard.display(0);
-    for (int p = 1; p<=4; p++) {
-      game.participants[p].display(0);
-    }
-    showReturnButton();
-    showScreenCapture();
+  ;
   }
 }
 

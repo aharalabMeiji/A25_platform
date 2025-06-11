@@ -43,6 +43,7 @@ games game = new games();
 class games{
   int nextPlayer;//1~4 // これは整理したい
   player[] participants; // これは整理したい。
+  int previousPlayer=0;
 }
 
 // simulators
