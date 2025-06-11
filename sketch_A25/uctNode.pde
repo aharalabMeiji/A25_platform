@@ -13,7 +13,7 @@ class uctNode {
   ArrayList<uctNode> children=null;
   String id;
   int depth;
-  uctNode parent=null;//不要なら後でやめる
+  uctNode parent=null;//必要
   boolean attackChanceNode=false;
 
   uctNode() {
@@ -27,7 +27,7 @@ class uctNode {
     uct=new float[5];
     for (int p=0; p<5; p++) uct[p]=0;
     children = null;
-    id="R";
+    id="";
     depth=0;
     attackChanceNode=false;
   }

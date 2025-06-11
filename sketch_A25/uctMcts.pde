@@ -48,7 +48,7 @@ int uctMctsBrain(player pl, int expandThreshold, int terminateThreshold, int _de
       if (pl.myBoard.vp[k]>0) {
         newNode = new uctNode();
         newNode.setItem(pl.position, k);
-        newNode.id = rootNode.id + (":"+pl.position+nf(k+1, 2));
+        newNode.id = rootNode.id + (":"+kifu.playerColCode[pl.position]+nf(k+1, 2));
         newNode.depth = 1;
         rootNode.children.add(newNode);//ルートノードにぶら下げる
         newNode.parent = null;//逆伝播をここで切りたいので
@@ -62,7 +62,7 @@ int uctMctsBrain(player pl, int expandThreshold, int terminateThreshold, int _de
     // 手抜きは展開しない。
     newNode = new uctNode();
     newNode.setItem(pl.position, 25);
-    newNode.id = rootNode.id+(":"+pl.position+nf(26, 2));
+    newNode.id = rootNode.id+(":"+kifu.playerColCode[pl.position]+nf(26, 2));
     newNode.depth = 1;
     rootNode.children.add(newNode);//ルートノードにぶら下げる
     newNode.parent = null;//
@@ -78,7 +78,7 @@ int uctMctsBrain(player pl, int expandThreshold, int terminateThreshold, int _de
         if ((pl.myBoard.vp[j]>0 && (pl.myBoard.s[i].col>=1 && pl.myBoard.s[i].col<=4)) || (pl.myBoard.vp[j]>0 && i==j)) {
           newNode = new uctNode();
           newNode.setItem(pl.position, k);
-          newNode.id = rootNode.id + (":"+pl.position+nf(j+1, 2)) + (":Y"+nf(i+1, 2));
+          newNode.id = rootNode.id + (":"+kifu.playerColCode[pl.position]+nf(j+1, 2)) + (":Y"+nf(i+1, 2));
           newNode.depth = 1;
           rootNode.children.add(newNode);//ぶら下げる
           newNode.parent = null;//
@@ -166,7 +166,7 @@ int uctMctsBrain(player pl, int expandThreshold, int terminateThreshold, int _de
     }
 
   }
-  println("ここからループ");
+  println("uct starts");
   int simulatorTag=10000;
   while (true) {
     //println(pl.myBoard.simulatorNumber);
@@ -186,22 +186,22 @@ int uctMctsBrain(player pl, int expandThreshold, int terminateThreshold, int _de
       print(str);
       simulatorTag += 10000;
       // １位と２位が大差であれば、ここで打ち切る。
-      uctNode nd1 = uctPrize.getMove(1);
-      uctNode nd2 = uctPrize.getMove(2);
-      float winrate1=nd1.wa[pl.position]/nd1.na;
-      float winrate2=nd2.wa[pl.position]/nd2.na;
-      float lowerBound = winrate1 - sqrt(winrate1*(1.0-winrate1)/nd1.na)*3.0;
-      if (winrate2 < lowerBound){
-        int ret = nd1.move;
-        println("大差["+nd1.id+"]");
-        if (pl.myBoard.attackChanceP()){
-          pl.yellow = int(ret/25);
-          return ret%25;
-        }
-        else {
-          return ret;
-        }
-      }
+      //uctNode nd1 = uctPrize.getMove(1);
+      //uctNode nd2 = uctPrize.getMove(2);
+      //float winrate1=nd1.wa[pl.position]/nd1.na;
+      //float winrate2=nd2.wa[pl.position]/nd2.na;
+      //float lowerBound = winrate1 - sqrt(winrate1*(1.0-winrate1)/nd1.na)*3.0;
+      //if (winrate2 < lowerBound){
+      //  int ret = nd1.move;
+      //  println("大差["+nd1.id+"]");
+      //  if (pl.myBoard.attackChanceP()){
+      //    pl.yellow = int(ret/25);
+      //    return ret%25;
+      //  }
+      //  else {
+      //    return ret;
+      //  }
+      //}
       
     }
     //println("uctMctsBrain:シミュレーション回数"+pl.myBoard.simulatorNumber);
@@ -287,7 +287,7 @@ int uctMctsBrain(player pl, int expandThreshold, int terminateThreshold, int _de
           break;
         }
       }
-      if (uctMaxNode.depth<_depth && uctMaxNode.id!="R") {   // 展開するための条件    
+      if (uctMaxNode.depth<_depth && uctMaxNode.id!="") {   // 展開するための条件    
         //println("uctMctsBrain:展開　"+uctMaxNode.id);
         // uctMaxNodeの下にノードをぶら下げる
         newNode=null;
@@ -308,7 +308,7 @@ int uctMctsBrain(player pl, int expandThreshold, int terminateThreshold, int _de
                 // 子ノードをぶら下げる
                 newNode = new uctNode();
                 newNode.setItem(p, k);
-                newNode.id = uctMaxNode.id+":"+p+nf(k, 2);
+                newNode.id = uctMaxNode.id+":"+kifu.playerColCode[p]+nf(k, 2);
                 newNode.depth = uctMaxNode.depth+1;
                 //println("uctMctsBrain: id="+newNode.id);                
                 tmpUctNodes.add(newNode);// tmpUctNodesに追加する
@@ -330,7 +330,7 @@ int uctMctsBrain(player pl, int expandThreshold, int terminateThreshold, int _de
                 if ((pl.myBoard.vp[j]>0 && (pl.myBoard.s[i].col>=1 && pl.myBoard.s[i].col<=4)) || (pl.myBoard.vp[j]>0 && i==j)) {
                   newNode = new uctNode();
                   newNode.setItem(p, k);
-                  newNode.id = uctMaxNode.id + (":"+pl.position+nf(j+1, 2)) + (":Y"+nf(i+1, 2));
+                  newNode.id = uctMaxNode.id + (":"+kifu.playerColCode[pl.position]+nf(j+1, 2)) + (":Y"+nf(i+1, 2));
                   newNode.depth = uctMaxNode.depth + 1;
                   //println("uctMctsBrain: id="+newNode.id);                  
                   tmpUctNodes.add(newNode);//tmpUctNodesにぶら下げる
