@@ -196,6 +196,11 @@ void showGames() {
     
     if (gameOptions.get("Order") == 3) {
       game.nextPlayer = getRandomOrder();// 次の手番をランダムに決める //
+      for (int p = 1; p<=4; p++) {
+        game.participants[p].turn = false;
+      }
+      game.participants[game.nextPlayer].turn = true;
+      managerPhase = mP.AfterChoosePlayer;
     } else if (gameOptions.get("Order") == 4){
       if (game.previousPlayer==0){
         game.previousPlayer = game.nextPlayer = int(random(4))+1;
@@ -203,14 +208,19 @@ void showGames() {
         game.nextPlayer = (game.previousPlayer%4)+1;
         game.previousPlayer = game.nextPlayer;
       }      
-    } else {
+      for (int p = 1; p<=4; p++) {
+        game.participants[p].turn = false;
+      }
+      game.participants[game.nextPlayer].turn = true;
+      managerPhase = mP.AfterChoosePlayer;
+    } else if (gameOptions.get("Order") == 0){
       game.nextPlayer = int(random(4))+1; 
+      for (int p = 1; p<=4; p++) {
+        game.participants[p].turn = false;
+      }
+      game.participants[game.nextPlayer].turn = true;
+      managerPhase = mP.AfterChoosePlayer;
     }
-    for (int p = 1; p<=4; p++) {
-      game.participants[p].turn = false;
-    }
-    game.participants[game.nextPlayer].turn = true;
-    managerPhase = mP.AfterChoosePlayer;
 
   } else if (managerPhase==mP.AfterChoosePlayer) {
     // from game.nextPlayer, set the player's turn
