@@ -9,7 +9,8 @@ int uctMctsBrain(player pl, int expandThreshold, int terminateThreshold, int _de
   println("uct starts");
   uct.simulationTag=10000;
   while (true) {
-    uctMctsMainLoop(pl, expandThreshold, terminateThreshold, _depth);
+    answer = uctMctsMainLoop(pl, expandThreshold, terminateThreshold, _depth);
+    if (answer!=-1) return answer;
   }// end of while(true)
 }
 
@@ -183,7 +184,7 @@ int uctMctsBrainFirstSimulation(int _count, player pl) {
   return -1;
 }
 
-void uctMctsMainLoop(player pl, int expandThreshold, int terminateThreshold, int _depth) {
+int uctMctsMainLoop(player pl, int expandThreshold, int terminateThreshold, int _depth) {
   //println(pl.myBoard.simulatorNumber);
   pl.myBoard.simulatorNumber ++;
   if (pl.myBoard.simulatorNumber>=uct.simulationTag) {
@@ -261,14 +262,11 @@ void uctMctsMainLoop(player pl, int expandThreshold, int terminateThreshold, int
         nd0.wa[p] += uct.winPoint.points[p];//2回め以降は和
         nd0.pa[p] += uct.winPoint.panels[p];//2回め以降は和
       }
-      //for (int p=1; p<=4; p++) {// 上がっていったら、たぶんUCTいらない。
-      //  nd0.uct[p] = nd0.UCTwp(p, pl.myBoard.simulatorNumber);// 上がっていったら、たぶんUCTいらない。
-      //}// 上がっていったら、たぶんUCTいらない。
       //println("uctMctsBrain:→　ノード ",nd0.id, "のデータ("+nd0.wa[1]+","+nd0.wa[2]+","+nd0.wa[3]+","+nd0.wa[4]+")/"+nd0.na);
     } else {// ルートまでたどり着いた、の意味
       break;
     }
-  } while (true);
+  } while (true);//println("親にさかのぼってデータを更新する");//おわり
 
   //println("uctMctsBrain:ノード ",uctMaxNode.id, "のデータ("+uctMaxNode.wa[1]+","+uctMaxNode.wa[2]+","+uctMaxNode.wa[3]+","+uctMaxNode.wa[4]+")/"+uctMaxNode.na);
   //println("uctMctsBrain:",uctMaxNode.na, uctMaxNode.wa[uctMaxNode.player], uctMaxNode.pa[uctMaxNode.player]);
@@ -378,13 +376,12 @@ void uctMctsMainLoop(player pl, int expandThreshold, int terminateThreshold, int
           // バックプロパゲートここまで
         }// 全部の新しいノードを５００回ずつ試行した。
         uct.prize.getPrize1FromNodeList(pl.position, uct.rootNode.children);
-        bestWr=uct.prize.w1;
+        float bestWr=uct.prize.w1;
         if (bestWr>0.0 && bestWr<1.0) {
           float lowerBound = bestWr - sqrt(bestWr*(1.0-bestWr)/uct.prize.m1.na)*4.0;// not 1.96? lol
           if (lowerBound>0) {
             int listSize=tmpUctNodes.size();
             for (int id=listSize-1; id>=0; id--) {
-              //println("348",id);
               uctNode nd=tmpUctNodes.get(id);
               //print((nd.move%25)+1, int(nd.move/25)+1, nd.wa[pl.position]/nd.na, lowerBound);
               if (nd.wa[pl.position]/nd.na < lowerBound) {
@@ -417,6 +414,7 @@ void uctMctsMainLoop(player pl, int expandThreshold, int terminateThreshold, int
       return ret;
     }
   }
+  return -1;
 }
 
 
