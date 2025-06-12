@@ -221,10 +221,7 @@ void showGames() {
       game.participants[game.nextPlayer].turn = true;
       managerPhase = mP.AfterChoosePlayer;
     }
-    for (int p = 1; p<=4; p++) {
-      game.participants[p].turn = false;
-    }
-    game.participants[game.nextPlayer].turn = true;
+
     
     background(255);
     utils.gameMainBoard.display(0);
@@ -235,7 +232,7 @@ void showGames() {
     showScreenCapture();
     showSaveBoard();
     
-    managerPhase = mP.AfterChoosePlayer;
+    //managerPhase = mP.AfterChoosePlayer;
 
   } else if (managerPhase==mP.AfterChoosePlayer) {
     // from game.nextPlayer, set the player's turn
