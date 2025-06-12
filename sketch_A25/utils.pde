@@ -94,3 +94,20 @@ class ucbClass{
     subsubBoard=new board();
   }
 }
+
+uctClass uct = new uctClass();
+class uctClass{
+  player[] participants;
+  winPoints winPoint;
+  prize prize;
+  board mainBoard;
+  board subBoard;
+  uctNode newNode;
+  uctNode rootNode;
+  ArrayList<uctNode> activeNodes;
+  int simulationTag=0;
+  
+  uctClass(){
+    ;
+  }
+};
