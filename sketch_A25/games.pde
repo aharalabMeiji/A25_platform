@@ -221,8 +221,6 @@ void showGames() {
       game.participants[game.nextPlayer].turn = true;
       managerPhase = mP.AfterChoosePlayer;
     }
-<<<<<<< Updated upstream
-=======
     for (int p = 1; p<=4; p++) {
       game.participants[p].turn = false;
     }
@@ -238,7 +236,6 @@ void showGames() {
     showSaveBoard();
     
     managerPhase = mP.AfterChoosePlayer;
->>>>>>> Stashed changes
 
   } else if (managerPhase==mP.AfterChoosePlayer) {
     // from game.nextPlayer, set the player's turn
