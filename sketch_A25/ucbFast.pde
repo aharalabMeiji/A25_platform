@@ -144,9 +144,6 @@ int ucbFastBrain(player pl, uctClass uct) {
   }
   do{
     uctNode maxNode = getMaxUcbFromNodeList(pl.position, uct.rootNode.children, count);
-    //if (uct == uct1){
-    //  print(":"+maxNode.na+"("+maxNode.move+")");
-    //}
     if (maxNode.na >= 1000) {
       break;
     }
@@ -166,7 +163,7 @@ int ucbFastBrain(player pl, uctClass uct) {
     count++;
   } while(count<20000);
   prz.getPrize1FromNodeList(pl.position, uct.rootNode.children);
-  println("goal="+prz.getMove(1).move);
+  //println("goal="+prz.getMove(1).move);
   if (pl.myBoard.attackChanceP()) {
     int k=prz.getMove(1).move;
     pl.yellow=int(k/25);//黄色にするパネルをこの変数に入れておけば、あとでそのように処理をする。

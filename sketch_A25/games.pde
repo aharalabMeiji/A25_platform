@@ -221,6 +221,24 @@ void showGames() {
       game.participants[game.nextPlayer].turn = true;
       managerPhase = mP.AfterChoosePlayer;
     }
+<<<<<<< Updated upstream
+=======
+    for (int p = 1; p<=4; p++) {
+      game.participants[p].turn = false;
+    }
+    game.participants[game.nextPlayer].turn = true;
+    
+    background(255);
+    utils.gameMainBoard.display(0);
+    for (int p = 1; p<=4; p++) {
+      game.participants[p].display(0);//
+    }
+    showReturnButton();
+    showScreenCapture();
+    showSaveBoard();
+    
+    managerPhase = mP.AfterChoosePlayer;
+>>>>>>> Stashed changes
 
   } else if (managerPhase==mP.AfterChoosePlayer) {
     // from game.nextPlayer, set the player's turn
@@ -260,12 +278,7 @@ void showGames() {
       utils.gameMainBoard.copyBoardToSub(game.participants[game.nextPlayer].myBoard);// copy a current board to the player's.
       int attack = game.participants[game.nextPlayer].callBrain();
       //print("["+attack+"]");
-      String strAttack=str(attack+1);
-      if (strAttack.length()<2) {
-        kifu.string += (kifu.playerColCode[game.nextPlayer]+"0"+strAttack);
-      } else {
-        kifu.string += (kifu.playerColCode[game.nextPlayer]+strAttack);
-      }
+      kifu.string += (kifu.playerColCode[game.nextPlayer]+nf(attack+1,2));
       utils.gameMainBoard.buildVP(game.nextPlayer);
       if (attack==25) {
         // パスを選択
