@@ -75,14 +75,8 @@ winPoints playSimulatorToEnd(board sub, player[] _participants) {// 引数名か
   }
   //println("playSimulatorToEnd:残り枚数は"+remaining);
   //int count=0;
-  
   if (remaining>0) {
     //println("playSimulatorToEnd:ループ開始");
-    //if (count==4){
-    //  for (int p=1; p<5; p++) {
-    //    _participants[p] = new player(p, "random", brain.Random);
-    //  }
-    //}
     do {
       int simulatorNextPlayer = int(random(4))+1;
       if (1<= simulatorNextPlayer && simulatorNextPlayer<=4 ) {
@@ -690,6 +684,59 @@ void UCB1(ucbClass ucb) {
   //println(millis()-startTime);
   //startTime=millis();
 }
+
+
+void UCT1() {
+  player nextPlayer=null;
+  if (simulationManager==sP.GameStart) {
+    simulator.Participants = new player[5];
+    for (int p=1; p<5; p++) {
+      simulator.Participants[p] = new player(p, "random", brain.Random);
+    }
+    for (int j=0; j<=25; j++) {
+      simulator.mainBoard.sv[j]=0;
+      simulator.mainBoard.sv2[j]=0;
+    }
+    for (int i=0; i<25; i++) {
+      simulator.mainBoard.s[i].col = simulatorStartBoard.get(simulator.StartBoardId).theArray[i];
+      simulator.mainBoard.s[i].marked = 0;
+    }
+    simulator.nextPlayer = simulatorStartBoard.get(simulator.StartBoardId).nextPlayer;
+    nextPlayer=simulator.Participants[simulator.nextPlayer];
+    int answer = uctMctsStartingJoseki(nextPlayer);
+    if (answer!=-1) {
+      simulator.mainBoard.sv[answer]=1;
+      simulationManager=sP.GameEnd;
+    }
+    else {
+      answer = uctMctsBrainPreparation(nextPlayer);
+      if (answer==-1){
+        simulationManager=sP.GameEnd;
+      }
+      else {
+        answer = uctMctsBrainFirstSimulation(500, nextPlayer);
+        if (answer!=-1) {
+          simulator.mainBoard.sv[answer]=1;
+          simulationManager=sP.GameEnd;
+        }
+        else {
+          println("uct starts");
+          uct.simulationTag=10000;
+          simulationManager=sP.setStartBoard;
+        }
+      }
+    }
+  } else if (simulationManager==sP.setStartBoard) {
+    int answer = uctMctsMainLoop(nextPlayer, 1000, 1000000, 4);
+    // 500回に1回、svにデータを埋める。
+    if (answer!=-1){
+      simulationManager=sP.GameEnd;
+    }
+  }else if (simulationManager==sP.GameEnd) {
+    ;
+  } 
+}
+
 
 void mousePreesedSimulator() {
   if (buttonReturnToMenu.mouseOn()) {//　メニューに戻る、をクリックされたとき
