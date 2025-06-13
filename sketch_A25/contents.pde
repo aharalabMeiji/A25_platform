@@ -472,10 +472,10 @@ void showContents() {
     button buttonSimMethod3=new button();
     buttonSimMethod3.setLT(left, top, buttonText);
     buttonSimMethod3.setItem("SimMethod", 3);
-    //buttons.add(buttonSimMethod3);
+    buttons.add(buttonSimMethod3);
     if (gameOptions.get("SimMethod") == 3) fill(255, 0, 0);
     else fill(0);
-    fill(200, 200, 200);
+    //fill(200, 200, 200);
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //

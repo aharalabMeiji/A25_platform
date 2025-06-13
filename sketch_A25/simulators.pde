@@ -203,8 +203,8 @@ void showSimulator() {
     fullRandomMC();
   } else if (gameOptions.get("SimMethod")==2) {
     UCB1(ucb1);
-  //} else if (gameOptions.get("SimMethod")==3) {
-  //  UCT2();
+  } else if (gameOptions.get("SimMethod")==3) {
+    UCT1();
   } else {
     fullRandomMC();
   }
@@ -703,6 +703,7 @@ void UCT1() {
     }
     simulator.nextPlayer = simulatorStartBoard.get(simulator.StartBoardId).nextPlayer;
     nextPlayer=simulator.Participants[simulator.nextPlayer];
+    simulator.mainBoard.copyBoardToSub(nextPlayer.myBoard);
     int answer = uctMctsStartingJoseki(nextPlayer);
     if (answer!=-1) {
       simulator.mainBoard.sv[answer]=1;
@@ -718,6 +719,10 @@ void UCT1() {
         if (answer!=-1) {
           simulator.mainBoard.sv[answer]=1;
           simulationManager=sP.GameEnd;
+          simulator.mainBoard.display(10);
+          showReturnButton();
+          showScreenCapture();
+
         }
         else {
           println("uct starts");
@@ -727,7 +732,13 @@ void UCT1() {
       }
     }
   } else if (simulationManager==sP.setStartBoard) {
-    int answer = uctMctsMainLoop(nextPlayer, 1000, 1000000, 4);
+    nextPlayer=simulator.Participants[simulator.nextPlayer];
+    int answer = uctMctsMainLoop(nextPlayer, 1000, 1000000, 4);//nextPlayerが空
+    
+    simulator.mainBoard.display(10);
+    showReturnButton();
+    showScreenCapture();
+    
     // 500回に1回、svにデータを埋める。
     if (answer!=-1){
       simulationManager=sP.GameEnd;
