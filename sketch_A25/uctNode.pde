@@ -44,7 +44,7 @@ class uctNode {
     return u1 + u2;
   }
   float UCTwp(int player, int NN) {// NN:　累計試行回数
-    float u1 = (wa[player]+pa[player]*0.04)/na;
+    float u1 = (wa[player]+pa[player]*0.04)/2/na;
     float u2 = 1.41421356*sqrt(log(NN)/na);
     return u1 + u2;
   }
