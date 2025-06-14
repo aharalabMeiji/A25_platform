@@ -1,7 +1,7 @@
 // contents
 
 void showContents() {
-  if(buttons==null){
+  if (buttons==null) {
     buttons = new ArrayList<button>();
   } else {
     buttons.clear();
@@ -149,7 +149,7 @@ void showContents() {
     else fill(0);
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
-     
+
     // Player3
     top += utils.vStep;
     left=utils.hOffset;
@@ -268,7 +268,7 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
 
-    
+
     // Order
     top += utils.vStep;
     left=utils.hOffset;
@@ -317,7 +317,7 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
 
-    
+
     // Times
     top += utils.vStep;
     left=utils.hOffset;
@@ -406,7 +406,7 @@ void showContents() {
     left=utils.hOffset;
     int total = simulatorStartBoard.size();
     if (total>0) {
-      float smallBoardDispSize = utils.fontSize; 
+      float smallBoardDispSize = utils.fontSize;
       float boardDispSize = smallBoardDispSize*1.5;
       int now = (simulator.StartBoardId) % total;
       int prev = (simulator.StartBoardId + total -1 ) % total;
@@ -439,13 +439,14 @@ void showContents() {
     buttonStart.setLT(left, top, buttonText);
     fill(255, 0, 0);
     text(buttonText, left, top);
-  } else if (gameOptions.get("gameMode") == 1) {// Simulation options
+  } else if (gameOptions.get("gameMode") == 1) {///////////////////////////////////////// Simulation options
     // シミュレーション方法選択
     //top += utils.vStep;
     left=utils.hOffset;
     String captionText = "Sim :";
     fill(0);
     text(captionText, left, top);
+    //gameOptions.set("SimTimes", 2);
     left += (textWidth(captionText)+utils.hSpace);
     //
     buttonText = "[MC]";
@@ -489,7 +490,7 @@ void showContents() {
       text(captionText, left, top);
       left += (textWidth(captionText)+utils.hSpace);
       //
-      buttonText = "[1000]";
+      buttonText = "[1K]";
       button buttontimes1=new button();
       buttontimes1.setLT(left, top, buttonText);
       buttontimes1.setItem("SimTimes", 1);
@@ -499,7 +500,7 @@ void showContents() {
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
       //
-      buttonText = "[10000]";
+      buttonText = "[10K]";
       button buttontimes2=new button();
       buttontimes2.setLT(left, top, buttonText);
       buttontimes2.setItem("SimTimes", 2);
@@ -518,7 +519,7 @@ void showContents() {
       else fill(0);
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
-    } else {//if (gameOptions.get("SimMethod") == 2 or 3){//[UCT-MC]
+    } else if (gameOptions.get("SimMethod") == 2 ){//[UCB]
       top += utils.vStep;
       left=utils.hOffset;
       captionText = "Time:";
@@ -552,6 +553,45 @@ void showContents() {
       buttontimes3.setItem("SimTimes", 13);
       buttons.add(buttontimes3);
       if (gameOptions.get("SimTimes") == 13) fill(255, 0, 0);
+      else fill(0);
+      text(buttonText, left, top);
+      left += (textWidth(buttonText)+utils.hSpace);
+      //
+    } else {//gameOptions.get("SimMethod") == 3 
+      //println("L561@contents",gameOptions.get("SimTimes"));
+      top += utils.vStep;
+      left=utils.hOffset;
+      captionText = "Time:";
+      fill(0);
+      text(captionText, left, top);
+      left += (textWidth(captionText)+utils.hSpace);
+      //
+      buttonText = "[500/100K]";
+      button buttontimes1=new button();
+      buttontimes1.setLT(left, top, buttonText);
+      buttontimes1.setItem("SimTimes", 21);
+      buttons.add(buttontimes1);
+      if (gameOptions.get("SimTimes") == 21) fill(255, 0, 0);
+      else fill(0);
+      text(buttonText, left, top);
+      left += (textWidth(buttonText)+utils.hSpace);
+      //
+      buttonText = "[1K/1M]";
+      button buttontimes2=new button();
+      buttontimes2.setLT(left, top, buttonText);
+      buttontimes2.setItem("SimTimes", 22);
+      buttons.add(buttontimes2);
+      if (gameOptions.get("SimTimes") == 22) fill(255, 0, 0);
+      else fill(0);
+      text(buttonText, left, top);
+      left += (textWidth(buttonText)+utils.hSpace);
+      //
+      buttonText = "[1K/10M]";
+      button buttontimes3=new button();
+      buttontimes3.setLT(left, top, buttonText);
+      buttontimes3.setItem("SimTimes", 23);
+      buttons.add(buttontimes3);
+      if (gameOptions.get("SimTimes") == 23) fill(255, 0, 0);
       else fill(0);
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
@@ -601,7 +641,7 @@ void showContents() {
     left=utils.hOffset;
     int total = simulatorStartBoard.size();
     if (total>0) {
-      float smallBoardDispSize = utils.fontSize; 
+      float smallBoardDispSize = utils.fontSize;
       float boardDispSize = smallBoardDispSize*1.5;
       int now = (simulator.StartBoardId) % total;
       int prev = (simulator.StartBoardId + total -1 ) % total;

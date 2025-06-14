@@ -55,6 +55,7 @@ void setup() {
 }
 
 void draw() {
+  
   if (displayManager == dP.onSimulator) {
     showSimulator();
   } else if (displayManager == dP.onGame) {// 通常のゲーム進行
@@ -118,12 +119,15 @@ void mousePressed() {
       for (button b : buttons) {
         if (b.mouseOn()) {
           gameOptions.set(b.dictKey, b.dictInt);
+          //println("L121@A25",b.dictKey, b.dictInt,(b.dictKey=="SimMethod" && b.dictInt==3));
           if (b.dictKey=="SimMethod" && b.dictInt==1) {
             gameOptions.set("SimTimes", 2);
           } else if (b.dictKey=="SimMethod" && b.dictInt==2) {
             gameOptions.set("SimTimes", 12);
+          } else if (b.dictKey=="SimMethod" && b.dictInt==3) {
+            gameOptions.set("SimTimes", 22);
           }
-          //println(b.dictKey, b.dictInt);
+          //println(gameOptions.get("SimMethod"), gameOptions.get("SimTimes"));
           return;
         }
       }

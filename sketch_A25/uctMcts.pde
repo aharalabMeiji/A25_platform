@@ -33,7 +33,7 @@ int uctMctsStartingJoseki(player pl) {
   if (count==2){
     uct.mainBoard=new board();
     pl.myBoard.buildVP(pl.position);
-    if (pl.myBoard.vp[2]>0) return 2;
+    if (pl.myBoard.vp[2]>0) return 2; //<>//
     if (pl.myBoard.vp[10]>0) return 10;
     if (pl.myBoard.vp[14]>0) return 14;
     if (pl.myBoard.vp[22]>0) return 22;
@@ -204,7 +204,7 @@ int uctMctsBrainFirstSimulation(int _count, player pl) {
   if (uct.rootNode.children.size()==1) {
     /// 選択肢が一つの時には、それを答える。
     int ret=uct.rootNode.children.get(0).move;
-    println("["+uct.rootNode.children.get(0).id+"]");
+    //println("["+uct.rootNode.children.get(0).id+"]");
     if (pl.myBoard.attackChanceP()) {
       pl.yellow = int(ret/25);
       return ret%25;
@@ -223,7 +223,7 @@ int uctMctsMainLoop(player pl, int expandThreshold, int terminateThreshold, int 
     String str="";
     str = " "+(uct.simulationTag/10000)+":(";
     if (uct.prize.getMove(1)!=null) {
-      str += (" "+uct.prize.getMove(1).id);
+      str += (""+uct.prize.getMove(1).id);
     }
     str += ",";
     if (uct.prize.getMove(2)!=null) {
@@ -332,7 +332,7 @@ int uctMctsMainLoop(player pl, int expandThreshold, int terminateThreshold, int 
               // 子ノードをぶら下げる
               uct.newNode = new uctNode();
               uct.newNode.setItem(p, k);
-              uct.newNode.id = uctMaxNode.id+":"+kifu.playerColCode[p]+nf(k, 2);
+              uct.newNode.id = uctMaxNode.id+":"+kifu.playerColCode[p]+nf(k+1, 2);
               uct.newNode.depth = uctMaxNode.depth+1;
               //println("uctMctsBrain: id="+uct.newNode.id);
               tmpUctNodes.add(uct.newNode);// tmpUctNodesに追加する
@@ -406,7 +406,7 @@ int uctMctsMainLoop(player pl, int expandThreshold, int terminateThreshold, int 
           } while (true);
           // バックプロパゲートここまで
         }// 全部の新しいノードを５００回ずつ試行した。
-        uct.prize.getPrize1FromNodeList(pl.position, uct.rootNode.children);
+        uct.prize.getPrize1FromNodeList(uctMaxNode.player, tmpUctNodes);
         float bestWr=uct.prize.w1;
         if (bestWr>0.0 && bestWr<1.0) {
           float lowerBound = bestWr - sqrt(bestWr*(1.0-bestWr)/uct.prize.m1.na)*4.0;// not 1.96? lol
@@ -415,8 +415,8 @@ int uctMctsMainLoop(player pl, int expandThreshold, int terminateThreshold, int 
             for (int id=listSize-1; id>=0; id--) {
               uctNode nd=tmpUctNodes.get(id);
               //print((nd.move%25)+1, int(nd.move/25)+1, nd.wa[pl.position]/nd.na, lowerBound);
-              if (nd.wa[pl.position]/nd.na < lowerBound) {
-                uct.rootNode.children.remove(nd);
+              if (nd.wa[uctMaxNode.player]/nd.na < lowerBound) {
+                tmpUctNodes.remove(nd);
                 //print(":deleted");
               }
               //println();
@@ -428,7 +428,7 @@ int uctMctsMainLoop(player pl, int expandThreshold, int terminateThreshold, int 
         }
         for (uctNode nd : tmpUctNodes) {
           uctMaxNode.children.add(nd);//親ノードにぶら下げた
-          uct.activeNodes.add(uct.newNode);//アクティブなノードのリストに追加
+          uct.activeNodes.add(nd);//アクティブなノードのリストに追加
         }
       }//ここまで、４人分のノード展開
     }

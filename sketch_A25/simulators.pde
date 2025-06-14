@@ -707,7 +707,11 @@ void UCT1() {
     int answer = uctMctsStartingJoseki(nextPlayer);
     if (answer!=-1) {
       simulator.mainBoard.sv[answer]=1;
+      simulator.mainBoard.s[answer].marked=1;
       simulationManager=sP.GameEnd;
+      simulator.mainBoard.display(12);
+      showReturnButton();
+      showScreenCapture();
     }
     else {
       answer = uctMctsBrainPreparation(nextPlayer);
@@ -717,9 +721,12 @@ void UCT1() {
       else {
         answer = uctMctsBrainFirstSimulation(500, nextPlayer);
         if (answer!=-1) {
-          simulator.mainBoard.sv[answer]=1;
+          uctNode nd = uct.rootNode.children.get(0);
+          simulator.mainBoard.sv[answer]=nd.wa[nextPlayer.position] / nd.na;
+          simulator.mainBoard.sv2[answer]=nd.pa[nextPlayer.position] / nd.na;
+          simulator.mainBoard.s[answer].marked=1;
           simulationManager=sP.GameEnd;
-          simulator.mainBoard.display(10);
+          simulator.mainBoard.display(12);
           showReturnButton();
           showScreenCapture();
 
@@ -733,12 +740,101 @@ void UCT1() {
     }
   } else if (simulationManager==sP.setStartBoard) {
     nextPlayer=simulator.Participants[simulator.nextPlayer];
-    int answer = uctMctsMainLoop(nextPlayer, 1000, 1000000, 4);//nextPlayerが空
-    
-    simulator.mainBoard.display(10);
-    showReturnButton();
-    showScreenCapture();
-    
+    int answer=-1;
+    if (gameOptions.get("SimTimes") == 21)
+      answer = uctMctsMainLoop(nextPlayer, 500, 100000, 4);//
+    else if (gameOptions.get("SimTimes") == 22)
+      answer = uctMctsMainLoop(nextPlayer, 1000, 1000000, 4);//
+    else if (gameOptions.get("SimTimes") == 23)
+      answer = uctMctsMainLoop(nextPlayer, 1000, 10000000, 4);//
+    // 500回に1回、svにデータを埋める。
+    if (nextPlayer.myBoard.simulatorNumber %1000 ==10){
+      String message="";
+      if (uct.rootNode.attackChanceNode==false){
+        for (uctNode nd : uct.rootNode.children){
+          int k = nd.move;//たぶん、kは0～２５
+          if (0<=k && k<=25) {
+            simulator.mainBoard.sv[k] = nd.wa[nextPlayer.position] / nd.na;
+            simulator.mainBoard.sv2[k] = nd.pa[nextPlayer.position] / nd.na;
+            if (k<25){
+              simulator.mainBoard.s[k].marked = 1;
+            }
+          }
+        }
+        uct.prize.getPrize3FromNodeList(nextPlayer.position, uct.rootNode.children);
+        message="";
+        uctNode nd1, ndP;
+        uctNode[] nd2 = new uctNode[5];
+        uctNode[] nd3 = new uctNode[5];
+        uctNode[] nd4 = new uctNode[5];
+        float maxWinrate=0;
+        if (uct.prize.getMove(1)!=null) {
+          nd1 = uct.prize.getMove(1);
+          for (int p2=1; p2<=4; p2++){
+            if (nd1.children!=null){
+              ndP = null;
+              maxWinrate = 0;
+              for (uctNode nd : nd1.children){
+                if (nd.player==p2){
+                  if (maxWinrate < nd.wa[p2]/nd.na){
+                    maxWinrate = nd.wa[p2]/nd.na;
+                    ndP = nd;
+                  }
+                }
+              }
+              nd2[p2] = ndP;
+            }
+          }
+          for (int p3=1; p3<=4; p3++){
+            if (nd2[p3]!=null && nd2[p3].children!=null){
+              ndP = null;
+              maxWinrate = 0;
+              for (uctNode nd : nd2[p3].children){
+                if (maxWinrate < nd.wa[p3]/nd.na){
+                  maxWinrate = nd.wa[p3]/nd.na;
+                  ndP = nd;
+                }
+              }
+              nd3[p3] = ndP;
+            }
+          }
+          for (int p4=1; p4<=4; p4++){
+            if (nd3[p4]!=null && nd3[p4].children!=null){
+              ndP = null;
+              maxWinrate = 0;
+              for (uctNode nd : nd3[p4].children){
+                if (maxWinrate < nd.wa[p4]/nd.na){
+                  maxWinrate = nd.wa[p4]/nd.na;
+                  ndP = nd;
+                }
+              }
+              nd4[p4] = ndP;
+            }
+          }
+          for (int p=1; p<=4; p++){
+            if (nd4[p]!=null) 
+              message += ("["+nd4[p].id+"]");
+            else if(nd3[p]!=null) 
+              message += ("["+nd3[p].id+"]");
+            else if(nd2[p]!=null) 
+              message += ("["+nd2[p].id+"]");
+            else if(nd1!=null) 
+              message += ("["+nd1.id+"]");
+            else 
+              message += "[]";
+          }
+        }
+
+      } else {
+        
+      }
+      simulator.mainBoard.display(12);// UCTディスプレイ
+      textAlign(LEFT, CENTER); 
+      fill(0);
+      text(message, utils.subL, utils.subU);
+      showReturnButton();
+      showScreenCapture();
+    }
     // 500回に1回、svにデータを埋める。
     if (answer!=-1){
       simulationManager=sP.GameEnd;
