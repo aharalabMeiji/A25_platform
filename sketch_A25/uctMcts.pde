@@ -246,6 +246,7 @@ int uctMctsMainLoop(player pl, int expandThreshold, int terminateThreshold, int 
       uctNode nd = uct.activeNodes.get(zz);
       if (nd.na >= expandThreshold && nd.depth >= _depth) {//
         uct.activeNodes.remove(zz);
+        println("末端のノード("+nd.id+")がいっぱいになったのでアクティブノードのリストから消去");
       } else if (nd.uct[nd.player]>uctMax) {
         uctMax=nd.uct[nd.player];
         uctMaxNode = nd;
@@ -309,7 +310,7 @@ int uctMctsMainLoop(player pl, int expandThreshold, int terminateThreshold, int 
         }
       }
       if (uctMaxNode.depth<_depth && uctMaxNode.id!="") {   // 展開するための条件
-        //println("uctMctsBrain:展開　"+uctMaxNode.id);
+        println("uctMctsBrain:展開　"+uctMaxNode.id);
         // uctMaxNodeの下にノードをぶら下げる
         uct.newNode=null;
 
@@ -422,10 +423,11 @@ int uctMctsMainLoop(player pl, int expandThreshold, int terminateThreshold, int 
           }// ここまで、プレイヤーpにとって、筋の悪いものを消した。
           if (uctMaxNode.children==null) {//
             uctMaxNode.children = new ArrayList<uctNode>();
-          }
+          } 
           for (uctNode nd : tmpUctNodes) {
             uctMaxNode.children.add(nd);//親ノードにぶら下げた
             uct.activeNodes.add(nd);//アクティブなノードのリストに追加
+            println("新しいノード("+nd.id+")を追加");
           }
         }//ここまで、４人分のノード展開
       }
@@ -469,12 +471,14 @@ void showAllMct(uctNode nd, int totalNumber, PrintWriter output) {
 
 int returnBestChildFromRoot(player pl, uctNode root) {
   // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする。
-  float bestWr=0;//
+  float bestWr=0, bestPr=0;//
   int bestMove=-1;
   for (uctNode nd1 : root.children) {
-    float tmpWe = (nd1.wa[pl.position]+nd1.pa[pl.position]*0.04 )/ nd1.na;
-    if (bestWr<=tmpWe) {
-      bestWr = tmpWe;
+    float tmpWr = (nd1.wa[pl.position])/ nd1.na;
+    float tmpPr = (nd1.pa[pl.position])/nd1.na;
+    if (bestWr<tmpWr || ( bestWr==tmpWr && bestPr<=tmpPr)) {
+      bestWr = tmpWr;
+      bestPr = tmpPr;
       bestMove = nd1.move;
     }
   }
@@ -483,20 +487,24 @@ int returnBestChildFromRoot(player pl, uctNode root) {
 
 int returnBest2ChildrenFromRoot(player pl, uctNode root) {
   // rootに直接ぶら下がっているノードの中から、最も勝率が良いものから２つをリターンする。
-  float bestWr=0;//
+  float bestWr=0,bestPr=0;//
   int bestMove=-1;
-  float secondWr=0;//
+  float secondWr=0, secondPr=0;//
   int secondMove=-1;
   for (uctNode nd1 : root.children) {
-    float tmpWe = nd1.wa[pl.position] / nd1.na;
-    if (bestWr<tmpWe) {
+    float tmpWr = nd1.wa[pl.position] / nd1.na;
+    float tmpPr = nd1.pa[pl.position] / nd1.na;
+    if (bestWr<tmpWr || (bestWr==tmpWr && bestPr<=tmpPr)) {
       secondWr = bestWr;
+      secondPr = bestPr;
       secondMove = bestMove;
-      bestWr = tmpWe;
+      bestWr = tmpWr;
+      bestPr = tmpPr;
       bestMove = nd1.move;
     } else
-      if (secondWr<tmpWe) {
-        secondWr = tmpWe;
+      if (secondWr<tmpWr || (secondWr==tmpWr && secondPr<=tmpPr)) {
+        secondWr = tmpWr;
+        secondPr = tmpPr;
         secondMove = nd1.move;
       }
   }
