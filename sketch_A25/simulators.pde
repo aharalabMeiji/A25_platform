@@ -752,28 +752,28 @@ void UCT1() {
     nextPlayer=simulator.Participants[simulator.nextPlayer];
     int answer=-1;
     if (SimTimes == 21)
-      answer = uctMctsMainLoop(nextPlayer, 500, 100000, 2);//
+      answer = uctMctsMainLoop(nextPlayer, 500, 100000, 4);//
     else if (SimTimes == 22)
-      answer = uctMctsMainLoop(nextPlayer, 1000, 1000000, 2);//
+      answer = uctMctsMainLoop(nextPlayer, 1000, 1000000, 4);//
     else if (SimTimes == 23)
-      answer = uctMctsMainLoop(nextPlayer, 1000, 10000000, 2);//
-    // 500回に1回、svにデータを埋める。
-    if (nextPlayer.myBoard.simulatorNumber %1000 ==10) {
-      
-      if (uct.rootNode.attackChanceNode==false) {
-        for (uctNode nd : uct.rootNode.children) {
-          int k = nd.move;//たぶん、kは0～２５
-          if (0<=k && k<=25) {
-            simulator.mainBoard.sv[k] = nd.wa[nextPlayer.position] / nd.na;
-            simulator.mainBoard.sv2[k] = nd.pa[nextPlayer.position] / nd.na;
-            if (k<25) {
-              simulator.mainBoard.s[k].marked = 1;
-            }
+      answer = uctMctsMainLoop(nextPlayer, 1000, 10000000, 4);//
+    // 1000回に1回、svにデータを埋める。
+
+    
+    if (uct.rootNode.attackChanceNode==false) {
+      for (uctNode nd : uct.rootNode.children) {
+        int k = nd.move;//たぶん、kは0～２５
+        if (0<=k && k<=25) {
+          simulator.mainBoard.sv[k] = nd.wa[nextPlayer.position] / nd.na;
+          simulator.mainBoard.sv2[k] = nd.pa[nextPlayer.position] / nd.na;
+          if (k<25) {
+            simulator.mainBoard.s[k].marked = 1;
           }
         }
-      } else {
       }
+    } else {
     }
+  
     showMcts(nextPlayer);
     if (answer!=-1) {
       simulationManager=sP.GameEnd;

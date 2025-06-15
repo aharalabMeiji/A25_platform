@@ -1,3 +1,4 @@
+// line 350
 class board {
   panel[] s;
 

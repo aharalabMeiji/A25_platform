@@ -234,7 +234,8 @@ int uctMctsMainLoop(player pl, int expandThreshold, int terminateThreshold, int 
       for (int p=1; p<=4; p++) {
         // シミュレーション総回数はpl.myBoard.simulatorNumber
         // 平均パネル枚数に0.04かけて、加算している。
-        nd.uct[p] = nd.UCTwp(p, pl.myBoard.simulatorNumber);
+        //nd.uct[p] = nd.UCTwp(p, pl.myBoard.simulatorNumber);
+        nd.uct[p] = nd.UCTa(p, pl.myBoard.simulatorNumber);
       }
     }
 
@@ -453,7 +454,8 @@ void showAllMct(uctNode nd, int totalNumber, PrintWriter output) {
   if (nd==null) return;
   if (nd != uct.rootNode) {
     float winrate = nd.wa[nd.player] / nd.na;
-    float ucbValue = nd.UCTwp(nd.player, totalNumber);
+    //float ucbValue = nd.UCTwp(nd.player, totalNumber);
+    float ucbValue = nd.UCTa(nd.player, totalNumber);
     println(nd.id+": "+ nf(winrate, 0, 3)+" [" +nd.na+"] <"+nf(ucbValue, 0, 3)+">");
   }
   if (nd.children!=null) {
