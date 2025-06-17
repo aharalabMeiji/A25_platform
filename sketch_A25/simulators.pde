@@ -701,9 +701,23 @@ void UCB1(ucbClass ucb) {
 
 void UCT1() {
   player nextPlayer=null;
-
+  int expandThreshold = 10;
+  int terminateThreshold = expandThreshold*1000000;
+  int depthMax = 4;
   int SimTimes = gameOptions.get("SimTimes");
   if (simulationManager==sP.GameStart) {
+    if (SimTimes == 21){
+      //expandThreshold=10;
+      //terminateThreshold = expandThreshold*100000;      
+    }
+    else if (SimTimes == 22){
+      expandThreshold=100;
+      terminateThreshold = expandThreshold*30000;
+    }
+    else if (SimTimes == 23){
+      expandThreshold=1000;
+      terminateThreshold = expandThreshold*30000;
+    }
     simulator.Participants = new player[5];
     for (int p=1; p<5; p++) {
       simulator.Participants[p] = new player(p, "random", brain.Random);
@@ -732,7 +746,7 @@ void UCT1() {
       if (answer==-1) {
         simulationManager=sP.GameEnd;
       } else {
-        answer = uctMctsBrainFirstSimulation(500, nextPlayer);
+        answer = uctMctsBrainFirstSimulation(5, nextPlayer);
         if (answer!=-1) {
           uctNode nd = uct.rootNode.children.get(0);
           simulator.mainBoard.sv[answer]=nd.wa[nextPlayer.position] / nd.na;
@@ -752,15 +766,9 @@ void UCT1() {
   } else if (simulationManager==sP.setStartBoard) {
     nextPlayer=simulator.Participants[simulator.nextPlayer];
     int answer=-1;
-    if (SimTimes == 21)
-      answer = uctMctsMainLoop(nextPlayer, 50, 50*30000, 4);//
-    else if (SimTimes == 22)
-      answer = uctMctsMainLoop(nextPlayer, 100, 100*30000, 4);//
-    else if (SimTimes == 23)
-      answer = uctMctsMainLoop(nextPlayer, 1000, 1000*30000, 4);//
+    answer = uctMctsMainLoop(nextPlayer, expandThreshold, terminateThreshold, depthMax);//
     // 1000回に1回、svにデータを埋める。
 
-    
     if (uct.rootNode.attackChanceNode==false) {
       for (uctNode nd : uct.rootNode.children) {
         int k = nd.move;//たぶん、kは0～２５

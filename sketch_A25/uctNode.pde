@@ -15,6 +15,8 @@ class uctNode {
   int depth;
   uctNode parent=null;//必要
   boolean attackChanceNode=false;
+  ArrayList<uctNode> activeNodes=null;// アクティブな子ノード
+  uctNode ancestor = null;// 第1世代の子ノード
 
   uctNode() {
     na=1;
