@@ -300,6 +300,7 @@ class panel {
   int x = 0, y = 0;
   int n = 0;
   int marked = 0;
+  int shaded = 0;
   float  sv =0.0;
   float sv2 =0.0;
   panel(int _x, int _y, int _n) {

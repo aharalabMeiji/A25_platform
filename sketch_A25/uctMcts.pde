@@ -6,7 +6,7 @@ int uctMctsBrain(player pl, int expandThreshold, int terminateThreshold, int _de
   if (answer!=-1) return answer;
   answer = uctMctsBrainPreparation(pl);
   if (answer==-1) return -1;
-  answer = uctMctsBrainFirstSimulation(expandThreshold/2, pl);
+  answer = uctMctsBrainFirstSimulation(2, pl);
   if (answer!=-1) return answer;
   println("uct starts");
   uct.simulationTag=expandThreshold*10;
@@ -212,18 +212,18 @@ int uctMctsBrainFirstSimulation(int _count, player pl) {
 }
 
 int uctMctsMainLoop(player pl, int expandThreshold, int terminateThreshold, int _depth) {
-    // console に計算経過を出力（マストではない。）
-    uct.prize.getPrize3FromNodeList(pl.position, uct.rootNode.children);
-    String str=""+(pl.myBoard.simulatorNumber/1000)+":(";
-    if (uct.prize.getMove(1)!=null) {
-      str += (""+uct.prize.getMove(1).id);
-    }
-    str += ",";
-    if (uct.prize.getMove(2)!=null) {
-      str += (uct.prize.getMove(2).id);
-    }
-    str += ")";
-    print(str);
+  // console に計算経過を出力（マストではない。）
+  uct.prize.getPrize3FromNodeList(pl.position, uct.rootNode.children);
+  String str=""+(pl.myBoard.simulatorNumber/1000)+":(";
+  if (uct.prize.getMove(1)!=null) {
+    str += (""+uct.prize.getMove(1).id);
+  }
+  str += ",";
+  if (uct.prize.getMove(2)!=null) {
+    str += (uct.prize.getMove(2).id);
+  }
+  str += ")";
+  //print(str);
   //println(pl.myBoard.simulatorNumber);
   for (int repeat=0; repeat<1000; repeat++) {
     pl.myBoard.simulatorNumber ++;
@@ -312,7 +312,8 @@ int uctMctsMainLoop(player pl, int expandThreshold, int terminateThreshold, int 
         }
       }
       if (uctMaxNode.depth<_depth && uctMaxNode.id!="") {   // 展開するための条件
-        println("uctMctsBrain:展開　"+uctMaxNode.id);/////////////////////////////ここから展開
+        //println("uctMctsBrain:展開　"+uctMaxNode.id);/////////////////////////////ここから展開
+        println(uctMaxNode.id+"を展開中");//+returnFriquentChildFromRoot(uct.rootNode).id);
         // uctMaxNodeの下にノードをぶら下げる
         uct.newNode=null;
 
@@ -460,7 +461,7 @@ void showAllMct(uctNode nd, int totalNumber, PrintWriter output) {
     float winrate = nd.wa[nd.player] / nd.na;
     //float ucbValue = nd.UCTwp(nd.player, totalNumber);
     float ucbValue = nd.UCTa(nd.player, totalNumber);
-    println(nd.id+": "+ nf(winrate, 0, 3)+" [" +nd.na+"] <"+nf(ucbValue, 0, 3)+">");
+    //println(nd.id+": "+ nf(winrate, 0, 3)+" [" +nd.na+"] <"+nf(ucbValue, 0, 3)+">");
   }
   if (nd.children!=null) {
     if (nd.children.size()>0) {
@@ -487,6 +488,18 @@ int returnBestChildFromRoot(player pl, uctNode root) {
   return bestMove;//
 }
 
+uctNode returnFriquentChildFromRoot(uctNode root) {
+  // rootに直接ぶら下がっているノードの中から、最も訪問関数が良いものをリターンする。
+  float bestNa=0;//
+  uctNode bestMove=null;
+  for (uctNode nd1 : root.children) {
+    if (bestNa<nd1.na) {
+      bestNa = nd1.na;
+      bestMove = nd1;
+    }
+  }
+  return bestMove;//
+}
 int returnBest2ChildrenFromRoot(player pl, uctNode root) {
   // rootに直接ぶら下がっているノードの中から、最も勝率が良いものから２つをリターンする。
   float bestWr=0,bestPr=0;//

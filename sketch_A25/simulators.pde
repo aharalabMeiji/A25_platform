@@ -701,6 +701,7 @@ void UCB1(ucbClass ucb) {
 
 void UCT1() {
   player nextPlayer=null;
+
   int SimTimes = gameOptions.get("SimTimes");
   if (simulationManager==sP.GameStart) {
     simulator.Participants = new player[5];
@@ -851,6 +852,10 @@ void showMcts(player nextPlayer) {
   simulator.mainBoard.display(12);// UCTディスプレイ
   textAlign(LEFT, CENTER);
   fill(0);
+  if (!simulator.mainBoard.attackChanceP){
+    text(1.0*simulator.mainBoard.sv[25], utils.mainL, utils.mainU-utils.fontSize);
+    text(1.0*simulator.mainBoard.sv2[25], utils.mainL+utils.fontSize*3.5, utils.mainU-utils.fontSize);
+  }
   for (int p=1; p<=4; p++) {
     text(message[p], utils.unitSize/2, utils.subU+utils.vStep*(p-1));
   }
