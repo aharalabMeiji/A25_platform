@@ -752,11 +752,11 @@ void UCT1() {
     nextPlayer=simulator.Participants[simulator.nextPlayer];
     int answer=-1;
     if (SimTimes == 21)
-      answer = uctMctsMainLoop(nextPlayer, 500, 100000, 4);//
+      answer = uctMctsMainLoop(nextPlayer, 50, 50*30000, 4);//
     else if (SimTimes == 22)
-      answer = uctMctsMainLoop(nextPlayer, 1000, 1000000, 4);//
+      answer = uctMctsMainLoop(nextPlayer, 100, 100*30000, 4);//
     else if (SimTimes == 23)
-      answer = uctMctsMainLoop(nextPlayer, 1000, 10000000, 4);//
+      answer = uctMctsMainLoop(nextPlayer, 1000, 1000*30000, 4);//
     // 1000回に1回、svにデータを埋める。
 
     

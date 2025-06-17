@@ -71,7 +71,7 @@ class player {
     } else if (myBrain==brain.UCB2){
       return ucbFastBrain(this, uct2);
     } else if (myBrain==brain.UCT334){
-      return uctMctsBrain(this, 1000, 1000000, 4);
+      return uctMctsBrain(this, 50, 1500000, 4);
     } else if (myBrain==brain.UCBUCT){
       return uctMctsABrain(this, 1000, 1000000, 4);
     }
