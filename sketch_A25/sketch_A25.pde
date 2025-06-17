@@ -1,7 +1,6 @@
 import javax.swing.JOptionPane; //
 import org.apache.commons.math3.random.MersenneTwister;
 
-
 MersenneTwister mt;
 
 void setup() {

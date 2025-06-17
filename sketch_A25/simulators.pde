@@ -706,6 +706,7 @@ void UCT1() {
   int depthMax = 4;
   int SimTimes = gameOptions.get("SimTimes");
   if (simulationManager==sP.GameStart) {
+    startTime=millis();
     if (SimTimes == 21){
       //expandThreshold=10;
       //terminateThreshold = expandThreshold*100000;      

@@ -225,17 +225,18 @@ int uctMctsBrainFirstSimulation(int _count, player pl) {
 int uctMctsMainLoop(player pl, int expandThreshold, int terminateThreshold, int _depth) {
   // console に計算経過を出力（マストではない。）
   uct.prize.getPrize3FromNodeList(pl.position, uct.rootNode.children);
-  String str=""+(pl.myBoard.simulatorNumber/1000)+":(";
-  if (uct.prize.getMove(1)!=null) {
-    str += (""+uct.prize.getMove(1).id);
-  }
-  str += ",";
-  if (uct.prize.getMove(2)!=null) {
-    str += (uct.prize.getMove(2).id);
-  }
-  str += ")";
+  //String str=""+(pl.myBoard.simulatorNumber/1000)+":(";
+  //if (uct.prize.getMove(1)!=null) {
+  //  str += (""+uct.prize.getMove(1).id);
+  //}
+  //str += ",";
+  //if (uct.prize.getMove(2)!=null) {
+  //  str += (uct.prize.getMove(2).id);
+  //}
+  //str += ")";
   //print(str);
   //println(pl.myBoard.simulatorNumber);
+  print(".");
   for (int repeat=0; repeat<1000; repeat++) {
     pl.myBoard.simulatorNumber ++;
     //println("uctMctsBrain:シミュレーション回数"+pl.myBoard.simulatorNumber);
@@ -364,7 +365,7 @@ int uctMctsMainLoop(player pl, int expandThreshold, int terminateThreshold, int 
         }
         if (uctMaxNode.depth<_depth && uctMaxNode.id!="") {   // 展開するための条件
           //println("uctMctsBrain:展開　"+uctMaxNode.id);/////////////////////////////ここから展開
-          println(uctMaxNode.id+"を展開中");//+returnFriquentChildFromRoot(uct.rootNode).id);
+          //println(uctMaxNode.id+"を展開中");//+returnFriquentChildFromRoot(uct.rootNode).id);
           // uctMaxNodeの下にノードをぶら下げる
           uct.newNode=null;
   
