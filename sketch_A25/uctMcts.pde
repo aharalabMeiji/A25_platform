@@ -153,7 +153,7 @@ int uctMctsBrainFirstSimulation(int _count, player pl) {
       nd.pa[p] = 0;//
     }
     //println("uctMctsBrain:最後までシミュレーションを_count回行う");
-    // ここをUCBにするアイディアもあるが、結局淘汰されるようなので、０出なければなんでもいいみたい。
+    // ここをUCBにするアイディアもあるが、結局淘汰されるようなので、０でなければなんでもいいみたい。
     for (int count=0; count<_count; count++) {
       uct.mainBoard.copyBdToBoard(nd.bd);
       uct.winPoint = playSimulatorToEnd(uct.mainBoard, uct.participants);//
@@ -459,23 +459,23 @@ int uctMctsMainLoop(player pl, int expandThreshold, int terminateThreshold, int 
               } while (true);
               // バックプロパゲートここまで
             }// 全部の新しいノードを５回ずつ試行した。
-            uct.prize.getPrize1FromNodeList(p, tmpUctNodes);
-            float bestWr=uct.prize.w1;
-            if (bestWr>0.0 && bestWr<1.0) {
-              float lowerBound = bestWr - sqrt(bestWr*(1.0-bestWr)/uct.prize.m1.na)*4.0;// not 1.96? lol
-              if (lowerBound>0) {
-                int listSize=tmpUctNodes.size();
-                for (int id=listSize-1; id>=0; id--) {
-                  uctNode nd=tmpUctNodes.get(id);
-                  //print((nd.move%25)+1, int(nd.move/25)+1, nd.wa[pl.position]/nd.na, lowerBound);
-                  if (nd.wa[p]/nd.na < lowerBound) {
-                    tmpUctNodes.remove(nd);
-                    //print(":deleted");
-                  }
-                  //println();
-                }
-              }
-            }// ここまで、プレイヤーpにとって、筋の悪いものを消した。
+            //uct.prize.getPrize1FromNodeList(p, tmpUctNodes);
+            //float bestWr=uct.prize.w1;
+            //if (bestWr>0.0 && bestWr<1.0) {
+            //  float lowerBound = bestWr - sqrt(bestWr*(1.0-bestWr)/uct.prize.m1.na)*4.0;// not 1.96? lol
+            //  if (lowerBound>0) {
+            //    int listSize=tmpUctNodes.size();
+            //    for (int id=listSize-1; id>=0; id--) {
+            //      uctNode nd=tmpUctNodes.get(id);
+            //      //print((nd.move%25)+1, int(nd.move/25)+1, nd.wa[pl.position]/nd.na, lowerBound);
+            //      if (nd.wa[p]/nd.na < lowerBound) {
+            //        tmpUctNodes.remove(nd);
+            //        //print(":deleted");
+            //      }
+            //      //println();
+            //    }
+            //  }
+            //}// ここまで、プレイヤーpにとって、筋の悪いものを消した。
             if (uctMaxNode.children==null) {//
               uctMaxNode.children = new ArrayList<uctNode>();
             } 
