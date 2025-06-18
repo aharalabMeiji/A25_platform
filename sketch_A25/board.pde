@@ -362,6 +362,10 @@ class panel {
         text(sv, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*0.7);
         text(sv2, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*1.4);
       }
+      if (shaded>0){
+        fill(utils.playerShade[shaded]);
+        rect(dx+10, dy+10, utils.mainW-20, utils.mainH-20);
+      }
     }
     return true;
   }

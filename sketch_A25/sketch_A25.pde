@@ -4,7 +4,7 @@ import org.apache.commons.math3.random.MersenneTwister;
 MersenneTwister mt;
 
 void setup() {
-  size(960, 960);
+  size(960, 960); //<>//
   mt = new MersenneTwister();
   
   frameRate(10000);//draw()の実行をできるだけ早く繰り返す

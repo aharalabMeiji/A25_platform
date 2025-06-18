@@ -1,4 +1,4 @@
-int uctMctsBrain(player pl, int expandThreshold, int terminateThreshold, int _depth) { // //<>// //<>//
+int uctMctsBrain(player pl, int expandThreshold, int terminateThreshold, int _depth) { // //<>//
   //候補を一つに絞ってもよいが、いつでも同じ動作になってしまうので、複数個の候補を重みをつけておくとよい。
   //ここから
   startTime=millis();
@@ -13,6 +13,9 @@ int uctMctsBrain(player pl, int expandThreshold, int terminateThreshold, int _de
   uct.simulationTag=expandThreshold*10;
   while (true) {
     answer = uctMctsMainLoop(pl, expandThreshold, terminateThreshold, _depth);
+    for(int k=0;k<25;k++){// 今のところ、この書き換えは反映されない。
+      utils.gameMainBoard.s[k].shaded=pl.myBoard.s[k].shaded;
+    }  
     if (answer!=-1) return answer;
   }// end of while(true)
 }
@@ -225,17 +228,30 @@ int uctMctsBrainFirstSimulation(int _count, player pl) {
 int uctMctsMainLoop(player pl, int expandThreshold, int terminateThreshold, int _depth) {
   // console に計算経過を出力（マストではない。）
   uct.prize.getPrize3FromNodeList(pl.position, uct.rootNode.children);
-  //String str=""+(pl.myBoard.simulatorNumber/1000)+":(";
-  //if (uct.prize.getMove(1)!=null) {
-  //  str += (""+uct.prize.getMove(1).id);
-  //}
-  //str += ",";
-  //if (uct.prize.getMove(2)!=null) {
-  //  str += (uct.prize.getMove(2).id);
-  //}
-  //str += ")";
-  //print(str);
+  uctNode thisNode = uct.prize.getMove(1);
+  if (thisNode!=null) {
+    if (thisNode.attackChanceNode){
+      int k=thisNode.move;
+      int i = int(k/25);
+      int j = (k%25);
+      for (int kk=0; kk<25; kk++){
+        utils.gameMainBoard.s[kk].shaded=0;
+      }
+      utils.gameMainBoard.s[i].shaded =5;
+      utils.gameMainBoard.s[j].shaded = pl.position;
+    } else {
+      int k=thisNode.move;
+      for (int kk=0; kk<25; kk++){
+        utils.gameMainBoard.s[kk].shaded=0;
+      }
+      if(k<25){
+        utils.gameMainBoard.s[k].shaded =pl.position;
+      }
+    }
+  }
+
   //println(pl.myBoard.simulatorNumber);
+  
   print(".");
   for (int repeat=0; repeat<1000; repeat++) {
     pl.myBoard.simulatorNumber ++;

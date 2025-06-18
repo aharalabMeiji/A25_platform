@@ -12,6 +12,14 @@ class globals{
   color(255, 255, 255),
   color(0, 80, 255),
   color(255, 255, 0) };
+  
+  color[] playerShade = {
+  color(128, 128, 128, 128),
+  color(255, 0, 0, 128),
+  color(0, 255, 0, 128),
+  color(255, 255, 255, 128),
+  color(0, 80, 255, 128),
+  color(255, 255, 0, 144) };
   //unitSize
   float unitSize;
   int mainL, mainU, mainW, mainH, subL, subU;
