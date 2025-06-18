@@ -799,81 +799,47 @@ void UCT1() {
 void showMcts(player nextPlayer) {
   uct.prize.getPrize3FromNodeList(nextPlayer.position, uct.rootNode.children);
   String[] message=new String[5];
-  uctNode nd1, ndP;
-  uctNode[] nd2 = new uctNode[5];
-  uctNode[] nd3 = new uctNode[5];
-  uctNode[] nd4 = new uctNode[5];
+  prize localPrize=new prize();
+  uctNode nd1, nd2, nd3, nd4;
   float maxWinrate=0;
-  if (uct.prize.getMove(1)!=null) {
-    nd1 = uct.prize.getMove(1);
+  nd1 = uct.prize.getMove(1);
+  if (nd1!=null) {
     for (int p2=1; p2<=4; p2++) {
-      if (nd1.children!=null) {
-        ndP = null;
-        maxWinrate = 0;
-        for (uctNode nd : nd1.children) {
-          if (nd.player==p2) {
-            if (maxWinrate < nd.wa[p2]/nd.na) {
-              maxWinrate = nd.wa[p2]/nd.na;
-              ndP = nd;
-            }
+      if (nd1.children!=null && nd1.children.size()>0) {
+        localPrize.getBPrize1FromNodeList(p2, nd1.children);
+        nd2 = localPrize.getMove(1);
+        if (nd2.children!=null && nd2.children.size()>0){
+          localPrize.getBXPrize1FromNodeList(nd2.children);
+          nd3 = localPrize.getMove(1);
+          if (nd3.children!=null && nd3.children.size()>0){
+            localPrize.getBXPrize1FromNodeList(nd3.children);
+            nd4 = localPrize.getMove(1);
+            message[p2] = nd4.id;
+          } else {
+            message[p2] = nd3.id;
           }
+        } else {
+          message[p2]=nd2.id;         
         }
-        nd2[p2] = ndP;
+      } else {
+        message[p2]=nd1.id;
       }
     }
-    for (int p3=1; p3<=4; p3++) {
-      if (nd2[p3]!=null && nd2[p3].children!=null) {
-        ndP = null;
-        maxWinrate = 0;
-        for (uctNode nd : nd2[p3].children) {
-          if (maxWinrate < nd.wa[p3]/nd.na) {
-            maxWinrate = nd.wa[p3]/nd.na;
-            ndP = nd;
-          }
-        }
-        nd3[p3] = ndP;
-      }
-    }
-    for (int p4=1; p4<=4; p4++) {
-      if (nd3[p4]!=null && nd3[p4].children!=null) {
-        ndP = null;
-        maxWinrate = 0;
-        for (uctNode nd : nd3[p4].children) {
-          if (maxWinrate < nd.wa[p4]/nd.na) {
-            maxWinrate = nd.wa[p4]/nd.na;
-            ndP = nd;
-          }
-        }
-        nd4[p4] = ndP;
-      }
+    simulator.mainBoard.display(12);// UCTディスプレイ
+    textAlign(LEFT, CENTER);
+    fill(0);
+    if (!simulator.mainBoard.attackChanceP){
+      text(1.0*simulator.mainBoard.sv[25], utils.mainL, utils.mainU-utils.fontSize);
+      text(1.0*simulator.mainBoard.sv2[25], utils.mainL+utils.fontSize*3.5, utils.mainU-utils.fontSize);
     }
     for (int p=1; p<=4; p++) {
-      if (nd4[p]!=null)
-        message[p] = ("["+nd4[p].id+"]");
-      else if (nd3[p]!=null)
-        message[p] = ("["+nd3[p].id+"]");
-      else if (nd2[p]!=null)
-        message[p] = ("["+nd2[p].id+"]");
-      else if (nd1!=null)
-        message[p] = ("["+nd1.id+"]");
-      else
-        message[p] = "[]";
+      text(message[p], utils.unitSize/2, utils.subU+utils.vStep*(p-1));
     }
+    showReturnButton();
+    showScreenCapture();
   }
-
-  simulator.mainBoard.display(12);// UCTディスプレイ
-  textAlign(LEFT, CENTER);
-  fill(0);
-  if (!simulator.mainBoard.attackChanceP){
-    text(1.0*simulator.mainBoard.sv[25], utils.mainL, utils.mainU-utils.fontSize);
-    text(1.0*simulator.mainBoard.sv2[25], utils.mainL+utils.fontSize*3.5, utils.mainU-utils.fontSize);
-  }
-  for (int p=1; p<=4; p++) {
-    text(message[p], utils.unitSize/2, utils.subU+utils.vStep*(p-1));
-  }
-  showReturnButton();
-  showScreenCapture();
 }
+
 void mousePreesedSimulator() {
   if (buttonReturnToMenu.mouseOn()) {//　メニューに戻る、をクリックされたとき
     displayManager = dP.onContents;

@@ -240,21 +240,21 @@ int uctMctsMainLoop(player pl, int expandThreshold, int terminateThreshold, int 
     }    
     if(winRate-secondRate>error){
       print(++uct.cancelCount);
-      //if ((uct.cancelCount)>=uct.cancelCountMax){
-      //  println("　勝率が収束・確定した");
-      //  println("試行回数("+pl.myBoard.simulatorNumber+")");
-      //  println("time=", millis()-startTime, "(ms)");
-      //  // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする
-      //  int ret = returnBestChildFromRoot(pl, uct.rootNode);
-      //  if (pl.myBoard.attackChanceP()) {
-      //    pl.yellow = int(ret/25);
-      //    println("["+(ret%25+1)+"-"+(pl.yellow+1)+"]");
-      //    return ret%25;
-      //  } else {
-      //    println("["+(ret+1)+"]");
-      //    return ret;
-      //  }
-      //}
+      if ((uct.cancelCount)>=uct.cancelCountMax){
+        println("　勝率が収束・確定した");
+        println("試行回数("+pl.myBoard.simulatorNumber+")");
+        println("time=", millis()-startTime, "(ms)");
+        // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする
+        int ret = returnBestChildFromRoot(pl, uct.rootNode);
+        if (pl.myBoard.attackChanceP()) {
+          pl.yellow = int(ret/25);
+          println("["+(ret%25+1)+"-"+(pl.yellow+1)+"]");
+          return ret%25;
+        } else {
+          println("["+(ret+1)+"]");
+          return ret;
+        }
+      }
     } else {
       uct.cancelCount=0;
     }
