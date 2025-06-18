@@ -88,6 +88,7 @@ int uctMctsBrainPreparation(player pl) {
   uct.rootNode = new uctNode();
   uct.rootNode.parent = null;
   uct.rootNode.children = new ArrayList<uctNode>();
+  uct.cancelCount=0;
   pl.myBoard.copyBoardToBd(uct.rootNode.bd);
   //uct.rootNodeに子供をぶら下げる
   if (pl.myBoard.attackChanceP()==false) {
@@ -228,30 +229,36 @@ int uctMctsBrainFirstSimulation(int _count, player pl) {
 int uctMctsMainLoop(player pl, int expandThreshold, int terminateThreshold, int _depth) {
   // console に計算経過を出力（マストではない。）
   uct.prize.getPrize3FromNodeList(pl.position, uct.rootNode.children);
-  uctNode thisNode = uct.prize.getMove(1);
-  if (thisNode!=null) {
-    if (thisNode.attackChanceNode){
-      int k=thisNode.move;
-      int i = int(k/25);
-      int j = (k%25);
-      for (int kk=0; kk<25; kk++){
-        utils.gameMainBoard.s[kk].shaded=0;
-      }
-      utils.gameMainBoard.s[i].shaded =5;
-      utils.gameMainBoard.s[j].shaded = pl.position;
+  if (uct.prize.getMove(1)!=null){
+    float winRate=uct.prize.w1;
+    float error = sqrt(winRate*(1.0-winRate)/uct.prize.getMove(1).na)*1.96;
+    float secondRate=0;
+    if(uct.prize.getMove(3)!=null) {
+      secondRate=uct.prize.w3;
+    } else if(uct.prize.getMove(2)!=null) {
+      secondRate=uct.prize.w2;
+    }    
+    if(winRate-secondRate>error){
+      print(++uct.cancelCount);
+      //if ((uct.cancelCount)>=uct.cancelCountMax){
+      //  println("　勝率が収束・確定した");
+      //  println("試行回数("+pl.myBoard.simulatorNumber+")");
+      //  println("time=", millis()-startTime, "(ms)");
+      //  // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする
+      //  int ret = returnBestChildFromRoot(pl, uct.rootNode);
+      //  if (pl.myBoard.attackChanceP()) {
+      //    pl.yellow = int(ret/25);
+      //    println("["+(ret%25+1)+"-"+(pl.yellow+1)+"]");
+      //    return ret%25;
+      //  } else {
+      //    println("["+(ret+1)+"]");
+      //    return ret;
+      //  }
+      //}
     } else {
-      int k=thisNode.move;
-      for (int kk=0; kk<25; kk++){
-        utils.gameMainBoard.s[kk].shaded=0;
-      }
-      if(k<25){
-        utils.gameMainBoard.s[k].shaded =pl.position;
-      }
+      uct.cancelCount=0;
     }
   }
-
-  //println(pl.myBoard.simulatorNumber);
-  
   print(".");
   for (int repeat=0; repeat<1000; repeat++) {
     pl.myBoard.simulatorNumber ++;
@@ -318,7 +325,7 @@ int uctMctsMainLoop(player pl, int expandThreshold, int terminateThreshold, int 
             break;
           }
         }
-        if (atsuzokkou) {
+        if (!atsuzokkou) {
           println("計算すべきノードが尽きた");
           println("試行回数("+pl.myBoard.simulatorNumber+")");
           println("time=", millis()-startTime, "(ms)");

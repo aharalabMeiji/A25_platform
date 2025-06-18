@@ -566,7 +566,7 @@ void showContents() {
       text(captionText, left, top);
       left += (textWidth(captionText)+utils.hSpace);
       //
-      buttonText = "[50/1.5M]";
+      buttonText = "[E10/D4]";
       button buttontimes1=new button();
       buttontimes1.setLT(left, top, buttonText);
       buttontimes1.setItem("SimTimes", 21);
@@ -576,7 +576,7 @@ void showContents() {
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
       //
-      buttonText = "[100/3M]";
+      buttonText = "[E100/D4]";
       button buttontimes2=new button();
       buttontimes2.setLT(left, top, buttonText);
       buttontimes2.setItem("SimTimes", 22);
@@ -586,7 +586,7 @@ void showContents() {
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
       //
-      buttonText = "[1K/30M]";
+      buttonText = "[E10/D5]";
       button buttontimes3=new button();
       buttontimes3.setLT(left, top, buttonText);
       buttontimes3.setItem("SimTimes", 23);

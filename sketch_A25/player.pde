@@ -1,5 +1,5 @@
 enum brain{
-  Human, Random, UCBold, UCB1, UCB2, UCT334, UCBUCT
+  Human, Random, UCBold, UCB1, UCB2, UCTE10D4, UCBUCT
 }
 
 class player {
@@ -70,7 +70,7 @@ class player {
       return ucbFastBrain(this, ucb1);
     } else if (myBrain==brain.UCB2){
       return ucbFastBrain(this, uct2);
-    } else if (myBrain==brain.UCT334){
+    } else if (myBrain==brain.UCTE10D4){
       return uctMctsBrain(this, 10, 10*1000000, 4);//250618 現在の一つの解
     } else if (myBrain==brain.UCBUCT){
       return uctMctsABrain(this, 1000, 1000000, 4);
@@ -79,7 +79,7 @@ class player {
   }
   int callAttackChance(){// すでにある色を黄色へ変更するアルゴリズム
     if (yellow!=-1) return yellow;// 黄色にするパネルをすでに決定済みであれば、それを回答する。
-    if (myBrain==brain.Random || myBrain==brain.UCB1 || myBrain==brain.UCT334 || myBrain==brain.UCBUCT ){
+    if (myBrain==brain.Random || myBrain==brain.UCB1 || myBrain==brain.UCTE10D4 || myBrain==brain.UCBUCT ){
       int[] ac = new int[25];
       for (int i=0; i<25; i++){
         if (1<=myBoard.s[i].col && myBoard.s[i].col<=4){
