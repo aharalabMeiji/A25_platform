@@ -234,6 +234,10 @@ void showGames() {
     showReturnButton();
     showScreenCapture();
     showSaveBoard();
+    fill(0);
+    textAlign(LEFT, CENTER);
+    textSize(utils.fontSize*0.6);
+    text(kifu.string, utils.subL, utils.subU + utils.mainH + utils.hOffset);     //残り枚数のカウントと分岐処理
     
     //managerPhase = mP.AfterChoosePlayer;
 
@@ -312,7 +316,6 @@ void showGames() {
     showReturnButton();
     showScreenCapture();
     showSaveBoard();
-    //残り枚数のカウントと分岐処理
     int remain05 = 0;
     int remain0 =0;
     for (int i=0; i<25; i++) {
@@ -383,8 +386,6 @@ void showGames() {
       }
     }
     game.nextPlayer = simulatorStartBoard.get(simulator.StartBoardId).nextPlayer;
-    // 棋譜文字列の初期化
-    kifu.string="";
     // 繰り返し判定
     if (utils.gameMainBoard.simulatorNumber == gameOptions.get("Times") ) {
       // 結果の表示
@@ -395,7 +396,13 @@ void showGames() {
       }
       showReturnButton();
       showScreenCapture();
+      fill(0);
+      textAlign(LEFT, CENTER);
+      textSize(utils.fontSize*0.6);
+      text(kifu.string, utils.subL, utils.subU + utils.mainH + utils.hOffset);     //残り枚数のカウントと分岐処理
 
+      // 棋譜文字列の初期化
+      kifu.string="";
       managerPhase = mP.Halt;
     } else {
       if (simulator.StartBoardId==0) {
@@ -426,6 +433,8 @@ void showGames() {
         game.nextPlayer = simulatorStartBoard.get(now).nextPlayer;
         kifu.kifuValid=false;
       }
+      // 棋譜文字列の初期化
+      kifu.string="";
       managerPhase = mP.WaitChoosePlayer;
     }
   } else if (managerPhase==mP.BeforeAttackChance) {///////mP.BeforeAttackChance

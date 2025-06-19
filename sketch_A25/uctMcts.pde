@@ -37,14 +37,14 @@ int uctMctsStartingJoseki(player pl) {
   if (count==2) {
     uct.mainBoard=new board();
     pl.myBoard.buildVP(pl.position);
-    if (pl.myBoard.vp[2]>0) return 2;
-    if (pl.myBoard.vp[10]>0) return 10;
-    if (pl.myBoard.vp[14]>0) return 14;
-    if (pl.myBoard.vp[22]>0) return 22;
-    if (pl.myBoard.vp[0]>0) return 0;
-    if (pl.myBoard.vp[4]>0) return 4;
-    if (pl.myBoard.vp[20]>0) return 20;
-    if (pl.myBoard.vp[24]>0) return 24;
+    if (pl.myBoard.s[7].col>0 && pl.myBoard.vp[2]>0) return 2;
+    if (pl.myBoard.s[11].col>0 && pl.myBoard.vp[10]>0) return 10;
+    if (pl.myBoard.s[13].col>0 && pl.myBoard.vp[14]>0) return 14;
+    if (pl.myBoard.s[17].col>0 && pl.myBoard.vp[22]>0) return 22;
+    if (pl.myBoard.s[6].col>0 && pl.myBoard.vp[0]>0) return 0;
+    if (pl.myBoard.s[8].col>0 && pl.myBoard.vp[4]>0) return 4;
+    if (pl.myBoard.s[16].col>0 && pl.myBoard.vp[20]>0) return 20;
+    if (pl.myBoard.s[18].col>0 && pl.myBoard.vp[24]>0) return 24;
   }
   return -1;
 }
