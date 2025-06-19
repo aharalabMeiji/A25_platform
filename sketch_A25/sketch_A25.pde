@@ -226,7 +226,8 @@ void openFileSelected(File selection) {
           println("第"+i+"行目が不正なデータです。");
         }
       }
-    } else if (lines[0].charAt(1)=='1' && lines[0].charAt(2)=='3') {
+    } else if ((lines[0].charAt(1)=='1' && lines[0].charAt(2)=='3') ||
+      (lines[0].charAt(1)=='2' && lines[0].charAt(2)=='6' && lines[0].charAt(4)=='1' && lines[0].charAt(5)=='3')) {
       //println(lines[0].substring(0, 4));
       simulatorStartBoard.clear();
       int len = lines[0].length();
