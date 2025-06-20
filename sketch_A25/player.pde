@@ -71,7 +71,11 @@ class player {
     } else if (myBrain==brain.UCB2){
       return ucbFastBrain(this, uct2);
     } else if (myBrain==brain.UCTE10D4){
-      return uctMctsBrain(this, 10, 10*1000000, 4);//250618 現在の一つの解
+      uct.expandThreshold=10;
+      uct.terminateThreshold = uct.expandThreshold*1000000;
+      uct.depthMax=4;
+      uct.cancelCountMax=10;
+      return uctMctsBrain(this);//250618 現在の一つの解
     } else if (myBrain==brain.UCBUCT){
       return uctMctsABrain(this, 1000, 1000000, 4);
     }

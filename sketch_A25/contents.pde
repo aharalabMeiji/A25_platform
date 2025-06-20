@@ -586,7 +586,7 @@ void showContents() {
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
       //
-      buttonText = "[E10/D5]";
+      buttonText = "[E10/D5/wC]";
       button buttontimes3=new button();
       buttontimes3.setLT(left, top, buttonText);
       buttontimes3.setItem("SimTimes", 23);
@@ -596,7 +596,28 @@ void showContents() {
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
       //
+      buttonText = "[E10/D5/woC]";
+      button buttontimes4=new button();
+      buttontimes4.setLT(left, top, buttonText);
+      buttontimes4.setItem("SimTimes", 24);
+      buttons.add(buttontimes4);
+      if (gameOptions.get("SimTimes") == 24) fill(255, 0, 0);
+      else fill(0);
+      text(buttonText, left, top);
+      left += (textWidth(buttonText)+utils.hSpace);
+      //
     }
+    if (gameOptions.get("SimMethod") == 3 ){
+      top += utils.vStep;
+      left=utils.hOffset;
+      //
+      fill(255, 0, 0);
+      if (gameOptions.get("SimTimes") == 21) text("visit/node=10, max depth=4, with cancelling",left,top);
+      else if (gameOptions.get("SimTimes") == 22) text("visit/node=100, max depth=4, with cancelling",left,top);
+      else if (gameOptions.get("SimTimes") == 23) text("visit/node=10, max depth=5, with cancelling",left,top);
+      else if (gameOptions.get("SimTimes") == 24) text("visit/node=10, max depth=5, w/o cancelling",left,top);
+    }
+    //
     top += utils.vStep;
     left=utils.hOffset;
     //

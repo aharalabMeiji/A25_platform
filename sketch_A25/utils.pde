@@ -117,7 +117,7 @@ class uctClass{
   int cancelCount=0;
   int expandThreshold = 10;// ここらあたりの変数があるんだったら、brainの引数要りませんね。
   int terminateThreshold = 10000000;
-  int depthMax = 5;
+  int depthMax = 4;
   int cancelCountMax=10;
   uctClass(){
     ;

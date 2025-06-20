@@ -8,7 +8,7 @@ int uctMctsABrain(player pl, int expandThreshold, int terminateThreshold, int _d
   if (answer==-1) return -1;
   answer = uctMctsABrainFirstSimulation(expandThreshold/2, pl);
   if (answer!=-1) return answer;
-  println("uct starts");
+  println("uct ",uct.expandThreshold, uct.terminateThreshold, uct.depthMax, uct.cancelCountMax);
   uct.simulationTag=expandThreshold*10;
   while (true) {
     answer = uctMctsAMainLoop(pl, expandThreshold, terminateThreshold, _depth);

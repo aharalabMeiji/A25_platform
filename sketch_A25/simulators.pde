@@ -1,4 +1,4 @@
-////
+//// simulate line 2651
 
 class startBoard {
   int[] theArray;
@@ -544,8 +544,8 @@ void UCB1(ucbClass ucb) {
       }
     }
     simulationManager=sP.setStartBoard;
-  } else if (simulationManager==sP.setStartBoard) {// UCT1ループ部分
-    if (simulator.mainBoard.attackChanceP()) {//アタックチャンスの場合// UCT1ループ部分
+  } else if (simulationManager==sP.setStartBoard) {// UCB1ループ部分
+    if (simulator.mainBoard.attackChanceP()) {//アタックチャンスの場合// UCB1ループ部分
       float maxUct=-100;
       uctNode maxNd=null;
       for (uctNode nd : ucb.fullNodes) {
@@ -589,9 +589,9 @@ void UCB1(ucbClass ucb) {
       }
       if (simulator.mainBoard.simulatorNumber%500==0) {
         // 間歇的に表示を更新する。
-        simulator.mainBoard.display(11);// Uct1 ディスプレイ
+        simulator.mainBoard.display(11);// Ucb1 ディスプレイ
         prize prize=new prize();
-        prize.getPrize3FromNodeList(simulator.nextPlayer, uct.rootNode.children);
+        prize.getPrize3FromNodeList(simulator.nextPlayer, ucb.rootNode.children);
         displayBestStats(prize);
         showReturnButton();
         showScreenCapture();
@@ -722,6 +722,12 @@ void UCT1() {
       uct.depthMax=5;
       uct.cancelCountMax=20;
     }
+    else if (SimTimes == 24){
+      uct.expandThreshold=10;
+      uct.terminateThreshold = uct.expandThreshold*1000000;
+      uct.depthMax=5;
+      uct.cancelCountMax=100000;
+    }
     simulator.Participants = new player[5];
     for (int p=1; p<5; p++) {
       simulator.Participants[p] = new player(p, "random", brain.Random);
@@ -750,7 +756,7 @@ void UCT1() {
       if (answer==-1) {
         simulationManager=sP.GameEnd;
       } else {
-        answer = uctMctsBrainFirstSimulation(5, nextPlayer);
+        answer = uctMctsBrainFirstSimulation(nextPlayer);
         if (answer!=-1) {
           uctNode nd = uct.rootNode.children.get(0);
           simulator.mainBoard.sv[answer]=nd.wa[nextPlayer.position] / nd.na;
@@ -761,7 +767,7 @@ void UCT1() {
           showReturnButton();
           showScreenCapture();
         } else {
-          println("uct starts");
+          println("uct ",uct.expandThreshold, uct.terminateThreshold, uct.depthMax, uct.cancelCountMax);
           uct.simulationTag=10000;
           simulationManager=sP.setStartBoard;
         }
@@ -770,7 +776,7 @@ void UCT1() {
   } else if (simulationManager==sP.setStartBoard) {
     nextPlayer=simulator.Participants[simulator.nextPlayer];
     int answer=-1;
-    answer = uctMctsMainLoop(nextPlayer, uct.expandThreshold, uct.terminateThreshold, uct.depthMax);//
+    answer = uctMctsMainLoop(nextPlayer);//
     // 1000回に1回、svにデータを埋める。
 
     if (uct.rootNode.attackChanceNode==false) {

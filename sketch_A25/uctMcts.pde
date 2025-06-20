@@ -1,4 +1,4 @@
-int uctMctsBrain(player pl, int expandThreshold, int terminateThreshold, int _depth) { // //<>//
+int uctMctsBrain(player pl) { // //<>//
   //候補を一つに絞ってもよいが、いつでも同じ動作になってしまうので、複数個の候補を重みをつけておくとよい。
   //ここから
   startTime=millis();
@@ -6,13 +6,13 @@ int uctMctsBrain(player pl, int expandThreshold, int terminateThreshold, int _de
   if (answer!=-1) return answer;
   answer = uctMctsBrainPreparation(pl);
   if (answer==-1) return -1;
-  answer = uctMctsBrainFirstSimulation(expandThreshold, pl);
+  answer = uctMctsBrainFirstSimulation(pl);
   
   if (answer!=-1) return answer;
-  println("uct starts");
-  uct.simulationTag=expandThreshold*10;
+  println("uct ",uct.expandThreshold, uct.terminateThreshold, uct.depthMax, uct.cancelCountMax);
+  //uct.simulationTag=uct.expandThreshold*10;
   while (true) {
-    answer = uctMctsMainLoop(pl, expandThreshold, terminateThreshold, _depth);
+    answer = uctMctsMainLoop(pl);
     for(int k=0;k<25;k++){// 今のところ、この書き換えは反映されない。
       utils.gameMainBoard.s[k].shaded=pl.myBoard.s[k].shaded;
     }  
@@ -147,7 +147,8 @@ int uctMctsBrainPreparation(player pl) {
   return 0;// トラブルなく終わる
 }
 
-int uctMctsBrainFirstSimulation(int _count, player pl) {
+int uctMctsBrainFirstSimulation(player pl) {
+  int _count = uct.expandThreshold;
   //println("uctMctsBrain:まずは_count回シミュレーションして、余りに成績が悪いものはここでカットする。");
   for (uctNode nd : uct.rootNode.children) {
     // パラメータの初期化
@@ -226,7 +227,7 @@ int uctMctsBrainFirstSimulation(int _count, player pl) {
   return -1;
 }
 
-int uctMctsMainLoop(player pl, int expandThreshold, int terminateThreshold, int _depth) {
+int uctMctsMainLoop(player pl) {
   // console に計算経過を出力（マストではない。）
   uct.prize.getPrize3FromNodeList(pl.position, uct.rootNode.children);
   if (uct.prize.getMove(1)!=null){
@@ -241,7 +242,7 @@ int uctMctsMainLoop(player pl, int expandThreshold, int terminateThreshold, int 
     if(winRate-secondRate>error){
       print(++uct.cancelCount);
       if ((uct.cancelCount)>=uct.cancelCountMax){
-        println("　勝率が収束・確定した");
+        println("　勝率の推定により着手が確定した");
         println("試行回数("+pl.myBoard.simulatorNumber+")");
         println("time=", millis()-startTime, "(ms)");
         // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする
@@ -291,7 +292,7 @@ int uctMctsMainLoop(player pl, int expandThreshold, int terminateThreshold, int 
       uctNode uctMaxNode=null;
       for (int zz=ancestor.activeNodes.size()-1; zz>=0; zz--) {
         uctNode nd = ancestor.activeNodes.get(zz);
-        if (nd.na >= expandThreshold && nd.depth >= _depth) {//
+        if (nd.na >= uct.expandThreshold && nd.depth >= uct.depthMax) {//
           ancestor.activeNodes.remove(zz);
           //println("末端のノード("+nd.id+")がいっぱいになったのでアクティブノードのリストから消去");
         } else if (nd.uct[nd.player]>uctMax) {
@@ -375,7 +376,7 @@ int uctMctsMainLoop(player pl, int expandThreshold, int terminateThreshold, int 
   
       //println("uctMctsBrain:ノード ",uctMaxNode.id, "のデータ("+uctMaxNode.wa[1]+","+uctMaxNode.wa[2]+","+uctMaxNode.wa[3]+","+uctMaxNode.wa[4]+")/"+uctMaxNode.na);
       //println("uctMctsBrain:",uctMaxNode.na, uctMaxNode.wa[uctMaxNode.player], uctMaxNode.pa[uctMaxNode.player]);
-      if (uctMaxNode.na >= expandThreshold) {// 削除するための条件
+      if (uctMaxNode.na >= uct.expandThreshold) {// 削除するための条件
         //println("uctMctsBrain:uctMaxNodeはuct.activeNodesから削除");
         //展開するにせよしないにせよ、この作業は等価に必要。
         for (int zz=ancestor.activeNodes.size()-1; zz>=0; zz--) {
@@ -386,7 +387,7 @@ int uctMctsMainLoop(player pl, int expandThreshold, int terminateThreshold, int 
             break;
           }
         }
-        if (uctMaxNode.depth<_depth && uctMaxNode.id!="") {   // 展開するための条件
+        if (uctMaxNode.depth<uct.depthMax && uctMaxNode.id!="") {   // 展開するための条件
           //println("uctMctsBrain:展開　"+uctMaxNode.id);/////////////////////////////ここから展開
           //println(uctMaxNode.id+"を展開中");//+returnFriquentChildFromRoot(uct.rootNode).id);
           // uctMaxNodeの下にノードをぶら下げる
@@ -511,7 +512,7 @@ int uctMctsMainLoop(player pl, int expandThreshold, int terminateThreshold, int 
           }//ここまで、４人分のノード展開
         }
       }// アクティブノード削除からの展開、ここまで
-      if (pl.myBoard.simulatorNumber >= terminateThreshold) {//
+      if (pl.myBoard.simulatorNumber >= uct.terminateThreshold) {//
         println("試行回数上限到達("+pl.myBoard.simulatorNumber+")");
         // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする。
         int ret = returnBestChildFromRoot(pl, uct.rootNode);
