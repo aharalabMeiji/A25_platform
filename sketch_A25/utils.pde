@@ -91,7 +91,7 @@ int randomOrderCount=0;
 
 // UCT
 ucbClass ucb1 = new ucbClass();
-ucbClass uct2 = new ucbClass();
+ucbClass ucb2 = new ucbClass();
 class ucbClass{
   board subBoard;
   board subsubBoard;
@@ -119,7 +119,9 @@ class uctClass{
   int terminateThreshold = 10000000;
   int depthMax = 4;
   int cancelCountMax=10;
+  ArrayList<joseki> josekiList = null;//使わないかも
+
   uctClass(){
-    ;
+    josekiList = new ArrayList<joseki>();
   }
 };

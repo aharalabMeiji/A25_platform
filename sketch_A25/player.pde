@@ -69,7 +69,7 @@ class player {
     } else if (myBrain==brain.UCB1){
       return ucbFastBrain(this, ucb1);
     } else if (myBrain==brain.UCB2){
-      return ucbFastBrain(this, uct2);
+      return ucbFastBrain(this, ucb2);
     } else if (myBrain==brain.UCTE10D4){
       uct.expandThreshold=10;
       uct.terminateThreshold = uct.expandThreshold*1000000;

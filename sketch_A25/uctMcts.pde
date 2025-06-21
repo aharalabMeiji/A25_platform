@@ -20,34 +20,7 @@ int uctMctsBrain(player pl) { // //<>//
   }// end of while(true)
 }
 
-int uctMctsStartingJoseki(player pl) {
-  int count=0;
-  for (int k=0; k<25; k++) {
-    if (pl.myBoard.s[k].col!=0) {
-      count++;
-    }
-  }
-  //println("panels =",count);
-  if (count==0) {
-    return 12;
-  }
-  if (count==1) {
-    return 7;
-  }
-  if (count==2) {
-    uct.mainBoard=new board();
-    pl.myBoard.buildVP(pl.position);
-    if (pl.myBoard.s[7].col>0 && pl.myBoard.vp[2]>0) return 2;
-    if (pl.myBoard.s[11].col>0 && pl.myBoard.vp[10]>0) return 10;
-    if (pl.myBoard.s[13].col>0 && pl.myBoard.vp[14]>0) return 14;
-    if (pl.myBoard.s[17].col>0 && pl.myBoard.vp[22]>0) return 22;
-    if (pl.myBoard.s[6].col>0 && pl.myBoard.vp[0]>0) return 0;
-    if (pl.myBoard.s[8].col>0 && pl.myBoard.vp[4]>0) return 4;
-    if (pl.myBoard.s[16].col>0 && pl.myBoard.vp[20]>0) return 20;
-    if (pl.myBoard.s[18].col>0 && pl.myBoard.vp[24]>0) return 24;
-  }
-  return -1;
-}
+
 
 int uctMctsBrainPreparation(player pl) {
   //println("uctMctsBrain:プレーヤーをランダムエージェントに設定");
