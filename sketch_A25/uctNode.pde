@@ -1,6 +1,3 @@
-
-//board uctBoard, uctSubBoard;
-
 class uctNode {
   float na=1;// このノードの試行回数
   float[] wa;// このノードの（誰にとっての）勝利回数

@@ -1,5 +1,6 @@
 int uctMctsMainLoopVer2(player pl) {
   board uctMainBoard=new board();
+  board uctSubBoard=new board();
   uctNode uctNewNode = new uctNode();
   // console に計算経過を出力（マストではない。）
   uct.prize.getPrize3FromNodeList(pl.position, uct.rootNode.children);
@@ -188,9 +189,9 @@ int uctMctsMainLoopVer2(player pl) {
                   tmpUctNodes.add(uctNewNode);// tmpUctNodesに追加する
                   uctNewNode.parent = uctMaxNode;//uctMaxNodeを親に設定
                   //println("新しいノード "+uctNewNode.id+"を追加した！");
-                  uctMainBoard.copyBoardToSub(uct.subBoard);
-                  uct.subBoard.move(p, k);// 1手着手する
-                  uct.subBoard.copyBoardToBd(uctNewNode.bd);
+                  uctMainBoard.copyBoardToSub(uctSubBoard);
+                  uctSubBoard.move(p, k);// 1手着手する
+                  uctSubBoard.copyBoardToBd(uctNewNode.bd);
                   //uctNewNode.printlnBd();
                 }
               }
@@ -210,10 +211,10 @@ int uctMctsMainLoopVer2(player pl) {
                     tmpUctNodes.add(uctNewNode);//tmpUctNodesにぶら下げる
                     uctNewNode.parent = uctMaxNode;//
                     //println("新しいノード "+uctNewNode.id+"を追加した！");
-                    uctMainBoard.copyBoardToSub(uct.subBoard);
-                    uct.subBoard.move(p, j);// 1手着手する
-                    uct.subBoard.s[i].col = 5;// 黄色を置く
-                    uct.subBoard.copyBoardToBd(uctNewNode.bd);
+                    uctMainBoard.copyBoardToSub(uctSubBoard);
+                    uctSubBoard.move(p, j);// 1手着手する
+                    uctSubBoard.s[i].col = 5;// 黄色を置く
+                    uctSubBoard.copyBoardToBd(uctNewNode.bd);
                     uctNewNode.attackChanceNode=true;
                   }
                 }
@@ -228,9 +229,9 @@ int uctMctsMainLoopVer2(player pl) {
                 nd.pa[pp] = 0;//
               }
               for (int count=0; count<5; count++) {
-                uct.subBoard.copyBdToBoard(nd.bd);
+                uctSubBoard.copyBdToBoard(nd.bd);
                 //println("uctMctsBrain:そこから最後までシミュレーションを行う");
-                winPoints wpwp = playSimulatorToEnd(uct.subBoard, uct.participants);//
+                winPoints wpwp = playSimulatorToEnd(uctSubBoard, uct.participants);//
                 nd.na ++;//
                 pl.myBoard.simulatorNumber ++;
                 for (int pp=1; pp<=4; pp++) {
