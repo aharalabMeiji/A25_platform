@@ -776,7 +776,7 @@ void UCT1() {
   } else if (simulationManager==sP.setStartBoard) {
     nextPlayer=simulator.Participants[simulator.nextPlayer];
     int answer=-1;
-    answer = uctMctsMainLoop(nextPlayer);//
+    answer = uctMctsMainLoopVer2(nextPlayer);//
     // 1000回に1回、svにデータを埋める。
 
     if (uct.rootNode.attackChanceNode==false) {
