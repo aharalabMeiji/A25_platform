@@ -55,7 +55,7 @@ int uctMctsSubLoop(player pl, uctNode ancestor) {
     for (int p=1; p<=4; p++) {
       // シミュレーション総回数はpl.myBoard.simulatorNumber
       // 平均パネル枚数に0.04かけて、加算している。
-      nd.uct[p] = nd.UCTwp(p, pl.myBoard.simulatorNumber);
+      nd.uct[p] = nd.UCTwp(p, int(ancestor.na+1));
     }
   }
   //println("uct値が最大となるノードを見つける");
@@ -157,7 +157,7 @@ int uctMctsSubLoop(player pl, uctNode ancestor) {
         }
       }
       if (uctMaxNode.depth<uct.depthMax && uctMaxNode.id!="") {   // 展開するための条件
-        //println("uctMctsBrain:展開　"+uctMaxNode.id);/////////////////////////////ここから展開
+        println("uctMctsBrain:展開　"+uctMaxNode.id);/////////////////////////////ここから展開
         //println(uctMaxNode.id+"を展開中");//+returnFriquentChildFromRoot(uct.rootNode).id);
         // uctMaxNodeの下にノードをぶら下げる
         uctNewNode=null;
