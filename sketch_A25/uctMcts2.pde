@@ -35,7 +35,7 @@ int uctMctsMainLoopVer2(player pl) {
     print(".");
   }
   //println("uctMctsBrain:シミュレーション回数"+pl.myBoard.simulatorNumber);
-
+  uct.maxNodeWinrate=0.0;
   int localStartTime=millis();
   for (uctNode ancestor : uct.rootNode.children) {
     pl.myBoard.simulatorNumber ++;
@@ -85,6 +85,11 @@ class uctMctsSubTask implements Runnable {
       localCount++;
       if (localCount%1000==0){
         println("id="+ancestor.id+":"+localCount+":Winrate="+(ancestor.wa[pl.position]/ancestor.na));
+        if (ancestor.wa[pl.position]/ancestor.na < uct.maxNodeWinrate-0.01){
+          println("成績が悪いので中断");
+          returnValue=1;
+          return ;
+        }
       }
       //for (int repeat=0; repeat<5; repeat++) {
 
@@ -119,6 +124,9 @@ class uctMctsSubTask implements Runnable {
         //println("ループ終了（計算すべきノードが尽きた時）");
         returnValue=0;
         println("id="+ancestor.id+":"+localCount+"nodes="+localEndNodes+":Winrate="+(ancestor.wa[pl.position]/ancestor.na));
+        if (uct.maxNodeWinrate<ancestor.wa[pl.position]/ancestor.na){
+          uct.maxNodeWinrate = ancestor.wa[pl.position]/ancestor.na;
+        }
         return ;
         //  // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする
         //  int ret = returnBestChildFromRoot(pl, uct.rootNode);
