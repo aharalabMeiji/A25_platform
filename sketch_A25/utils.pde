@@ -119,10 +119,8 @@ class uctClass{
   int terminateThreshold = 10000000;
   int depthMax = 4;
   int cancelCountMax=10;
-  ArrayList<joseki> josekiList = null;//使わないかも
-  int uctMainLoopOption=2;
+  int uctMainLoopOption=1;
   float maxNodeWinrate=0.0;
   uctClass(){
-    josekiList = new ArrayList<joseki>();
   }
 };

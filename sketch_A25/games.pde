@@ -288,9 +288,10 @@ void showGames() {
         if (attack==25) {
           // パスを選択
           managerPhase = mP.AfterMoving;
+          game.participants[game.nextPlayer].noPass+=2;// 向こう２ターンはパス禁止
         } else if (utils.gameMainBoard.vp[attack]>0) {
           utils.gameMainBoard.move(game.nextPlayer, attack);// 着手可能ならば着手する
-          //
+          game.participants[game.nextPlayer].noPass = max(0, game.participants[game.nextPlayer].noPass-1);
           managerPhase = mP.AfterMoving;
         } else {
           println("ERROR:OnMoving@draw");
@@ -542,6 +543,7 @@ void mousePreesedGame() {// ゲーム中のキーボード待ちの処理
         for (int i=0; i<25; i++) {
           utils.gameMainBoard.s[i].marked=0;
         }
+        game.participants[game.nextPlayer].noPass = max(0, game.participants[game.nextPlayer].noPass-1);
         managerPhase = mP.AfterMoving;
         for (int p = 1; p<=4; p++) {
           game.participants[p].turn = false;
@@ -555,11 +557,12 @@ void mousePreesedGame() {// ゲーム中のキーボード待ちの処理
         showScreenCapture();
         showPassButton();
       }
-    } else if (buttonPass.mouseOn()) {
+    } else if (buttonPass.mouseOn() && game.participants[game.nextPlayer].noPass==0) {
       kifu.string += (kifu.playerColCode[game.nextPlayer]+"26");
       for (int i=0; i<25; i++) {
         utils.gameMainBoard.s[i].marked=0;
       }
+      game.participants[game.nextPlayer].noPass ++;
       managerPhase = mP.AfterMoving;
       for (int p = 1; p<=4; p++) {
         game.participants[p].turn = false;

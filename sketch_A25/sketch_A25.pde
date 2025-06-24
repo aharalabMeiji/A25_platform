@@ -124,7 +124,7 @@ void mousePressed() {
           } else if (b.dictKey=="SimMethod" && b.dictInt==2) {
             gameOptions.set("SimTimes", 12);
           } else if (b.dictKey=="SimMethod" && b.dictInt==3) {
-            gameOptions.set("SimTimes", 22);
+            gameOptions.set("SimTimes", 21);
           }
           //println(gameOptions.get("SimMethod"), gameOptions.get("SimTimes"));
           return;

@@ -566,7 +566,7 @@ void showContents() {
       text(captionText, left, top);
       left += (textWidth(captionText)+utils.hSpace);
       //
-      buttonText = "[E10/D4]";
+      buttonText = "[D4/wC]";
       button buttontimes1=new button();
       buttontimes1.setLT(left, top, buttonText);
       buttontimes1.setItem("SimTimes", 21);
@@ -576,7 +576,7 @@ void showContents() {
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
       //
-      buttonText = "[E100/D4]";
+      buttonText = "[D4/woC]";
       button buttontimes2=new button();
       buttontimes2.setLT(left, top, buttonText);
       buttontimes2.setItem("SimTimes", 22);
@@ -586,7 +586,7 @@ void showContents() {
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
       //
-      buttonText = "[E10/D5/wC]";
+      buttonText = "[D5/wC]";
       button buttontimes3=new button();
       buttontimes3.setLT(left, top, buttonText);
       buttontimes3.setItem("SimTimes", 23);
@@ -596,7 +596,7 @@ void showContents() {
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
       //
-      buttonText = "[E10/D5/woC]";
+      buttonText = "[D5/woC]";
       button buttontimes4=new button();
       buttontimes4.setLT(left, top, buttonText);
       buttontimes4.setItem("SimTimes", 24);
@@ -613,7 +613,7 @@ void showContents() {
       //
       fill(255, 0, 0);
       if (gameOptions.get("SimTimes") == 21) text("visit/node=10, max depth=4, with cancelling",left,top);
-      else if (gameOptions.get("SimTimes") == 22) text("visit/node=100, max depth=4, with cancelling",left,top);
+      else if (gameOptions.get("SimTimes") == 22) text("visit/node=10, max depth=4, w/o cancelling",left,top);
       else if (gameOptions.get("SimTimes") == 23) text("visit/node=10, max depth=5, with cancelling",left,top);
       else if (gameOptions.get("SimTimes") == 24) text("visit/node=10, max depth=5, w/o cancelling",left,top);
     }

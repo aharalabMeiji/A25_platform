@@ -48,7 +48,7 @@ int uctMctsMainLoopVer2(player pl) {
     try {
       ancestor.myThread.join();
     } catch (InterruptedException e) {
-      e.printStackTrace(); //<>//
+      e.printStackTrace(); //<>// //<>// //<>// //<>//
     }
   }
   // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする
@@ -83,10 +83,10 @@ class uctMctsSubTask implements Runnable {
     winPoints uctWinPoint = new winPoints();
     do {
       localCount++;
-      if (localCount%1000==0){
-        println("id="+ancestor.id+":"+localCount+":Winrate="+(ancestor.wa[pl.position]/ancestor.na));
+      if (localCount%2000==0){
+        //println("id="+ancestor.id+":"+localCount+":Winrate="+(ancestor.wa[pl.position]/ancestor.na));
         if (ancestor.wa[pl.position]/ancestor.na < uct.maxNodeWinrate-0.01){
-          println("成績が悪いので中断");
+          //println("成績が悪いので中断");
           returnValue=1;
           return ;
         }
@@ -210,8 +210,13 @@ class uctMctsSubTask implements Runnable {
             //println(uctMaxNode.id+"を展開中");//+returnFriquentChildFromRoot(uct.rootNode).id);
             // uctMaxNodeの下にノードをぶら下げる
             uctNewNode=null;
-
             for (int p=1; p<5; p++) {
+              if (uctMaxNode.move==25){                
+                if (uctMaxNode.player==p){
+                  print("pass.");
+                  continue;
+                }
+              }
               //println("プレイヤー"+p+"の着手を追加");
               uctMainBoard.copyBdToBoard(uctMaxNode.bd);
               uctMainBoard.buildVP(p);
@@ -223,7 +228,6 @@ class uctMctsSubTask implements Runnable {
                 for (int k=0; k<25; k++) {
                   // 合法手ごとのforループ
                   if (uctMainBoard.vp[k]>0) {
-
                     // 子ノードをぶら下げる
                     uctNewNode = new uctNode();
                     uctNewNode.setItem(p, k);

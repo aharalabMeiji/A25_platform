@@ -85,16 +85,17 @@ int uctMctsBrainPreparation(player pl) {
       }
     }
     //println("uctMctsBrain:手抜きという選択肢を考える");
-    // 手抜きは展開しない。
-    uct.newNode = new uctNode();
-    uct.newNode.setItem(pl.position, 25);
-    uct.newNode.id = uct.rootNode.id+(":"+kifu.playerColCode[pl.position]+nf(26, 2));
-    uct.newNode.depth = 1;
-    uct.rootNode.children.add(uct.newNode);//ルートノードにぶら下げる
-    uct.newNode.parent = null;//
-    pl.myBoard.copyBoardToSub(uct.mainBoard);
-    uct.mainBoard.copyBoardToBd(uct.newNode.bd);
-    uct.newNode.attackChanceNode=false;//念のため倒しておく。
+    if (pl.noPass==0){
+      uct.newNode = new uctNode();
+      uct.newNode.setItem(pl.position, 25);
+      uct.newNode.id = uct.rootNode.id+(":"+kifu.playerColCode[pl.position]+nf(26, 2));
+      uct.newNode.depth = 1;
+      uct.rootNode.children.add(uct.newNode);//ルートノードにぶら下げる
+      uct.newNode.parent = null;//
+      pl.myBoard.copyBoardToSub(uct.mainBoard);
+      uct.mainBoard.copyBoardToBd(uct.newNode.bd);
+      uct.newNode.attackChanceNode=false;//念のため倒しておく。
+    }
   } else {
     //println("uctMctsBrain:AC時、uct.rootNodeに子供をぶら下げる");
     pl.myBoard.attackChanceP=true;
@@ -371,6 +372,12 @@ int uctMctsMainLoop(player pl) {
           uct.newNode=null;
   
           for (int p=1; p<5; p++) {
+            if (uctMaxNode.move==25){                
+              if (uctMaxNode.player==p){
+                print("pass.");
+                continue;
+              }
+            }
             //println("プレイヤー"+p+"の着手を追加");
             uct.mainBoard.copyBdToBoard(uctMaxNode.bd);
             uct.mainBoard.buildVP(p);

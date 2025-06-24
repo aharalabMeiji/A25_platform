@@ -10,6 +10,7 @@ class player {
   board myBoard;
   float score;
   int yellow=-1;
+  int noPass=0;
   player(int _p, String _n, brain _b) {
     position = _p;
     name = _n;

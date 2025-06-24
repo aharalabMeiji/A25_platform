@@ -711,10 +711,10 @@ void UCT1() {
       uct.cancelCountMax=10;
    }
     else if (SimTimes == 22){
-      uct.expandThreshold=100;
+      uct.expandThreshold=10;
       uct.terminateThreshold = uct.expandThreshold*1000000;
       uct.depthMax=4;
-      uct.cancelCountMax=10;
+      uct.cancelCountMax=1000000;
     }
     else if (SimTimes == 23){
       uct.expandThreshold=10;
@@ -743,16 +743,19 @@ void UCT1() {
     simulator.nextPlayer = simulatorStartBoard.get(simulator.StartBoardId).nextPlayer;
     nextPlayer=simulator.Participants[simulator.nextPlayer];
     simulator.mainBoard.copyBoardToSub(nextPlayer.myBoard);
-    int answer = uctMctsStartingJoseki(nextPlayer);
-    if (answer!=-1) {
-      simulator.mainBoard.sv[answer]=1;
-      simulator.mainBoard.s[answer].marked=1;
-      simulationManager=sP.GameEnd;
-      simulator.mainBoard.display(12);
-      showReturnButton();
-      showScreenCapture();
-    } else {
-      answer = uctMctsBrainPreparation(nextPlayer);
+    //int answer = uctMctsStartingJoseki(nextPlayer);
+    //if (answer!=-1) {
+    //  simulator.mainBoard.sv[answer]=1;
+    //  if(answer<25){
+    //    simulator.mainBoard.s[answer].marked=1;
+    //  }
+    //  simulationManager=sP.GameEnd;
+    //  simulator.mainBoard.display(12);
+    //  showReturnButton();
+    //  showScreenCapture();
+    //} else 
+    {
+      int answer = uctMctsBrainPreparation(nextPlayer);
       if (answer==-1) {
         simulationManager=sP.GameEnd;
       } else {
@@ -806,7 +809,7 @@ void showMcts(player nextPlayer) {
   uct.prize.getPrize3FromNodeList(nextPlayer.position, uct.rootNode.children);
   String[] message=new String[5];
   prize localPrize=new prize();
-  uctNode nd1, nd2, nd3, nd4;
+  uctNode nd1=null, nd2=null, nd3=null, nd4=null;
   float maxWinrate=0;
   nd1 = uct.prize.getMove(1);
   if (nd1!=null) {
@@ -814,10 +817,14 @@ void showMcts(player nextPlayer) {
       if (nd1.children!=null && nd1.children.size()>0) {
         localPrize.getBPrize1FromNodeList(p2, nd1.children);
         nd2 = localPrize.getMove(1);
-        if (nd2.children!=null && nd2.children.size()>0){
+        if (nd2==null){
+          message[p2]=nd1.id;
+        } else if (nd2.children!=null && nd2.children.size()>0){
           localPrize.getBXPrize1FromNodeList(nd2.children);
           nd3 = localPrize.getMove(1);
-          if (nd3.children!=null && nd3.children.size()>0){
+          if (nd3==null){
+            message[p2] = nd2.id;
+          } else if (nd3.children!=null && nd3.children.size()>0){
             localPrize.getBXPrize1FromNodeList(nd3.children);
             nd4 = localPrize.getMove(1);
             message[p2] = nd4.id;
