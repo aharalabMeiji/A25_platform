@@ -120,7 +120,7 @@ class uctClass{
   int depthMax = 4;
   int cancelCountMax=10;
   ArrayList<joseki> josekiList = null;//使わないかも
-
+  int uctMainLoopOption=2;
   uctClass(){
     josekiList = new ArrayList<joseki>();
   }

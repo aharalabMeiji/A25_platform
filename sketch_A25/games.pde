@@ -49,32 +49,30 @@ void showPassButton() { //
 }
 
 void initRandomOrder() {
-
-    randomOrderCount=0;
-    for (int i=0; i<28; i++) {
-      randomOrder[i] = (i%4)+1;
+  randomOrderCount=0;
+  for (int i=0; i<28; i++) {
+    randomOrder[i] = (i%4)+1;
+  }
+  for (int i=0; i<500; i++) {
+    int j=int(random(28));
+    int k=int(random(28));
+    if (j!=k) {
+      int tmp=randomOrder[j];
+      randomOrder[j] = randomOrder[k];
+      randomOrder[k] = tmp;
     }
-    for (int i=0; i<500; i++) {
-      int j=int(random(28));
-      int k=int(random(28));
-      if (j!=k) {
-        int tmp=randomOrder[j];
-        randomOrder[j] = randomOrder[k];
-        randomOrder[k] = tmp;
-      }
-    }
-
+  }
 }
 
 int getRandomOrder() {
-    if (randomOrderCount<28) {
-      int ret = randomOrder[randomOrderCount];
-      randomOrderCount ++;
-      return ret;
-    } else {
-      randomOrderCount ++;
-      return int(random(4)+1);
-    }
+  if (randomOrderCount<28) {
+    int ret = randomOrder[randomOrderCount];
+    randomOrderCount ++;
+    return ret;
+  } else {
+    randomOrderCount ++;
+    return int(random(4)+1);
+  }
 
 }
 
@@ -183,7 +181,7 @@ void showGames() {
     kifu.string="";// 初期盤面以降の着手をここに記録する。
     // 試しに、「ターン回数を均等にするランダム」を作ってみる
     initRandomOrder();
-    randomOrderCount=0;
+    //randomOrderCount=0;
     //盤面を一度表示
     background(255);
     utils.gameMainBoard.display(0);
@@ -194,8 +192,7 @@ void showGames() {
     showScreenCapture();
     showPassButton();
     managerPhase=mP.WaitChoosePlayer;// show setting and wait start
-  } else if (managerPhase==mP.WaitChoosePlayer) {
-    
+  } else if (managerPhase==mP.WaitChoosePlayer) {   
     if (gameOptions.get("Order") == 3) {
       game.nextPlayer = getRandomOrder();// 次の手番をランダムに決める //
       for (int p = 1; p<=4; p++) {
@@ -435,8 +432,10 @@ void showGames() {
       }
       // 棋譜文字列の初期化
       kifu.string="";
+      initRandomOrder();
       managerPhase = mP.WaitChoosePlayer;
     }
+    ///////mP.GameEndここまで
   } else if (managerPhase==mP.BeforeAttackChance) {///////mP.BeforeAttackChance
     //人間のプレーのときには、アタックチャンスで消せる枠にマークを付ける
     if (game.participants[game.nextPlayer].myBrain==brain.Human) {

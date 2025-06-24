@@ -1,4 +1,4 @@
-int uctMctsBrain(player pl) { // //<>//
+int uctMctsBrain(player pl) { //
   //候補を一つに絞ってもよいが、いつでも同じ動作になってしまうので、複数個の候補を重みをつけておくとよい。
   //ここから
   startTime=millis();
@@ -12,7 +12,11 @@ int uctMctsBrain(player pl) { // //<>//
   println("uct ",uct.expandThreshold, uct.terminateThreshold, uct.depthMax, uct.cancelCountMax);
   //uct.simulationTag=uct.expandThreshold*10;
   while (true) {
-    answer = uctMctsMainLoop(pl);
+    if (uct.uctMainLoopOption==1){
+      answer = uctMctsMainLoop(pl);
+    } else {
+      answer = uctMctsMainLoopVer2(pl);
+    }
     for(int k=0;k<25;k++){// 今のところ、この書き換えは反映されない。
       utils.gameMainBoard.s[k].shaded=pl.myBoard.s[k].shaded;
     }  
