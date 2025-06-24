@@ -14,7 +14,7 @@ class uctNode {
   boolean attackChanceNode=false;
   ArrayList<uctNode> activeNodes=null;// アクティブな子ノード
   uctNode ancestor = null;// 第1世代の子ノード
-
+  Thread myThread = null;
   uctNode() {
     na=1;
     wa=new float[5];
@@ -29,6 +29,7 @@ class uctNode {
     id="";
     depth=0;
     attackChanceNode=false;
+    
   }
   boolean setItem(int _p, int _m) {
     player=_p;

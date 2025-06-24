@@ -1,6 +1,18 @@
 /// ucbFast
 
 int ucbFastBrain(player pl, ucbClass ucb) {
+  int panelCount=0;
+  for (int k=0; k<25; k++) {
+    if (pl.myBoard.s[k].col!=0) {
+      panelCount++;
+    }
+  }
+  if (panelCount==0) {////////////////////////////////// 1 /////////
+    return 12;
+  }
+  if (panelCount==1) {////////////////////////////////// 2 /////////
+    return 7;
+  }
   player[] ucbMcParticipants = new player[5];
   //if (ucb == ucb1){
   //  for (int p=1; p<5; p++) {

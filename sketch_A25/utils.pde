@@ -121,6 +121,7 @@ class uctClass{
   int cancelCountMax=10;
   ArrayList<joseki> josekiList = null;//使わないかも
   int uctMainLoopOption=2;
+  float maxNodeWinrate=0.0;
   uctClass(){
     josekiList = new ArrayList<joseki>();
   }

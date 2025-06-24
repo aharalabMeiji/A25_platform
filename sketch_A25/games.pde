@@ -62,6 +62,11 @@ void initRandomOrder() {
       randomOrder[k] = tmp;
     }
   }
+  //print("random order=");
+  //for(int i=0; i<28; i++) {
+  //  print(randomOrder[i]);
+  //}
+  //println();
 }
 
 int getRandomOrder() {
@@ -213,8 +218,8 @@ void showGames() {
       game.participants[game.nextPlayer].turn = true;
       managerPhase = mP.AfterChoosePlayer;
     } else if (gameOptions.get("Order") == 0){
-      //game.nextPlayer = mt.nextInt(4)+1; 
-      game.nextPlayer = int(random(4))+1; 
+      game.nextPlayer = mt.nextInt(4)+1; 
+      //game.nextPlayer = int(random(4))+1; 
       for (int p = 1; p<=4; p++) {
         game.participants[p].turn = false;
       }
