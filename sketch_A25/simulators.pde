@@ -781,7 +781,7 @@ void UCT1() {
     int answer=-1;
     answer = uctMctsMainLoop(nextPlayer);
     // 1000回に1回、svにデータを埋める。
-
+    
     if (uct.rootNode.attackChanceNode==false) {
       for (uctNode nd : uct.rootNode.children) {
         int k = nd.move;//たぶん、kは0～２５
@@ -795,7 +795,7 @@ void UCT1() {
       }
     } else {
     }
-  
+    simulator.mainBoard.simulatorNumber=nextPlayer.myBoard.simulatorNumber;
     showMcts(nextPlayer);
     if (answer!=-1) {
       simulationManager=sP.GameEnd;
@@ -838,12 +838,13 @@ void showMcts(player nextPlayer) {
         message[p2]=nd1.id;
       }
     }
+    
     simulator.mainBoard.display(12);// UCTディスプレイ
     textAlign(LEFT, CENTER);
     fill(0);
     if (!simulator.mainBoard.attackChanceP){
       text(1.0*simulator.mainBoard.sv[25], utils.mainL, utils.mainU-utils.fontSize);
-      text(1.0*simulator.mainBoard.sv2[25], utils.mainL+utils.fontSize*3.5, utils.mainU-utils.fontSize);
+      text(1.0*simulator.mainBoard.sv2[25], utils.mainL+utils.fontSize*3, utils.mainU-utils.fontSize);
     }
     for (int p=1; p<=4; p++) {
       text(message[p], utils.unitSize/2, utils.subU+utils.vStep*(p-1));
@@ -893,7 +894,7 @@ void saveScreenShotSelected(File selection) {
     println("ファイルが選択されませんでした。");
   } else {
     filePath = selection.getAbsolutePath();
-    if (filePath.substring(filePath.length()-4)!=".png") {
+    if (differentExt(filePath,".png")) {
       filePath += ".png";
     }
     println("選択されたファイルパス: " + filePath);

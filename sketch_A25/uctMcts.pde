@@ -415,7 +415,7 @@ int uctMctsMainLoop(player pl) {
                   if ((uct.mainBoard.vp[j]>0 && (uct.mainBoard.s[i].col>=1 && uct.mainBoard.s[i].col<=4)) || (uct.mainBoard.vp[j]>0 && i==j)) {
                     uct.newNode = new uctNode();
                     uct.newNode.setItem(p, k);
-                    uct.newNode.id = uctMaxNode.id + (":"+kifu.playerColCode[pl.position]+nf(j+1, 2)) + (":Y"+nf(i+1, 2));
+                    uct.newNode.id = uctMaxNode.id + (":"+kifu.playerColCode[p]+nf(j+1, 2)) + (":Y"+nf(i+1, 2));
                     uct.newNode.depth = uctMaxNode.depth + 1;
                     //println("uctMctsBrain: id="+uct.newNode.id);
                     tmpUctNodes.add(uct.newNode);//tmpUctNodesにぶら下げる

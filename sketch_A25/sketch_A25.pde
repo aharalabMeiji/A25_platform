@@ -142,9 +142,9 @@ void mousePressed() {
       } else if (buttonSaveFile.mouseOn()) {
         selectOutput("保存先を選択してください", "saveFileSelected");
       } else if (buttonOpenFile.mouseOn()) {
-        selectInput("読み込むTXTファイルを選択してください", "openFileSelected");
-      } else if (buttonOpenPsrFile.mouseOn()) {
-        selectInput("読み込むPSRファイルを選択してください", "openPsrFileSelected");
+        selectInput("読み込むファイルを選択してください", "openFileSelected");
+      //} else if (buttonOpenPsrFile.mouseOn()) {
+      //  selectInput("読み込むPSRファイルを選択してください", "openPsrFileSelected");
       } else if (buttonNew.mouseOn()) {
         simulatorStartBoard.clear();
         simulatorStartBoard.add(startBoard0);
@@ -169,17 +169,27 @@ void mousePressed() {
   }
 }
 
+boolean differentExt(String s1, String ext){
+  int len = s1.length();
+  int repeat=ext.length();
+  for (int i=0; i<repeat; i++){
+    if (s1.charAt(len-repeat+i)!=ext.charAt(i)) return false;
+  }
+  return true;
+}
 String filePath; // 選択されたファイルのフルパスを保存する変数
+String filenamePath="---";// 選択されたファイルのファイル名部分を保存する変数
 // ダイアログで選択されたファイルパスを取得する関数
 void saveFileSelected(File selection) {
   if (selection == null) {
     println("ファイルが選択されませんでした。");
   } else {
     filePath = selection.getAbsolutePath();
-    println("選択されたファイルパス: " + filePath);
-    if (filePath.substring(filePath.length()-4)!=".txt") {
+    
+    if (differentExt(filePath,".txt") ){
       filePath += ".txt";
     }
+    println("選択されたファイルパス: " + filePath);
     int lineSize = simulatorStartBoard.size();
     String[] lines = new String[lineSize];
 
@@ -204,11 +214,29 @@ void saveKifuFileSelected(File selection) {
   }
 }
 
+String filenameFromPath(String fn){
+  int len=fn.length();
+  String ret="";
+  int phase=0;
+  for (int i=len-1; i>=0; i--){
+    if (phase==0){
+      if (fn.charAt(i)=='.'){
+        phase=1;
+      }
+    } else if (phase==1){
+      if (fn.charAt(i)=='\\') return ret;
+      ret = str(fn.charAt(i))+ret;
+    }
+  }
+  return ret;
+}
 void openFileSelected(File selection) {
   if (selection == null) {
     println("ファイルが選択されませんでした。");
   } else {
     filePath = selection.getAbsolutePath(); 
+    println("選択されたファイルパス: " + filePath);
+    filenamePath = filenameFromPath(filePath);
     String[] lines = loadStrings(filePath);
     int lineSize=lines.length;
     if (lines[0].charAt(0)=='0' && lines[0].charAt(1)==',') {

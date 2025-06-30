@@ -628,19 +628,19 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    buttonText = "[Open TXT file]";
+    buttonText = "[Open file]";
     buttonOpenFile = new button();
     buttonOpenFile.setLT(left, top, buttonText);
     fill(0);
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    buttonText = "[Open PSR file]";
-    buttonOpenPsrFile = new button();
-    buttonOpenPsrFile.setLT(left, top, buttonText);
-    fill(0);
-    text(buttonText, left, top);
-    left += (textWidth(buttonText)+utils.hSpace);
+    buttonText = "("+filenamePath+")";
+    //buttonOpenPsrFile = new button();
+    //buttonOpenPsrFile.setLT(left, top, buttonText);
+    //fill(0);
+    //text(buttonText, left, top);
+    //left += (textWidth(buttonText)+utils.hSpace);
     //
     top += utils.vStep;
     left = utils.hOffset;
