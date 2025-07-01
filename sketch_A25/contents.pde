@@ -647,8 +647,8 @@ void showContents() {
     //text(buttonText, left, top);
     //left += (textWidth(buttonText)+utils.hSpace);
     //
-    top += utils.vStep;
-    left = utils.hOffset;
+    //top += utils.vStep;
+    //left = utils.hOffset;
     buttonText = "[Save TXT file]";
     buttonSaveFile = new button();
     buttonSaveFile.setLT(left, top, buttonText);

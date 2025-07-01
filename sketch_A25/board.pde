@@ -36,7 +36,7 @@ class board {
         s[i].display(mode);
       }
       textSize(utils.fontSize);
-      if (!attackChanceP){
+      if (!attackChanceP) {
         text(1.0*sv[25], utils.mainL, utils.mainU-utils.fontSize);
         text(1.0*sv2[25], utils.mainL+utils.fontSize*3.5, utils.mainU-utils.fontSize);
       }
@@ -45,6 +45,12 @@ class board {
       int total = simulatorStartBoard.size();
       int now = (simulator.StartBoardId) % total;
       text(filenamePath+"("+now+")", utils.mainL+utils.fontSize*22, utils.mainU-utils.fontSize);
+      String simMethod = "Monte Carlo Method";
+      if (gameOptions.get("SimTimes") == 1) simMethod += "(1k)";
+      else if (gameOptions.get("SimTimes") == 2) simMethod += "(10k)";
+      else simMethod += "(limit)";
+      textAlign(LEFT, CENTER);
+      text(simMethod, utils.subL, utils.subU);
       stroke(0);
       fill(utils.playerColor[simulator.nextPlayer]);
       rect(utils.mainL+utils.fontSize*14, utils.mainU-utils.fontSize*1.3, utils.fontSize*3, utils.fontSize*0.8);
@@ -57,7 +63,7 @@ class board {
         s[i].display(mode);
       }
       textSize(utils.fontSize);
-      if (!attackChanceP){
+      if (!attackChanceP) {
         text(1.0*sv[25], utils.mainL, utils.mainU-utils.fontSize);
         text(1.0*sv2[25], utils.mainL+utils.fontSize*3.5, utils.mainU-utils.fontSize);
       }
@@ -66,6 +72,12 @@ class board {
       int total = simulatorStartBoard.size();
       int now = (simulator.StartBoardId) % total;
       text(filenamePath+"("+now+")", utils.mainL+utils.fontSize*22, utils.mainU-utils.fontSize);
+      String simMethod = "Monte Carlo Method(UCB) ";
+      if (gameOptions.get("SimTimes") == 11) simMethod += "(10 sec)";
+      else if (gameOptions.get("SimTimes") == 12) simMethod += "(60sec)";
+      else simMethod += "(limit)";
+      textAlign(LEFT, CENTER);
+      text(simMethod, utils.subL, utils.subU);
       stroke(0);
       fill(utils.playerColor[simulator.nextPlayer]);
       rect(utils.mainL+utils.fontSize*14, utils.mainU-utils.fontSize*1.3, utils.fontSize*3, utils.fontSize*0.8);
@@ -84,10 +96,18 @@ class board {
       int total = simulatorStartBoard.size();
       int now = (simulator.StartBoardId) % total;
       text(filenamePath+"("+now+")", utils.mainL+utils.fontSize*22, utils.mainU-utils.fontSize);
+      String simMethod = "Monte Carlo Tree Search(UCT) ";
+      textAlign(LEFT, CENTER);
+      text(simMethod, utils.subL, utils.subU);
+      if (gameOptions.get("SimTimes") == 21) simMethod = "(Depth4/wCancel)";
+      else if (gameOptions.get("SimTimes") == 22) simMethod = "(Depth4/woCancel)";
+      else if (gameOptions.get("SimTimes") == 23) simMethod = "(Depth5/wCancel)";
+      else if (gameOptions.get("SimTimes") == 24) simMethod = "(Depth5/woCancel)";
+      text(simMethod, utils.subL, utils.subU+utils.vStep);
       stroke(0);
       fill(utils.playerColor[simulator.nextPlayer]);
       rect(utils.mainL+utils.fontSize*14, utils.mainU-utils.fontSize*1.3, utils.fontSize*3, utils.fontSize*0.8);
-      
+
       //}
     }
     return true;
@@ -204,10 +224,10 @@ class board {
     }
     return true;
   }
-  void ClearSv(){
+  void ClearSv() {
     for (int i=0; i<25; i++) {
       sv[i]=sv2[i]=0;
-    }    
+    }
   }
   boolean move(int pn, int attack) {// including othello moves
     s[attack].col = pn;
@@ -372,7 +392,7 @@ class panel {
         text(sv, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*0.7);
         text(sv2, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*1.4);
       }
-      if (shaded>0){
+      if (shaded>0) {
         fill(utils.playerShade[shaded]);
         rect(dx+10, dy+10, utils.mainW-20, utils.mainH-20);
       }
