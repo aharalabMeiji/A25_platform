@@ -178,7 +178,7 @@ boolean differentExt(String s1, String ext){
   return true;
 }
 String filePath; // 選択されたファイルのフルパスを保存する変数
-String filenamePath="---";// 選択されたファイルのファイル名部分を保存する変数
+String filenamePath="default";// 選択されたファイルのファイル名部分を保存する変数
 // ダイアログで選択されたファイルパスを取得する関数
 void saveFileSelected(File selection) {
   if (selection == null) {

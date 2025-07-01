@@ -32,6 +32,9 @@ void showContents() {
   else fill(0);
   text(buttonText, left, top);
   //
+  fill(0);
+  text(filenamePath, utils.mainL+utils.fontSize*22, utils.mainU-utils.fontSize);
+  //
   top += utils.vStep;
   left=utils.hOffset;
   if (gameOptions.get("gameMode") == 0) {// Game options
@@ -440,6 +443,8 @@ void showContents() {
     fill(255, 0, 0);
     text(buttonText, left, top);
   } else if (gameOptions.get("gameMode") == 1) {///////////////////////////////////////// Simulation options
+    fill(0);
+    text(filenamePath, utils.mainL+utils.fontSize*22, utils.mainU-utils.fontSize);
     // シミュレーション方法選択
     //top += utils.vStep;
     left=utils.hOffset;
