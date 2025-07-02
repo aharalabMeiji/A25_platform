@@ -42,14 +42,15 @@ class board {
       }
       text("("+simulatorNumber+")", utils.mainL+utils.fontSize*7, utils.mainU-utils.fontSize);
       text("player:", utils.mainL+utils.fontSize*12, utils.mainU-utils.fontSize);
+      textAlign(LEFT, CENTER);
       int total = simulatorStartBoard.size();
       int now = (simulator.StartBoardId) % total;
-      text(filenamePath+"("+now+")", utils.mainL+utils.fontSize*22, utils.mainU-utils.fontSize);
+      text(filenamePath+"("+now+")", utils.mainL+utils.fontSize*20, utils.mainU-utils.fontSize);
       String simMethod = "Monte Carlo Method";
       if (gameOptions.get("SimTimes") == 1) simMethod += "(1k)";
       else if (gameOptions.get("SimTimes") == 2) simMethod += "(10k)";
       else simMethod += "(limit)";
-      textAlign(LEFT, CENTER);
+      
       text(simMethod, utils.subL, utils.subU);
       stroke(0);
       fill(utils.playerColor[simulator.nextPlayer]);
@@ -69,14 +70,15 @@ class board {
       }
       text("("+simulatorNumber+")", utils.mainL+utils.fontSize*7, utils.mainU-utils.fontSize);
       text("player:", utils.mainL+utils.fontSize*12, utils.mainU-utils.fontSize);
+      textAlign(LEFT, CENTER);
       int total = simulatorStartBoard.size();
       int now = (simulator.StartBoardId) % total;
-      text(filenamePath+"("+now+")", utils.mainL+utils.fontSize*22, utils.mainU-utils.fontSize);
+      text(filenamePath+"("+now+")", utils.mainL+utils.fontSize*20, utils.mainU-utils.fontSize);
       String simMethod = "Monte Carlo Method(UCB) ";
       if (gameOptions.get("SimTimes") == 11) simMethod += "(10 sec)";
       else if (gameOptions.get("SimTimes") == 12) simMethod += "(60sec)";
       else simMethod += "(limit)";
-      textAlign(LEFT, CENTER);
+
       text(simMethod, utils.subL, utils.subU);
       stroke(0);
       fill(utils.playerColor[simulator.nextPlayer]);
@@ -93,11 +95,12 @@ class board {
       textSize(utils.fontSize);
       text("("+simulatorNumber+")", utils.mainL+utils.fontSize*8, utils.mainU-utils.fontSize);
       text("player:", utils.mainL+utils.fontSize*12, utils.mainU-utils.fontSize);
+      textAlign(LEFT, CENTER);
       int total = simulatorStartBoard.size();
       int now = (simulator.StartBoardId) % total;
-      text(filenamePath+"("+now+")", utils.mainL+utils.fontSize*22, utils.mainU-utils.fontSize);
+      text(filenamePath+"("+now+")", utils.mainL+utils.fontSize*20, utils.mainU-utils.fontSize);
       String simMethod = "Monte Carlo Tree Search(UCT) ";
-      textAlign(LEFT, CENTER);
+      
       text(simMethod, utils.subL, utils.subU);
       if (gameOptions.get("SimTimes") == 21) simMethod = "(Depth4/wCancel)";
       else if (gameOptions.get("SimTimes") == 22) simMethod = "(Depth4/woCancel)";
