@@ -173,9 +173,9 @@ boolean differentExt(String s1, String ext){
   int len = s1.length();
   int repeat=ext.length();
   for (int i=0; i<repeat; i++){
-    if (s1.charAt(len-repeat+i)!=ext.charAt(i)) return false;
+    if (s1.charAt(len-repeat+i)!=ext.charAt(i)) return true;
   }
-  return true;
+  return false;
 }
 String filePath; // 選択されたファイルのフルパスを保存する変数
 String filenamePath="default.txt";// 選択されたファイルのファイル名部分を保存する変数
@@ -186,7 +186,7 @@ void saveFileSelected(File selection) {
   } else {
     filePath = selection.getAbsolutePath();
     
-    if (differentExt(filePath,".txt") ){
+    if (differentExt(filePath,".txt")==true ){
       filePath += ".txt";
     }
     println("選択されたファイルパス: " + filePath);

@@ -894,7 +894,7 @@ void saveScreenShotSelected(File selection) {
     println("ファイルが選択されませんでした。");
   } else {
     filePath = selection.getAbsolutePath();
-    if (differentExt(filePath,".png")) {
+    if (differentExt(filePath,".png")==true) {
       filePath += ".png";
     }
     println("選択されたファイルパス: " + filePath);
