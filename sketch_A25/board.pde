@@ -326,6 +326,92 @@ class board {
       s[k].marked=0;
     }
   }
+  boolean symmetryLR(){
+    for(int j=0; j<5; j++){
+      for (int i=0; i<2; i++){
+        int k= 5*j + i;
+        int kk = 5*j + (4-i);
+        if (s[k].col != s[kk].col)
+          return false;
+      }
+    }
+    return true;    
+  }
+  boolean symmetryTB(){
+    for(int j=0; j<2; j++){
+      for (int i=0; i<5; i++){
+        int k= 5*j + i;
+        int kk = 5*(4-j) + i;
+        if (s[k].col != s[kk].col)
+          return false;
+      }
+    }
+    return true;    
+  }
+  boolean symmetryDiagonal(){
+    for(int j=0; j<5; j++){
+      for (int i=0; i<5; i++){
+        if (i<j){
+          int k= 5*j + i;
+          int kk = 5*i + j;
+          if (s[k].col != s[kk].col)
+            return false;
+        }
+      }
+    }
+    return true;    
+  }
+  boolean symmetryAntiDiagonal(){
+    for(int j=0; j<5; j++){
+      for (int i=0; i<5; i++){
+        if (i+j<4){
+          int k= 5*j + i;
+          int kk = 5*(4-i) + (4-j); 
+          if (s[k].col != s[kk].col)
+            return false;
+        }
+      }
+    }
+    return true;    
+  }
+  void deleteSymmetricVp(){
+    if (this.symmetryLR()){
+      for(int j=0; j<5; j++){
+        for (int i=0; i<2; i++){
+          int k= 5*j + i;
+          vp[k]=0;
+        }
+      }
+    } else 
+    if (this.symmetryTB()){
+      for(int j=0; j<2; j++){
+        for (int i=0; i<5; i++){
+          int k= 5*j + i;
+          vp[k]=0;
+        }
+      }
+    } else 
+    if (this.symmetryDiagonal()){
+      for(int j=0; j<5; j++){
+        for (int i=0; i<5; i++){
+          if (i<j){
+            int k= 5*j + i;
+            vp[k]=0;
+          }
+        }
+      }
+    }  else 
+    if (this.symmetryAntiDiagonal()){
+      for(int j=0; j<5; j++){
+        for (int i=0; i<5; i++){
+          if (i+j<4){
+            int k= 5*j + i;
+            vp[k]=0;
+          }
+        }
+      }
+    }     
+  }
 }; // end of class board
 
 class panel {
