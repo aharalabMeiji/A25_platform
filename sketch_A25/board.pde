@@ -107,9 +107,9 @@ class board {
       else if (gameOptions.get("SimTimes") == 23) simMethod = "(Depth5/wCancel)";
       else if (gameOptions.get("SimTimes") == 24) simMethod = "(Depth5/woCancel)";
       else {
-        simMethod="E"+str(gameOptions.get("expandThreshold"))+"T"+str(gameOptions.get("terminateThreshold"))+"D"+str(gameOptions.get("depthMax"));
-        if (gameOptions.get("wCancel")==1) simMethod += "/wCancel";
-        else simMethod += "/woCancel";
+        simMethod="(E"+str(gameOptions.get("expandThreshold"))+"/T"+str(gameOptions.get("terminateThreshold"))+"/D"+str(gameOptions.get("depthMax"));
+        if (gameOptions.get("wCancel")==1) simMethod += "/wCancel)";
+        else simMethod += "/woCancel)";
       }
       text(simMethod, utils.subL, utils.subU+utils.vStep);
       stroke(0);

@@ -126,7 +126,7 @@ void mousePressed() {
           } else if (b.dictKey=="SimMethod" && b.dictInt==3) {
             gameOptions.set("SimTimes", 21);
           } else if (b.dictKey=="SimTimes" && b.dictInt==25) {
-            gameOptions.set("expandThreshold", 16);
+            gameOptions.set("expandThreshold", 10);
             gameOptions.set("terminateThreshold", 5);
             gameOptions.set("depthMax", 4);
             gameOptions.set("wCancel", 1);

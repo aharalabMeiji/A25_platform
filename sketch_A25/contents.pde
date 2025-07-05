@@ -639,42 +639,42 @@ void showContents() {
         text(captionText, left, top);
         left += (textWidth(captionText)+utils.hSpace);
         //
-        buttonText = "[16]";
+        buttonText = "[10]";
         button buttonExpandThreshold1=new button();
         buttonExpandThreshold1.setLT(left, top, buttonText);
-        buttonExpandThreshold1.setItem("expandThreshold", 16);
+        buttonExpandThreshold1.setItem("expandThreshold", 10);
         buttons.add(buttonExpandThreshold1);
-        if (gameOptions.get("expandThreshold")==16) fill(255, 0, 0);
+        if (gameOptions.get("expandThreshold")==10) fill(255, 0, 0);
         else fill(0);
         text(buttonText, left, top);
         left += (textWidth(buttonText)+utils.hSpace);
         //
-        buttonText = "[128]";
+        buttonText = "[100]";
         button buttonExpandThreshold2=new button();
         buttonExpandThreshold2.setLT(left, top, buttonText);
-        buttonExpandThreshold2.setItem("expandThreshold", 128);
+        buttonExpandThreshold2.setItem("expandThreshold", 100);
         buttons.add(buttonExpandThreshold2);
-        if (gameOptions.get("expandThreshold")==128) fill(255, 0, 0);
+        if (gameOptions.get("expandThreshold")==100) fill(255, 0, 0);
         else fill(0);
         text(buttonText, left, top);
         left += (textWidth(buttonText)+utils.hSpace);
         //
-        buttonText = "[1024]";
+        buttonText = "[1000]";
         button buttonExpandThreshold3=new button();
         buttonExpandThreshold3.setLT(left, top, buttonText);
-        buttonExpandThreshold3.setItem("expandThreshold", 1024);
+        buttonExpandThreshold3.setItem("expandThreshold", 1000);
         buttons.add(buttonExpandThreshold3);
-        if (gameOptions.get("expandThreshold")==1024) fill(255, 0, 0);
+        if (gameOptions.get("expandThreshold")==1000) fill(255, 0, 0);
         else fill(0);
         text(buttonText, left, top);
         left += (textWidth(buttonText)+utils.hSpace);
         //
-        buttonText = "[4096]";
+        buttonText = "[5000]";
         button buttonExpandThreshold4=new button();
         buttonExpandThreshold4.setLT(left, top, buttonText);
-        buttonExpandThreshold4.setItem("expandThreshold", 4096);
+        buttonExpandThreshold4.setItem("expandThreshold", 5000);
         buttons.add(buttonExpandThreshold4);
-        if (gameOptions.get("expandThreshold")==4096) fill(255, 0, 0);
+        if (gameOptions.get("expandThreshold")==5000) fill(255, 0, 0);
         else fill(0);
         text(buttonText, left, top);
         left += (textWidth(buttonText)+utils.hSpace);
