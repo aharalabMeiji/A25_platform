@@ -377,14 +377,14 @@ class board {
   void deleteSymmetricVp(){
     if (this.symmetryLR()){
       for(int j=0; j<5; j++){
-        for (int i=0; i<2; i++){
+        for (int i=3; i<5; i++){
           int k= 5*j + i;
           vp[k]=0;
         }
       }
     } else 
     if (this.symmetryTB()){
-      for(int j=0; j<2; j++){
+      for(int j=3; j<5; j++){
         for (int i=0; i<5; i++){
           int k= 5*j + i;
           vp[k]=0;
@@ -404,7 +404,7 @@ class board {
     if (this.symmetryAntiDiagonal()){
       for(int j=0; j<5; j++){
         for (int i=0; i<5; i++){
-          if (i+j<4){
+          if (i+j>4){
             int k= 5*j + i;
             vp[k]=0;
           }
