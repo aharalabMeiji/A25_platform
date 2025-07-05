@@ -612,6 +612,16 @@ void showContents() {
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
       //
+      buttonText = "[manual]";
+      button buttontimes5=new button();
+      buttontimes5.setLT(left, top, buttonText);
+      buttontimes5.setItem("SimTimes", 25);
+      buttons.add(buttontimes5);
+      if (gameOptions.get("SimTimes") == 25) fill(255, 0, 0);
+      else fill(0);
+      text(buttonText, left, top);
+      left += (textWidth(buttonText)+utils.hSpace);
+      ////
     }
     if (gameOptions.get("SimMethod") == 3 ){
       top += utils.vStep;
@@ -622,6 +632,141 @@ void showContents() {
       else if (gameOptions.get("SimTimes") == 22) text("visit/node=10, max depth=4, w/o cancelling",left,top);
       else if (gameOptions.get("SimTimes") == 23) text("visit/node=10, max depth=5, with cancelling",left,top);
       else if (gameOptions.get("SimTimes") == 24) text("visit/node=10, max depth=5, w/o cancelling",left,top);
+      else if (gameOptions.get("SimTimes") == 25) {
+        //
+        captionText = "visit/node:";
+        fill(0);
+        text(captionText, left, top);
+        left += (textWidth(captionText)+utils.hSpace);
+        //
+        buttonText = "[16]";
+        button buttonExpandThreshold1=new button();
+        buttonExpandThreshold1.setLT(left, top, buttonText);
+        buttonExpandThreshold1.setItem("expandThreshold", 16);
+        buttons.add(buttonExpandThreshold1);
+        if (gameOptions.get("expandThreshold")==16) fill(255, 0, 0);
+        else fill(0);
+        text(buttonText, left, top);
+        left += (textWidth(buttonText)+utils.hSpace);
+        //
+        buttonText = "[128]";
+        button buttonExpandThreshold2=new button();
+        buttonExpandThreshold2.setLT(left, top, buttonText);
+        buttonExpandThreshold2.setItem("SimTimes", 128);
+        buttons.add(buttonExpandThreshold2);
+        if (gameOptions.get("expandThreshold")==128) fill(255, 0, 0);
+        else fill(0);
+        text(buttonText, left, top);
+        left += (textWidth(buttonText)+utils.hSpace);
+        //
+        buttonText = "[1024]";
+        button buttonExpandThreshold3=new button();
+        buttonExpandThreshold3.setLT(left, top, buttonText);
+        buttonExpandThreshold3.setItem("expandThreshold", 1024);
+        buttons.add(buttonExpandThreshold3);
+        if (gameOptions.get("expandThreshold")==1024) fill(255, 0, 0);
+        else fill(0);
+        text(buttonText, left, top);
+        left += (textWidth(buttonText)+utils.hSpace);
+        //
+        buttonText = "[4096]";
+        button buttonExpandThreshold4=new button();
+        buttonExpandThreshold4.setLT(left, top, buttonText);
+        buttonExpandThreshold4.setItem("expandThreshold", 4096);
+        buttons.add(buttonExpandThreshold4);
+        if (gameOptions.get("expandThreshold")==4096) fill(255, 0, 0);
+        else fill(0);
+        text(buttonText, left, top);
+        left += (textWidth(buttonText)+utils.hSpace);
+        //
+        top += utils.vStep;
+        left=utils.hOffset;
+        //
+        captionText = "max # of nodes:";
+        fill(0);
+        text(captionText, left, top);
+        left += (textWidth(captionText)+utils.hSpace);
+        //
+        buttonText = "[10K]";
+        button buttonTerminateThreshold1=new button();
+        buttonTerminateThreshold1.setLT(left, top, buttonText);
+        buttonTerminateThreshold1.setItem("terminateThreshold", 4);
+        buttons.add(buttonTerminateThreshold1);
+        if (gameOptions.get("terminateThreshold")==4) fill(255, 0, 0);
+        else fill(0);
+        text(buttonText, left, top);
+        left += (textWidth(buttonText)+utils.hSpace);
+        //
+        buttonText = "[100K]";
+        button buttonTerminateThreshold2=new button();
+        buttonTerminateThreshold2.setLT(left, top, buttonText);
+        buttonTerminateThreshold2.setItem("terminateThreshold", 5);
+        buttons.add(buttonTerminateThreshold2);
+        if (gameOptions.get("terminateThreshold")==5) fill(255, 0, 0);
+        else fill(0);
+        text(buttonText, left, top);
+        left += (textWidth(buttonText)+utils.hSpace);
+        //
+        buttonText = "[1M]";
+        button buttonTerminateThreshold3=new button();
+        buttonTerminateThreshold3.setLT(left, top, buttonText);
+        buttonTerminateThreshold3.setItem("terminateThreshold", 6);
+        buttons.add(buttonTerminateThreshold3);
+        if (gameOptions.get("terminateThreshold")==6) fill(255, 0, 0);
+        else fill(0);
+        text(buttonText, left, top);
+        left += (textWidth(buttonText)+utils.hSpace);
+        //
+        top += utils.vStep;
+        left=utils.hOffset;
+        //
+        captionText = "max depth:";
+        fill(0);
+        text(captionText, left, top);
+        left += (textWidth(captionText)+utils.hSpace);
+        //
+        buttonText = "[2]";
+        button buttonDepthMax1=new button();
+        buttonDepthMax1.setLT(left, top, buttonText);
+        buttonDepthMax1.setItem("depthMax", 2);
+        buttons.add(buttonDepthMax1);
+        if (gameOptions.get("depthMax")==2) fill(255, 0, 0);
+        else fill(0);
+        text(buttonText, left, top);
+        left += (textWidth(buttonText)+utils.hSpace);
+        //
+        buttonText = "[3]";
+        button buttonDepthMax2=new button();
+        buttonDepthMax2.setLT(left, top, buttonText);
+        buttonDepthMax2.setItem("depthMax", 3);
+        buttons.add(buttonDepthMax2);
+        if (gameOptions.get("depthMax")==3) fill(255, 0, 0);
+        else fill(0);
+        text(buttonText, left, top);
+        left += (textWidth(buttonText)+utils.hSpace);
+        //
+        buttonText = "[4]";
+        button buttonDepthMax3=new button();
+        buttonDepthMax3.setLT(left, top, buttonText);
+        buttonDepthMax3.setItem("depthMax", 4);
+        buttons.add(buttonDepthMax3);
+        if (gameOptions.get("depthMax")==4) fill(255, 0, 0);
+        else fill(0);
+        text(buttonText, left, top);
+        left += (textWidth(buttonText)+utils.hSpace);
+        //
+        buttonText = "[5]";
+        button buttonDepthMax4=new button();
+        buttonDepthMax4.setLT(left, top, buttonText);
+        buttonDepthMax4.setItem("depthMax", 5);
+        buttons.add(buttonDepthMax4);
+        if (gameOptions.get("depthMax")==5) fill(255, 0, 0);
+        else fill(0);
+        text(buttonText, left, top);
+        left += (textWidth(buttonText)+utils.hSpace);
+         
+        
+      }
     }
     //
     top += utils.vStep;
