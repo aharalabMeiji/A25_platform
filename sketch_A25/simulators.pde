@@ -728,6 +728,30 @@ void UCT1() {
       uct.depthMax=5;
       uct.cancelCountMax=100000;
     }
+    else if (SimTimes == 25){
+      uct.expandThreshold=gameOptions.get("expandThreshold");
+      if (gameOptions.get("terminateThreshold")==4){
+        uct.terminateThreshold = uct.expandThreshold*10000;
+      } else if (gameOptions.get("terminateThreshold")==5){
+        uct.terminateThreshold = uct.expandThreshold*100000;
+      } else {
+        uct.terminateThreshold = uct.expandThreshold*1000000;
+      }
+      uct.depthMax=gameOptions.get("depthMax");
+      if (gameOptions.get("wCancel")==1){
+        if (uct.depthMax==2){
+          uct.cancelCountMax=2;
+        } else if (uct.depthMax==3){
+          uct.cancelCountMax=6;
+        } else if (uct.depthMax==4){
+          uct.cancelCountMax=10;
+        } else {
+          uct.cancelCountMax=20;
+        }
+      } else {
+        uct.cancelCountMax=100000;
+      }
+    }
     simulator.Participants = new player[5];
     for (int p=1; p<5; p++) {
       simulator.Participants[p] = new player(p, "random", brain.Random);

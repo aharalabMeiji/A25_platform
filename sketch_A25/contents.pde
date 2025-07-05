@@ -652,7 +652,7 @@ void showContents() {
         buttonText = "[128]";
         button buttonExpandThreshold2=new button();
         buttonExpandThreshold2.setLT(left, top, buttonText);
-        buttonExpandThreshold2.setItem("SimTimes", 128);
+        buttonExpandThreshold2.setItem("expandThreshold", 128);
         buttons.add(buttonExpandThreshold2);
         if (gameOptions.get("expandThreshold")==128) fill(255, 0, 0);
         else fill(0);
@@ -764,8 +764,34 @@ void showContents() {
         else fill(0);
         text(buttonText, left, top);
         left += (textWidth(buttonText)+utils.hSpace);
-         
-        
+        //
+        top += utils.vStep;
+        left=utils.hOffset;
+        //
+        captionText = "loop Cancelling:";
+        fill(0);
+        text(captionText, left, top);
+        left += (textWidth(captionText)+utils.hSpace);
+        //
+        buttonText = "[with Cancel]";
+        button buttonCancelling1=new button();
+        buttonCancelling1.setLT(left, top, buttonText);
+        buttonCancelling1.setItem("wCancel", 1);
+        buttons.add(buttonCancelling1);
+        if (gameOptions.get("wCancel")==1) fill(255, 0, 0);
+        else fill(0);
+        text(buttonText, left, top);
+        left += (textWidth(buttonText)+utils.hSpace);
+        //
+        buttonText = "[without Cancel]";
+        button buttonCancelling2=new button();
+        buttonCancelling2.setLT(left, top, buttonText);
+        buttonCancelling2.setItem("wCancel", 2);
+        buttons.add(buttonCancelling2);
+        if (gameOptions.get("wCancel")==2) fill(255, 0, 0);
+        else fill(0);
+        text(buttonText, left, top);
+        left += (textWidth(buttonText)+utils.hSpace);
       }
     }
     //
