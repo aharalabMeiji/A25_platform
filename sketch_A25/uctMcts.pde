@@ -34,7 +34,7 @@ int uctMctsBrainPreparation(player pl) {
   }
   //println("uctMctsBrain:着手可能点を計算しておく");
   pl.myBoard.buildVP(pl.position);
-  pl.myBoard.deleteSymmetricVp();
+  //pl.myBoard.deleteSymmetricVp();
   //pl.myBoard.vp に、候補を整数値（大きい値ほど選ばれる確率が大きい）で入れておく。
   int noVp=0;//着手可能点のカウント
   for (int k=0; k<25; k++) {
