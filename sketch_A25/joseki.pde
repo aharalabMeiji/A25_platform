@@ -6,10 +6,11 @@ int rotation(int pos, int theta) {
   else return 24-rot[pos];
 }
 
-int playByJoseki(player pl, int[] myPanel, int[] hisPanel1, int[] hisPanel2, int answer1, int answer2, int answer3, int pattern) {
+int playByJoseki(player pl, int[] myPanel, int[] hisPanel1, int[] hisPanel2, int[] hisPanel3, int answer1, int answer2, int answer3, int pattern) {
   int lenA=myPanel.length;
   int lenB=hisPanel1.length;
   int lenC=hisPanel2.length;
+  int lenD=hisPanel3.length;
 
   for (int t=0; t<4; t++) {
     boolean ret=true;
@@ -28,8 +29,23 @@ int playByJoseki(player pl, int[] myPanel, int[] hisPanel1, int[] hisPanel2, int
         ret = false;
       }
     }
+    if (ret && lenD>0) {
+      if (pl.myBoard.s[rotation(hisPanel3[0], t)].col == pl.position) {
+        ret = false;
+      }
+    }
     if (ret && lenB>0 && lenC>0) {
       if (pl.myBoard.s[rotation(hisPanel1[0], t)].col==pl.myBoard.s[rotation(hisPanel2[0], t)].col) {
+        ret = false;
+      }
+    }
+    if (ret && lenB>0 && lenD>0) {
+      if (pl.myBoard.s[rotation(hisPanel1[0], t)].col==pl.myBoard.s[rotation(hisPanel3[0], t)].col) {
+        ret = false;
+      }
+    }
+    if (ret && lenC>0 && lenD>0) {
+      if (pl.myBoard.s[rotation(hisPanel2[0], t)].col==pl.myBoard.s[rotation(hisPanel3[0], t)].col) {
         ret = false;
       }
     }
@@ -50,6 +66,13 @@ int playByJoseki(player pl, int[] myPanel, int[] hisPanel1, int[] hisPanel2, int
     if (ret && lenC>1) {
       for (int i=1; i<lenC; i++) {
         if (pl.myBoard.s[rotation(hisPanel2[i], t)].col!=pl.myBoard.s[rotation(hisPanel2[0], t)].col) {
+          return -1;
+        }
+      }
+    }
+    if (ret && lenD>1) {
+      for (int i=1; i<lenD; i++) {
+        if (pl.myBoard.s[rotation(hisPanel3[i], t)].col!=pl.myBoard.s[rotation(hisPanel3[0], t)].col) {
           return -1;
         }
       }
@@ -113,9 +136,14 @@ int uctMctsStartingJoseki(player pl) {
     pl.myBoard.buildVP(pl.position);
     int[] a31a={7, 12, 17};
     int[] none={};
-    answer = playByJoseki(pl, a31a, none, none, 2, 0, 0, 0);
+    answer = playByJoseki(pl, a31a, none, none, none, 2, 0, 0, 0);
     if (answer>=0 && pl.myBoard.vp[answer]>0) return answer;
-    answer = playByJoseki(pl, none, a31a, none, 2, 0, 0, 0);
+    // . . . . .
+    // . . B . .
+    // . . B . .
+    // . . B . .
+    // . . . . .
+    answer = playByJoseki(pl, none, a31a, none, none, 2, 0, 0, 0);
     if (answer>=0 && pl.myBoard.vp[answer]>0) return answer;
     // . . A . .
     // . . A . .
@@ -123,9 +151,40 @@ int uctMctsStartingJoseki(player pl) {
     // . . . . .
     // . . . . .
     int[] a32a={2, 7, 12};    
-    answer = playByJoseki(pl, a32a, none, none, 13, 17, 18, 3);
+    answer = playByJoseki(pl, a32a, none, none, none, 17, 0, 0, 1);
     if (answer>=0 && pl.myBoard.vp[answer]>0) return answer;
-    answer = playByJoseki(pl, none, a32a, none, 13, 0, 0, 10);
+    // . . B . .
+    // . . B . .
+    // . . B . .
+    // . . . . .
+    // . . . . .
+    answer = playByJoseki(pl, none, a32a, none, none, 13, 0, 0, 10);
+    if (answer>=0 &&  (answer==25 || pl.myBoard.vp[answer]>0)) return answer;
+    // . . B . .
+    // . . C . .
+    // . . C . .
+    // . . . . .
+    // . . . . .
+    int[] a33a={2};    
+    int[] a33b={7, 12};
+    answer = playByJoseki(pl, none, a33a, a33b, none, 11, 0, 0, 10);
+    if (answer>=0 &&  (answer==25 || pl.myBoard.vp[answer]>0)) return answer;
+    // . . C . .
+    // . . B . .
+    // . . A . .
+    // . . . . .
+    // . . . . .
+    int[] a34a={12};    
+    int[] a34b={7};
+    int[] a34c={2};
+    answer = playByJoseki(pl, a34a, a34b, a34c, none, 11, 0, 0, 1);///////////////////////////////////// old move
+    if (answer>=0 &&  (answer==25 || pl.myBoard.vp[answer]>0)) return answer;
+    // . . B . .
+    // . . C . .
+    // . . D . .
+    // . . . . .
+    // . . . . .
+    answer = playByJoseki(pl, none, a34a, a34b, a34c, 11, 0, 0, 1);///////////////////////////////////// old move
     if (answer>=0 &&  (answer==25 || pl.myBoard.vp[answer]>0)) return answer;
   }
   if (count==4) {
@@ -137,9 +196,32 @@ int uctMctsStartingJoseki(player pl) {
     pl.myBoard.buildVP(pl.position);
     int[] a41a={2, 7, 12, 17};
     int[] none={};
-    int answer = playByJoseki(pl, a41a, none, none, 22,0,0,0);
+    int answer = playByJoseki(pl, a41a, none, none, none, 22,0,0,0);
     if (answer>=0 && pl.myBoard.vp[answer]>0) return answer;
-    answer = playByJoseki(pl, none, a41a, none, 13,0,0,10);
+    // . . B . .
+    // . . B . .
+    // . . B . .
+    // . . B . .
+    // . . . . .
+    answer = playByJoseki(pl, none, a41a, none, none, 13,0,0,10);
+    if (answer>=0 && (answer==25 || pl.myBoard.vp[answer]>0)) return answer;   
+    // . . B . .
+    // . . C . .
+    // . . C . .
+    // . . C . .
+    // . . . . .
+    int[] a42b={2};
+    int[] a42c={7, 12, 17};
+    answer = playByJoseki(pl, none, a42b, a42c, none, 11,0,0,1);
+    if (answer>=0 && (answer==25 || pl.myBoard.vp[answer]>0)) return answer;   
+    // . . B . .
+    // . . B . .
+    // . . B C .
+    // . . . . .
+    // . . . . .
+    int[] a43b={2, 7, 12};
+    int[] a43c={13};
+    answer = playByJoseki(pl, none, a43b, a43c, none, 14,0,0,1);
     if (answer>=0 && (answer==25 || pl.myBoard.vp[answer]>0)) return answer;   
   }
   if (count==5) {
@@ -151,9 +233,9 @@ int uctMctsStartingJoseki(player pl) {
     pl.myBoard.buildVP(pl.position);
     int[] a51a={2, 7, 12, 17, 22};
     int[] none={};
-    int answer = playByJoseki(pl, a51a, none, none, 11,0,0,0);
+    int answer = playByJoseki(pl, a51a, none, none, none, 11,0,0,0);
     if (answer>=0 && pl.myBoard.vp[answer]>0) return answer;
-    answer = playByJoseki(pl, none, a51a, none, 11,0,0,10);
+    answer = playByJoseki(pl, none, a51a, none, none, 11,0,0,10);
     if (answer>=0 && (answer==25 || pl.myBoard.vp[answer]>0)) return answer;
     // . . A . .
     // . . A . .
@@ -161,9 +243,9 @@ int uctMctsStartingJoseki(player pl) {
     // . . . . .
     // . . . . .
     int[] a52a={2, 7, 12, 13, 14};
-    answer = playByJoseki(pl, a52a, none, none, 11,0,0,0);
+    answer = playByJoseki(pl, a52a, none, none, none, 11,0,0,0);
     if (answer>=0 && pl.myBoard.vp[answer]>0) return answer;
-    answer = playByJoseki(pl, none, a52a, none, 11,0,0,10);
+    answer = playByJoseki(pl, none, a52a, none, none, 11,0,0,10);
     if (answer>=0 &&  (answer==25 || pl.myBoard.vp[answer]>0)) return answer;
 
   }
@@ -176,9 +258,9 @@ int uctMctsStartingJoseki(player pl) {
     pl.myBoard.buildVP(pl.position);
     int[] a61a={2, 7, 12, 17, 22, 13};
     int[] none={};
-    int answer = playByJoseki(pl, a61a, none, none, 14,0,0,0);
+    int answer = playByJoseki(pl, a61a, none, none, none, 14,0,0,0);
     if (answer>=0 && pl.myBoard.vp[answer]>0) return answer;
-    answer = playByJoseki(pl, none, a61a, none, 14,0,0,0);
+    answer = playByJoseki(pl, none, a61a, none, none, 14,0,0,0);
     if (answer>=0 && pl.myBoard.vp[answer]>0) return answer;
     // . . A . .
     // . . A . .
@@ -186,9 +268,9 @@ int uctMctsStartingJoseki(player pl) {
     // . . A . .
     // . . . . .
     int[] a62a={2, 7, 12, 13, 14, 17};
-    answer = playByJoseki(pl, a62a, none, none, 22,0,0,0);
+    answer = playByJoseki(pl, a62a, none, none, none, 22,0,0,0);
     if (answer>=0 && pl.myBoard.vp[answer]>0) return answer;
-    answer = playByJoseki(pl, none, a62a, none, 11,0,0,10);
+    answer = playByJoseki(pl, none, a62a, none, none, 11,0,0,10);
     if (answer>=0 &&  (answer==25 || pl.myBoard.vp[answer]>0)) return answer;
   }
   return -1;
