@@ -239,7 +239,7 @@ int uctMctsMainLoop(player pl) {
       uct.cancelCount=0;
     }
   }
-  print(".");
+  print(".");////////////////////////////////////////////////time stump
   for (int repeat=0; repeat<1000; repeat++) {
     pl.myBoard.simulatorNumber ++;
     //println("uctMctsBrain:シミュレーション回数"+pl.myBoard.simulatorNumber);
@@ -283,21 +283,21 @@ int uctMctsMainLoop(player pl) {
       //  println("計算すべきノードが尽きた先祖がいる");
       //  println("試行回数("+pl.myBoard.simulatorNumber+")");
       //  println("time=", millis()-startTime, "(ms)");
-      //  //PrintWriter output = createWriter("output.txt");
-      //  //showAllMct(uct.rootNode, pl.myBoard.simulatorNumber, output);
-      //  //output.flush();
-      //  //output.close();
-      //  //println("ループ終了（計算すべきノードが尽きた時）");
-      //  // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする
-      //  int ret = returnBestChildFromRoot(pl, uct.rootNode);
-      //  if (pl.myBoard.attackChanceP()) {
-      //    pl.yellow = int(ret/25);
-      //    println("["+(ret%25+1)+"-"+(pl.yellow+1)+"]");
-      //    return ret%25;
-      //  } else {
-      //    println("["+(ret+1)+"]");
-      //    return ret;
-      //  }
+        //  //PrintWriter output = createWriter("output.txt");
+        //  //showAllMct(uct.rootNode, pl.myBoard.simulatorNumber, output);
+        //  //output.flush();
+        //  //output.close();
+        //  //println("ループ終了（計算すべきノードが尽きた時）");
+        //  // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする
+        //  int ret = returnBestChildFromRoot(pl, uct.rootNode);
+        //  if (pl.myBoard.attackChanceP()) {
+        //    pl.yellow = int(ret/25);
+        //    println("["+(ret%25+1)+"-"+(pl.yellow+1)+"]");
+        //    return ret%25;
+        //  } else {
+        //    println("["+(ret+1)+"]");
+        //    return ret;
+        //  }
         boolean atsuzokkou=false;
         for (uctNode ancestor2 : uct.rootNode.children){
           if (ancestor2.activeNodes.size()>0){
@@ -323,7 +323,7 @@ int uctMctsMainLoop(player pl) {
         else {
           continue; 
         }
-      }// あとで、これやめるかも（すべての先祖が終わったら、そこでおわり、とか）
+      }//
   
       //println("uctMctsBrain:",uctMaxNode.id, "のノードを調べる");
       //println("uctMctsBrain:uct.mainBoardへ盤面をコピー");
@@ -369,17 +369,25 @@ int uctMctsMainLoop(player pl) {
         if (uctMaxNode.depth<uct.depthMax && uctMaxNode.id!="") {   // 展開するための条件
           //println("uctMctsBrain:展開　"+uctMaxNode.id);/////////////////////////////ここから展開
           //println(uctMaxNode.id+"を展開中");//+returnFriquentChildFromRoot(uct.rootNode).id);
-          // uctMaxNodeの下にノードをぶら下げる
+          
           uct.newNode=null;
   
           for (int p=1; p<5; p++) {
+            //println("一旦uctMaxNodeの下に4つのチャンスノード(chanceNode)をぶらさげて、その下にそれぞれ");
+            //println("新しいノードをぶら下げる");
             if (uctMaxNode.move==25){                
               if (uctMaxNode.player==p){
                 print("pass.");
                 continue;
               }
             }
-            //println("プレイヤー"+p+"の着手を追加");
+            // println("プレイヤー"+p+のチャンスノードをuctMaxNodeに追加);
+            chanceNode newChanceNode=new chanceNode();
+            newChanceNode.setItem(p, -1);//ノードの主体だけは分かるようにしておく。
+            newChanceNode.id = uctMaxNode.id+":"+kifu.playerColCode[p]+"CN";
+            newChanceNode.depth = uctMaxNode.depth+1;
+            newChanceNode.thisIsChanceNode=true;
+            //println("プレイヤー"+p+"の着手をチャンスノードに追加");
             uct.mainBoard.copyBdToBoard(uctMaxNode.bd);
             uct.mainBoard.buildVP(p);
             ArrayList<uctNode> tmpUctNodes = new ArrayList<uctNode>();//いったんここにぶら下げる。
@@ -524,8 +532,8 @@ int uctMctsMainLoop(player pl) {
 void showAllMct(uctNode nd, int totalNumber, PrintWriter output) {
   if (nd==null) return;
   if (nd != uct.rootNode) {
-    float winrate = nd.wa[nd.player] / nd.na;
-    float ucbValue = nd.UCTwp(nd.player, totalNumber);
+    //float winrate = nd.wa[nd.player] / nd.na;
+    //float ucbValue = nd.UCTwp(nd.player, totalNumber);
     //float ucbValue = nd.UCTa(nd.player, totalNumber);
     //println(nd.id+": "+ nf(winrate, 0, 3)+" [" +nd.na+"] <"+nf(ucbValue, 0, 3)+">");
   }

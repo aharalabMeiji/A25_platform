@@ -15,6 +15,7 @@ class uctNode {
   ArrayList<uctNode> activeNodes=null;// アクティブな子ノード
   uctNode ancestor = null;// 第1世代の子ノード
   Thread myThread = null;
+  boolean thisIsChanceNode = false;// チャンスノードではない／である
   uctNode() {
     na=1;
     wa=new float[5];
@@ -82,6 +83,19 @@ class uctNode {
     }
     println();   
   }
+}
+
+class chanceNode extends uctNode{
+  // uctNodeに、一旦4つのchaceNodeをぶら下げる。（赤緑白青それぞれに対応させる。）
+  // chaceNodeの下に対応させたプレイヤーの着手をぶら下げる。
+  // バックプロパゲートの時、４つのchanceNodeの分母をそろえる作業を行う。
+  // 分母はそのままで親ノードの成績を調整する、のほうが筋がよいか？
+  // ４つのchanceNodeの「赤の」winrateがr_i/n_i (i=1,2,3,4)とかだったりしたとき、
+  // n_parent = n_1+n_2+n_3+n_4
+  // r_parent = (0.25*r_1/n_1+0.25*r_2/n_2+0.25*r_3/n_3+0.25*r_4/n_4)*n_parent
+  // 現状ではここを(r_1+r_2+r_3+r_4)/n_parentで扱っていた。
+  // ここを選べるようにしておくのが良いかと。
+  
 }
 
 uctNode getMaxUcbFromNodeList(int player, ArrayList<uctNode> nds, int NN) {

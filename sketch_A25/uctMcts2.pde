@@ -1,3 +1,6 @@
+////並列処理により、計算効率を上げたバージョン、チャンスノードは未実装
+////ここを利用する場合には、uctMcts.pdeと比較をして適切にバージョンアップすることが必要。
+
 int uctMctsMainLoopVer2(player pl) {
   // console に計算経過を出力（マストではない。）
   if (pl.myBoard.simulatorNumber%1000==10) {
@@ -48,7 +51,7 @@ int uctMctsMainLoopVer2(player pl) {
     try {
       ancestor.myThread.join();
     } catch (InterruptedException e) {
-      e.printStackTrace(); //<>// //<>// //<>// //<>//
+      e.printStackTrace(); // //<>//
     }
   }
   // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする
@@ -64,6 +67,7 @@ int uctMctsMainLoopVer2(player pl) {
   }
 }
 
+////並列処理により、計算効率を上げる。
 class uctMctsSubTask implements Runnable {
   player pl;
   uctNode ancestor;
@@ -72,7 +76,7 @@ class uctMctsSubTask implements Runnable {
     this.pl=_pl;
     this.ancestor=_ancestor;
   }
-
+  
 
   public void run() {
     int localCount=0;
