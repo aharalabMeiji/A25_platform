@@ -207,6 +207,7 @@ int uctMctsBrainFirstSimulation(player pl) {
 }
 
 int uctMctsMainLoop(player pl) {
+  //uctMctsMainLoop block 01
   // console に計算経過を出力（マストではない。）
   uct.prize.getPrize3FromNodeList(pl.position, uct.rootNode.children);
   if (uct.prize.getMove(1)!=null){
@@ -240,10 +241,13 @@ int uctMctsMainLoop(player pl) {
     }
   }
   print(".");////////////////////////////////////////////////time stump
+  //uctMctsMainLoop block 02
   for (int repeat=0; repeat<1000; repeat++) {
+    // 不要な気がする。
     pl.myBoard.simulatorNumber ++;
     //println("uctMctsBrain:シミュレーション回数"+pl.myBoard.simulatorNumber);
 
+    //uctMctsMainLoop block 02-1
     //   version1
     //for (uctNode nd : uct.activeNodes) {
     //  for (int p=1; p<=4; p++) {
@@ -254,7 +258,7 @@ int uctMctsMainLoop(player pl) {
     //  }
     //}
     // VERSION2
-    for (uctNode ancestor : uct.rootNode.children){//rootの直接の子供に、アクティブノードがぶら下がっている。
+    for (uctNode ancestor : uct.rootNode.children){//root直下に、アクティブノードがぶら下がっている。
       for (uctNode nd : ancestor.activeNodes) {
         for (int p=1; p<=4; p++) {
           // シミュレーション総回数はpl.myBoard.simulatorNumber
@@ -264,25 +268,30 @@ int uctMctsMainLoop(player pl) {
         }
       }
     }
-    ///
-    for (uctNode ancestor : uct.rootNode.children){
-      //println("uct値が最大となるノードを見つける");
+    
+    //uctMctsMainLoop block 02-2
+    for (uctNode ancestor : uct.rootNode.children){//
+      //println("ancestorごとに、uct値が最大となるアクティブノードを見つける");
+      //uctMctsMainLoop block 02-2-1
       float uctMax=-1;
       uctNode uctMaxNode=null;
-      for (int zz=ancestor.activeNodes.size()-1; zz>=0; zz--) {
+      // ll. 345-　あたりと重複しているのではないかと思うので、後でチェック。
+      for (int zz=ancestor.activeNodes.size()-1; zz>=0; zz--) {//消去する可能性があるので、後ろからサーチする。
         uctNode nd = ancestor.activeNodes.get(zz);
-        if (nd.na >= uct.expandThreshold && nd.depth >= uct.depthMax) {//
-          ancestor.activeNodes.remove(zz);
-          //println("末端のノード("+nd.id+")がいっぱいになったのでアクティブノードのリストから消去");
-        } else if (nd.uct[nd.player]>uctMax) {
+        if (nd.na >= uct.expandThreshold && nd.depth >= uct.depthMax) {//試行回数がマックス、かつ深さもマックス
+          //println("試行回数がマックス、かつ深さもマックスなので、"+nd.id+"を展開せずにアクティブノードのリストから消去");
+          ancestor.activeNodes.remove(zz);// 展開せずにアクティブノードのリストから消去          
+        } else if (nd.uct[nd.player]>uctMax) {// uct局所最大なら、記録しておく。
           uctMax=nd.uct[nd.player];
           uctMaxNode = nd;
         }
       }
+      //uctMctsMainLoop block 02-2-2
+      // このancestorの下のアクティブノードが尽きたとき。
       if (uctMaxNode==null) {
-      //  println("計算すべきノードが尽きた先祖がいる");
-      //  println("試行回数("+pl.myBoard.simulatorNumber+")");
-      //  println("time=", millis()-startTime, "(ms)");
+        //  println("先祖"+ancenstor.id+"では、計算すべきノードが尽きた");
+        //  println("試行回数("+pl.myBoard.simulatorNumber+")");
+        //  println("time=", millis()-startTime, "(ms)");
         //  //PrintWriter output = createWriter("output.txt");
         //  //showAllMct(uct.rootNode, pl.myBoard.simulatorNumber, output);
         //  //output.flush();
@@ -298,6 +307,7 @@ int uctMctsMainLoop(player pl) {
         //    println("["+(ret+1)+"]");
         //    return ret;
         //  }
+        //よそのancestorで、続行するかを調査
         boolean atsuzokkou=false;
         for (uctNode ancestor2 : uct.rootNode.children){
           if (ancestor2.activeNodes.size()>0){
@@ -306,7 +316,7 @@ int uctMctsMainLoop(player pl) {
           }
         }
         if (!atsuzokkou) {
-          println("計算すべきノードが尽きた");
+          println("すべてのancestorでアクティブノードが尽きた");
           println("試行回数("+pl.myBoard.simulatorNumber+")");
           println("time=", millis()-startTime, "(ms)");
           // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする
@@ -317,45 +327,19 @@ int uctMctsMainLoop(player pl) {
             return ret%25;
           } else {
             println("["+(ret+1)+"]");
-            return ret;
+            return ret; //<>//
           }
         }// すべての先祖が終わったら、そこでおわり
         else {
           continue; 
         }
       }//
-  
-      //println("uctMctsBrain:",uctMaxNode.id, "のノードを調べる");
-      //println("uctMctsBrain:uct.mainBoardへ盤面をコピー");
-      uct.mainBoard.copyBdToBoard(uctMaxNode.bd);
-      //println("uctMctsBrain:uct.mainBoardを最後まで打ち切る");
-      uct.winPoint = playSimulatorToEnd(uct.mainBoard, uct.participants);
-      //println("uctMctsBrain:nd.wa[p]、nd.pa[p]、nd.uct[p]");
-      uctMaxNode.na ++;//
-      for (int p=1; p<=4; p++) {
-        uctMaxNode.wa[p] += uct.winPoint.points[p];//2回め以降は和
-        uctMaxNode.pa[p] += uct.winPoint.panels[p];//2回め以降は和
-      }
-  
-      //println("親にさかのぼってデータを更新する");
-      uctNode nd0 = uctMaxNode;
-      do {
-        if (nd0.parent!=null) {
-          nd0 = nd0.parent;
-          // chance node であるなしに関わらず、上に合流するのが「旧式」//uct.chanceNodeOn=false;
-          // chance node から上にあげるときには式を変更するのが「新式」//uct.chanceNodeOn=true;
-          nd0.na ++;
-          for (int p=1; p<=4; p++) {
-            nd0.wa[p] += uct.winPoint.points[p];//2回め以降は和
-            nd0.pa[p] += uct.winPoint.panels[p];//2回め以降は和
-          }
-          //println("uctMctsBrain:→　ノード ",nd0.id, "のデータ("+nd0.wa[1]+","+nd0.wa[2]+","+nd0.wa[3]+","+nd0.wa[4]+")/"+nd0.na);
-        } else {// ルートまでたどり着いた、の意味
-          // ルートまでたどり着いて、なにか作業する必要があればここに書く。
-          break;
-        }
-      } while (true);//println("親にさかのぼってデータを更新する");//おわり
-  
+      //uctMctsMainLoop block 02-2-3
+      // uctMaxNodeから最後までランダムに打って
+      // そののちに親までさかのぼって褒章データを更新する。
+      uct.randomPlayAndBackPropagate(uctMaxNode);
+      
+      //uctMctsMainLoop block 02-2-4
       //println("uctMctsBrain:ノード ",uctMaxNode.id, "のデータ("+uctMaxNode.wa[1]+","+uctMaxNode.wa[2]+","+uctMaxNode.wa[3]+","+uctMaxNode.wa[4]+")/"+uctMaxNode.na);
       //println("uctMctsBrain:",uctMaxNode.na, uctMaxNode.wa[uctMaxNode.player], uctMaxNode.pa[uctMaxNode.player]);
       if (uctMaxNode.na >= uct.expandThreshold) {// 削除するための条件
@@ -364,70 +348,92 @@ int uctMctsMainLoop(player pl) {
         for (int zz=ancestor.activeNodes.size()-1; zz>=0; zz--) {
           if (ancestor.activeNodes.get(zz)==uctMaxNode) {
             //println("ノード"+uctMaxNode.id+"をアクティブノードのリストから消去");
-            ancestor.activeNodes.remove(zz);//枝を打ち切る
-            
+            ancestor.activeNodes.remove(zz);//枝を打ち切る           
             break;
           }
         }
         if (uctMaxNode.depth<uct.depthMax && uctMaxNode.id!="") {   // 展開するための条件
+
           //println("uctMctsBrain:展開　"+uctMaxNode.id);////展開開始展開開始展開開始展開開始展開開始展開開始
           //println(uctMaxNode.id+"を展開中");//+returnFriquentChildFromRoot(uct.rootNode).id);
           
           uct.newNode=null;
           uctMaxNode.children = new ArrayList<uctNode>();
-          for (int p=1; p<5; p++) {
-            //println("一旦uctMaxNodeの下に4つのチャンスノード(chanceNode)をぶらさげて、その下にそれぞれ");
-            //println("新しいノードをぶら下げる");
+          for (int p=1; p<5; p++) {// 4人分の作業ここから
+            //uctMctsMainLoop block 02-2-4-1
+            //println("一旦uctMaxNodeの下に4つのチャンスノード(chanceNode)をぶらさげて、");
+            //println("その下にそれぞれ新しいノードをぶら下げる");
             if (uctMaxNode.move==25){// パス選択のノードには、繰り返し同じプレイヤーを扱わない。           
               if (uctMaxNode.player==p){
                 print("pass.");
                 continue;
               }
             }
-            // println("プレイヤー"+p+のチャンスノードをuctMaxNodeに追加);
+            //uctMctsMainLoop block 02-2-4-2
+            // println("プレイヤー"+p+のチャンスノードをuctMaxNodeに追加);//展開中
             chanceNode newChanceNode=new chanceNode();
             newChanceNode.setItem(p, -1);//ノードの主体だけは分かるようにしておく。
             newChanceNode.id = uctMaxNode.id+":"+kifu.playerColCode[p]+"CN";
             newChanceNode.depth = uctMaxNode.depth+1;
             newChanceNode.thisIsChanceNode=true;
+            if (uctMaxNode.children==null) uctMaxNode.children = new ArrayList<uctNode>();
             uctMaxNode.children.add(newChanceNode);//newChanceNodeをuctMaxNodeの子に設定
             newChanceNode.parent = uctMaxNode;// uctMaxNodeをnewChanceNodeの親に設定
+            newChanceNode.ancestor = ancestor;// ご先祖様を記録
             //println("ボードの内容をチャンスノードにもいちおうコピー");/// これはたぶん省略可能。
             for (int k=0; k<25; k++) {
               newChanceNode.bd[k] = uctMaxNode.bd[k];
             }
+            //チャンスノードの報酬パラメータをクリアしておく//本質的に不要だが、誤動作防止のため
+            newChanceNode.na=0;
+            for (int pp=1; pp<=4; pp++) {
+              newChanceNode.wa[pp] = 0;//
+              newChanceNode.pa[pp] = 0;//
+            }
+            //uctMctsMainLoop block 02-2-4-2
             //println("uctMaxNodeの盤面をuct.mainBoardにコピーして、新規ノードのデータを作る。");
             uct.mainBoard.copyBdToBoard(uctMaxNode.bd);
             uct.mainBoard.buildVP(p);
             //println("新規ノードを作り、プレイヤー"+p+"の着手を入れて、これをチャンスノードにぶらさげる");
             newChanceNode.children = new ArrayList<uctNode>();//チャンスノードの子供のリストを作る。
             //println("uctMctsBrain: uctMaxNodeの盤面でプレイヤー"+p+"の合法手をリストアップ");
+            //uctMctsMainLoop block 02-2-4-3
             if (uct.mainBoard.attackChanceP()==false) {
-              // アタックチャンスでないときの、子ノードのぶらさげ
+              //uctMctsMainLoop block 02-2-4-3-1
+              // アタックチャンスでないときの、子ノードのぶらさげ//展開中
               uctMaxNode.attackChanceNode=false;
-              for (int k=0; k<25; k++) {
-                // 合法手ごとのforループ
-                if (uct.mainBoard.vp[k]>0) {
-  
-                  // 子ノードをぶら下げる
+              
+              for (int k=0; k<25; k++) {   // 合法手ごとのforループ             
+                if (uct.mainBoard.vp[k]>0) { // 子ノードをぶら下げる                 
                   uct.newNode = new uctNode();
                   uct.newNode.setItem(p, k);
                   uct.newNode.id = uctMaxNode.id+":"+kifu.playerColCode[p]+nf(k+1, 2);
                   uct.newNode.depth = uctMaxNode.depth+1;//=newChancenode.depth
-                  //println("uctMctsBrain: id="+uct.newNode.id);
+                  //println("新しいノード "+uct.newNode.id+"を追加した！");
                   newChanceNode.children.add(uct.newNode);// uct.newNodeをnewChanceNodeの子に設定
                   uct.newNode.parent = newChanceNode;//newChanceNodeをuct.newNodeの親に設定
-                  //println("新しいノード "+uct.newNode.id+"を追加した！");
+                  uct.newNode.ancestor = ancestor;//uct.newNodeのご先祖さまを記録
+                  ancestor.activeNodes.add(uct.newNode);//ご先祖様のアクティブノードに登録
+                  //println("新しいノードに盤情報を記入");
                   uct.mainBoard.copyBoardToSub(uct.subBoard);
                   uct.subBoard.move(p, k);// 1手着手する
                   uct.subBoard.copyBoardToBd(uct.newNode.bd);
                   //uct.newNode.printlnBd();
+                  // println("新しいノードで５回ランダム試行を行う。");// アタックチャンスでないとき//展開中
+                  // uct.newNodeの報酬データを初期化
+                  uct.newNode.initRewardOfNode();
+                  // ５回、最後まで打ち切ってバックプロパゲートしておく。
+                  // uct値を有効にするため。
+                  for (int count=0; count<5; count++) {
+                    uct.randomPlayAndBackPropagate(uct.newNode);
+                  }
                 }
-              }
+              }// 合法手ごとのforループ ここまで
             } else {
-              // アタックチャンスのときの、子ノードのぶらさげ
+              //uctMctsMainLoop block 02-2-4-3-2
+              // アタックチャンスのときの、子ノードのぶらさげ//展開中
               uctMaxNode.attackChanceNode=true;
-  
+              // 合法手ごとのforループ
               for (int j=0; j<25; j++) { //加えるパネル
                 for (int i=0; i<25; i++) { //黄色にするパネル
                   int k = i*25+j;
@@ -436,58 +442,33 @@ int uctMctsMainLoop(player pl) {
                     uct.newNode.setItem(p, k);
                     uct.newNode.id = uctMaxNode.id + (":"+kifu.playerColCode[p]+nf(j+1, 2)) + (":Y"+nf(i+1, 2));
                     uct.newNode.depth = uctMaxNode.depth + 1;//=newChancenode.depth
-                    //println("uctMctsBrain: id="+uct.newNode.id);
+                    //println("uctMctsBrain: id="+uct.newNode.id);                   
                     newChanceNode.children.add(uct.newNode);// uct.newNodeをnewChanceNodeの子に設定
                     uct.newNode.parent = newChanceNode;//newChanceNodeをuct.newNodeの親に設定
+                    uct.newNode.ancestor = ancestor;//uct.newNodeのご先祖さまを記録
+                    ancestor.activeNodes.add(uct.newNode);//ご先祖様のアクティブノードに登録
                     //println("新しいノード "+uct.newNode.id+"を追加した！");
                     uct.mainBoard.copyBoardToSub(uct.subBoard);
                     uct.subBoard.move(p, j);// 1手着手する
                     uct.subBoard.s[i].col = 5;// 黄色を置く
                     uct.subBoard.copyBoardToBd(uct.newNode.bd);
                     uct.newNode.attackChanceNode=true;
+                    // println("新しいノードで５回ランダム試行を行う。");// アタックチャンスのとき//展開中
+                    // uct.newNodeの報酬データを初期化
+                    uct.newNode.initRewardOfNode();
+                    // ５回、最後まで打ち切ってバックプロパゲートしておく。
+                    // uct値を有効にするため。
+                    for (int count=0; count<5; count++) {
+                      uct.randomPlayAndBackPropagate(uct.newNode);
+                    }
+                    //新規ノードの処理ここまで/// アタックチャンスのとき//展開中
                   }
                 }
-              }
+              }// 合法手ごとのforループ ここまで
             }// ACノードの子ノード作成終わり。
-            // 子ノードをぶら下げるここまで
-            // TODO: 5回
-            for (uctNode nd : tmpUctNodes) {
-              nd.na=0;
-              for (int pp=1; pp<=4; pp++) {
-                nd.wa[pp] = 0;//
-                nd.pa[pp] = 0;//
-              }
-              for (int count=0; count<5; count++) {
-                uct.subBoard.copyBdToBoard(nd.bd);
-                //println("uctMctsBrain:そこから最後までシミュレーションを行う");
-                winPoints wpwp = playSimulatorToEnd(uct.subBoard, uct.participants);//
-                nd.na ++;//
-                pl.myBoard.simulatorNumber ++;
-                for (int pp=1; pp<=4; pp++) {
-                  nd.wa[pp] += wpwp.points[pp];//
-                  nd.pa[pp] += wpwp.panels[pp];//
-                  //println("uctMctsBrain:"+pp,uct.newNode.wa[p], uct.newNode.pa[p]);
-                }
-              }
-              //println("親にさかのぼってデータを更新する");
-              nd0 = nd;
-              do {
-                if (nd0.parent!=null) {
-                  nd0 = nd0.parent;
-                  // chance node であるなしに関わらず、上に合流するのが「旧式」//uct.chanceNodeOn=false;
-                  // chance node から上にあげるときには式を変更するのが「新式」//uct.chanceNodeOn=true;
-                  nd0.na +=nd.na;
-                  for (int pp=1; pp<=4; pp++) {
-                    nd0.wa[pp] += nd.wa[pp];//
-                    nd0.pa[pp] += nd.pa[pp];//
-                  }
-                  //println("uctMctsBrain:→　ノード ",nd0.id, "のデータ("+nd0.wa[1]+","+nd0.wa[2]+","+nd0.wa[3]+","+nd0.wa[4]+")/"+nd0.na);
-                } else {// ルートまでたどり着いた、の意味
-                  break;
-                }
-              } while (true);
-              // バックプロパゲートここまで
-            }// 全部の新しいノードを５回ずつ試行した。
+            // 子ノードをぶら下げるここまで//展開中
+            //uctMctsMainLoop block 02-2-4-4
+            // プレイヤーpにとって、筋の悪いものを消す。//この作業自体の筋が悪そうなので、コメアウト
             //uct.prize.getPrize1FromNodeList(p, tmpUctNodes);
             //float bestWr=uct.prize.w1;
             //if (bestWr>0.0 && bestWr<1.0) {
@@ -504,19 +485,12 @@ int uctMctsMainLoop(player pl) {
             //      //println();
             //    }
             //  }
-            //}// ここまで、プレイヤーpにとって、筋の悪いものを消した。
-            if (uctMaxNode.children==null) {//
-              uctMaxNode.children = new ArrayList<uctNode>();
-            } 
-            for (uctNode nd : tmpUctNodes) {
-              uctMaxNode.children.add(nd);//親ノードにぶら下げた
-              ancestor.activeNodes.add(nd);//アクティブなノードのリストに追加
-              nd.ancestor = ancestor;
-              //println("新しいノード("+nd.id+")を追加");
-            }
+            //}// プレイヤーpにとって、筋の悪いものを消す。ここまで
           }//ここまで、４人分のノード展開
+          //println("uctMctsBrain:展開　終了　"+uctMaxNode.id);
         }
       }// アクティブノード削除からの展開、ここまで
+      //uctMctsMainLoop block 02-2-5
       if (pl.myBoard.simulatorNumber >= uct.terminateThreshold) {//
         println("試行回数上限到達("+pl.myBoard.simulatorNumber+")");
         // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする。
@@ -535,7 +509,7 @@ int uctMctsMainLoop(player pl) {
           return ret;
         }
       }
-    }
+    }//for (uctNode ancestor : uct.rootNode.children)ここまで
   }
   return -1;
 }

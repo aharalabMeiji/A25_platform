@@ -35,6 +35,13 @@ class uctNode {
     depth=0;    
     attackChanceNode=false;
   }
+  void initRewardOfNode(){
+    na=0;
+    wa=new float[5];
+    for (int p=0; p<5; p++) wa[p]=0;
+    pa=new float[5];
+    for (int p=0; p<5; p++) pa[p]=0;
+  }
   boolean setItem(int _p, int _m) {
     player=_p;
     move=_m;

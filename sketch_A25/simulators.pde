@@ -834,7 +834,6 @@ void showMcts(player nextPlayer) {
   String[] message=new String[5];
   prize localPrize=new prize();
   uctNode nd1=null, nd2=null, nd3=null, nd4=null;
-  float maxWinrate=0;
   nd1 = uct.prize.getMove(1);
   if (nd1!=null) {
     for (int p2=1; p2<=4; p2++) {
@@ -851,7 +850,8 @@ void showMcts(player nextPlayer) {
           } else if (nd3.children!=null && nd3.children.size()>0){
             localPrize.getBXPrize1FromNodeList(nd3.children);
             nd4 = localPrize.getMove(1);
-            message[p2] = nd4.id;
+            if (nd4!=null)
+              message[p2] = nd4.id;
           } else {
             message[p2] = nd3.id;
           }
