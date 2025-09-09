@@ -820,12 +820,21 @@ void UCT1() {
     } else {
     }
     simulator.mainBoard.simulatorNumber=nextPlayer.myBoard.simulatorNumber;
-    showMcts(nextPlayer);
+    showMcts(nextPlayer);//
+    printlnAllNodes(uct.rootNode,2);//
     if (answer!=-1) {
       simulationManager=sP.GameEnd;
     }
   } else if (simulationManager==sP.GameEnd) {
     ;
+  }
+}
+
+void printlnAllNodes(uctNode nd, int p){
+  //if (nd.thisIsChanceNode==false)
+  println(""+nd.id+":("+nf(nd.wa[p],1,3)+")["+nf(nd.wa[p]/nd.na,1,3)+"]:("+nd.na+")");
+  for (uctNode nd0 : nd.children){
+    printlnAllNodes(nd0, p);
   }
 }
 
