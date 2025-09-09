@@ -327,7 +327,7 @@ int uctMctsMainLoop(player pl) {
             return ret%25;
           } else {
             println("["+(ret+1)+"]");
-            return ret; //<>//
+            return ret;
           }
         }// すべての先祖が終わったら、そこでおわり
         else {

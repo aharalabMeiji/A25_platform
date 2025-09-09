@@ -852,6 +852,8 @@ void showMcts(player nextPlayer) {
             nd4 = localPrize.getMove(1);
             if (nd4!=null)
               message[p2] = nd4.id;
+            else 
+              message[p2] = nd3.id;
           } else {
             message[p2] = nd3.id;
           }
@@ -863,7 +865,7 @@ void showMcts(player nextPlayer) {
       }
     }
     
-    simulator.mainBoard.display(12);// UCTディスプレイ
+    simulator.mainBoard.display(12);// UCTディスプレイ //<>//
     textAlign(LEFT, CENTER);
     fill(0);
     if (!simulator.mainBoard.attackChanceP){
