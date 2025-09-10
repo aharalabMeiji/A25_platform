@@ -352,7 +352,7 @@ int uctMctsMainLoop(player pl) {
             break;
           }
         }
-        if (uctMaxNode.depth<uct.depthMax && uctMaxNode.id!="") {   // 展開するための条件
+        if (uctMaxNode.depth<uct.depthMax && uctMaxNode.id!="" && remaingInBd(uctMaxNode.bd)>0) {   // 展開するための条件
 
           //println("uctMctsBrain:展開　"+uctMaxNode.id);////展開開始展開開始展開開始展開開始展開開始展開開始
           //println(uctMaxNode.id+"を展開中");//+returnFriquentChildFromRoot(uct.rootNode).id);
@@ -374,7 +374,7 @@ int uctMctsMainLoop(player pl) {
             chanceNode newChanceNode=new chanceNode();
             newChanceNode.setItem(p, -1);//ノードの主体だけは分かるようにしておく。
             newChanceNode.id = uctMaxNode.id+":"+kifu.playerColCode[p]+"CN";
-            newChanceNode.depth = uctMaxNode.depth+1;
+            newChanceNode.depth = uctMaxNode.depth;
             newChanceNode.thisIsChanceNode=true;
             if (uctMaxNode.children==null) uctMaxNode.children = new ArrayList<uctNode>();
             uctMaxNode.children.add(newChanceNode);//newChanceNodeをuctMaxNodeの子に設定
@@ -466,6 +466,10 @@ int uctMctsMainLoop(player pl) {
                 }
               }// 合法手ごとのforループ ここまで
             }// ACノードの子ノード作成終わり。
+            if (newChanceNode.children.size()==0){//なにもぶら下がっていないときは、チャンスノードも消す。
+              //
+              
+            }
             // 子ノードをぶら下げるここまで//展開中
             //uctMctsMainLoop block 02-2-4-4
             // プレイヤーpにとって、筋の悪いものを消す。//この作業自体の筋が悪そうなので、コメアウト

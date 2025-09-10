@@ -107,9 +107,11 @@ uctClass uct = new uctClass();
 class uctClass{
   player[] participants;
   winPoints winPoint;
+  winPoints randomPlayWinPoint;
   prize prize;
   board mainBoard;
   board subBoard;
+  board randomPlayBoard=null;
   uctNode newNode;
   uctNode rootNode;
   ArrayList<uctNode> activeNodes;
@@ -127,14 +129,20 @@ class uctClass{
   void randomPlayAndBackPropagate(uctNode uctMaxNode){
       //println("uctMctsBrain:",uctMaxNode.id, "のノードを調べる");
       //println("uctMctsBrain:uct.mainBoardへ盤面をコピー");
-      this.mainBoard.copyBdToBoard(uctMaxNode.bd);
+      if (this.randomPlayBoard==null){
+        this.randomPlayBoard = new board();
+      }
+      if (this.randomPlayWinPoint==null){
+        this.randomPlayWinPoint = new winPoints();
+      }
+      this.randomPlayBoard.copyBdToBoard(uctMaxNode.bd);
       //println("uctMctsBrain:uct.mainBoardを最後まで打ち切る");
-      this.winPoint = playSimulatorToEnd(this.mainBoard, this.participants);
+      this.randomPlayWinPoint = playSimulatorToEnd(this.randomPlayBoard, this.participants);
       //println("uctMctsBrain:nd.wa[p]、nd.pa[p]、nd.uct[p]");
       uctMaxNode.na ++;//
       for (int p=1; p<=4; p++) {
-        uctMaxNode.wa[p] += this.winPoint.points[p];//2回め以降は和
-        uctMaxNode.pa[p] += this.winPoint.panels[p];//2回め以降は和
+        uctMaxNode.wa[p] += this.randomPlayWinPoint.points[p];//2回め以降は和
+        uctMaxNode.pa[p] += this.randomPlayWinPoint.panels[p];//2回め以降は和
       }
       //println("親にさかのぼってデータを更新する");
       uctNode nd0 = uctMaxNode;
@@ -145,8 +153,8 @@ class uctClass{
           // chance node から上にあげるときには式を変更するのが「新式」//uct.chanceNodeOn=true;
           nd0.na ++;
           for (int p=1; p<=4; p++) {
-            nd0.wa[p] += this.winPoint.points[p];//2回め以降は和
-            nd0.pa[p] += this.winPoint.panels[p];//2回め以降は和
+            nd0.wa[p] += this.randomPlayWinPoint.points[p];//2回め以降は和
+            nd0.pa[p] += this.randomPlayWinPoint.panels[p];//2回め以降は和
           }
           //println("uctMctsBrain:→　ノード ",nd0.id, "のデータ("+nd0.wa[1]+","+nd0.wa[2]+","+nd0.wa[3]+","+nd0.wa[4]+")/"+nd0.na);
         } else {// ルートまでたどり着いた、の意味

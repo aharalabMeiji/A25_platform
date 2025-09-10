@@ -704,46 +704,42 @@ void UCT1() {
   int SimTimes = gameOptions.get("SimTimes");
   if (simulationManager==sP.GameStart) {
     startTime=millis();
-    if (SimTimes == 21){
+    if (SimTimes == 21) {
       uct.expandThreshold=10;
       uct.terminateThreshold = uct.expandThreshold*1000000;
       uct.depthMax=4;
       uct.cancelCountMax=10;
-   }
-    else if (SimTimes == 22){
+    } else if (SimTimes == 22) {
       uct.expandThreshold=10;
       uct.terminateThreshold = uct.expandThreshold*1000000;
       uct.depthMax=4;
       uct.cancelCountMax=1000000;
-    }
-    else if (SimTimes == 23){
+    } else if (SimTimes == 23) {
       uct.expandThreshold=10;
       uct.terminateThreshold = uct.expandThreshold*1000000;
       uct.depthMax=5;
       uct.cancelCountMax=20;
-    }
-    else if (SimTimes == 24){
+    } else if (SimTimes == 24) {
       uct.expandThreshold=10;
       uct.terminateThreshold = uct.expandThreshold*1000000;
       uct.depthMax=5;
       uct.cancelCountMax=100000;
-    }
-    else if (SimTimes == 25){
+    } else if (SimTimes == 25) {
       uct.expandThreshold=gameOptions.get("expandThreshold");
-      if (gameOptions.get("terminateThreshold")==4){
+      if (gameOptions.get("terminateThreshold")==4) {
         uct.terminateThreshold = uct.expandThreshold*10000;
-      } else if (gameOptions.get("terminateThreshold")==5){
+      } else if (gameOptions.get("terminateThreshold")==5) {
         uct.terminateThreshold = uct.expandThreshold*100000;
       } else {
         uct.terminateThreshold = uct.expandThreshold*1000000;
       }
       uct.depthMax=gameOptions.get("depthMax");
-      if (gameOptions.get("wCancel")==1){
-        if (uct.depthMax==2){
+      if (gameOptions.get("wCancel")==1) {
+        if (uct.depthMax==2) {
           uct.cancelCountMax=2;
-        } else if (uct.depthMax==3){
+        } else if (uct.depthMax==3) {
           uct.cancelCountMax=6;
-        } else if (uct.depthMax==4){
+        } else if (uct.depthMax==4) {
           uct.cancelCountMax=10;
         } else {
           uct.cancelCountMax=20;
@@ -777,7 +773,7 @@ void UCT1() {
     //  simulator.mainBoard.display(12);
     //  showReturnButton();
     //  showScreenCapture();
-    //} else 
+    //} else
     {
       int answer = uctMctsBrainPreparation(nextPlayer);
       if (answer==-1) {
@@ -794,7 +790,7 @@ void UCT1() {
           showReturnButton();
           showScreenCapture();
         } else {
-          println("uct ",uct.expandThreshold, uct.terminateThreshold, uct.depthMax, uct.cancelCountMax);
+          println("uct ", uct.expandThreshold, uct.terminateThreshold, uct.depthMax, uct.cancelCountMax);
           uct.simulationTag=10000;
           simulationManager=sP.setStartBoard;
         }
@@ -805,7 +801,7 @@ void UCT1() {
     int answer=-1;
     answer = uctMctsMainLoop(nextPlayer);
     // 1000回に1回、svにデータを埋める。
-    
+
     if (uct.rootNode.attackChanceNode==false) {
       for (uctNode nd : uct.rootNode.children) {
         int k = nd.move;//たぶん、kは0～２５
@@ -821,7 +817,7 @@ void UCT1() {
     }
     simulator.mainBoard.simulatorNumber=nextPlayer.myBoard.simulatorNumber;
     showMcts(nextPlayer);//
-    printlnAllNodes(uct.rootNode,2);//
+    //printlnAllNodes(uct.rootNode, 2);//
     if (answer!=-1) {
       simulationManager=sP.GameEnd;
     }
@@ -830,11 +826,14 @@ void UCT1() {
   }
 }
 
-void printlnAllNodes(uctNode nd, int p){
-  //if (nd.thisIsChanceNode==false)
-  println(""+nd.id+":("+nf(nd.wa[p],1,3)+")["+nf(nd.wa[p]/nd.na,1,3)+"]:("+nd.na+")");
-  for (uctNode nd0 : nd.children){
-    printlnAllNodes(nd0, p);
+void printlnAllNodes(uctNode nd, int p) {
+  if (nd.thisIsChanceNode==false){
+    println(""+nd.id+":("+nf(nd.wa[p], 1, 3)+")["+nf(nd.wa[p]/nd.na, 1, 3)+"]:("+nd.na+")");
+  }
+  if (nd.children!=null) {
+    for (uctNode nd0 : nd.children) {
+      printlnAllNodes(nd0, p);
+    }
   }
 }
 
@@ -847,37 +846,37 @@ void showMcts(player nextPlayer) {
   if (nd1!=null) {
     for (int p2=1; p2<=4; p2++) {
       if (nd1.children!=null && nd1.children.size()>0) {
-        localPrize.getBPrize1FromNodeList(p2, nd1.children);
+        localPrize.getBPrize1FromNodeListWithChanceNode(p2, nd1.children);
         nd2 = localPrize.getMove(1);
-        if (nd2==null){
+        if (nd2==null) {
           message[p2]=nd1.id;
-        } else if (nd2.children!=null && nd2.children.size()>0){
-          localPrize.getBXPrize1FromNodeList(nd2.children);
+        } else if (nd2.children!=null && nd2.children.size()>0) {
+          localPrize.getBXPrize1FromNodeListWithChanceNode(nd2.children);
           nd3 = localPrize.getMove(1);
-          if (nd3==null){
+          if (nd3==null) {
             message[p2] = nd2.id;
-          } else if (nd3.children!=null && nd3.children.size()>0){
-            localPrize.getBXPrize1FromNodeList(nd3.children);
+          } else if (nd3.children!=null && nd3.children.size()>0) {
+            localPrize.getBXPrize1FromNodeListWithChanceNode(nd3.children);
             nd4 = localPrize.getMove(1);
             if (nd4!=null)
               message[p2] = nd4.id;
-            else 
-              message[p2] = nd3.id;
+            else
+            message[p2] = nd3.id;
           } else {
             message[p2] = nd3.id;
           }
         } else {
-          message[p2]=nd2.id;         
+          message[p2]=nd2.id;
         }
       } else {
         message[p2]=nd1.id;
       }
     }
-    
-    simulator.mainBoard.display(12);// UCTディスプレイ //<>//
+
+    simulator.mainBoard.display(12);// UCTディスプレイ
     textAlign(LEFT, CENTER);
     fill(0);
-    if (!simulator.mainBoard.attackChanceP){
+    if (!simulator.mainBoard.attackChanceP) {
       text(1.0*simulator.mainBoard.sv[25], utils.mainL, utils.mainU-utils.fontSize);
       text(1.0*simulator.mainBoard.sv2[25], utils.mainL+utils.fontSize*3, utils.mainU-utils.fontSize);
     }
@@ -929,7 +928,7 @@ void saveScreenShotSelected(File selection) {
     println("ファイルが選択されませんでした。");
   } else {
     filePath = selection.getAbsolutePath();
-    if (differentExt(filePath,".png")==true) {
+    if (differentExt(filePath, ".png")==true) {
       filePath += ".png";
     }
     println("選択されたファイルパス: " + filePath);
