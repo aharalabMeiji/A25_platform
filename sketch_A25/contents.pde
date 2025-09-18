@@ -765,6 +765,16 @@ void showContents() {
         text(buttonText, left, top);
         left += (textWidth(buttonText)+utils.hSpace);
         //
+        buttonText = "[6]";
+        button buttonDepthMax5=new button();
+        buttonDepthMax5.setLT(left, top, buttonText);
+        buttonDepthMax5.setItem("depthMax", 6);
+        buttons.add(buttonDepthMax5);
+        if (gameOptions.get("depthMax")==6) fill(255, 0, 0);
+        else fill(0);
+        text(buttonText, left, top);
+        left += (textWidth(buttonText)+utils.hSpace);
+        //
         top += utils.vStep;
         left=utils.hOffset;
         //
