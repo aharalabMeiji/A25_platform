@@ -8,6 +8,7 @@ class board {
   float[] sv2;
   int simulatorNumber;
   boolean attackChanceP;
+  color nextPlayerColor;
   board() {
     s = new panel[25];
     vp = new int[25];
@@ -21,6 +22,17 @@ class board {
     }
     simulatorNumber=0;
     attackChanceP=false;
+    nextPlayerColor=0;
+  }
+  void setNextPlayerColor(int player){
+    switch (player){
+      case 0: 
+      this.nextPlayerColor=color(0,0,0);
+      break;
+      case 1: case 2: case 3: case 4:
+      this.nextPlayerColor=utils.playerColor[player];
+      break;
+    }
   }
   boolean display(int mode) {
     textAlign(CENTER, CENTER);
@@ -34,6 +46,7 @@ class board {
         s[i].sv=sv[i];
         s[i].sv2=sv2[i];
         s[i].display(mode);
+        s[i].nextPlayerColor = this.nextPlayerColor;
       }
       textSize(utils.fontSize);
       if (!attackChanceP) {
@@ -427,10 +440,12 @@ class panel {
   int shaded = 0;
   float  sv =0.0;
   float sv2 =0.0;
+  color nextPlayerColor;
   panel(int _x, int _y, int _n) {
     x = _x;
     y = _y;
     n = _n;
+    nextPlayerColor=color(0,0,0);
   }
   boolean display(int mode) {
     if (mode == 0) {
@@ -455,7 +470,7 @@ class panel {
       textSize(utils.fontSize*2);
       text(n, dx+utils.mainW/2, dy+utils.mainH/2-5);
       if (marked>0) {
-        fill(0);
+        fill(this.nextPlayerColor);
         textSize(utils.fontSize*0.7);
         text(sv, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*0.7);
         text(sv2, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*1.4);

@@ -428,6 +428,7 @@ void fullRandomMC() {
         prevPanels1 = prize.getPanels(1);
         prevPanels2=prize.getPanels(2);
         simulator.mainBoard.display(10);
+        simulator.mainBoard.setNextPlayerColor(simulator.nextPlayer);
         showReturnButton();
         showScreenCapture();
       }
