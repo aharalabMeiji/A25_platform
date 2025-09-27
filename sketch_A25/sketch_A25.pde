@@ -40,6 +40,7 @@ void setup() {
   gameOptions.set("SimMethod", 1);
   
   buttons = new ArrayList<button>();
+  buttonMainBoard = new button();
   buttonReturnToMenu = new button();
   buttonSaveScreenShot = new button();
   buttonSaveBoard = new button();

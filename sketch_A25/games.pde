@@ -15,6 +15,11 @@ void showReturnButton() { //
   buttonReturnToMenu.setLT(dx, dy, buttonMenuText);
 }
 
+void setMainboardButton(){//
+  float dx=utils.mainL, dy=utils.mainU;
+  buttonMainBoard.setLTWH(dx, dy, utils.mainL*10, utils.mainU*10);
+}
+
 void showScreenCapture() {
   float dx=utils.subL+textWidth("[Return to menu]")+utils.hSpace, dy=utils.subU+utils.mainH*1.5+utils.hOffset;
   // スクショ ボタン

@@ -412,7 +412,7 @@ void fullRandomMC() {
           simulationManager=sP.GameEnd;
         }
       }
-      if (simulator.mainBoard.simulatorNumber%500==0) {
+      if (simulator.mainBoard.simulatorNumber%500==0) {// 500回に1回、画面を更新する
         prize prize=new prize();
         prize.getPrize3FromNodeList(simulator.nextPlayer, simulator.rootNode.children);
         if (abs(prevWinrate1-prize.getWinrate(1))<0.0005 && abs(prevWinrate2-prize.getWinrate(2))<0.0005 )
@@ -431,6 +431,7 @@ void fullRandomMC() {
         simulator.mainBoard.setNextPlayerColor(simulator.nextPlayer);
         showReturnButton();
         showScreenCapture();
+        setMainboardButton();
       }
     }
     //print(",");
@@ -882,16 +883,20 @@ void showMcts(player nextPlayer) {
 }
 
 void mousePreesedSimulator() {
-  if (buttonReturnToMenu.mouseOn()) {//　メニューに戻る、をクリックされたとき
+  if (buttonReturnToMenu.mouseOn()) {//　メニューに戻る、がクリックされたとき
     displayManager = dP.onContents;
     managerPhase=mP.GameStart;
     return;
   }
-  if (buttonSaveScreenShot.mouseOn()) {//　メニューに戻る、をクリックされたとき
+  if (buttonSaveScreenShot.mouseOn()) {//　スクショを取る、がクリックされたとき
     selectOutput("スクリーンショットを保存", "saveScreenShotSelected");
     //save("screenshot.png");
   }
-  if (gameOptions.get("SimMethod")==1) {
+  if (buttonMainBoard.mouseOn()){// ボード画面がクリックされたとき（勝率の主語を変更するとき）
+    //画面上の勝率・パネル数の期待値について、「誰にとっての勝率・期待値」なのかを変更できるようにする。 
+  }
+  if (gameOptions.get("SimMethod")==1) {// アタックチャンス次の右下部分のスクロール対応
+    //アタックチャンスの時、という一文がここにほしい。
     if (buttonPrevSV.mouseOn()) {
       int loopSize=simulator.rootNode.children.size();
       attackChanceCursor = (attackChanceCursor+loopSize-1)%loopSize;

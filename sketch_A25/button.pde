@@ -10,6 +10,13 @@ class button{
     wid = textWidth(text)+5;
     hei=utils.fontSize;
   }
+  void setLTWH(float _l, float _t, float _w, float _h){// box type
+    left = _l;
+    top = _t+_h/2;
+    wid = _w;
+    hei = _h;
+  }
+
   void setItem(String k,int i){
     dictKey = k;
     dictInt = i;

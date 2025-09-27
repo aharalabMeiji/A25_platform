@@ -42,6 +42,7 @@ ArrayList<button> buttons;
 button buttonStart;
 button buttonNew, buttonOpenFile, buttonOpenPsrFile, buttonSaveFile, buttonDeleteFromList, buttonKifuFolder;
 button buttonPrevBoard, buttonNextBoard;
+button buttonMainBoard;
 button buttonReturnToMenu, buttonMenuGame, buttonMenuSimulation, buttonPass;
 button buttonSaveScreenShot;// スクショのボタン
 button buttonSaveBoard;// 盤面保存のボタン
