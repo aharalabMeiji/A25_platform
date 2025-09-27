@@ -14,7 +14,7 @@ int ucbMcBrain(player pl) {
 
   //println("着手可能点を計算しておく");
   pl.myBoard.buildVP(pl.position);
-  
+
   //println("pl の変数の初期化");
   for (int j=0; j<=25; j++) {
     pl.myBoard.sv[j]=0;
@@ -28,7 +28,7 @@ int ucbMcBrain(player pl) {
   ArrayList<uctNode> ucbMcNodes = new ArrayList<uctNode>();
   //println("ループ回数のカウント");
   pl.myBoard.simulatorNumber=0;
-  
+
   //println("シミュレーション開始");
   if (pl.myBoard.attackChanceP()) {// アタックチャンスのときの処理を先に書く。
     uctNode newNode=new uctNode();
@@ -217,8 +217,8 @@ int ucbMcBrain(player pl) {
           // 正常終了 uct最大は、最も勝率の良い手
           float bestWr=0;
           int bestMove=25;
-          for (uctNode nd1 : ucbMcNodes){
-            if (bestWr<nd1.wa[pl.position]){
+          for (uctNode nd1 : ucbMcNodes) {
+            if (bestWr<nd1.wa[pl.position]) {
               bestWr=nd1.wa[pl.position];
               bestMove = nd1.move;
             }
@@ -236,7 +236,7 @@ int ucbMcBrain(player pl) {
 }
 
 int ucbMcAttackChance(player pl) {
-  if (pl.yellow!=-1) return pl.yellow;// すでに決定済みであれば、それを回答する。 
+  if (pl.yellow!=-1) return pl.yellow;// すでに決定済みであれば、それを回答する。
   int[] ac = new int[25];
   for (int i=0; i<25; i++) {
     if (1<=pl.myBoard.s[i].col && pl.myBoard.s[i].col<=4) {

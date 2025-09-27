@@ -50,6 +50,7 @@ void setup() {
   simulationManager = sP.setStartBoard;
 
   simulatorStartBoard = new ArrayList<startBoard>();
+  println("default file is:"+filename);
   initStartBoard();
   
 }
