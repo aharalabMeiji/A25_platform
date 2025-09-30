@@ -101,6 +101,92 @@ void ucbMcStartSimulation(ucbClass ucb) {
   }
 }
 
+void ucbMcRegularLoop(ucbClass ucb) {
+  float maxUct=-100;
+  uctNode maxNd=null;
+  for (uctNode nd : ucb.fullNodes) {
+    if (nd.children==null) {
+      float newUct = nd.UCTwp(nd.player, simulator.mainBoard.simulatorNumber);
+      if (newUct>maxUct) {
+        maxUct=newUct;
+        maxNd=nd;
+      }
+    }
+  }
+  if (maxNd==null) {
+    simulationManager=sP.GameEnd;
+  } else {
+    //この枝のデータを更新する。
+    for (int k=0; k<25; k++) {//ノードの盤面をsimulator.subBoardへコピ－
+      simulator.subBoard.s[k].col = maxNd.bd[k] ;
+    }
+    winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants);//そこから最後までシミュレーションを行う。
+    simulator.mainBoard.simulatorNumber ++;
+    maxNd.na ++ ;//　
+    for (int p=1; p<5; p++) {
+      maxNd.wa[p] += wp.points[p];//
+      maxNd.pa[p] += wp.panels[p];//
+    }
+    // 表示データの更新
+    simulator.mainBoard.sv[maxNd.move] = maxNd.wa[maxNd.player]/maxNd.na;
+    simulator.mainBoard.sv2[maxNd.move] = maxNd.pa[maxNd.player]/maxNd.na;
+    //maxNd.UCTwp(maxNd.player, simulator.mainBoard.simulatorNumber) ;
+    if (gameOptions.get("SimTimes")==11) {// 10sec
+      if (millis()-startTime>=10000) {
+        simulationManager=sP.GameEnd;
+      }
+    } else if (gameOptions.get("SimTimes")==12) {// 60sec
+      if (millis()-startTime>=60000) {
+        simulationManager=sP.GameEnd;
+      }
+    } else {/// gameOptions.get("SimTimes")==13
+      if (simulator.mainBoard.simulatorNumber%1000==0) {//収束しているかを判定する
+        winrateConvergents=false;
+        panelsConvergent=false;
+        prevWinrate1=best1Wr;
+        prevWinrate2=best2Wr;
+        prevPanels1 = best1Pr;
+        prevPanels2=best2Pr;
+        best1Wr=0;
+        best2Wr=0;
+        best1Pr=0;
+        best2Pr=0;
+        for (int kk=0; kk<=25; kk++) {
+          if (simulator.mainBoard.sv[kk]>0 || simulator.mainBoard.sv2[kk]>0) {
+            if (simulator.mainBoard.sv[kk]>best1Wr ||(simulator.mainBoard.sv[kk]==best1Wr && simulator.mainBoard.sv2[kk]>best1Pr)) {
+              best2Wr = best1Wr;
+              best2Pr=best2Wr;
+              best1Wr = simulator.mainBoard.sv[kk];
+              best1Pr = simulator.mainBoard.sv2[kk];
+            } else
+              if (simulator.mainBoard.sv[kk]>best2Wr ||(simulator.mainBoard.sv[kk]==best2Wr && simulator.mainBoard.sv2[kk]>best2Pr)) {
+                best2Wr = simulator.mainBoard.sv[kk];
+                best2Pr = simulator.mainBoard.sv2[kk];
+              }
+          }
+        }
+        //println(prevWinrate1,best1Wr,prevWinrate2,best2Wr);
+        if (abs(prevWinrate1-best1Wr)<0.0005 && abs(prevWinrate2-best2Wr)<0.0005 )
+          winrateConvergents=true;
+        else winrateConvergents=false;
+        if (abs(prevPanels1-best1Pr)<0.005 && abs(prevPanels2-best2Pr)<0.005 )
+          panelsConvergent=true;
+        else panelsConvergent=false;
+        if (winrateConvergents && panelsConvergent) {
+          simulationManager=sP.GameEnd;
+        }
+      }
+    }
+  }
+}
+
+void ucbMcRegularDisplay() {
+  simulator.mainBoard.ucbMcSimulatorRegularDisplay();// Uct1 ディスプレイ
+  showReturnButton();
+  showScreenCapture();
+  setMainboardButton();
+}
+
 void ucbMcAttackchanceLoop(ucbClass ucb) {
   float maxUct=-100;
   uctNode maxNd=null;
@@ -145,7 +231,7 @@ void ucbMcAttackchanceLoop(ucbClass ucb) {
 }
 
 void ucbMcAttackchanceDisplay(ucbClass ucb) {
-  simulator.mainBoard.display(11);// Ucb1 ディスプレイ
+  simulator.mainBoard.ucbMcSimulatorAttackchanceDisplay();// Ucb1 ディスプレイ
   prize prize=new prize();
   prize.getPrize3FromNodeList(simulator.nextPlayer, ucb.rootNode.children);
   displayBestStats(prize);
