@@ -40,7 +40,6 @@ void setup() {
   gameOptions.set("SimMethod", 1);
   
   buttons = new ArrayList<button>();
-  buttonMainBoard = new button();
   buttonReturnToMenu = new button();
   buttonSaveScreenShot = new button();
   buttonSaveBoard = new button();
@@ -50,7 +49,6 @@ void setup() {
   simulationManager = sP.setStartBoard;
 
   simulatorStartBoard = new ArrayList<startBoard>();
-  println("default file is:"+filename);
   initStartBoard();
   
 }

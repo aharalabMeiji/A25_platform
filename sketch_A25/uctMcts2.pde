@@ -48,7 +48,7 @@ int uctMctsMainLoopVer2(player pl) {
     try {
       ancestor.myThread.join();
     } catch (InterruptedException e) {
-      e.printStackTrace(); //<>// //<>// //<>// //<>// //<>//
+      e.printStackTrace(); //<>// //<>// //<>// //<>//
     }
   }
   // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする

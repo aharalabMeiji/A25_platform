@@ -241,7 +241,7 @@ int uctMctsStartingJoseki(player pl) {
     // . . A . .
     // . . A . .
     // . . A . .
-    pl.myBoard.buildVP(pl.position); //<>// //<>//
+    pl.myBoard.buildVP(pl.position); //<>//
     int[] a51a={2, 7, 12, 17, 22};
     int[] none={};
     int answer = playByJoseki(pl, a51a, none, none, none, 11,0,0,0);

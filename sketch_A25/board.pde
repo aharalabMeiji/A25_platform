@@ -8,7 +8,6 @@ class board {
   float[] sv2;
   int simulatorNumber;
   boolean attackChanceP;
-  color nextPlayerColor;
   board() {
     s = new panel[25];
     vp = new int[25];
@@ -22,96 +21,47 @@ class board {
     }
     simulatorNumber=0;
     attackChanceP=false;
-    nextPlayerColor=0;
   }
-  void setSubjectPlayerColor(int player) {
-    switch (player) {
-    case 0:
-      this.nextPlayerColor=color(0, 0, 0);
-      break;
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-      this.nextPlayerColor=utils.playerColor[player];
-      break;
-    }
-  }
-  boolean randomMcSimulatorRegularDisplay() {
+  boolean display(int mode) {
     textAlign(CENTER, CENTER);
-    background(255);
-    for (int i = 0; i < 25; i ++) {
-      s[i].sv=sv[i];
-      s[i].sv2=sv2[i];
-      s[i].simulatorDisplay();
-      s[i].nextPlayerColor = this.nextPlayerColor;
-    }
-    textSize(utils.fontSize);
-    if (!attackChanceP) {
-      if (this.nextPlayerColor==color(255,255,255)) fill(color(160,160,160));
-      else fill(this.nextPlayerColor);
-      text(1.0*sv[25], utils.mainL, utils.mainU-utils.fontSize);
-      text(1.0*sv2[25], utils.mainL+utils.fontSize*3.5, utils.mainU-utils.fontSize);
-    }
-    fill(0);
-    text("("+simulatorNumber+")", utils.mainL+utils.fontSize*7, utils.mainU-utils.fontSize);
-    text("player:", utils.mainL+utils.fontSize*12, utils.mainU-utils.fontSize);
-    textAlign(LEFT, CENTER);
-    int total = simulatorStartBoard.size();
-    int now = (simulator.StartBoardId) % total;
-    text(filenamePath+"("+now+")", utils.mainL+utils.fontSize*20, utils.mainU-utils.fontSize);
-    String simMethod = "Monte Carlo Method";
-    if (gameOptions.get("SimTimes") == 1) simMethod += "(1k)";
-    else if (gameOptions.get("SimTimes") == 2) simMethod += "(10k)";
-    else simMethod += "(limit)";
-
-    text(simMethod, utils.subL, utils.subU);
-    stroke(0);
-    fill(utils.playerColor[simulator.nextPlayer]);
-    rect(utils.mainL+utils.fontSize*14, utils.mainU-utils.fontSize*1.3, utils.fontSize*3, utils.fontSize*0.8);
-    return false;
-  }
-  boolean randomMcSimulatorAttackchanceDisplay() {
-    textAlign(CENTER, CENTER);
-    background(255);
-    for (int i = 0; i < 25; i ++) {
-      s[i].sv=sv[i];
-      s[i].sv2=sv2[i];
-      s[i].simulatorDisplay();
-      s[i].nextPlayerColor = this.nextPlayerColor;
-    }
-    textSize(utils.fontSize);
-    if (!attackChanceP) {
-      if (this.nextPlayerColor==color(255,255,255)) fill(color(160,160,160));
-      else fill(this.nextPlayerColor);
-      text(1.0*sv[25], utils.mainL, utils.mainU-utils.fontSize);
-      text(1.0*sv2[25], utils.mainL+utils.fontSize*3.5, utils.mainU-utils.fontSize);
-    }
-    fill(0);
-    text("("+simulatorNumber+")", utils.mainL+utils.fontSize*7, utils.mainU-utils.fontSize);
-    text("player:", utils.mainL+utils.fontSize*12, utils.mainU-utils.fontSize);
-    textAlign(LEFT, CENTER);
-    int total = simulatorStartBoard.size();
-    int now = (simulator.StartBoardId) % total;
-    text(filenamePath+"("+now+")", utils.mainL+utils.fontSize*20, utils.mainU-utils.fontSize);
-    String simMethod = "Monte Carlo Method";
-    if (gameOptions.get("SimTimes") == 1) simMethod += "(1k)";
-    else if (gameOptions.get("SimTimes") == 2) simMethod += "(10k)";
-    else simMethod += "(limit)";
-
-    text(simMethod, utils.subL, utils.subU);
-    stroke(0);
-    fill(utils.playerColor[simulator.nextPlayer]);
-    rect(utils.mainL+utils.fontSize*14, utils.mainU-utils.fontSize*1.3, utils.fontSize*3, utils.fontSize*0.8);
-    return false;
-  }
-  void ucbMcSimulatorRegularDisplay(){
+    if (mode == 0) {
+      for (int i = 0; i < 25; i ++) {
+        s[i].display(mode);
+      }
+    } else if (mode==10) {// Simulator ランダムディスプレイ
+      background(255);
+      for (int i = 0; i < 25; i ++) {
+        s[i].sv=sv[i];
+        s[i].sv2=sv2[i];
+        s[i].display(mode);
+      }
+      textSize(utils.fontSize);
+      if (!attackChanceP) {
+        text(1.0*sv[25], utils.mainL, utils.mainU-utils.fontSize);
+        text(1.0*sv2[25], utils.mainL+utils.fontSize*3.5, utils.mainU-utils.fontSize);
+      }
+      text("("+simulatorNumber+")", utils.mainL+utils.fontSize*7, utils.mainU-utils.fontSize);
+      text("player:", utils.mainL+utils.fontSize*12, utils.mainU-utils.fontSize);
+      textAlign(LEFT, CENTER);
+      int total = simulatorStartBoard.size();
+      int now = (simulator.StartBoardId) % total;
+      text(filenamePath+"("+now+")", utils.mainL+utils.fontSize*20, utils.mainU-utils.fontSize);
+      String simMethod = "Monte Carlo Method";
+      if (gameOptions.get("SimTimes") == 1) simMethod += "(1k)";
+      else if (gameOptions.get("SimTimes") == 2) simMethod += "(10k)";
+      else simMethod += "(limit)";
+      
+      text(simMethod, utils.subL, utils.subU);
+      stroke(0);
+      fill(utils.playerColor[simulator.nextPlayer]);
+      rect(utils.mainL+utils.fontSize*14, utils.mainU-utils.fontSize*1.3, utils.fontSize*3, utils.fontSize*0.8);
+    } else if (mode==11) {// Ucb ディスプレイ
       //if (simulatorNumber%100==0) {
       background(255);
       for (int i = 0; i < 25; i ++) {
         s[i].sv=sv[i];
         s[i].sv2=sv2[i];
-        s[i].ucbMcDisplay();
+        s[i].display(mode);
       }
       textSize(utils.fontSize);
       if (!attackChanceP) {
@@ -134,20 +84,6 @@ class board {
       fill(utils.playerColor[simulator.nextPlayer]);
       rect(utils.mainL+utils.fontSize*14, utils.mainU-utils.fontSize*1.3, utils.fontSize*3, utils.fontSize*0.8);
       //}
-  }
-  void ucbMcAttackchanceDisplay(){
-    ;
-  }
-  boolean display(int mode) {
-    textAlign(CENTER, CENTER);
-    if (mode == 0) {
-      for (int i = 0; i < 25; i ++) {
-        s[i].display(mode);
-      }
-    } else if (mode==10) {// Simulator ランダムディスプレイ
-      ;
-    } else if (mode==11) {// Ucb ディスプレイ
-      ;
     } else if (mode==12) {// Uct ディスプレイ
       //if (simulatorNumber%100==0) {
       background(255);
@@ -164,7 +100,7 @@ class board {
       int now = (simulator.StartBoardId) % total;
       text(filenamePath+"("+now+")", utils.mainL+utils.fontSize*20, utils.mainU-utils.fontSize);
       String simMethod = "Monte Carlo Tree Search(UCT) ";
-
+      
       text(simMethod, utils.subL, utils.subU);
       if (gameOptions.get("SimTimes") == 21) simMethod = "(Depth4/wCancel)";
       else if (gameOptions.get("SimTimes") == 22) simMethod = "(Depth4/woCancel)";
@@ -395,32 +331,32 @@ class board {
       s[k].marked=0;
     }
   }
-  boolean symmetryLR() {
-    for (int j=0; j<5; j++) {
-      for (int i=0; i<2; i++) {
+  boolean symmetryLR(){
+    for(int j=0; j<5; j++){
+      for (int i=0; i<2; i++){
         int k= 5*j + i;
         int kk = 5*j + (4-i);
         if (s[k].col != s[kk].col)
           return false;
       }
     }
-    return true;
+    return true;    
   }
-  boolean symmetryTB() {
-    for (int j=0; j<2; j++) {
-      for (int i=0; i<5; i++) {
+  boolean symmetryTB(){
+    for(int j=0; j<2; j++){
+      for (int i=0; i<5; i++){
         int k= 5*j + i;
         int kk = 5*(4-j) + i;
         if (s[k].col != s[kk].col)
           return false;
       }
     }
-    return true;
+    return true;    
   }
-  boolean symmetryDiagonal() {
-    for (int j=0; j<5; j++) {
-      for (int i=0; i<5; i++) {
-        if (i<j) {
+  boolean symmetryDiagonal(){
+    for(int j=0; j<5; j++){
+      for (int i=0; i<5; i++){
+        if (i<j){
           int k= 5*j + i;
           int kk = 5*i + j;
           if (s[k].col != s[kk].col)
@@ -428,58 +364,58 @@ class board {
         }
       }
     }
-    return true;
+    return true;    
   }
-  boolean symmetryAntiDiagonal() {
-    for (int j=0; j<5; j++) {
-      for (int i=0; i<5; i++) {
-        if (i+j<4) {
+  boolean symmetryAntiDiagonal(){
+    for(int j=0; j<5; j++){
+      for (int i=0; i<5; i++){
+        if (i+j<4){
           int k= 5*j + i;
-          int kk = 5*(4-i) + (4-j);
+          int kk = 5*(4-i) + (4-j); 
           if (s[k].col != s[kk].col)
             return false;
         }
       }
     }
-    return true;
+    return true;    
   }
-  void deleteSymmetricVp() {
-    if (this.symmetryLR()) {
-      for (int j=0; j<5; j++) {
-        for (int i=3; i<5; i++) {
+  void deleteSymmetricVp(){
+    if (this.symmetryLR()){
+      for(int j=0; j<5; j++){
+        for (int i=3; i<5; i++){
           int k= 5*j + i;
           vp[k]=0;
         }
       }
-    } else
-      if (this.symmetryTB()) {
-        for (int j=3; j<5; j++) {
-          for (int i=0; i<5; i++) {
+    } else 
+    if (this.symmetryTB()){
+      for(int j=3; j<5; j++){
+        for (int i=0; i<5; i++){
+          int k= 5*j + i;
+          vp[k]=0;
+        }
+      }
+    } else 
+    if (this.symmetryDiagonal()){
+      for(int j=0; j<5; j++){
+        for (int i=0; i<5; i++){
+          if (i<j){
             int k= 5*j + i;
             vp[k]=0;
           }
         }
-      } else
-        if (this.symmetryDiagonal()) {
-          for (int j=0; j<5; j++) {
-            for (int i=0; i<5; i++) {
-              if (i<j) {
-                int k= 5*j + i;
-                vp[k]=0;
-              }
-            }
+      }
+    }  else 
+    if (this.symmetryAntiDiagonal()){
+      for(int j=0; j<5; j++){
+        for (int i=0; i<5; i++){
+          if (i+j>4){
+            int k= 5*j + i;
+            vp[k]=0;
           }
-        } else
-          if (this.symmetryAntiDiagonal()) {
-            for (int j=0; j<5; j++) {
-              for (int i=0; i<5; i++) {
-                if (i+j>4) {
-                  int k= 5*j + i;
-                  vp[k]=0;
-                }
-              }
-            }
-          }
+        }
+      }
+    }     
   }
 }; // end of class board
 
@@ -491,42 +427,10 @@ class panel {
   int shaded = 0;
   float  sv =0.0;
   float sv2 =0.0;
-  color nextPlayerColor;
   panel(int _x, int _y, int _n) {
     x = _x;
     y = _y;
     n = _n;
-    nextPlayerColor=color(0, 0, 0);
-  }
-  boolean simulatorDisplay() {
-    int dx = utils.mainL + utils.mainW * x;
-    int dy = utils.mainU + utils.mainH * y;
-    fill(utils.playerColor[col]);//
-    rect(dx, dy, utils.mainW, utils.mainH);
-    fill(0);
-    textSize(utils.fontSize*2);
-    text(n, dx+utils.mainW/2, dy+utils.mainH/2-5);
-    if (marked>0) {
-      fill(this.nextPlayerColor);
-      textSize(utils.fontSize*0.7);
-      text(sv, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*0.7);
-      text(sv2, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*1.4);
-    }
-    return false;
-  }
-  void ucbMcDisplay(){
-      int dx = utils.mainL + utils.mainW * x;
-      int dy = utils.mainU + utils.mainH * y;
-      fill(utils.playerColor[col]);//
-      rect(dx, dy, utils.mainW, utils.mainH);
-      fill(0);
-      textSize(utils.fontSize*2);
-      text(n, dx+utils.mainW/2, dy+utils.mainH/2-5);
-      if (marked>0) {
-        textSize(utils.fontSize*0.7);
-        text(sv, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*0.7);
-        text(sv2, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*1.4);
-      }
   }
   boolean display(int mode) {
     if (mode == 0) {
@@ -543,9 +447,32 @@ class panel {
         text("o", dx+utils.mainW/2, dy+utils.mainH/2);
       }
     } else if (mode ==10) {
-      ;
+      int dx = utils.mainL + utils.mainW * x;
+      int dy = utils.mainU + utils.mainH * y;
+      fill(utils.playerColor[col]);//
+      rect(dx, dy, utils.mainW, utils.mainH);
+      fill(0);
+      textSize(utils.fontSize*2);
+      text(n, dx+utils.mainW/2, dy+utils.mainH/2-5);
+      if (marked>0) {
+        fill(0);
+        textSize(utils.fontSize*0.7);
+        text(sv, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*0.7);
+        text(sv2, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*1.4);
+      }
     } else if (mode==11) {// Ucb ディスプレイ
-      ;
+      int dx = utils.mainL + utils.mainW * x;
+      int dy = utils.mainU + utils.mainH * y;
+      fill(utils.playerColor[col]);//
+      rect(dx, dy, utils.mainW, utils.mainH);
+      fill(0);
+      textSize(utils.fontSize*2);
+      text(n, dx+utils.mainW/2, dy+utils.mainH/2-5);
+      if (marked>0) {
+        textSize(utils.fontSize*0.7);
+        text(sv, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*0.7);
+        text(sv2, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*1.4);
+      }
     } else if (mode==12) {// Uct ディスプレイ
       int dx = utils.mainL + utils.mainW * x;
       int dy = utils.mainU + utils.mainH * y;

@@ -42,7 +42,6 @@ ArrayList<button> buttons;
 button buttonStart;
 button buttonNew, buttonOpenFile, buttonOpenPsrFile, buttonSaveFile, buttonDeleteFromList, buttonKifuFolder;
 button buttonPrevBoard, buttonNextBoard;
-button buttonMainBoard;
 button buttonReturnToMenu, buttonMenuGame, buttonMenuSimulation, buttonPass;
 button buttonSaveScreenShot;// スクショのボタン
 button buttonSaveBoard;// 盤面保存のボタン
@@ -64,7 +63,6 @@ class simulators {
   board subBoard;
   uctNode rootNode=null;
   int nextPlayer=1;//1~4
-  int subjectPlayer=1;
 }
 
 //int simulator.nextPlayer=1;//1~4
