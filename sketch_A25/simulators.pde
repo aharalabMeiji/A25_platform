@@ -154,14 +154,14 @@ void displayBestStats(prize prize) {
   textAlign(LEFT, CENTER);
   textSize(utils.fontSize);
   fill(255, 0, 0);
-  text("BEST 3", utils.subL, utils.subU+utils.fontSize*1.5);
+  text("BEST 3", utils.subL, utils.subU);
   fill(0);
   for (int pr=1; pr<=3; pr++) {
     int move = prize.getMove(pr).move;
     float winrate = prize.getWinrate(pr);
     float panels = prize.getPanels(pr);
     String msg = "("+(move%25+1)+"-"+(int(move/25)+1)+") "+nf(winrate, 1, 3)+" : "+ nf(panels, 2, 3);
-    text(msg, utils.subL, utils.subU+utils.fontSize*1.5*(1+pr) );
+    text(msg, utils.subL, utils.subU+utils.fontSize*1.5*pr );
   }
 }
 
