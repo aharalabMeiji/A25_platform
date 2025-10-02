@@ -717,6 +717,16 @@ void showContents() {
         text(buttonText, left, top);
         left += (textWidth(buttonText)+utils.hSpace);
         //
+        buttonText = "[10M]";
+        button buttonTerminateThreshold4=new button();
+        buttonTerminateThreshold4.setLT(left, top, buttonText);
+        buttonTerminateThreshold4.setItem("terminateThreshold", 7);
+        buttons.add(buttonTerminateThreshold4);
+        if (gameOptions.get("terminateThreshold")==7) fill(255, 0, 0);
+        else fill(0);
+        text(buttonText, left, top);
+        left += (textWidth(buttonText)+utils.hSpace);
+        //
         top += utils.vStep;
         left=utils.hOffset;
         //

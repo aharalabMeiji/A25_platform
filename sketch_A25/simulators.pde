@@ -150,18 +150,18 @@ winPoints playSimulatorToEnd(board sub, player[] _participants) {// 引数名か
   return wp;//
 }
 
-void displayBestStats(prize prize) {
+void displayBestStats(prize prize, float yy) {
   textAlign(LEFT, CENTER);
   textSize(utils.fontSize);
-  fill(255, 0, 0);
-  text("BEST 3", utils.subL, utils.subU+utils.fontSize*1.5);
+  //fill(255, 0, 0);
+  //text("BEST 3", utils.subL, utils.subU+utils.fontSize*1.5);
   fill(0);
   for (int pr=1; pr<=3; pr++) {
     int move = prize.getMove(pr).move;
     float winrate = prize.getWinrate(pr);
     float panels = prize.getPanels(pr);
     String msg = "("+(move%25+1)+"-"+(int(move/25)+1)+") "+nf(winrate, 1, 3)+" : "+ nf(panels, 2, 3);
-    text(msg, utils.subL, utils.subU+utils.fontSize*1.5*(1+pr) );
+    text(msg, utils.subL, yy+utils.fontSize*1.5*(pr-1) );
   }
 }
 
@@ -354,7 +354,7 @@ void fullRandomMC() {
         prevPanels1 = prize.getPanels(1);
         prevPanels2=prize.getPanels(2);
 
-        displayBestStats(prize);
+        displayBestStats(prize,utils.subU+utils.fontSize*1.5);
         displayAllStats(attackChanceCursor, simulator.nextPlayer);
         showReturnButton();
         showScreenCapture();
@@ -592,7 +592,7 @@ void UCB1(ucbClass ucb) {
         simulator.mainBoard.display(11);// Ucb1 ディスプレイ
         prize prize=new prize();
         prize.getPrize3FromNodeList(simulator.nextPlayer, ucb.rootNode.children);
-        displayBestStats(prize);
+        displayBestStats(prize,utils.subU+utils.fontSize*1.5);
         showReturnButton();
         showScreenCapture();
         if (abs(prevWinrate1-prize.getWinrate(1))<0.0005 && abs(prevWinrate2-prize.getWinrate(2))<0.0005 )
@@ -734,8 +734,10 @@ void UCT1() {
         uct.terminateThreshold = uct.expandThreshold*10000;
       } else if (gameOptions.get("terminateThreshold")==5){
         uct.terminateThreshold = uct.expandThreshold*100000;
-      } else {
+      } else if (gameOptions.get("terminateThreshold")==6){
         uct.terminateThreshold = uct.expandThreshold*1000000;
+      } else {
+        uct.terminateThreshold = uct.expandThreshold*10000000;
       }
       uct.depthMax=gameOptions.get("depthMax");
       if (gameOptions.get("wCancel")==1){
@@ -744,11 +746,11 @@ void UCT1() {
         } else if (uct.depthMax==3){
           uct.cancelCountMax=6;
         } else if (uct.depthMax==4){
-          uct.cancelCountMax=10;
-        } else if (uct.depthMax==5){
           uct.cancelCountMax=20;
+        } else if (uct.depthMax==5){
+          uct.cancelCountMax=60;
         } else {
-          uct.cancelCountMax=40;
+          uct.cancelCountMax=180;
         }
       } else {
         uct.cancelCountMax=100000;
@@ -808,7 +810,8 @@ void UCT1() {
     answer = uctMctsMainLoop(nextPlayer);
     // 1000回に1回、svにデータを埋める。
     
-    if (uct.rootNode.attackChanceNode==false) {
+    //if (uct.rootNode.attackChanceNode==false) {
+    if (nextPlayer.myBoard.attackChanceP==false){
       for (uctNode nd : uct.rootNode.children) {
         int k = nd.move;//たぶん、kは0～２５
         if (0<=k && k<=25) {
@@ -820,6 +823,7 @@ void UCT1() {
         }
       }
     } else {
+      
     }
     simulator.mainBoard.simulatorNumber=nextPlayer.myBoard.simulatorNumber;
     showMcts(nextPlayer);
@@ -868,9 +872,15 @@ void showMcts(player nextPlayer) {
     simulator.mainBoard.display(12);// UCTディスプレイ
     textAlign(LEFT, CENTER);
     fill(0);
-    if (!simulator.mainBoard.attackChanceP){
+    //if (!simulator.mainBoard.attackChanceP){
+    if (nextPlayer.myBoard.attackChanceP==false){
       text(1.0*simulator.mainBoard.sv[25], utils.mainL, utils.mainU-utils.fontSize);
       text(1.0*simulator.mainBoard.sv2[25], utils.mainL+utils.fontSize*3, utils.mainU-utils.fontSize);
+    }else {
+      prize prize=new prize();
+      prize.getPrize3FromNodeList(nextPlayer.position, uct.rootNode.children);
+      displayBestStats(prize,utils.subU+utils.fontSize*3);
+      
     }
     for (int p=1; p<=4; p++) {
       text(message[p], utils.unitSize/2, utils.subU+utils.vStep*(p-1));
@@ -897,7 +907,7 @@ void mousePreesedSimulator() {
       simulator.mainBoard.display(10);
       prize prize=new prize();
       prize.getPrize3FromNodeList(simulator.nextPlayer, simulator.rootNode.children);
-      displayBestStats(prize);
+      displayBestStats(prize,utils.subU+utils.fontSize*1.5);
       displayAllStats(attackChanceCursor, simulator.nextPlayer);
       showReturnButton();
       showScreenCapture();
@@ -907,7 +917,7 @@ void mousePreesedSimulator() {
       simulator.mainBoard.display(10);
       prize prize=new prize();
       prize.getPrize3FromNodeList(simulator.nextPlayer, simulator.rootNode.children);
-      displayBestStats(prize);
+      displayBestStats(prize,utils.subU+utils.fontSize*1.5);
       displayAllStats(attackChanceCursor, simulator.nextPlayer);
       showReturnButton();
       showScreenCapture();
