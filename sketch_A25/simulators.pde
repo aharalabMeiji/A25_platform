@@ -741,9 +741,7 @@ void UCT1() {
           uct.cancelCountMax=2;
         } else if (uct.depthMax==3) {
           uct.cancelCountMax=6;
-        } else if (uct.depthMax==4) {
-          uct.cancelCountMax=10;
-        } else {
+        } else if (uct.depthMax==4){
           uct.cancelCountMax=20;
         } else if (uct.depthMax==5){
           uct.cancelCountMax=60;
