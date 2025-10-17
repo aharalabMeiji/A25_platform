@@ -717,6 +717,16 @@ void showContents() {
         text(buttonText, left, top);
         left += (textWidth(buttonText)+utils.hSpace);
         //
+        buttonText = "[10M]";
+        button buttonTerminateThreshold4=new button();
+        buttonTerminateThreshold4.setLT(left, top, buttonText);
+        buttonTerminateThreshold4.setItem("terminateThreshold", 7);
+        buttons.add(buttonTerminateThreshold4);
+        if (gameOptions.get("terminateThreshold")==7) fill(255, 0, 0);
+        else fill(0);
+        text(buttonText, left, top);
+        left += (textWidth(buttonText)+utils.hSpace);
+        //
         top += utils.vStep;
         left=utils.hOffset;
         //
@@ -761,6 +771,16 @@ void showContents() {
         buttonDepthMax4.setItem("depthMax", 5);
         buttons.add(buttonDepthMax4);
         if (gameOptions.get("depthMax")==5) fill(255, 0, 0);
+        else fill(0);
+        text(buttonText, left, top);
+        left += (textWidth(buttonText)+utils.hSpace);
+        //
+        buttonText = "[6]";
+        button buttonDepthMax5=new button();
+        buttonDepthMax5.setLT(left, top, buttonText);
+        buttonDepthMax5.setItem("depthMax", 6);
+        buttons.add(buttonDepthMax5);
+        if (gameOptions.get("depthMax")==6) fill(255, 0, 0);
         else fill(0);
         text(buttonText, left, top);
         left += (textWidth(buttonText)+utils.hSpace);

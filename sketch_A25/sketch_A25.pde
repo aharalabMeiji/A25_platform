@@ -19,7 +19,7 @@ void setup() {
   utils.fontSize=utils.unitSize/35;
   utils.hOffset=utils.fontSize;
   utils.hSpace=10;
-  utils.vStep=utils.fontSize*1.6;
+  utils.vStep=utils.fontSize*1.5;
 
   utils.gameMainBoard = new board();
   utils.gameSubBoard = new board();

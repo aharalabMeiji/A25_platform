@@ -223,16 +223,17 @@ int uctMctsMainLoop(player pl) {
       print(++uct.cancelCount);
       if ((uct.cancelCount)>=uct.cancelCountMax){
         println("　勝率の推定により着手が確定した");
-        println("試行回数("+pl.myBoard.simulatorNumber+")");
+        //println("試行回数( "+pl.myBoard.simulatorNumber+" )");
         println("time=", millis()-startTime, "(ms)");
         // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする
         int ret = returnBestChildFromRoot(pl, uct.rootNode);
         if (pl.myBoard.attackChanceP()) {
           pl.yellow = int(ret/25);
-          println("["+(ret%25+1)+"-"+(pl.yellow+1)+"]");
+          //println("[ "+(ret%25+1)+"-"+(pl.yellow+1)+" ]");
           return ret%25;
         } else {
-          println("["+(ret+1)+"]");
+          //println("[ "+(ret+1)+" ]");
+          println(""+simulator.mainBoard.sv[ret]+" : "+simulator.mainBoard.sv2[ret]);
           return ret;
         }
       }
@@ -326,7 +327,8 @@ int uctMctsMainLoop(player pl) {
             println("["+(ret%25+1)+"-"+(pl.yellow+1)+"]");
             return ret%25;
           } else {
-            println("["+(ret+1)+"]");
+            println("[ "+(ret+1)+" ]");
+            println(""+simulator.mainBoard.sv[ret]+" : "+simulator.mainBoard.sv2[ret]);
             return ret;
           }
         }// すべての先祖が終わったら、そこでおわり
@@ -510,6 +512,7 @@ int uctMctsMainLoop(player pl) {
           return ret%25;
         } else {
           println("["+(ret+1)+"]");
+          //println(""+simulator.mainBoard.sv[ret]+" : "+simulator.mainBoard.sv2[ret]);
           return ret;
         }
       }
