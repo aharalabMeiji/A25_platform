@@ -107,9 +107,11 @@ uctClass uct = new uctClass();
 class uctClass{
   player[] participants;
   winPoints winPoint;
+  winPoints randomPlayWinPoint;
   prize prize;
   board mainBoard;
   board subBoard;
+  board randomPlayBoard=null;
   uctNode newNode;
   uctNode rootNode;
   ArrayList<uctNode> activeNodes;
@@ -121,6 +123,44 @@ class uctClass{
   int cancelCountMax=10;
   int uctMainLoopOption=1;// ここを２にすると、並列処理になる。が、今は使わない。
   float maxNodeWinrate=0.0;
+  boolean chanceNodeOn=false;
   uctClass(){
   }
+  void randomPlayAndBackPropagate(uctNode uctMaxNode){
+      //println("uctMctsBrain:",uctMaxNode.id, "のノードを調べる");
+      //println("uctMctsBrain:uct.mainBoardへ盤面をコピー");
+      if (this.randomPlayBoard==null){
+        this.randomPlayBoard = new board();
+      }
+      if (this.randomPlayWinPoint==null){
+        this.randomPlayWinPoint = new winPoints();
+      }
+      this.randomPlayBoard.copyBdToBoard(uctMaxNode.bd);
+      //println("uctMctsBrain:uct.mainBoardを最後まで打ち切る");
+      this.randomPlayWinPoint = playSimulatorToEnd(this.randomPlayBoard, this.participants);
+      //println("uctMctsBrain:nd.wa[p]、nd.pa[p]、nd.uct[p]");
+      uctMaxNode.na ++;//
+      for (int p=1; p<=4; p++) {
+        uctMaxNode.wa[p] += this.randomPlayWinPoint.points[p];//2回め以降は和
+        uctMaxNode.pa[p] += this.randomPlayWinPoint.panels[p];//2回め以降は和
+      }
+      //println("親にさかのぼってデータを更新する");
+      uctNode nd0 = uctMaxNode;
+      do {
+        if (nd0.parent!=null) {
+          nd0 = nd0.parent;
+          // chance node であるなしに関わらず、上に合流するのが「旧式」//uct.chanceNodeOn=false;
+          // chance node から上にあげるときには式を変更するのが「新式」//uct.chanceNodeOn=true;
+          nd0.na ++;
+          for (int p=1; p<=4; p++) {
+            nd0.wa[p] += this.randomPlayWinPoint.points[p];//2回め以降は和
+            nd0.pa[p] += this.randomPlayWinPoint.panels[p];//2回め以降は和
+          }
+          //println("uctMctsBrain:→　ノード ",nd0.id, "のデータ("+nd0.wa[1]+","+nd0.wa[2]+","+nd0.wa[3]+","+nd0.wa[4]+")/"+nd0.na);
+        } else {// ルートまでたどり着いた、の意味
+          // ルートまでたどり着いて、なにか作業する必要があればここに書く。
+          break;
+        }
+      } while (true);//println("親にさかのぼってデータを更新する");//おわり
+  }    
 };

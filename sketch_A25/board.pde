@@ -419,6 +419,17 @@ class board {
   }
 }; // end of class board
 
+int remaingInBd(int[] bd){
+  int len = min(bd.length,25);
+  int count=0;
+  for(int k=0; k<len; k++){
+    if(bd[k]==0){
+      count++;
+    }
+  }
+  return count;
+}
+
 class panel {
   int col = 0;
   int x = 0, y = 0;
