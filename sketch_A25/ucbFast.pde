@@ -36,7 +36,7 @@ int ucbFastBrain(player pl, ucbClass ucb) {
 
   //println("ルートノード");
   ucb.rootNode=new uctNode();
-  ucb.rootNode.children = new ArrayList<uctNode>();
+  ucb.rootNode.legalMoves = new ArrayList<uctNode>();
   pl.myBoard.copyBoardToBd(ucb.rootNode.bd);
 
   //配列vpの値の初期化
@@ -51,7 +51,7 @@ int ucbFastBrain(player pl, ucbClass ucb) {
         if ((pl.myBoard.vp[j]>0 && (pl.myBoard.s[i].col>=1 && pl.myBoard.s[i].col<=4)) || (pl.myBoard.vp[j]>0 && i==j)) {
           newNode = new uctNode();
           newNode.setItem(pl.position, k);
-          ucb.rootNode.children.add(newNode);//ぶら下げる
+          ucb.rootNode.legalMoves.add(newNode);//ぶら下げる
           pl.myBoard.copyBoardToSub(ucb.subBoard);
           ucb.subBoard.move(pl.position, j);// 1手着手する
           ucb.subBoard.s[i].col = 5;// 黄色を置く
@@ -74,7 +74,7 @@ int ucbFastBrain(player pl, ucbClass ucb) {
       if (pl.myBoard.vp[k]>0) {
         newNode = new uctNode();
         newNode.setItem(pl.position, k);
-        ucb.rootNode.children.add(newNode);//ぶら下げる
+        ucb.rootNode.legalMoves.add(newNode);//ぶら下げる
         pl.myBoard.copyBoardToSub(ucb.subBoard);
         ucb.subBoard.move(pl.position, k);// 1手着手する
         ucb.subBoard.copyBoardToBd(newNode.bd);     
@@ -94,7 +94,7 @@ int ucbFastBrain(player pl, ucbClass ucb) {
     if (pl.noPass==0){
       newNode = new uctNode();
       newNode.setItem(pl.position, 25);
-      ucb.rootNode.children.add(newNode);//ぶら下げる
+      ucb.rootNode.legalMoves.add(newNode);//ぶら下げる
       pl.myBoard.copyBoardToSub(ucb.subBoard);//
       pl.myBoard.copyBoardToBd(newNode.bd);
       //newNode.attackChanceNode=false;//デフォルト
@@ -112,7 +112,7 @@ int ucbFastBrain(player pl, ucbClass ucb) {
   // １万回UCBを試して成績の悪いものをカットする。 
   int count=2;
   do{
-    uctNode maxNode = getMaxUcbFromNodeList(pl.position, ucb.rootNode.children, count);
+    uctNode maxNode = getMaxUcbFromNodeList(pl.position, ucb.rootNode.legalMoves, count);
     //if (uct == ucb1){
     //  print(":"+maxNode.na+"("+maxNode.move+")");
     //}
@@ -127,7 +127,7 @@ int ucbFastBrain(player pl, ucbClass ucb) {
       maxNode.wa[p] += wp.points[p];//初回は代入
       maxNode.pa[p] += 1.0*wp.panels[p];//初回は代入
     }
-    for(uctNode nd : ucb.rootNode.children){
+    for(uctNode nd : ucb.rootNode.legalMoves){
       for (int p=1; p<=4; p++) {
         nd.uct[p] = nd.UCTwp(p, count);
       }
@@ -136,12 +136,12 @@ int ucbFastBrain(player pl, ucbClass ucb) {
   } while(count<10000);
   //if (uct == ucb1) println("half");
   prize prz=new prize();
-  if (ucb.rootNode.children.size()>=10){  
-    prz.getPrize5FromNodeList(pl.position, ucb.rootNode.children);
-  } else if (ucb.rootNode.children.size()>=4){ 
-    prz.getPrize3FromNodeList(pl.position, ucb.rootNode.children);
+  if (ucb.rootNode.legalMoves.size()>=10){  
+    prz.getPrize5FromNodeList(pl.position, ucb.rootNode.legalMoves);
+  } else if (ucb.rootNode.legalMoves.size()>=4){ 
+    prz.getPrize3FromNodeList(pl.position, ucb.rootNode.legalMoves);
   } else {    
-    prz.getPrize1FromNodeList(pl.position, ucb.rootNode.children);
+    prz.getPrize1FromNodeList(pl.position, ucb.rootNode.legalMoves);
     if (pl.myBoard.attackChanceP()) {
       int k=prz.getMove(1).move;
       pl.yellow=int(k/25);//黄色にするパネルをこの変数に入れておけば、あとでそのように処理をする。
@@ -150,14 +150,14 @@ int ucbFastBrain(player pl, ucbClass ucb) {
       return prz.getMove(1).move;
     }
   }
-  for (int id=ucb.rootNode.children.size()-1; id>=0; id--){
-    uctNode nd =ucb.rootNode.children.get(id);
+  for (int id=ucb.rootNode.legalMoves.size()-1; id>=0; id--){
+    uctNode nd =ucb.rootNode.legalMoves.get(id);
     if(nd!=prz.getMove(1) && nd!=prz.getMove(2) && nd!=prz.getMove(3) && nd!=prz.getMove(4) && nd!=prz.getMove(5)){
-      ucb.rootNode.children.remove(id);
+      ucb.rootNode.legalMoves.remove(id);
     }
   }
   do{
-    uctNode maxNode = getMaxUcbFromNodeList(pl.position, ucb.rootNode.children, count);
+    uctNode maxNode = getMaxUcbFromNodeList(pl.position, ucb.rootNode.legalMoves, count);
     if (maxNode.na >= 1000) {
       break;
     }
@@ -169,14 +169,14 @@ int ucbFastBrain(player pl, ucbClass ucb) {
       maxNode.wa[p] += wp.points[p];//
       maxNode.pa[p] += 1.0*wp.panels[p];//
     }
-    for(uctNode nd : ucb.rootNode.children){
+    for(uctNode nd : ucb.rootNode.legalMoves){
       for (int p=1; p<=4; p++) {
         nd.uct[p] = nd.UCTwp(p, count);
       }
     }
     count++;
   } while(count<20000);
-  prz.getPrize1FromNodeList(pl.position, ucb.rootNode.children);
+  prz.getPrize1FromNodeList(pl.position, ucb.rootNode.legalMoves);
   //println("goal="+prz.getMove(1).move);
   if (pl.myBoard.attackChanceP()) {
     int k=prz.getMove(1).move;

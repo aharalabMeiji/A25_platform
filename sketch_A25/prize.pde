@@ -70,17 +70,18 @@ class prize {
     }
   }
   boolean CompareB(int i, float winrate, float panels) {
+    float rate=0.04f;
     switch(i) {
     case 1:
-      return (w1+p1*0.25<winrate+panels*0.25);
+      return (w1+p1*rate<winrate+panels*rate);
     case 2:
-      return (w2+p2*0.25<winrate+panels*0.25);
+      return (w2+p2*rate<winrate+panels*rate);
     case 3:
-      return (w3+p3*0.25<winrate+panels*0.25);
+      return (w3+p3*rate<winrate+panels*rate);
     case 4:
-      return (w4+p4*0.25<winrate+panels*0.25);
+      return (w4+p4*rate<winrate+panels*rate);
     case 5:
-      return (w4+p4*0.25<winrate+panels*0.25);
+      return (w4+p4*rate<winrate+panels*rate);
     default:
       return false;
     }
@@ -212,23 +213,44 @@ class prize {
       }
     }
   }
-  void getBPrize1FromNodeListWithChanceNode(int player, ArrayList<uctNode> nds) {
+  void getBPrize1FromNodeListWithChanceNode(int player, uctNode nd) {
     w1=w2=w3=w4=w5=0;
     p1=p2=p3=p4=p5=0;
     m1=m2=m3=m4=m5=null;
-    for (uctNode nd0 : nds) {
-      if (nd0.children!=null) {
-        for (uctNode nd : nd0.children) {
-          if (nd.player==player) {
-            float tmpWinrate = nd.wa[player] / nd.na;
-            float tmpPanels = nd.pa[player] / nd.na;
-            if (CompareB(1, tmpWinrate, tmpPanels)) {
-              w1=tmpWinrate;
-              p1=tmpPanels;
-              m1=nd;
-            }
-          }
-        }
+    for (uctNode nd0 : nd.childR) {
+      float tmpWinrate = nd0.wa[player] / nd0.na;
+      float tmpPanels = nd0.pa[player] / nd0.na;
+      if (CompareB(1, tmpWinrate, tmpPanels)) {
+        w1=tmpWinrate;
+        p1=tmpPanels;
+        m1=nd0;
+      }
+    }
+    for (uctNode nd0 : nd.childG) {
+      float tmpWinrate = nd0.wa[player] / nd0.na;
+      float tmpPanels = nd0.pa[player] / nd0.na;
+      if (CompareB(1, tmpWinrate, tmpPanels)) {
+        w1=tmpWinrate;
+        p1=tmpPanels;
+        m1=nd0;
+      }
+    }
+    for (uctNode nd0 : nd.childW) {
+      float tmpWinrate = nd0.wa[player] / nd0.na;
+      float tmpPanels = nd0.pa[player] / nd0.na;
+      if (CompareB(1, tmpWinrate, tmpPanels)) {
+        w1=tmpWinrate;
+        p1=tmpPanels;
+        m1=nd0;
+      }
+    }
+    for (uctNode nd0 : nd.childB) {
+      float tmpWinrate = nd0.wa[player] / nd0.na;
+      float tmpPanels = nd0.pa[player] / nd0.na;
+      if (CompareB(1, tmpWinrate, tmpPanels)) {
+        w1=tmpWinrate;
+        p1=tmpPanels;
+        m1=nd0;
       }
     }
   }
@@ -246,29 +268,48 @@ class prize {
             p1=tmpPanels;
             m1=nd;
           }
-        }
+        }    
       }
     }
   }
-  void getBXPrize1FromNodeListWithChanceNode(ArrayList<uctNode> nds) {
+  void getBXPrize1FromNodeListWithChanceNode(uctNode nd) {
     w1=w2=w3=w4=w5=0;
     p1=p2=p3=p4=p5=0;
     m1=m2=m3=m4=m5=null;
-    for (int player=1; player<=4; player++) {
-      for (uctNode nd0 : nds) {
-        if (nd0.children!=null) {
-          for (uctNode nd : nd0.children) {
-            if (nd.player==player) {
-              float tmpWinrate = nd.wa[player] / nd.na;
-              float tmpPanels = nd.pa[player] / nd.na;
-              if (CompareB(1, tmpWinrate, tmpPanels)) {
-                w1=tmpWinrate;
-                p1=tmpPanels;
-                m1=nd;
-              }
-            }
-          }
-        }
+    for (uctNode nd0 : nd.childR) {
+      float tmpWinrate = nd0.wa[1] / nd0.na;
+      float tmpPanels = nd0.pa[1] / nd0.na;
+      if (CompareB(1, tmpWinrate, tmpPanels)) {
+        w1=tmpWinrate;
+        p1=tmpPanels;
+        m1=nd0;
+      }
+    }
+    for (uctNode nd0 : nd.childG) {
+      float tmpWinrate = nd0.wa[2] / nd0.na;
+      float tmpPanels = nd0.pa[2] / nd0.na;
+      if (CompareB(1, tmpWinrate, tmpPanels)) {
+        w1=tmpWinrate;
+        p1=tmpPanels;
+        m1=nd0;
+      }
+    }
+    for (uctNode nd0 : nd.childW) {
+      float tmpWinrate = nd0.wa[3] / nd0.na;
+      float tmpPanels = nd0.pa[3] / nd0.na;
+      if (CompareB(1, tmpWinrate, tmpPanels)) {
+        w1=tmpWinrate;
+        p1=tmpPanels;
+        m1=nd0;
+      }
+    }
+    for (uctNode nd0 : nd.childB) {
+      float tmpWinrate = nd0.wa[4] / nd0.na;
+      float tmpPanels = nd0.pa[4] / nd0.na;
+      if (CompareB(1, tmpWinrate, tmpPanels)) {
+        w1=tmpWinrate;
+        p1=tmpPanels;
+        m1=nd0;
       }
     }
   }

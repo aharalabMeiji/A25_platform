@@ -7,7 +7,8 @@ class uctNode {
   float[] uct;
   int player=0;
   int move=-1;// attack chance時には、625までの数が入る。
-  ArrayList<uctNode> children=null;
+  ArrayList<uctNode> legalMoves=null;// children から変更。深さ１の子供たち。
+  ArrayList<uctNode> childR,childG,childW,childB;// チャンスノードの代わりに、子供を４つに分ける251018
   String id;
   int depth;
   uctNode parent=null;//必要
@@ -30,7 +31,8 @@ class uctNode {
     //NN=1;
     uct=new float[5];
     for (int p=0; p<5; p++) uct[p]=0;
-    children = null;
+    legalMoves = null;
+    childR = childG = childW = childB = null;
     id="";
     depth=0;    
     attackChanceNode=false;
@@ -92,6 +94,51 @@ class uctNode {
       print(":");
     }
     println();   
+  }
+  boolean totalChildNullP(){
+    if (childR!=null || childG!=null || childW!=null || childB!=null){
+      return false;
+    }
+    return true;
+  }
+  int totalChildSize(){
+    int total=0;
+    if (childR!=null){
+      total += childR.size();
+    }
+    if (childG!=null){
+      total += childG.size();
+    }
+    if (childW!=null){
+      total += childW.size();
+    }
+    if (childB!=null){
+      total += childB.size();
+    }
+    return total;
+  }
+  uctNode totalChildGet(int index){
+    int size=totalChildSize();
+    while (index<0) {
+      index += size;
+    }
+    if (index < childR.size()){
+      return childR.get(index);
+    } 
+    index -= childR.size();
+    if (index < childG.size()){
+      return childG.get(index);
+    } 
+    index -= childG.size();
+    if (index < childW.size()){
+      return childW.get(index);
+    } 
+    index -= childW.size();
+    if (index < childB.size()){
+      return childB.get(index);
+    } 
+    print("illegal call on uctNode::totalChildGet");
+    return null;
   }
 }
 

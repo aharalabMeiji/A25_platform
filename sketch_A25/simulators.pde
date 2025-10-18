@@ -170,9 +170,9 @@ void displayAllStats(int cursor, int player) {
   fill(255, 0, 0);
   text("ALL(click to slide)", utils.unitSize/2, utils.subU);
   fill(0);
-  int loopSize=simulator.rootNode.children.size();
+  int loopSize=simulator.rootNode.legalMoves.size();
   int prev= (cursor+loopSize-1)%loopSize;
-  uctNode tmpNd = simulator.rootNode.children.get(prev);
+  uctNode tmpNd = simulator.rootNode.legalMoves.get(prev);
   int move=tmpNd.move;
   float winrate=tmpNd.wa[player]/tmpNd.na;
   float panels=tmpNd.pa[player]/tmpNd.na;
@@ -180,14 +180,14 @@ void displayAllStats(int cursor, int player) {
   text(msg, utils.unitSize/2, utils.subU+utils.fontSize*1.5);
   buttonPrevSV.setLT(utils.unitSize/2, utils.subU+utils.fontSize*1.5, msg);
   int now = cursor%loopSize;
-  tmpNd = simulator.rootNode.children.get(now);
+  tmpNd = simulator.rootNode.legalMoves.get(now);
   move=tmpNd.move;
   winrate=tmpNd.wa[player]/tmpNd.na;
   panels=tmpNd.pa[player]/tmpNd.na;
   msg = "("+(move%25+1)+"-"+(int(move/25)+1)+") "+nf(winrate, 1, 3)+" : "+ nf(panels, 2, 3);
   text(msg, utils.unitSize/2, utils.subU+utils.fontSize*3);
   int next= (cursor+1)%loopSize;
-  tmpNd = simulator.rootNode.children.get(next);
+  tmpNd = simulator.rootNode.legalMoves.get(next);
   move=tmpNd.move;
   winrate=tmpNd.wa[player]/tmpNd.na;
   panels=tmpNd.pa[player]/tmpNd.na;
@@ -217,7 +217,7 @@ void fullRandomMC() {
     startTime=millis();
     simulator.Participants = new player[5];
     simulator.rootNode = new uctNode();
-    simulator.rootNode.children = new ArrayList<uctNode>();
+    simulator.rootNode.legalMoves = new ArrayList<uctNode>();
     //attackChanceSV = new float[625];//いらなくなる
     //attackChanceSV2 = new float[625];//いらなくなる
     attackChanceVP = new int[625];//
@@ -254,7 +254,7 @@ void fullRandomMC() {
       // vpの初期化と、svの初期化
       simulator.mainBoard.attackChanceP=true;
       simulator.mainBoard.buildVP(simulator.nextPlayer);
-      simulator.rootNode.children.clear();
+      simulator.rootNode.legalMoves.clear();
       attackChanceCursor=1;
       for (int j=0; j<25; j++) { //加えるほう
         for (int i=0; i<25; i++) { //黄色にするほう
@@ -264,14 +264,14 @@ void fullRandomMC() {
             uctNode newNode = new uctNode();
             newNode.setItem(simulator.nextPlayer, k);
             //newNodeに盤面情報を入れるならここ
-            simulator.rootNode.children.add(newNode);
+            simulator.rootNode.legalMoves.add(newNode);
             newNode.parent = simulator.rootNode;
           } else if (simulator.mainBoard.vp[j]>0 && i==j) {//　ルール上これも許される。
             attackChanceVP[k]=1;
             uctNode newNode = new uctNode();
             newNode.setItem(simulator.nextPlayer, k);
             //newNodeに盤面情報を入れるならここ
-            simulator.rootNode.children.add(newNode);
+            simulator.rootNode.legalMoves.add(newNode);
             newNode.parent = simulator.rootNode;
           } else {
             attackChanceVP[k]=0;
@@ -283,20 +283,20 @@ void fullRandomMC() {
       // ///////////////////////////////////////////////////////////////////問題がアタックチャンスでないときの「準備」
       simulator.mainBoard.attackChanceP=false;
       simulator.mainBoard.buildVP(simulator.nextPlayer);
-      simulator.rootNode.children.clear();
+      simulator.rootNode.legalMoves.clear();
       for (int k=0; k<25; k++) {
         if (simulator.mainBoard.vp[k]>0 ) {
           uctNode newNode = new uctNode();
           newNode.setItem(simulator.nextPlayer, k);
           //newNodeに盤面情報を入れるならここ
-          simulator.rootNode.children.add(newNode);
+          simulator.rootNode.legalMoves.add(newNode);
           newNode.parent = simulator.rootNode;
         }
       }
       uctNode newNode = new uctNode();
       newNode.setItem(simulator.nextPlayer, 25);
       //newNodeに盤面情報を入れるならここ
-      simulator.rootNode.children.add(newNode);
+      simulator.rootNode.legalMoves.add(newNode);
       newNode.parent = simulator.rootNode;
       simulationManager = sP.runMC;
     }
@@ -304,7 +304,7 @@ void fullRandomMC() {
     if (simulator.mainBoard.attackChanceP()) {
       // ///////////////////////////////////////////////////////////////////問題がアタックチャンス問題のときの「ループ」
       //int loopLen = simulator.rootNode.children.size();
-      for (uctNode nd : simulator.rootNode.children) {
+      for (uctNode nd : simulator.rootNode.legalMoves) {
         for (int i=0; i<25; i++) {// 問題画面をsimulatorSubにコピー
           simulator.subBoard.s[i].col = simulator.mainBoard.s[i].col;
         }
@@ -340,7 +340,7 @@ void fullRandomMC() {
       if (simulator.mainBoard.simulatorNumber%500==0) {
         simulator.mainBoard.display(10);
         prize prize=new prize();
-        prize.getPrize3FromNodeList(simulator.nextPlayer, simulator.rootNode.children);
+        prize.getPrize3FromNodeList(simulator.nextPlayer, simulator.rootNode.legalMoves);
         if (abs(prevWinrate1-prize.getWinrate(1))<0.0005 && abs(prevWinrate2-prize.getWinrate(2))<0.0005 )
           winrateConvergents=true;
         else
@@ -361,7 +361,7 @@ void fullRandomMC() {
       }
     } else {// 通常時
       ///////////////////////////////////////////////////////////////////通常営業の「ループ」
-      for (uctNode nd : simulator.rootNode.children) {
+      for (uctNode nd : simulator.rootNode.legalMoves) {
         // 問題画面をsimulatorSubにコピー
         for (int k=0; k<25; k++) {
           simulator.subBoard.s[k].col = simulatorStartBoard.get(simulator.StartBoardId).theArray[k];
@@ -414,7 +414,7 @@ void fullRandomMC() {
       }
       if (simulator.mainBoard.simulatorNumber%500==0) {
         prize prize=new prize();
-        prize.getPrize3FromNodeList(simulator.nextPlayer, simulator.rootNode.children);
+        prize.getPrize3FromNodeList(simulator.nextPlayer, simulator.rootNode.legalMoves);
         if (abs(prevWinrate1-prize.getWinrate(1))<0.0005 && abs(prevWinrate2-prize.getWinrate(2))<0.0005 )
           winrateConvergents=true;
         else
@@ -486,11 +486,11 @@ void UCB1(ucbClass ucb) {
         }
       }
       simulator.mainBoard.simulatorNumber=0;
-      ucb.rootNode.children=new ArrayList<uctNode>();
+      ucb.rootNode.legalMoves=new ArrayList<uctNode>();
       for (int k=0; k<625; k++) {//アタックチャンス時の合法手のノードを追加する
         if (attackChanceVP[k]>0) {
           uctNode newNode = new uctNode();
-          ucb.rootNode.children.add(newNode);
+          ucb.rootNode.legalMoves.add(newNode);
           ucb.fullNodes.add(newNode);
           newNode.setItem(simulator.nextPlayer, k);
           simulator.mainBoard.copyBoardToSub(simulator.subBoard);
@@ -502,7 +502,7 @@ void UCB1(ucbClass ucb) {
             newNode.bd[l] = simulator.subBoard.s[l].col;
           }
           newNode.parent = ucb.rootNode;
-          newNode.children = null;
+          //newNode.children = null;
           //とりあえず、最初の１シミュレーションはここで行うのがよさそう。
           winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants);//そこから最後までシミュレーションを行う。
           simulator.mainBoard.simulatorNumber ++;
@@ -513,15 +513,15 @@ void UCB1(ucbClass ucb) {
           //simulator.mainBoard.s[j].marked=1;// この行、様子をみる。実際には、盤面下部に優良データを表示する方針
         }
       }
-    } else {// 通常時の１世代めの追加 // UCT1
+    } else {// 通常時の１世代めの追加 // UCB1
       simulator.mainBoard.attackChanceP=false;
       simulator.mainBoard.buildVP(simulator.nextPlayer);
       simulator.mainBoard.simulatorNumber=0;
-      ucb.rootNode.children=new ArrayList<uctNode>();
+      ucb.rootNode.legalMoves=new ArrayList<uctNode>();
       for (int j=0; j<25; j++) {
         if (simulator.mainBoard.vp[j]>0) {
           uctNode newNode = new uctNode();
-          ucb.rootNode.children.add(newNode);
+          ucb.rootNode.legalMoves.add(newNode);
           ucb.fullNodes.add(newNode);
           newNode.setItem(simulator.nextPlayer, j);
           simulator.mainBoard.copyBoardToSub(simulator.subBoard);
@@ -549,12 +549,10 @@ void UCB1(ucbClass ucb) {
       float maxUct=-100;
       uctNode maxNd=null;
       for (uctNode nd : ucb.fullNodes) {
-        if (nd.children==null) {
-          float newUct = nd.UCTwp(nd.player, simulator.mainBoard.simulatorNumber) ;
-          if (newUct>maxUct) {
-            maxUct=newUct;
-            maxNd=nd;
-          }
+        float newUct = nd.UCTwp(nd.player, simulator.mainBoard.simulatorNumber) ;
+        if (newUct>maxUct) {
+          maxUct=newUct;
+          maxNd=nd;
         }
       }
       if (maxNd==null) {
@@ -591,7 +589,7 @@ void UCB1(ucbClass ucb) {
         // 間歇的に表示を更新する。
         simulator.mainBoard.display(11);// Ucb1 ディスプレイ
         prize prize=new prize();
-        prize.getPrize3FromNodeList(simulator.nextPlayer, ucb.rootNode.children);
+        prize.getPrize3FromNodeList(simulator.nextPlayer, ucb.rootNode.legalMoves);
         displayBestStats(prize,utils.subU+utils.fontSize*1.5);
         showReturnButton();
         showScreenCapture();
@@ -608,16 +606,14 @@ void UCB1(ucbClass ucb) {
         prevPanels1 = prize.getPanels(1);
         prevPanels2=prize.getPanels(2);
       }
-    } else {//通常の場合// UCT1ループ部分
+    } else {//通常の場合// UCB1ループ部分
       float maxUct=-100;
       uctNode maxNd=null;
       for (uctNode nd : ucb.fullNodes) {
-        if (nd.children==null) {
-          float newUct = nd.UCTwp(nd.player, simulator.mainBoard.simulatorNumber) ;
-          if (newUct>maxUct) {
-            maxUct=newUct;
-            maxNd=nd;
-          }
+        float newUct = nd.UCTwp(nd.player, simulator.mainBoard.simulatorNumber) ;
+        if (newUct>maxUct) {
+          maxUct=newUct;
+          maxNd=nd;
         }
       }
       if (maxNd==null) {
@@ -785,7 +781,7 @@ void UCT1() {
       } else {
         answer = uctMctsBrainFirstSimulation(nextPlayer);
         if (answer!=-1) {
-          uctNode nd = uct.rootNode.children.get(0);
+          uctNode nd = uct.rootNode.legalMoves.get(0);
           simulator.mainBoard.sv[answer]=nd.wa[nextPlayer.position] / nd.na;
           simulator.mainBoard.sv2[answer]=nd.pa[nextPlayer.position] / nd.na;
           simulator.mainBoard.s[answer].marked=1;
@@ -805,10 +801,9 @@ void UCT1() {
     int answer=-1;
     answer = uctMctsMainLoop(nextPlayer);
     // 1000回に1回、svにデータを埋める。
-    
     //if (uct.rootNode.attackChanceNode==false) {
     if (nextPlayer.myBoard.attackChanceP==false){
-      for (uctNode nd : uct.rootNode.children) {
+      for (uctNode nd : uct.rootNode.legalMoves) {
         int k = nd.move;//たぶん、kは0～２５
         if (0<=k && k<=25) {
           simulator.mainBoard.sv[k] = nd.wa[nextPlayer.position] / nd.na;
@@ -819,7 +814,7 @@ void UCT1() {
         }
       }
     } else {
-      
+      // アタックチャンスのときには、sv,sv2を使わずに表示する。 
     }
     simulator.mainBoard.simulatorNumber=nextPlayer.myBoard.simulatorNumber;
     showMcts(nextPlayer);//
@@ -833,71 +828,81 @@ void UCT1() {
 }
 
 void printlnAllNodes(uctNode nd, int p) {
-  if (nd.thisIsChanceNode==false){
-    println(""+nd.id+":("+nf(nd.wa[p], 1, 3)+")["+nf(nd.wa[p]/nd.na, 1, 3)+"]:("+nd.na+")");
-  }
-  if (nd.children!=null) {
-    for (uctNode nd0 : nd.children) {
+  //if (nd.thisIsChanceNode==false){
+  println(""+nd.id+":("+nf(nd.wa[p], 1, 3)+")["+nf(nd.wa[p]/nd.na, 1, 3)+"]:("+nd.na+")");
+  //}
+  if (! nd.totalChildNullP()) {
+    for (uctNode nd0 : nd.childR) {
+      printlnAllNodes(nd0, p);
+    }
+    for (uctNode nd0 : nd.childG) {
+      printlnAllNodes(nd0, p);
+    }
+    for (uctNode nd0 : nd.childW) {
+      printlnAllNodes(nd0, p);
+    }
+    for (uctNode nd0 : nd.childB) {
       printlnAllNodes(nd0, p);
     }
   }
 }
 
 void showMcts(player nextPlayer) {
-  uct.prize.getPrize3FromNodeList(nextPlayer.position, uct.rootNode.children);
+  uct.prize.getPrize3FromNodeList(nextPlayer.position, uct.rootNode.legalMoves);
   String[] message=new String[5];
   prize localPrize=new prize();
   uctNode nd1=null, nd2=null, nd3=null, nd4=null;
   nd1 = uct.prize.getMove(1);
-  if (nd1!=null) {
-    for (int p2=1; p2<=4; p2++) {
-      if (nd1.children!=null && nd1.children.size()>0) {
-        localPrize.getBPrize1FromNodeListWithChanceNode(p2, nd1.children);
-        nd2 = localPrize.getMove(1);
-        if (nd2==null) {
-          message[p2]=nd1.id;
-        } else if (nd2.children!=null && nd2.children.size()>0) {
-          localPrize.getBXPrize1FromNodeListWithChanceNode(nd2.children);
-          nd3 = localPrize.getMove(1);
-          if (nd3==null) {
-            message[p2] = nd2.id;
-          } else if (nd3.children!=null && nd3.children.size()>0) {
-            localPrize.getBXPrize1FromNodeListWithChanceNode(nd3.children);
-            nd4 = localPrize.getMove(1);
-            if (nd4!=null)
-              message[p2] = nd4.id;
-            else
-            message[p2] = nd3.id;
-          } else {
-            message[p2] = nd3.id;
-          }
+  if (nd1==null) {
+    return;
+  }
+  for (int p2=1; p2<=4; p2++) {
+    if (nd1.totalChildNullP()==false && nd1.totalChildSize()>0) {
+      localPrize.getBPrize1FromNodeListWithChanceNode(p2, nd1);
+      nd2 = localPrize.getMove(1);
+      if (nd2==null) {
+        message[p2]=nd1.id;
+      } else if (nd2.totalChildNullP()==false && nd2.totalChildSize()>0) {
+        localPrize.getBXPrize1FromNodeListWithChanceNode(nd2);
+        nd3 = localPrize.getMove(1);
+        if (nd3==null) {
+          message[p2] = nd2.id;
+        } else if (nd3.totalChildNullP()==false && nd3.totalChildSize()>0) {
+          localPrize.getBXPrize1FromNodeListWithChanceNode(nd3);
+          nd4 = localPrize.getMove(1);
+          if (nd4!=null)
+            message[p2] = nd4.id;
+          else
+          message[p2] = nd3.id;
         } else {
-          message[p2]=nd2.id;
+          message[p2] = nd3.id;
         }
       } else {
-        message[p2]=nd1.id;
+        message[p2]=nd2.id;
       }
+    } else {
+      message[p2]=nd1.id;
     }
-
-    simulator.mainBoard.display(12);// UCTディスプレイ
-    textAlign(LEFT, CENTER);
-    fill(0);
-    //if (!simulator.mainBoard.attackChanceP){
-    if (nextPlayer.myBoard.attackChanceP==false){
-      text(1.0*simulator.mainBoard.sv[25], utils.mainL, utils.mainU-utils.fontSize);
-      text(1.0*simulator.mainBoard.sv2[25], utils.mainL+utils.fontSize*3, utils.mainU-utils.fontSize);
-    }else {
-      prize prize=new prize();
-      prize.getPrize3FromNodeList(nextPlayer.position, uct.rootNode.children);
-      displayBestStats(prize,utils.subU+utils.fontSize*3);
-      
-    }
-    for (int p=1; p<=4; p++) {
-      text(message[p], utils.unitSize/2, utils.subU+utils.vStep*(p-1));
-    }
-    showReturnButton();
-    showScreenCapture();
   }
+  simulator.mainBoard.display(12);// UCTディスプレイ
+  textAlign(LEFT, CENTER);
+  fill(0);
+  //if (!simulator.mainBoard.attackChanceP){
+  if (nextPlayer.myBoard.attackChanceP==false){
+    text(1.0*simulator.mainBoard.sv[25], utils.mainL, utils.mainU-utils.fontSize);
+    text(1.0*simulator.mainBoard.sv2[25], utils.mainL+utils.fontSize*3, utils.mainU-utils.fontSize);
+  }else {
+    prize prize=new prize();
+    prize.getPrize3FromNodeList(nextPlayer.position, uct.rootNode.legalMoves);
+    displayBestStats(prize,utils.subU+utils.fontSize*3);
+    
+  }
+  for (int p=1; p<=4; p++) {
+    text(message[p], utils.unitSize/2, utils.subU+utils.vStep*(p-1));
+  }
+  showReturnButton();
+  showScreenCapture();
+
 }
 
 void mousePreesedSimulator() {
@@ -912,21 +917,21 @@ void mousePreesedSimulator() {
   }
   if (gameOptions.get("SimMethod")==1) {
     if (buttonPrevSV.mouseOn()) {
-      int loopSize=simulator.rootNode.children.size();
+      int loopSize=simulator.rootNode.legalMoves.size();
       attackChanceCursor = (attackChanceCursor+loopSize-1)%loopSize;
       simulator.mainBoard.display(10);
       prize prize=new prize();
-      prize.getPrize3FromNodeList(simulator.nextPlayer, simulator.rootNode.children);
+      prize.getPrize3FromNodeList(simulator.nextPlayer, simulator.rootNode.legalMoves);
       displayBestStats(prize,utils.subU+utils.fontSize*1.5);
       displayAllStats(attackChanceCursor, simulator.nextPlayer);
       showReturnButton();
       showScreenCapture();
     } else if (buttonNextSV.mouseOn()) {
-      int loopSize=simulator.rootNode.children.size();
+      int loopSize=simulator.rootNode.legalMoves.size();
       attackChanceCursor = (attackChanceCursor+1)%loopSize;
       simulator.mainBoard.display(10);
       prize prize=new prize();
-      prize.getPrize3FromNodeList(simulator.nextPlayer, simulator.rootNode.children);
+      prize.getPrize3FromNodeList(simulator.nextPlayer, simulator.rootNode.legalMoves);
       displayBestStats(prize,utils.subU+utils.fontSize*1.5);
       displayAllStats(attackChanceCursor, simulator.nextPlayer);
       showReturnButton();
