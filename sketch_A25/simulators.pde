@@ -303,7 +303,7 @@ void fullRandomMC() {
   } else if (simulationManager == sP.runMC) {
     if (simulator.mainBoard.attackChanceP()) {
       // ///////////////////////////////////////////////////////////////////問題がアタックチャンス問題のときの「ループ」
-      //int loopLen = simulator.rootNode.children.size();
+      //int loopLen = simulator.rootNode.legalMoves.size();
       for (uctNode nd : simulator.rootNode.legalMoves) {
         for (int i=0; i<25; i++) {// 問題画面をsimulatorSubにコピー
           simulator.subBoard.s[i].col = simulator.mainBoard.s[i].col;
@@ -502,7 +502,7 @@ void UCB1(ucbClass ucb) {
             newNode.bd[l] = simulator.subBoard.s[l].col;
           }
           newNode.parent = ucb.rootNode;
-          //newNode.children = null;
+          //newNode.childR = newNode.childG = newNode.childW = newNode.childB = null;
           //とりあえず、最初の１シミュレーションはここで行うのがよさそう。
           winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants);//そこから最後までシミュレーションを行う。
           simulator.mainBoard.simulatorNumber ++;

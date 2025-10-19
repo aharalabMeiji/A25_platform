@@ -4,7 +4,7 @@
 int uctMctsMainLoopVer2(player pl) {
   // console に計算経過を出力（マストではない。）
   if (pl.myBoard.simulatorNumber%1000==10) {
-    uct.prize.getPrize3FromNodeList(pl.position, uct.rootNode.children);
+    uct.prize.getPrize3FromNodeList(pl.position, uct.rootNode.legalMoves);
     if (uct.prize.getMove(1)!=null) {
       //float winRate=uct.prize.w1;
       //float error = sqrt(winRate*(1.0-winRate)/uct.prize.getMove(1).na)*1.96;
@@ -40,14 +40,14 @@ int uctMctsMainLoopVer2(player pl) {
   //println("uctMctsBrain:シミュレーション回数"+pl.myBoard.simulatorNumber);
   uct.maxNodeWinrate=0.0;
   int localStartTime=millis();
-  for (uctNode ancestor : uct.rootNode.children) {
+  for (uctNode ancestor : uct.rootNode.legalMoves) {
     pl.myBoard.simulatorNumber ++;
     ancestor.myThread = new Thread(new uctMctsSubTask(pl, ancestor));
   }
-  for (uctNode ancestor : uct.rootNode.children) {
+  for (uctNode ancestor : uct.rootNode.legalMoves) {
     ancestor.myThread.start();
   }
-  for (uctNode ancestor : uct.rootNode.children) {
+  for (uctNode ancestor : uct.rootNode.legalMoves) {
     try {
       ancestor.myThread.join();
     } catch (InterruptedException e) {
@@ -144,7 +144,7 @@ class uctMctsSubTask implements Runnable {
         //  }
         //{
         //boolean atsuzokkou=false;
-        //for (uctNode ancestor2 : uct.rootNode.children) {
+        //for (uctNode ancestor2 : uct.rootNode.legalMoves) {
         //  if (ancestor2.activeNodes.size()>0) {
         //    atsuzokkou=true;
         //    break;

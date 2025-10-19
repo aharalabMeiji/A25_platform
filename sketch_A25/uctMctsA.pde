@@ -83,7 +83,7 @@ int uctMctsABrainPreparation(player pl) {
   uct.newNode = null;
   uct.rootNode = new uctNode();
   uct.rootNode.parent = null;
-  uct.rootNode.children = new ArrayList<uctNode>();
+  uct.rootNode.legalMoves = new ArrayList<uctNode>();
   pl.myBoard.copyBoardToBd(uct.rootNode.bd);
   //uct.rootNodeに子供をぶら下げる
   if (pl.myBoard.attackChanceP()==false) {
@@ -94,7 +94,7 @@ int uctMctsABrainPreparation(player pl) {
         uct.newNode.setItem(pl.position, k);
         uct.newNode.id = uct.rootNode.id + (":"+kifu.playerColCode[pl.position]+nf(k+1, 2));
         uct.newNode.depth = 1;
-        uct.rootNode.children.add(uct.newNode);//ルートノードにぶら下げる
+        uct.rootNode.legalMoves.add(uct.newNode);//ルートノードにぶら下げる
         uct.newNode.parent = null;//逆伝播をここで切りたいので
         pl.myBoard.copyBoardToSub(uct.mainBoard);
         uct.mainBoard.move(pl.position, k);//一手進める
@@ -108,7 +108,7 @@ int uctMctsABrainPreparation(player pl) {
     uct.newNode.setItem(pl.position, 25);
     uct.newNode.id = uct.rootNode.id+(":"+kifu.playerColCode[pl.position]+nf(26, 2));
     uct.newNode.depth = 1;
-    uct.rootNode.children.add(uct.newNode);//ルートノードにぶら下げる
+    uct.rootNode.legalMoves.add(uct.newNode);//ルートノードにぶら下げる
     uct.newNode.parent = null;//
     pl.myBoard.copyBoardToSub(uct.mainBoard);
     uct.mainBoard.copyBoardToBd(uct.newNode.bd);
@@ -124,7 +124,7 @@ int uctMctsABrainPreparation(player pl) {
           uct.newNode.setItem(pl.position, k);
           uct.newNode.id = uct.rootNode.id + (":"+kifu.playerColCode[pl.position]+nf(j+1, 2)) + (":Y"+nf(i+1, 2));
           uct.newNode.depth = 1;
-          uct.rootNode.children.add(uct.newNode);//ぶら下げる
+          uct.rootNode.legalMoves.add(uct.newNode);//ぶら下げる
           uct.newNode.parent = null;//
           pl.myBoard.copyBoardToSub(uct.mainBoard);
           uct.mainBoard.move(pl.position, j);// 1手着手する
@@ -144,7 +144,7 @@ int uctMctsABrainPreparation(player pl) {
 
 int uctMctsABrainFirstSimulation(int _count, player pl) {
   //println("uctMctsBrain:まずは500回シミュレーションして、余りに成績が悪いものはここでカットする。");
-  for (uctNode nd : uct.rootNode.children) {
+  for (uctNode nd : uct.rootNode.legalMoves) {
     // パラメータの初期化
     nd.na=0;
     for (int p=1; p<=4; p++) {
@@ -164,29 +164,29 @@ int uctMctsABrainFirstSimulation(int _count, player pl) {
       }
     }
   }
-  uct.prize.getPrize1FromNodeList(pl.position, uct.rootNode.children);// 勝率の最善をピックアップ
+  uct.prize.getPrize1FromNodeList(pl.position, uct.rootNode.legalMoves);// 勝率の最善をピックアップ
   float bestWr=uct.prize.w1;
   if (bestWr>0.0 && bestWr<1.0) {
     float lowerBound = bestWr - sqrt(bestWr*(1.0-bestWr)/uct.prize.m1.na)*4.0;// 最善勝率より、かなり低い枝はカットする。
     if (lowerBound>0) {
-      int listSize=uct.rootNode.children.size();
+      int listSize=uct.rootNode.legalMoves.size();
       for (int id=listSize-1; id>=0; id--) {
-        uctNode nd=uct.rootNode.children.get(id);
+        uctNode nd=uct.rootNode.legalMoves.get(id);
         //print((nd.move%25)+1, int(nd.move/25)+1, nd.wa[pl.position]/nd.na, lowerBound);
         if (nd.wa[pl.position]/nd.na < lowerBound) {
-          uct.rootNode.children.remove(nd);
+          uct.rootNode.legalMoves.remove(nd);
           //print(":deleted");
         }
         //println();
       }
     }
   } else if (bestWr>=1.0) {// 優勝が決まっているときには、優勝を逃す可能性のある枝を切る。
-    int listSize=uct.rootNode.children.size();
+    int listSize=uct.rootNode.legalMoves.size();
     for (int id=listSize-1; id>=0; id--) {
-      uctNode nd=uct.rootNode.children.get(id);
+      uctNode nd=uct.rootNode.legalMoves.get(id);
       //print((nd.move%25)+1, int(nd.move/25)+1, nd.wa[pl.position]/nd.na, "1");
       if (nd.wa[pl.position]/nd.na < 1.0) {
-        uct.rootNode.children.remove(nd);
+        uct.rootNode.legalMoves.remove(nd);
         //print(":deleted");
       }
       //println();
@@ -194,13 +194,13 @@ int uctMctsABrainFirstSimulation(int _count, player pl) {
   }
   //アクティブなノードをリスト化する。
   uct.activeNodes.clear();
-  for (uctNode nd : uct.rootNode.children) {
+  for (uctNode nd : uct.rootNode.legalMoves) {
     uct.activeNodes.add(nd);
   }
-  if (uct.rootNode.children.size()==1) {
+  if (uct.rootNode.legalMoves.size()==1) {
     /// 選択肢が一つの時には、それを答える。
-    int ret=uct.rootNode.children.get(0).move;
-    //println("["+uct.rootNode.children.get(0).id+"]");
+    int ret=uct.rootNode.legalMoves.get(0).move;
+    //println("["+uct.rootNode.legalMoves.get(0).id+"]");
     if (pl.myBoard.attackChanceP()) {
       pl.yellow = int(ret/25);
       return ret%25;
@@ -213,7 +213,7 @@ int uctMctsABrainFirstSimulation(int _count, player pl) {
 
 int uctMctsAMainLoop(player pl, int expandThreshold, int terminateThreshold, int _depth) {
     // console に計算経過を出力（マストではない。）
-    uct.prize.getPrize3FromNodeList(pl.position, uct.rootNode.children);
+    uct.prize.getPrize3FromNodeList(pl.position, uct.rootNode.legalMoves);
     String str=""+(pl.myBoard.simulatorNumber/1000)+":(";
     if (uct.prize.getMove(1)!=null) {
       str += (""+uct.prize.getMove(1).id);
