@@ -407,11 +407,32 @@ int uctMctsAMainLoop(player pl, int expandThreshold, int terminateThreshold, int
             }
           } while (true);
           // バックプロパゲートここまで
-          if (uctMaxNode.children==null) {//
-            uctMaxNode.children = new ArrayList<uctNode>();
+          if (uctMaxNode.childR==null) {//
+            uctMaxNode.childR = new ArrayList<uctNode>();
           } 
-          
-          uctMaxNode.children.add(bestNode);//親ノードにぶら下げた
+          if (uctMaxNode.childG==null) {//
+            uctMaxNode.childR = new ArrayList<uctNode>();
+          } 
+          if (uctMaxNode.childW==null) {//
+            uctMaxNode.childR = new ArrayList<uctNode>();
+          } 
+          if (uctMaxNode.childB==null) {//
+            uctMaxNode.childR = new ArrayList<uctNode>();
+          } 
+          switch(p){
+            case 1:
+            uctMaxNode.childR.add(bestNode);//親ノードにぶら下げた
+            break;
+            case 2:
+            uctMaxNode.childG.add(bestNode);//親ノードにぶら下げた
+            break;
+            case 3:
+            uctMaxNode.childW.add(bestNode);//親ノードにぶら下げた
+            break;
+            case 4:
+            uctMaxNode.childB.add(bestNode);//親ノードにぶら下げた
+            break;
+          }
           uct.activeNodes.add(bestNode);//アクティブなノードのリストに追加
           //println("新しいノード("+bestNode.id+")を追加");
          

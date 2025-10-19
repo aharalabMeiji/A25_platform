@@ -309,14 +309,45 @@ class uctMctsSubTask implements Runnable {
                 } while (true);
                 // バックプロパゲートここまで
               }// 全部の新しいノードを５回ずつ試行した。
-              if (uctMaxNode.children==null) {//
-                uctMaxNode.children = new ArrayList<uctNode>();
+              if (uctMaxNode.childR==null) {//
+                uctMaxNode.childR = new ArrayList<uctNode>();
+              }
+              if (uctMaxNode.childG==null) {//
+                uctMaxNode.childG = new ArrayList<uctNode>();
+              }
+              if (uctMaxNode.childW==null) {//
+                uctMaxNode.childW = new ArrayList<uctNode>();
+              }
+              if (uctMaxNode.childB==null) {//
+                uctMaxNode.childB = new ArrayList<uctNode>();
               }
               for (uctNode nd : tmpUctNodes) {
-                uctMaxNode.children.add(nd);//親ノードにぶら下げた
-                if (nd.depth==uct.depthMax){
-                  localEndNodes ++;
-                }
+                switch(p){
+                  case 1: 
+                  uctMaxNode.childR.add(nd);//親ノードにぶら下げた
+                  if (nd.depth==uct.depthMax){
+                    localEndNodes ++;
+                  }
+                  break;
+                  case 2: 
+                  uctMaxNode.childG.add(nd);//親ノードにぶら下げた
+                  if (nd.depth==uct.depthMax){
+                    localEndNodes ++;
+                  }
+                  break;
+                  case 3: 
+                  uctMaxNode.childW.add(nd);//親ノードにぶら下げた
+                  if (nd.depth==uct.depthMax){
+                    localEndNodes ++;
+                  }
+                  break;
+                  case 4: 
+                  uctMaxNode.childB.add(nd);//親ノードにぶら下げた
+                  if (nd.depth==uct.depthMax){
+                    localEndNodes ++;
+                  }
+                  break;
+                }  
                 ancestor.activeNodes.add(nd);//アクティブなノードのリストに追加
                 nd.ancestor = ancestor;
                 //println("新しいノード("+nd.id+")を追加");
