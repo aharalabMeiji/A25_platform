@@ -793,12 +793,52 @@ void showContents() {
         text(captionText, left, top);
         left += (textWidth(captionText)+utils.hSpace);
         //
-        buttonText = "[with Cancel]";
+        buttonText = "[5k]";
         button buttonCancelling1=new button();
         buttonCancelling1.setLT(left, top, buttonText);
         buttonCancelling1.setItem("wCancel", 1);
         buttons.add(buttonCancelling1);
         if (gameOptions.get("wCancel")==1) fill(255, 0, 0);
+        else fill(0);
+        text(buttonText, left, top);
+        left += (textWidth(buttonText)+utils.hSpace);
+        //
+        buttonText = "[10k]";
+        button buttonCancelling3=new button();
+        buttonCancelling3.setLT(left, top, buttonText);
+        buttonCancelling3.setItem("wCancel", 3);
+        buttons.add(buttonCancelling3);
+        if (gameOptions.get("wCancel")==3) fill(255, 0, 0);
+        else fill(0);
+        text(buttonText, left, top);
+        left += (textWidth(buttonText)+utils.hSpace);
+        //
+        buttonText = "[20k]";
+        button buttonCancelling4=new button();
+        buttonCancelling4.setLT(left, top, buttonText);
+        buttonCancelling4.setItem("wCancel", 4);
+        buttons.add(buttonCancelling4);
+        if (gameOptions.get("wCancel")==4) fill(255, 0, 0);
+        else fill(0);
+        text(buttonText, left, top);
+        left += (textWidth(buttonText)+utils.hSpace);
+        //
+        buttonText = "[50k]";
+        button buttonCancelling5=new button();
+        buttonCancelling5.setLT(left, top, buttonText);
+        buttonCancelling5.setItem("wCancel", 5);
+        buttons.add(buttonCancelling5);
+        if (gameOptions.get("wCancel")==5) fill(255, 0, 0);
+        else fill(0);
+        text(buttonText, left, top);
+        left += (textWidth(buttonText)+utils.hSpace);
+        //
+        buttonText = "[100k]";
+        button buttonCancelling6=new button();
+        buttonCancelling6.setLT(left, top, buttonText);
+        buttonCancelling6.setItem("wCancel", 6);
+        buttons.add(buttonCancelling6);
+        if (gameOptions.get("wCancel")==6) fill(255, 0, 0);
         else fill(0);
         text(buttonText, left, top);
         left += (textWidth(buttonText)+utils.hSpace);
@@ -814,6 +854,54 @@ void showContents() {
         left += (textWidth(buttonText)+utils.hSpace);
       }
     }
+    //
+    top += utils.vStep;
+    left=utils.hOffset;
+    //
+    captionText = "Absence next:";
+    fill(0);
+    text(captionText, left, top);
+    left += (textWidth(captionText)+utils.hSpace);
+    //
+    buttonText = "[R]";
+    button buttonAbsence1R=new button();
+    buttonAbsence1R.setLT(left, top, buttonText);
+    buttonAbsence1R.setItem("Absence1R", 1-gameOptions.get("Absence1R"));
+    buttons.add(buttonAbsence1R);
+    if (gameOptions.get("Absence1R")==1) fill(255, 0, 0);
+    else fill(0);
+    text(buttonText, left, top);
+    left += (textWidth(buttonText)+utils.hSpace);
+    //
+    buttonText = "[G]";
+    button buttonAbsence1G=new button();
+    buttonAbsence1G.setLT(left, top, buttonText);
+    buttonAbsence1G.setItem("Absence1G", 1-gameOptions.get("Absence1G"));
+    buttons.add(buttonAbsence1G);
+    if (gameOptions.get("Absence1G")==1) fill(255, 0, 0);
+    else fill(0);
+    text(buttonText, left, top);
+    left += (textWidth(buttonText)+utils.hSpace);
+    //
+    buttonText = "[W]";
+    button buttonAbsence1W=new button();
+    buttonAbsence1W.setLT(left, top, buttonText);
+    buttonAbsence1W.setItem("Absence1W", 1-gameOptions.get("Absence1W"));
+    buttons.add(buttonAbsence1W);
+    if (gameOptions.get("Absence1W")==1) fill(255, 0, 0);
+    else fill(0);
+    text(buttonText, left, top);
+    left += (textWidth(buttonText)+utils.hSpace);
+    //
+    buttonText = "[B]";
+    button buttonAbsence1B=new button();
+    buttonAbsence1B.setLT(left, top, buttonText);
+    buttonAbsence1B.setItem("Absence1B", 1-gameOptions.get("Absence1B"));
+    buttons.add(buttonAbsence1B);
+    if (gameOptions.get("Absence1B")==1) fill(255, 0, 0);
+    else fill(0);
+    text(buttonText, left, top);
+    left += (textWidth(buttonText)+utils.hSpace);
     //
     top += utils.vStep;
     left=utils.hOffset;

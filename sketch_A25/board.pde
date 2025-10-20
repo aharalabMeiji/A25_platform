@@ -111,6 +111,10 @@ class board {
         if (gameOptions.get("wCancel")==1) simMethod += "/wCancel)";
         else simMethod += "/woCancel)";
       }
+      if(gameOptions.get("Absence1R")==1) simMethod += "<R>";
+      if(gameOptions.get("Absence1G")==1) simMethod += "<G>";
+      if(gameOptions.get("Absence1W")==1) simMethod += "<W>";
+      if(gameOptions.get("Absence1B")==1) simMethod += "<B>";
       text(simMethod, utils.subL, utils.subU+utils.vStep);
       stroke(0);
       fill(utils.playerColor[simulator.nextPlayer]);

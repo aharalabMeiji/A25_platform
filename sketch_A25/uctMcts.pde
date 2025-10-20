@@ -1,5 +1,4 @@
 int uctMctsBrain(player pl) { //
-  //候補を一つに絞ってもよいが、いつでも同じ動作になってしまうので、複数個の候補を重みをつけておくとよい。
   //ここから
   startTime=millis();
   int answer = uctMctsStartingJoseki(pl);
@@ -371,7 +370,25 @@ int uctMctsMainLoop(player pl) {
             //旧来のノード構成で、ぶら下げる場所を4か所作る（メモリとスピードの節約のため）
             if (uctMaxNode.move==25) {// パス選択のノードには、繰り返し同じプレイヤーを扱わない。
               if (uctMaxNode.player==p) {
-                print("pass.");
+                print("[pass]");
+                continue;
+              }
+            }
+            if (uctMaxNode.depth==1){
+              if (gameOptions.get("Absence1R")==1 && p==1){
+                print("[R otachi]");
+                continue;
+              }
+              if (gameOptions.get("Absence1G")==1 && p==2){
+                print("[G otachi]");
+                continue;
+              }
+              if (gameOptions.get("Absence1W")==1 && p==3){
+                print("[W otachi]");
+                continue;
+              }
+              if (gameOptions.get("Absence1B")==1 && p==4){
+                print("[B otachi]");
                 continue;
               }
             }

@@ -749,19 +749,17 @@ void UCT1() {
         uct.terminateThreshold = uct.expandThreshold*10000000;
       }
       uct.depthMax=gameOptions.get("depthMax");
-      if (gameOptions.get("wCancel")==1) {
-        if (uct.depthMax==2) {
-          uct.cancelCountMax=2;
-        } else if (uct.depthMax==3) {
-          uct.cancelCountMax=6;
-        } else if (uct.depthMax==4){
-          uct.cancelCountMax=20;
-        } else if (uct.depthMax==5){
-          uct.cancelCountMax=60;
-        } else {
-          uct.cancelCountMax=180;
-        }
-      } else {
+      if (gameOptions.get("wCancel")==1){
+        uct.cancelCountMax=5;
+      } else if (gameOptions.get("wCancel")==3) {
+        uct.cancelCountMax=10;
+      } else if (gameOptions.get("wCancel")==4){
+        uct.cancelCountMax=20;
+      } else if (gameOptions.get("wCancel")==5){
+        uct.cancelCountMax=50;
+      } else if (gameOptions.get("wCancel")==6){
+        uct.cancelCountMax=100;        
+      } else if (gameOptions.get("wCancel")==2){
         uct.cancelCountMax=100000;
       }
     }
