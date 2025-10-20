@@ -542,6 +542,23 @@ void UCB1(ucbClass ucb) {
           simulator.mainBoard.s[j].marked=0;
         }
       }
+      uctNode newNode = new uctNode();
+      ucb.rootNode.legalMoves.add(newNode);
+      ucb.fullNodes.add(newNode);
+      newNode.setItem(simulator.nextPlayer, 25);
+      //
+      simulator.mainBoard.copyBoardToSub(simulator.subBoard);
+      for (int k=0; k<25; k++) {
+        newNode.bd[k] = simulator.subBoard.s[k].col;
+      }
+      newNode.parent = ucb.rootNode;
+      //最初の１シミュレーション
+      winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants);//そこから最後までシミュレーションを行う。
+      simulator.mainBoard.simulatorNumber ++;
+      newNode.na=1;//　初回につき代入、以後+=
+      for (int p=1; p<5; p++) {
+        newNode.wa[p] = wp.points[p];//　初回につき代入、以後+=
+      }
     }
     simulationManager=sP.setStartBoard;
   } else if (simulationManager==sP.setStartBoard) {// UCB1ループ部分
@@ -790,7 +807,11 @@ void UCT1() {
           showReturnButton();
           showScreenCapture();
         } else {
-          println("uct ", uct.expandThreshold, uct.terminateThreshold, uct.depthMax, uct.cancelCountMax);
+          if(uct.cancelCountMax>1000){
+            println("uct:E"+uct.expandThreshold+"D"+uct.depthMax+"woC");//+"T"+uct.terminateThreshold
+          } else {
+            println("uct:E"+uct.expandThreshold+"D"+uct.depthMax+"C"+uct.cancelCountMax);
+          }
           uct.simulationTag=10000;
           simulationManager=sP.setStartBoard;
         }
