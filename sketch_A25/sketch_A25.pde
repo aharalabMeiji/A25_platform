@@ -38,6 +38,10 @@ void setup() {
   gameOptions.set("Times", 1);// 1:once, 100:100 times, 10000:10000 times
   gameOptions.set("SimTimes", 2);
   gameOptions.set("SimMethod", 1);
+  gameOptions.set("Absence0R", 0);
+  gameOptions.set("Absence0G", 0);
+  gameOptions.set("Absence0W", 0);
+  gameOptions.set("Absence0B", 0);
   gameOptions.set("Absence1R", 0);
   gameOptions.set("Absence1G", 0);
   gameOptions.set("Absence1W", 0);

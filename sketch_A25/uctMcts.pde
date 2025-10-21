@@ -368,28 +368,65 @@ int uctMctsMainLoop(player pl) {
             //uctMctsMainLoop block 02-2-4-1
             // チャンスノードを別途ぶら下げる案を却下。
             //旧来のノード構成で、ぶら下げる場所を4か所作る（メモリとスピードの節約のため）
-            if (uctMaxNode.move==25) {// パス選択のノードには、繰り返し同じプレイヤーを扱わない。
-              if (uctMaxNode.player==p) {
+            if (ancestor.move==25){// パス選択のノードには、繰り返し同じプレイヤーを扱わない。
+              if (uctMaxNode.depth==1 && ancestor.player==p) {
                 print("[pass]");
                 continue;
               }
-            }
-            if (uctMaxNode.depth==1){
-              if (gameOptions.get("Absence1R")==1 && p==1){
-                print("[R otachi]");
-                continue;
+              if (uctMaxNode.depth==1){
+                if (gameOptions.get("Absence0R")==1 && p==1){
+                  print("[R]");
+                  continue;
+                }
+                if (gameOptions.get("Absence0G")==1 && p==2){
+                  print("[G]");
+                  continue;
+                }
+                if (gameOptions.get("Absence0W")==1 && p==3){
+                  print("[W]");
+                  continue;
+                }
+                if (gameOptions.get("Absence0B")==1 && p==4){
+                  print("[B]");
+                  continue;
+                }
               }
-              if (gameOptions.get("Absence1G")==1 && p==2){
-                print("[G otachi]");
-                continue;
+              else if (uctMaxNode.depth==2){
+                if (gameOptions.get("Absence1R")==1 && p==1){
+                  print("[R]");
+                  continue;
+                }
+                if (gameOptions.get("Absence1G")==1 && p==2){
+                  print("[G]");
+                  continue;
+                }
+                if (gameOptions.get("Absence1W")==1 && p==3){
+                  print("[W]");
+                  continue;
+                }
+                if (gameOptions.get("Absence1B")==1 && p==4){
+                  print("[B]");
+                  continue;
+                }
               }
-              if (gameOptions.get("Absence1W")==1 && p==3){
-                print("[W otachi]");
-                continue;
-              }
-              if (gameOptions.get("Absence1B")==1 && p==4){
-                print("[B otachi]");
-                continue;
+            } else {
+              if (uctMaxNode.depth==1){
+                if (gameOptions.get("Absence1R")==1 && p==1){
+                  print("[R]");
+                  continue;
+                }
+                if (gameOptions.get("Absence1G")==1 && p==2){
+                  print("[G]");
+                  continue;
+                }
+                if (gameOptions.get("Absence1W")==1 && p==3){
+                  print("[W]");
+                  continue;
+                }
+                if (gameOptions.get("Absence1B")==1 && p==4){
+                  print("[B]");
+                  continue;
+                }
               }
             }
             //uctMctsMainLoop block 02-2-4-2
@@ -405,7 +442,7 @@ int uctMctsMainLoop(player pl) {
               // アタックチャンスでないときの、子ノードのぶらさげ//ただいま展開中
               uctMaxNode.attackChanceNode=false;
 
-              for (int k=0; k<25; k++) {   // 合法手ごとのforループ
+              for (int k=0; k<25; k++) {   // 合法手ごとのforループ、パスは含まない
                 if (uct.mainBoard.vp[k]>0) { // 子ノードをぶら下げる
                   uct.newNode = new uctNode();
                   uct.newNode.setItem(p, k);

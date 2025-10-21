@@ -858,6 +858,54 @@ void showContents() {
     top += utils.vStep;
     left=utils.hOffset;
     //
+    captionText = "Absence now:";
+    fill(0);
+    text(captionText, left, top);
+    left += (textWidth(captionText)+utils.hSpace);
+    //
+    buttonText = "[R]";
+    button buttonAbsence0R=new button();
+    buttonAbsence0R.setLT(left, top, buttonText);
+    buttonAbsence0R.setItem("Absence0R", 1-gameOptions.get("Absence0R"));
+    buttons.add(buttonAbsence0R);
+    if (gameOptions.get("Absence0R")==1) fill(255, 0, 0);
+    else fill(0);
+    text(buttonText, left, top);
+    left += (textWidth(buttonText)+utils.hSpace);
+    //
+    buttonText = "[G]";
+    button buttonAbsence0G=new button();
+    buttonAbsence0G.setLT(left, top, buttonText);
+    buttonAbsence0G.setItem("Absence0G", 1-gameOptions.get("Absence0G"));
+    buttons.add(buttonAbsence0G);
+    if (gameOptions.get("Absence0G")==1) fill(255, 0, 0);
+    else fill(0);
+    text(buttonText, left, top);
+    left += (textWidth(buttonText)+utils.hSpace);
+    //
+    buttonText = "[W]";
+    button buttonAbsence0W=new button();
+    buttonAbsence0W.setLT(left, top, buttonText);
+    buttonAbsence0W.setItem("Absence0W", 1-gameOptions.get("Absence0W"));
+    buttons.add(buttonAbsence0W);
+    if (gameOptions.get("Absence0W")==1) fill(255, 0, 0);
+    else fill(0);
+    text(buttonText, left, top);
+    left += (textWidth(buttonText)+utils.hSpace);
+    //
+    buttonText = "[B]";
+    button buttonAbsence0B=new button();
+    buttonAbsence0B.setLT(left, top, buttonText);
+    buttonAbsence0B.setItem("Absence0B", 1-gameOptions.get("Absence0B"));
+    buttons.add(buttonAbsence0B);
+    if (gameOptions.get("Absence0B")==1) fill(255, 0, 0);
+    else fill(0);
+    text(buttonText, left, top);
+    left += (textWidth(buttonText)+utils.hSpace);
+    //
+    top += utils.vStep;
+    left=utils.hOffset;
+    //
     captionText = "Absence next:";
     fill(0);
     text(captionText, left, top);
