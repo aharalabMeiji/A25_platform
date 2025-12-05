@@ -154,15 +154,25 @@ class uctClass{
     }
     //println("親にさかのぼってデータを更新する");
     uctNode nd0 = uctMaxNode;
+    uctNode ndC = null;
     do {
       if (nd0.parent!=null) {
+        
+        ndC = nd0;
         nd0 = nd0.parent;
         // chance node であるなしに関わらず、上に合流するのが「旧式」//uct.chanceNodeOn=false;
         // chance node から上にあげるときには式を変更するのが「新式」//uct.chanceNodeOn=true;
         nd0.na ++;
-        for (int p=1; p<=4; p++) {
-          nd0.wa[p] += this.randomPlayWinPoint.points[p];//2回め以降は和
-          nd0.pa[p] += this.randomPlayWinPoint.panels[p];//2回め以降は和
+        if(uct.chanceNodeOn){// 「新式」//uct.chanceNodeOn=true;
+          for (int p=1; p<=4; p++) {
+            nd0.wa[p] += this.randomPlayWinPoint.points[p];//2回め以降は和
+            nd0.pa[p] += this.randomPlayWinPoint.panels[p];//2回め以降は和
+          }
+        } else {//「旧式」//uct.chanceNodeOn=false;
+          for (int p=1; p<=4; p++) {
+            nd0.wa[p] += this.randomPlayWinPoint.points[p];//2回め以降は和
+            nd0.pa[p] += this.randomPlayWinPoint.panels[p];//2回め以降は和
+          }
         }
         //println("uctMctsBrain:→　ノード ",nd0.id, "のデータ("+nd0.wa[1]+","+nd0.wa[2]+","+nd0.wa[3]+","+nd0.wa[4]+")/"+nd0.na);
       } else {// ルートまでたどり着いた、の意味
