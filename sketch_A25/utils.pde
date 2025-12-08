@@ -164,6 +164,7 @@ class uctClass{
         // chance node から上にあげるときには式を変更するのが「新式」//uct.chanceNodeOn=true;
         nd0.na ++;
         if(uct.chanceNodeOn){// 「新式」//uct.chanceNodeOn=true;
+        //println("new type");
           for (int p=1; p<=4; p++) {
             nd0.wa[p] += this.randomPlayWinPoint.points[p];//2回め以降は和
             nd0.pa[p] += this.randomPlayWinPoint.panels[p];//2回め以降は和

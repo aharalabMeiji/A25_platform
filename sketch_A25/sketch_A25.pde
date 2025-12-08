@@ -46,6 +46,7 @@ void setup() {
   gameOptions.set("Absence1G", 0);
   gameOptions.set("Absence1W", 0);
   gameOptions.set("Absence1B", 0);
+  gameOptions.set("chanceNodeOn", 0);
   
   buttons = new ArrayList<button>();
   buttonReturnToMenu = new button();

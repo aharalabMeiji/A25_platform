@@ -950,6 +950,32 @@ void showContents() {
     else fill(0);
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
+    
+    //
+    if (gameOptions.get("SimMethod") == 3 ){
+      top += utils.vStep;
+      left=utils.hOffset;
+      //
+      buttonText = "[Chance Nodes Off]";
+      button buttonChanceNode=new button();
+      buttonChanceNode.setLT(left, top, buttonText);
+      buttonChanceNode.setItem("chanceNodeOn", 0);
+      buttons.add(buttonChanceNode);
+      if (gameOptions.get("chanceNodeOn")==0) fill(255, 0, 0);
+      else fill(0);
+      text(buttonText, left, top);
+      left += (textWidth(buttonText)+utils.hSpace);
+      //
+      buttonText = "[Chance Nodes On]";
+      buttonChanceNode=new button();
+      buttonChanceNode.setLT(left, top, buttonText);
+      buttonChanceNode.setItem("chanceNodeOn", 1);
+      buttons.add(buttonChanceNode);
+      if (gameOptions.get("chanceNodeOn")==1) fill(255, 0, 0);
+      else fill(0);
+      text(buttonText, left, top);
+      left += (textWidth(buttonText)+utils.hSpace);
+      }
     //
     top += utils.vStep;
     left=utils.hOffset;

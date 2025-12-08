@@ -764,6 +764,7 @@ void UCT1() {
         uct.cancelCountMax=100000;
       }
     }
+    uct.chanceNodeOn=(gameOptions.get("chanceNodeOn")==1);
     simulator.Participants = new player[5];
     for (int p=1; p<5; p++) {
       simulator.Participants[p] = new player(p, "random", brain.Random);
