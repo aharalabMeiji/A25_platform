@@ -717,6 +717,7 @@ void UCT1() {
   int SimTimes = gameOptions.get("SimTimes");
   if (simulationManager==sP.GameStart) {
     startTime=millis();
+    uct.chanceNodeOn=false;
     if (SimTimes == 21) {
       uct.expandThreshold=10;
       uct.terminateThreshold = uct.expandThreshold*1000000;
