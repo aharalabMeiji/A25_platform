@@ -151,6 +151,7 @@ class uctClass{
     for (int p=1; p<=4; p++) {
       uctMaxNode.wa[p] += this.randomPlayWinPoint.points[p];//2回め以降は和
       uctMaxNode.pa[p] += this.randomPlayWinPoint.panels[p];//2回め以降は和
+      // このタイミングで、「差」を計算しておく。
     }
     //println("親にさかのぼってデータを更新する");
     uctNode nd0 = uctMaxNode;
@@ -164,10 +165,19 @@ class uctClass{
         // chance node から上にあげるときには式を変更するのが「新式」//uct.chanceNodeOn=true;
         nd0.na ++;
         if(uct.chanceNodeOn){// 「新式」//uct.chanceNodeOn=true;
-        //println("new type");
+          if( ndC.player == 1){ // 次が赤の手番
+            // 論理的には、 nd0.childRにぶら下がっているノードのwa[p]の総和をwaR[p]に入れる感じ。
+            // ただ、それをやっていると、計算量が増えるので、wa[p]の差分だけを記録して、それを加える。
+            nd0.naR ++ ;// nd0.childRにぶら下がっているノードのnaの総和と一致するハズ。
+            for (int p=1; p<=4; p++) {
+              nd0.waR[p] = ndC.wa[p];// 前段で「差」を計算しておいて、それを加える。
+              nd0.paR[p] = ndC.pa[p];
+            }
+          }
           for (int p=1; p<=4; p++) {
-            nd0.wa[p] += this.randomPlayWinPoint.points[p];//2回め以降は和
-            nd0.pa[p] += this.randomPlayWinPoint.panels[p];//2回め以降は和
+            nd0.wa[p] = (nd0.waR[p]/nd0.naR + nd0.waG[p]/nd0.naG + nd0.waW[p]/nd0.naW + nd0.waB[p]/nd0.naB)*0.25;//
+            nd0.pa[p] = (nd0.paR[p]/nd0.naR + nd0.paG[p]/nd0.naG + nd0.paW[p]/nd0.naW + nd0.paB[p]/nd0.naB)*0.25;//
+            // このタイミングで、「差」を計算しておく。
           }
         } else {//「旧式」//uct.chanceNodeOn=false;
           for (int p=1; p<=4; p++) {

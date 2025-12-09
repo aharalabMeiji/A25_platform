@@ -1,7 +1,10 @@
 class uctNode {
   float na=1;// このノードの試行回数
+  float naR=1, naG=1, naW=1, naB=1;// このノードの試行回数
   float[] wa;// このノードの（誰にとっての）勝利回数
+  float[] waR, waG, waW, waB ;// このノードの（誰にとっての）勝利回数
   float[] pa;// このノードの（誰にとっての）累積パネル数
+  float[] paR, paG, paW, paB;// このノードの（誰にとっての）累積パネル数
   int []bd;// 盤面// ここをboard 型にするかどうか。
   //float NN=1;// 累計試行回数
   float[] uct;
@@ -23,10 +26,14 @@ class uctNode {
   }
   void initUctNode(){
     na=1;
-    wa=new float[5];
-    for (int p=0; p<5; p++) wa[p]=0;
-    pa=new float[5];
-    for (int p=0; p<5; p++) pa[p]=0;
+    wa=new float[5];waR=new float[5];waG=new float[5];waW=new float[5];waB=new float[5];
+    for (int p=0; p<5; p++) {
+      wa[p]=0;waR[p]=0;waG[p]=0;waW[p]=0;waB[p]=0;
+    }
+    pa=new float[5];paR=new float[5];paG=new float[5];paW=new float[5];paB=new float[5];
+    for (int p=0; p<5; p++) {
+      pa[p]=0;paR[p]=0;paG[p]=0;paW[p]=0;paB[p]=0;
+    }
     bd= new int[25];
     //NN=1;
     uct=new float[5];
