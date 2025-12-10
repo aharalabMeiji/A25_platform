@@ -135,6 +135,8 @@ class uctClass{
     }
   }
   void randomPlayAndBackPropagate(uctNode uctMaxNode){
+    float[] wDeltas = new float[5];
+    float[] pDeltas = new float[5];
     //println("uctMctsBrain:",uctMaxNode.id, "のノードを調べる");
     //println("uctMctsBrain:uct.mainBoardへ盤面をコピー");
     if (this.randomPlayBoard==null){
@@ -149,35 +151,56 @@ class uctClass{
     //println("uctMctsBrain:nd.wa[p]、nd.pa[p]、nd.uct[p]");
     uctMaxNode.na ++;//
     for (int p=1; p<=4; p++) {
-      uctMaxNode.wa[p] += this.randomPlayWinPoint.points[p];//2回め以降は和
-      uctMaxNode.pa[p] += this.randomPlayWinPoint.panels[p];//2回め以降は和
+      wDeltas[p] = this.randomPlayWinPoint.points[p];
+      uctMaxNode.wa[p] += wDeltas[p];//2回め以降は和
+      pDeltas[p] = this.randomPlayWinPoint.panels[p];
+      uctMaxNode.pa[p] += pDeltas[p];//2回め以降は和
       // このタイミングで、「差」を計算しておく。
     }
     //println("親にさかのぼってデータを更新する");
     uctNode nd0 = uctMaxNode;
     uctNode ndC = null;
     do {
-      if (nd0.parent!=null) {
-        
+      if (nd0.parent!=null) {        
         ndC = nd0;
         nd0 = nd0.parent;
         // chance node であるなしに関わらず、上に合流するのが「旧式」//uct.chanceNodeOn=false;
         // chance node から上にあげるときには式を変更するのが「新式」//uct.chanceNodeOn=true;
         nd0.na ++;
         if(uct.chanceNodeOn){// 「新式」//uct.chanceNodeOn=true;
-          if( ndC.player == 1){ // 次が赤の手番
+          if( ndC.player == 1){ // 次がRの手番
             // 論理的には、 nd0.childRにぶら下がっているノードのwa[p]の総和をwaR[p]に入れる感じ。
             // ただ、それをやっていると、計算量が増えるので、wa[p]の差分だけを記録して、それを加える。
             nd0.naR ++ ;// nd0.childRにぶら下がっているノードのnaの総和と一致するハズ。
             for (int p=1; p<=4; p++) {
-              nd0.waR[p] = ndC.wa[p];// 前段で「差」を計算しておいて、それを加える。
-              nd0.paR[p] = ndC.pa[p];
+              nd0.waR[p] += wDeltas[p];// 前段で「差」を計算しておいて、それを加える。
+              nd0.paR[p] += pDeltas[p];
+            }
+          } else if( ndC.player == 2){ // 次がGの手番
+            nd0.naG ++ ;// nd0.childRにぶら下がっているノードのnaの総和と一致するハズ。
+            for (int p=1; p<=4; p++) {
+              nd0.waG[p] += wDeltas[p];// 前段で「差」を計算しておいて、それを加える。
+              nd0.paG[p] += pDeltas[p];
+            }
+          } else if( ndC.player == 3){ // 次がWの手番
+            nd0.naW ++ ;// nd0.childRにぶら下がっているノードのnaの総和と一致するハズ。
+            for (int p=1; p<=4; p++) {
+              nd0.waW[p] += wDeltas[p];// 前段で「差」を計算しておいて、それを加える。
+              nd0.paW[p] += pDeltas[p];
+            }
+          } else if( ndC.player == 4){ // 次がBの手番
+            nd0.naB ++ ;// nd0.childRにぶら下がっているノードのnaの総和と一致するハズ。
+            for (int p=1; p<=4; p++) {
+              nd0.waB[p] += wDeltas[p];// 前段で「差」を計算しておいて、それを加える。
+              nd0.paB[p] += pDeltas[p];
             }
           }
           for (int p=1; p<=4; p++) {
-            nd0.wa[p] = (nd0.waR[p]/nd0.naR + nd0.waG[p]/nd0.naG + nd0.waW[p]/nd0.naW + nd0.waB[p]/nd0.naB)*0.25;//
-            nd0.pa[p] = (nd0.paR[p]/nd0.naR + nd0.paG[p]/nd0.naG + nd0.paW[p]/nd0.naW + nd0.paB[p]/nd0.naB)*0.25;//
             // このタイミングで、「差」を計算しておく。
+            wDeltas[p] = (nd0.waR[p]/nd0.naR + nd0.waG[p]/nd0.naG + nd0.waW[p]/nd0.naW + nd0.waB[p]/nd0.naB)*0.25 - nd0.wa[p];
+            nd0.wa[p] += wDeltas[p];//
+            pDeltas[p] = (nd0.paR[p]/nd0.naR + nd0.paG[p]/nd0.naG + nd0.paW[p]/nd0.naW + nd0.paB[p]/nd0.naB)*0.25 - nd0.pa[p];
+            nd0.pa[p] += nd0.pa[p];//         
           }
         } else {//「旧式」//uct.chanceNodeOn=false;
           for (int p=1; p<=4; p++) {
