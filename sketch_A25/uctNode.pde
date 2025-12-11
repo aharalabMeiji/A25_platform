@@ -1,6 +1,6 @@
 class uctNode {
   float na=1;// このノードの試行回数
-  float naR=1, naG=1, naW=1, naB=1;// このノードの試行回数
+  float naR=0, naG=0, naW=0, naB=0;// このノードの試行回数
   float[] wa;// このノードの（誰にとっての）勝利回数
   float[] waR, waG, waW, waB ;// このノードの（誰にとっての）勝利回数
   float[] pa;// このノードの（誰にとっての）累積パネル数

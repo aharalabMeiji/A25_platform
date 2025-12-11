@@ -162,7 +162,7 @@ class uctClass{
     uctNode ndC = null;
     do {
       if (nd0.parent!=null) {        
-        ndC = nd0;
+        ndC = nd0; //<>//
         nd0 = nd0.parent;
         // chance node であるなしに関わらず、上に合流するのが「旧式」//uct.chanceNodeOn=false;
         // chance node から上にあげるときには式を変更するのが「新式」//uct.chanceNodeOn=true;
@@ -197,10 +197,10 @@ class uctClass{
           }
           for (int p=1; p<=4; p++) {
             // このタイミングで、「差」を計算しておく。
-            wDeltas[p] = (nd0.waR[p]/nd0.naR + nd0.waG[p]/nd0.naG + nd0.waW[p]/nd0.naW + nd0.waB[p]/nd0.naB)*0.25 - nd0.wa[p];
+            wDeltas[p] = (nd0.waR[p]/nd0.naR + nd0.waG[p]/nd0.naG + nd0.waW[p]/nd0.naW + nd0.waB[p]/nd0.naB)*0.25 *nd0.na - nd0.wa[p];
             nd0.wa[p] += wDeltas[p];//
-            pDeltas[p] = (nd0.paR[p]/nd0.naR + nd0.paG[p]/nd0.naG + nd0.paW[p]/nd0.naW + nd0.paB[p]/nd0.naB)*0.25 - nd0.pa[p];
-            nd0.pa[p] += nd0.pa[p];//         
+            pDeltas[p] = (nd0.paR[p]/nd0.naR + nd0.paG[p]/nd0.naG + nd0.paW[p]/nd0.naW + nd0.paB[p]/nd0.naB)*0.25 *nd0.na - nd0.pa[p];
+            nd0.pa[p] += pDeltas[p];//         
           }
         } else {//「旧式」//uct.chanceNodeOn=false;
           for (int p=1; p<=4; p++) {
