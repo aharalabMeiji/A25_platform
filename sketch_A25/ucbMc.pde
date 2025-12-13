@@ -74,7 +74,7 @@ int ucbMcBrain(player pl) {
           newNode.bd[b] = ucbMcSubboard.s[b].col;
         }
         //println("そこから最後までシミュレーションを行う");
-        winPoints wp = playSimulatorToEnd(ucbMcSubboard, ucbMcParticipants);//
+        winPoints wp = playSimulatorToEnd(ucbMcSubboard, ucbMcParticipants, 0);//
         //println("初回は代入");
         newNode.na=1;//
         for (int p=1; p<=4; p++) {
@@ -85,7 +85,7 @@ int ucbMcBrain(player pl) {
         }
       }
     }
-    //println("UCTループここから");
+    //println("UCBループここから");
     while (true) {
       pl.myBoard.simulatorNumber ++;//シミュレーション回数
       //println("uct値が最大となるノードを見つける");
@@ -110,7 +110,7 @@ int ucbMcBrain(player pl) {
       for (int i=0; i<25; i++) {
         ucbMcSubboard.s[i].col = uctMaxNode.bd[i];
       }
-      winPoints wp = playSimulatorToEnd(ucbMcSubboard, ucbMcParticipants);
+      winPoints wp = playSimulatorToEnd(ucbMcSubboard, ucbMcParticipants, 0);
       uctMaxNode.na ++;//2回め以降は和
       for (int p=1; p<=4; p++) {
         uctMaxNode.wa[p] += wp.points[p];//2回め以降は和
@@ -169,7 +169,7 @@ int ucbMcBrain(player pl) {
         }
       }
       //println("そこから最後までシミュレーションを行う");
-      winPoints wp = playSimulatorToEnd(ucbMcSubboard, ucbMcParticipants);//
+      winPoints wp = playSimulatorToEnd(ucbMcSubboard, ucbMcParticipants, 0);//
       //println("初回は代入");
       nd.na=1;//
       for (int p=1; p<=4; p++) {
@@ -201,7 +201,7 @@ int ucbMcBrain(player pl) {
         for (int i=0; i<25; i++) {
           ucbMcSubboard.s[i].col = uctMaxNode.bd[i];
         }
-        winPoints wp = playSimulatorToEnd(ucbMcSubboard, ucbMcParticipants);
+        winPoints wp = playSimulatorToEnd(ucbMcSubboard, ucbMcParticipants, 0);
         uctMaxNode.na ++;//2回め以降は和
         for (int p=1; p<=4; p++) {
           uctMaxNode.wa[p] += wp.points[p];//2回め以降は和

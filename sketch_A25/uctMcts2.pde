@@ -172,7 +172,7 @@ class uctMctsSubTask implements Runnable {
         //println("uctMctsBrain:uctMainBoardへ盤面をコピー");
         uctMainBoard.copyBdToBoard(uctMaxNode.bd);
         //println("uctMctsBrain:uctMainBoardを最後まで打ち切る");
-        uctWinPoint = playSimulatorToEnd(uctMainBoard, uct.participants);
+        uctWinPoint = playSimulatorToEnd(uctMainBoard, uct.participants, 0);
         //println("uctMctsBrain:nd.wa[p]、nd.pa[p]、nd.uct[p]");
         uctMaxNode.na ++;//
         for (int p=1; p<=4; p++) {
@@ -283,7 +283,7 @@ class uctMctsSubTask implements Runnable {
                 for (int count=0; count<5; count++) {
                   uctSubBoard.copyBdToBoard(nd.bd);
                   //println("uctMctsBrain:そこから最後までシミュレーションを行う");
-                  winPoints wpwp = playSimulatorToEnd(uctSubBoard, uct.participants);//
+                  winPoints wpwp = playSimulatorToEnd(uctSubBoard, uct.participants, 0);//
                   nd.na ++;//
                   pl.myBoard.simulatorNumber ++;
                   for (int pp=1; pp<=4; pp++) {

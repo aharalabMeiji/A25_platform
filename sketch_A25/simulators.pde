@@ -65,20 +65,26 @@ class winPoints {
   }
 }
 
-winPoints playSimulatorToEnd(board sub, player[] _participants) {// 引数名かぶり
+winPoints playSimulatorToEnd(board sub, player[] _participants, int nextplayer) {// 
   // TODO アタックチャンスの判定と処理
   // n(0)=4 -> AC_flag==false -> アタックチャンス, AC_flag=true
   //
   int remaining=0;
   for (int i=0; i<25; i++) {
-    if (sub.s[i].col==0 || sub.s[i].col==5) remaining ++;// 黄色パネルは空欄あつかい
+    if (sub.s[i].col==0 || sub.s[i].col==5) remaining ++;// 黄色(5)パネルは空欄あつかい
   }
   //println("playSimulatorToEnd:残り枚数は"+remaining);
   //int count=0;
   if (remaining>0) {
     //println("playSimulatorToEnd:ループ開始");
     do {
-      int simulatorNextPlayer = int(random(4))+1;
+      int simulatorNextPlayer;
+      if (nextplayer==0){// 次の手番をランダムに定める
+        simulatorNextPlayer = int(random(4))+1;
+      } else {// 次の手番をnextplayerによって定め、以降はランダムに定める
+        simulatorNextPlayer = nextplayer;
+        nextplayer=0;
+      }
       if (1<= simulatorNextPlayer && simulatorNextPlayer<=4 ) {
         //println("playSimulatorToEnd:player変数が持っている盤面をsubにコピーする。");
         sub.copyBoardToSub(_participants[simulatorNextPlayer].myBoard);
@@ -313,7 +319,7 @@ void fullRandomMC() {
         int i = int(k/25);
         simulator.subBoard.move(simulator.nextPlayer, j);// 1手着手する
         simulator.subBoard.setCol(i, 5);// 黄色を置く
-        winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants);//そこから最後までシミュレーションを行う。
+        winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants, 0);//そこから最後までシミュレーションを行う。
         nd.na ++;
         for (int p=1; p<=4; p++) {
           nd.wa[p] += wp.points[p];// 総勝ち数
@@ -372,7 +378,7 @@ void fullRandomMC() {
             nd.bd[k] = simulator.subBoard.s[k].col;
           }
           //println(simulator.nextPlayer, j, "*");
-          winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants);//そこから最後までシミュレーションを行う。
+          winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants, 0);//そこから最後までシミュレーションを行う。
           nd.na ++;
           for (int p=1; p<=4; p++) {
             nd.wa[p] += wp.points[p];
@@ -387,7 +393,7 @@ void fullRandomMC() {
           for (int k=0; k<25; k++) {
             nd.bd[k] = simulator.subBoard.s[k].col;
           }
-          winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants);//そこから最後までシミュレーションを行う。
+          winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants, 0);//そこから最後までシミュレーションを行う。
           nd.na ++;
           for (int p=1; p<=4; p++) {
             nd.wa[p] += wp.points[p];
@@ -504,7 +510,7 @@ void UCB1(ucbClass ucb) {
           newNode.parent = ucb.rootNode;
           //newNode.childR = newNode.childG = newNode.childW = newNode.childB = null;
           //とりあえず、最初の１シミュレーションはここで行うのがよさそう。
-          winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants);//そこから最後までシミュレーションを行う。
+          winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants, 0);//そこから最後までシミュレーションを行う。
           simulator.mainBoard.simulatorNumber ++;
           newNode.na=1;//　初回につき代入、以後+=
           for (int p=1; p<5; p++) {
@@ -531,7 +537,7 @@ void UCB1(ucbClass ucb) {
           }
           newNode.parent = ucb.rootNode;
           //とりあえず、最初の１シミュレーションはここで行うのがよさそう。
-          winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants);//そこから最後までシミュレーションを行う。
+          winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants, 0);//そこから最後までシミュレーションを行う。
           simulator.mainBoard.simulatorNumber ++;
           newNode.na=1;//　初回につき代入、以後+=
           for (int p=1; p<5; p++) {
@@ -553,7 +559,7 @@ void UCB1(ucbClass ucb) {
       }
       newNode.parent = ucb.rootNode;
       //最初の１シミュレーション
-      winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants);//そこから最後までシミュレーションを行う。
+      winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants, 0);//そこから最後までシミュレーションを行う。
       simulator.mainBoard.simulatorNumber ++;
       newNode.na=1;//　初回につき代入、以後+=
       for (int p=1; p<5; p++) {
@@ -580,7 +586,7 @@ void UCB1(ucbClass ucb) {
         for (int k=0; k<25; k++) {//ノードの盤面をsimulator.subBoardへコピ－
           simulator.subBoard.s[k].col = maxNd.bd[k] ;
         }
-        winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants);//そこから最後までシミュレーションを行う。
+        winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants, 0);//そこから最後までシミュレーションを行う。
         simulator.mainBoard.simulatorNumber ++;
         maxNd.na ++ ;//
         for (int p=1; p<5; p++) {
@@ -640,7 +646,7 @@ void UCB1(ucbClass ucb) {
         for (int k=0; k<25; k++) {//ノードの盤面をsimulator.subBoardへコピ－
           simulator.subBoard.s[k].col = maxNd.bd[k] ;
         }
-        winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants);//そこから最後までシミュレーションを行う。
+        winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants, 0);//そこから最後までシミュレーションを行う。
         simulator.mainBoard.simulatorNumber ++;
         maxNd.na ++ ;//　
         for (int p=1; p<5; p++) {

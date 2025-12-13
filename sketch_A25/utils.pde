@@ -147,7 +147,8 @@ class uctClass{
     }
     this.randomPlayBoard.copyBdToBoard(uctMaxNode.bd);
     //println("uctMctsBrain:uct.mainBoardを最後まで打ち切る");
-    this.randomPlayWinPoint = playSimulatorToEnd(this.randomPlayBoard, this.participants);
+    int nextplayer = int(random(4))+1;
+    this.randomPlayWinPoint = playSimulatorToEnd(this.randomPlayBoard, this.participants, nextplayer);
     //println("uctMctsBrain:nd.wa[p]、nd.pa[p]、nd.uct[p]");
     uctMaxNode.na ++;//
     for (int p=1; p<=4; p++) {

@@ -154,7 +154,7 @@ int uctMctsABrainFirstSimulation(int _count, player pl) {
     //println("uctMctsBrain:最後までシミュレーションを500回行う");
     for (int count=0; count<_count; count++) {
       uct.mainBoard.copyBdToBoard(nd.bd);
-      uct.winPoint = playSimulatorToEnd(uct.mainBoard, uct.participants);//
+      uct.winPoint = playSimulatorToEnd(uct.mainBoard, uct.participants, 0);//
       pl.myBoard.simulatorNumber ++;
       nd.na ++;//
       for (int p=1; p<=4; p++) {
@@ -274,7 +274,7 @@ int uctMctsAMainLoop(player pl, int expandThreshold, int terminateThreshold, int
     //println("uctMctsBrain:uct.mainBoardへ盤面をコピー");
     uct.mainBoard.copyBdToBoard(uctMaxNode.bd);
     //println("uctMctsBrain:uct.mainBoardを最後まで打ち切る");
-    uct.winPoint = playSimulatorToEnd(uct.mainBoard, uct.participants);
+    uct.winPoint = playSimulatorToEnd(uct.mainBoard, uct.participants, 0);
     //println("uctMctsBrain:nd.wa[p]、nd.pa[p]、nd.uct[p]");
     uctMaxNode.na ++;//
     for (int p=1; p<=4; p++) {
@@ -378,7 +378,7 @@ int uctMctsAMainLoop(player pl, int expandThreshold, int terminateThreshold, int
             for (int count=0; count<500; count++) {
               uct.subBoard.copyBdToBoard(nd.bd);
               //println("uctMctsBrain:そこから最後までシミュレーションを行う");
-              winPoints wpwp = playSimulatorToEnd(uct.subBoard, uct.participants);//
+              winPoints wpwp = playSimulatorToEnd(uct.subBoard, uct.participants, 0);//
               nd.na ++;//
               pl.myBoard.simulatorNumber ++;
               for (int pp=1; pp<=4; pp++) {

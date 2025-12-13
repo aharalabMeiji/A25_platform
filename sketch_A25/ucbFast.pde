@@ -58,7 +58,7 @@ int ucbFastBrain(player pl, ucbClass ucb) {
           ucb.subBoard.copyBoardToBd(newNode.bd);
           newNode.attackChanceNode=true;
           //1回実行する
-          winPoints wp = playSimulatorToEnd(ucb.subBoard, ucbMcParticipants);
+          winPoints wp = playSimulatorToEnd(ucb.subBoard, ucbMcParticipants, 0);
           newNode.na=1;//
           for (int p=1; p<=4; p++) {
             newNode.wa[p] = wp.points[p];//初回は代入
@@ -80,7 +80,7 @@ int ucbFastBrain(player pl, ucbClass ucb) {
         ucb.subBoard.copyBoardToBd(newNode.bd);     
         //newNode.attackChanceNode=false;//デフォルト
         //1回実行する
-        winPoints wp = playSimulatorToEnd(ucb.subBoard, ucbMcParticipants);
+        winPoints wp = playSimulatorToEnd(ucb.subBoard, ucbMcParticipants, 0);
         newNode.na=1;//
         for (int p=1; p<=4; p++) {
           newNode.wa[p] = wp.points[p];//初回は代入
@@ -99,7 +99,7 @@ int ucbFastBrain(player pl, ucbClass ucb) {
       pl.myBoard.copyBoardToBd(newNode.bd);
       //newNode.attackChanceNode=false;//デフォルト
       //1回実行する
-      winPoints wp = playSimulatorToEnd(ucb.subBoard, ucbMcParticipants);
+      winPoints wp = playSimulatorToEnd(ucb.subBoard, ucbMcParticipants, 0);
       newNode.na=1;//
       for (int p=1; p<=4; p++) {
         newNode.wa[p] = wp.points[p];//初回は代入
@@ -121,7 +121,7 @@ int ucbFastBrain(player pl, ucbClass ucb) {
     }
     ucb.subsubBoard.copyBdToBoard(maxNode.bd);
     //1回実行する
-    winPoints wp = playSimulatorToEnd(ucb.subsubBoard, ucbMcParticipants);
+    winPoints wp = playSimulatorToEnd(ucb.subsubBoard, ucbMcParticipants, 0);
     maxNode.na ++;//
     for (int p=1; p<=4; p++) {
       maxNode.wa[p] += wp.points[p];//初回は代入
@@ -163,7 +163,7 @@ int ucbFastBrain(player pl, ucbClass ucb) {
     }
     ucb.subsubBoard.copyBdToBoard(maxNode.bd);
     //1回実行する
-    winPoints wp = playSimulatorToEnd(ucb.subsubBoard, ucbMcParticipants);
+    winPoints wp = playSimulatorToEnd(ucb.subsubBoard, ucbMcParticipants, 0);
     maxNode.na ++;//
     for (int p=1; p<=4; p++) {
       maxNode.wa[p] += wp.points[p];//
