@@ -1,5 +1,5 @@
 class uctNode {
-  float na=1;// このノードの試行回数
+  float na=0;// このノードの試行回数
   float naR=0, naG=0, naW=0, naB=0;// このノードの試行回数
   float[] wa;// このノードの（誰にとっての）勝利回数
   float[] waR, waG, waW, waB ;// このノードの（誰にとっての）勝利回数

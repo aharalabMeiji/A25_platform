@@ -174,7 +174,7 @@ class uctMctsSubTask implements Runnable {
         //println("uctMctsBrain:uctMainBoardを最後まで打ち切る");
         uctWinPoint = playSimulatorToEnd(uctMainBoard, uct.participants, 0);
         //println("uctMctsBrain:nd.wa[p]、nd.pa[p]、nd.uct[p]");
-        uctMaxNode.na ++;//
+        uctMaxNode.na ++;//旧対応
         for (int p=1; p<=4; p++) {
           uctMaxNode.wa[p] += uctWinPoint.points[p];//2回め以降は和
           uctMaxNode.pa[p] += uctWinPoint.panels[p];//2回め以降は和

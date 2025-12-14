@@ -127,7 +127,6 @@ int uctMctsBrainPreparation(player pl) {
 
 int uctMctsBrainFirstSimulation(player pl) {
   int _count = uct.expandThreshold;
-  //println("uctMctsBrain:まずは_count回シミュレーションして、余りに成績が悪いものはここでカットする。");
   for (uctNode nd : uct.rootNode.legalMoves) {
     // パラメータの初期化
     nd.na=0; nd.naR=0; nd.naG=0; nd.naW=0; nd.naB=0;
@@ -141,47 +140,46 @@ int uctMctsBrainFirstSimulation(player pl) {
       int nextplayer = int(random(4))+1;
       uct.mainBoard.copyBdToBoard(nd.bd);
       uct.winPoint = playSimulatorToEnd(uct.mainBoard, uct.participants, nextplayer);//ここは次手番をnextplayerとする。
-      pl.myBoard.simulatorNumber ++;
-      nd.na ++;//
-      if(nextplayer==1){
-        nd.naR ++;
-        for (int p=1; p<=4; p++) {
-          nd.waR[p] += uct.winPoint.points[p];//
-          nd.paR[p] += uct.winPoint.panels[p];//
+      if(uct.chanceNodeOn){// 「新式」//uct.chanceNodeOn=true;
+        pl.myBoard.simulatorNumber ++;
+        nd.na ++;
+        if(nextplayer==1){
+          nd.naR ++;
+          for (int p=1; p<=4; p++) {
+            nd.waR[p] += uct.winPoint.points[p];//
+            nd.paR[p] += uct.winPoint.panels[p];//
+          }
+        } else if(nextplayer==2){
+          nd.naG ++;
+          for (int p=1; p<=4; p++) {
+            nd.waG[p] += uct.winPoint.points[p];//
+            nd.paG[p] += uct.winPoint.panels[p];//
+          }
+        } else if(nextplayer==3){
+          nd.naW ++;
+          for (int p=1; p<=4; p++) {
+            nd.waW[p] += uct.winPoint.points[p];//
+            nd.paW[p] += uct.winPoint.panels[p];//
+          }
+        } else { //if(nextplayer==4){
+          nd.naB ++;
+          for (int p=1; p<=4; p++) {
+            nd.waB[p] += uct.winPoint.points[p];//
+            nd.paB[p] += uct.winPoint.panels[p];//
+          }
         }
-      } else if(nextplayer==2){
-        nd.naG ++;
+        nd.na ++;//
+        // nd.na = nd.naR + nd.naG + nd.naW + nd.naB;
         for (int p=1; p<=4; p++) {
-          nd.waG[p] += uct.winPoint.points[p];//
-          nd.paG[p] += uct.winPoint.panels[p];//
+          nd.wa[p] = uct.averageBackPropagate(nd.waR[p],nd.naR,nd.waG[p],nd.naG,nd.waW[p],nd.naW,nd.waB[p],nd.naB,nd.na);
+          nd.pa[p] = uct.averageBackPropagate(nd.paR[p],nd.naR,nd.paG[p],nd.naG,nd.paW[p],nd.naW,nd.paB[p],nd.naB,nd.na);
         }
-      } else if(nextplayer==3){
-        nd.naW ++;
+      } else {// 旧式
+        nd.na ++;//
         for (int p=1; p<=4; p++) {
-          nd.waW[p] += uct.winPoint.points[p];//
-          nd.paW[p] += uct.winPoint.panels[p];//
+          nd.wa[p] += uct.winPoint.points[p];//
+          nd.pa[p] += uct.winPoint.panels[p];//
         }
-      } else { //if(nextplayer==4){
-        nd.naB ++;
-        for (int p=1; p<=4; p++) {
-          nd.waB[p] += uct.winPoint.points[p];//
-          nd.paB[p] += uct.winPoint.panels[p];//
-        }
-      }
-      // nd.na = nd.naR + nd.naG + nd.naW + nd.naB;
-      for (int p=1; p<=4; p++) {
-        float sum = 0f;
-        if (nd.naR!=0) sum += nd.waR[p]/nd.naR*0.25;
-        if (nd.naG!=0) sum += nd.waG[p]/nd.naG*0.25;
-        if (nd.naW!=0) sum += nd.waW[p]/nd.naW*0.25;
-        if (nd.naB!=0) sum += nd.waB[p]/nd.naB*0.25;
-        nd.wa[p] = sum * nd.na;//
-        sum = 0f;
-        if (nd.naR!=0) sum += nd.paR[p]/nd.naR*0.25;
-        if (nd.naG!=0) sum += nd.paG[p]/nd.naG*0.25;
-        if (nd.naW!=0) sum += nd.paW[p]/nd.naW*0.25;
-        if (nd.naB!=0) sum += nd.paB[p]/nd.naB*0.25;
-        nd.pa[p] = sum * nd.na;//
       }
     }
   }
@@ -668,6 +666,9 @@ int returnBestChildFromRoot(player pl, uctNode root) {
         bestMove = nd1.move;
       }
     }
+  }
+  if (bestMove==-1) {
+    println("No root's legal moves"); //<>//
   }
   return bestMove;//
 }
