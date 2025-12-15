@@ -126,7 +126,6 @@ int uctMctsBrainPreparation(player pl) {
 }
 
 int uctMctsBrainFirstSimulation(player pl) {
-  int _count = uct.expandThreshold;
   for (uctNode nd : uct.rootNode.legalMoves) {
     // パラメータの初期化
     nd.na=0; nd.naR=0; nd.naG=0; nd.naW=0; nd.naB=0;
@@ -136,13 +135,12 @@ int uctMctsBrainFirstSimulation(player pl) {
     }
     //println("uctMctsBrain:最後までシミュレーションを_count回行う");
     // ここをUCBにするアイディアもあるが、結局淘汰されるようなので、０でなければなんでもいいみたい。
-    //for (int count=0; count<_count; count++) {
     for (int count=0; count<4; count++) {
       int nextplayer = count+1;
       uct.mainBoard.copyBdToBoard(nd.bd);
       uct.winPoint = playSimulatorToEnd(uct.mainBoard, uct.participants, nextplayer);//ここは次手番をnextplayerとする。
+      pl.myBoard.simulatorNumber ++;
       if(uct.chanceNodeOn){// 「新式」//uct.chanceNodeOn=true;
-        pl.myBoard.simulatorNumber ++;
         if(nextplayer==1){
           nd.naR ++;
           for (int p=1; p<=4; p++) {
@@ -212,12 +210,6 @@ int uctMctsBrainFirstSimulation(player pl) {
   //  }
   //}
   //アクティブなノードをリスト化する。
-  //ここがバージョン１
-  //uct.activeNodes.clear();
-  //for (uctNode nd : uct.rootNode.legalMoves) {
-  //  uct.activeNodes.add(nd);
-  //  println(nd.id+":"+(nd.wa[pl.position]/nd.na));
-  //}
   //ここがバージョン２//深さ１のノードのそれぞれにアクティブなノードをぶら下げる。
   for (uctNode nd : uct.rootNode.legalMoves) {
     nd.activeNodes = new ArrayList<uctNode>();
@@ -278,15 +270,6 @@ int uctMctsMainLoop(player pl) {
   //uctMctsMainLoop block 02
   for (int repeat=0; repeat<1000; repeat++) {
     //uctMctsMainLoop block 02-1
-    //   version1
-    //for (uctNode nd : uct.activeNodes) {
-    //  for (int p=1; p<=4; p++) {
-    //    // シミュレーション総回数はpl.myBoard.simulatorNumber
-    //    // 平均パネル枚数に0.04かけて、加算している。
-    //    //nd.uct[p] = nd.UCTwp(p, pl.myBoard.simulatorNumber);
-    //    nd.uct[p] = nd.UCTa(p, pl.myBoard.simulatorNumber);
-    //  }
-    //}
     // VERSION2
     for (uctNode ancestor : uct.rootNode.legalMoves) {//root直下に、アクティブノードがぶら下がっている。
       for (uctNode nd : ancestor.activeNodes) {
@@ -308,7 +291,6 @@ int uctMctsMainLoop(player pl) {
       //uctMctsMainLoop block 02-2-1
       float uctMax=-1;
       uctNode uctMaxNode=null;
-      // ll. 345-　あたりと重複しているのではないかと思うので、後でチェック。
       for (int zz=ancestor.activeNodes.size()-1; zz>=0; zz--) {//消去する可能性があるので、後ろからサーチする。
         uctNode nd = ancestor.activeNodes.get(zz);
         if (nd.na >= uct.expandThreshold && nd.depth >= uct.depthMax) {//試行回数がマックス、かつ深さもマックス
@@ -322,33 +304,15 @@ int uctMctsMainLoop(player pl) {
       //uctMctsMainLoop block 02-2-2
       // このancestorの下のアクティブノードが尽きたとき。
       if (uctMaxNode==null) {
-        //  println("先祖"+ancenstor.id+"では、計算すべきノードが尽きた");
-        //  println("試行回数("+pl.myBoard.simulatorNumber+")");
-        //  println("time=", millis()-startTime, "(ms)");
-        //  //PrintWriter output = createWriter("output.txt");
-        //  //showAllMct(uct.rootNode, pl.myBoard.simulatorNumber, output);
-        //  //output.flush();
-        //  //output.close();
-        //  //println("ループ終了（計算すべきノードが尽きた時）");
-        //  // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする
-        //  int ret = returnBestChildFromRoot(pl, uct.rootNode);
-        //  if (pl.myBoard.attackChanceP()) {
-        //    pl.yellow = int(ret/25);
-        //    println("["+(ret%25+1)+"-"+(pl.yellow+1)+"]");
-        //    return ret%25;
-        //  } else {
-        //    println("["+(ret+1)+"]");
-        //    return ret;
-        //  }
         //よそのancestorで、続行するかを調査
-        boolean atsuzokkou=false;
+        boolean anotherAncestor=false;
         for (uctNode ancestor2 : uct.rootNode.legalMoves) {
           if (ancestor2.activeNodes.size()>0) {
-            atsuzokkou=true;
+            anotherAncestor=true;
             break;
           }
         }
-        if (!atsuzokkou) {
+        if (!anotherAncestor) {
           println("すべてのancestorでアクティブノードが尽きた");
           println("試行回数(",pl.myBoard.simulatorNumber,")");
           println("time=", millis()-startTime, "(ms)");
@@ -388,6 +352,7 @@ int uctMctsMainLoop(player pl) {
           }
         }
         if (uctMaxNode.depth<uct.depthMax && uctMaxNode.id!="" && remaingInBd(uctMaxNode.bd)>0) {   // 展開するための条件
+          // remaingInBd(uctMaxNode.bd) : 残り空パネルの個数。
           //println("uctMctsBrain:展開　"+uctMaxNode.id);////展開開始展開開始展開開始展開開始展開開始展開開始
           //println(uctMaxNode.id+"を展開中");//+returnFriquentChildFromRoot(uct.rootNode).id);
 
@@ -474,10 +439,8 @@ int uctMctsMainLoop(player pl) {
               //uctMctsMainLoop block 02-2-4-3-1
               // アタックチャンスでないときの、子ノードのぶらさげ//ただいま展開中
               uctMaxNode.attackChanceNode=false;
-              int vpCount=0;
               for (int k=0; k<25; k++) {   // 合法手ごとのforループ、パスは含まない
                 if (uct.mainBoard.vp[k]>0) { // 子ノードをぶら下げる
-                  vpCount++;
                   uct.newNode = new uctNode();
                   uct.newNode.setItem(p, k);
                   uct.newNode.id = uctMaxNode.id+":"+kifu.playerColCode[p]+nf(k+1, 2);
@@ -516,10 +479,6 @@ int uctMctsMainLoop(player pl) {
                   }
                 }
               }// 合法手ごとのforループ ここまで
-              // 合法手がない時は消去
-              if (vpCount==0){
-                println("id="+uctMaxNode.id+"["+uctMaxNode.wa[1]+","+uctMaxNode.wa[2]+","+uctMaxNode.wa[3]+","+uctMaxNode.wa[4]+"]["+uctMaxNode.pa[1]+","+uctMaxNode.pa[2]+","+uctMaxNode.pa[3]+","+uctMaxNode.pa[4]+"]"); //<>//
-              }
             } else {
               //uctMctsMainLoop block 02-2-4-3-2
               // アタックチャンスのときの、子ノードのぶらさげ//ただいま展開中
@@ -593,7 +552,10 @@ int uctMctsMainLoop(player pl) {
             //}// プレイヤーpにとって、筋の悪いものを消す。ここまで
           }//ここまで、４人分のノード展開
           //println("uctMctsBrain:展開　終了　"+uctMaxNode.id);
-        }
+        } 
+        //else if (remaingInBd(uctMaxNode.bd)==0){
+        //  println(""+uctMaxNode.id+","+uctMaxNode.wa[1]+","+uctMaxNode.wa[2]+","+uctMaxNode.wa[3]+","+uctMaxNode.wa[4]+","+uctMaxNode.pa[1]+","+uctMaxNode.pa[2]+","+uctMaxNode.pa[3]+","+uctMaxNode.pa[4]+","+uctMaxNode.na+"");
+        //}
       }// アクティブノード削除からの展開、ここまで
       //uctMctsMainLoop block 02-2-5
       if (pl.myBoard.simulatorNumber >= uct.terminateThreshold) {//

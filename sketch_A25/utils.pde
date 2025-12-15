@@ -141,68 +141,76 @@ class uctClass {
   void randomPlayAndBackPropagate(uctNode uctMaxNode, int _nextPlayer) {
     float[] wDeltas = new float[5];
     float[] pDeltas = new float[5];
-    //print("uctMctsBrain:",uctMaxNode.id, "のノードを調べる",int(uctMaxNode.na)+":"+int(uctMaxNode.naR)+":"+int(uctMaxNode.naG)+":"+int(uctMaxNode.naW)+":"+int(uctMaxNode.naB));
-    //println("uctMctsBrain:uct.mainBoardへ盤面をコピー");
+    //print("randomPlayAndBackPropagate:",uctMaxNode.id, "のノードを調べる",int(uctMaxNode.na)+":"+int(uctMaxNode.naR)+":"+int(uctMaxNode.naG)+":"+int(uctMaxNode.naW)+":"+int(uctMaxNode.naB));
     if (this.randomPlayBoard==null) {
       this.randomPlayBoard = new board();
     }
     if (this.randomPlayWinPoint==null) {
       this.randomPlayWinPoint = new winPoints();
     }
+    //println("uctMctsBrain:uct.mainBoardへ盤面をコピー");
     this.randomPlayBoard.copyBdToBoard(uctMaxNode.bd);
-    //println("uctMctsBrain:uct.mainBoardを最後まで打ち切る");
     int nextplayer = int(random(4))+1;
     if (1<=_nextPlayer && _nextPlayer<=4){
       nextplayer = _nextPlayer;
     }
+    //println("uctMctsBrain:uct.mainBoardを最後まで打ち切る");
     this.randomPlayWinPoint = playSimulatorToEnd(this.randomPlayBoard, this.participants, nextplayer);
     //println("uctMctsBrain:nd.wa[p]、nd.pa[p]、nd.uct[p]");
     uctMaxNode.na ++;//
+    if (uct.chanceNodeOn) {
 
-    // このタイミングで、「差」を計算しておく。
-    for (int p=1; p<=4; p++) {
-      wDeltas[p] = this.randomPlayWinPoint.points[p];
-      pDeltas[p] = this.randomPlayWinPoint.panels[p];
+      // このタイミングで、「差」を計算しておく。
+      for (int p=1; p<=4; p++) {
+        wDeltas[p] = this.randomPlayWinPoint.points[p];
+        pDeltas[p] = this.randomPlayWinPoint.panels[p];
+      }
+      if (nextplayer==1) {
+        for (int p=1; p<=4; p++) {
+          uctMaxNode.waR[p] += wDeltas[p];
+          uctMaxNode.paR[p] += pDeltas[p];
+        }
+        uctMaxNode.naR ++;
+      } else if (nextplayer==2) {
+        for (int p=1; p<=4; p++) {
+          uctMaxNode.waG[p] += wDeltas[p];
+          uctMaxNode.paG[p] += pDeltas[p];
+        }
+        uctMaxNode.naG ++;
+      } else if (nextplayer==3) {
+        for (int p=1; p<=4; p++) {
+          uctMaxNode.waW[p] += wDeltas[p];
+          uctMaxNode.paW[p] += pDeltas[p];
+        }
+        uctMaxNode.naW ++;
+      } else if (nextplayer==4) {
+        for (int p=1; p<=4; p++) {
+          uctMaxNode.waB[p] += wDeltas[p];
+          uctMaxNode.paB[p] += pDeltas[p];
+        }
+        uctMaxNode.naB ++;
+      }
+      for (int p=1; p<=4; p++) {
+        uctMaxNode.wa[p] = averageBackPropagate(
+          uctMaxNode.waR[p], uctMaxNode.naR,
+          uctMaxNode.waG[p], uctMaxNode.naG,
+          uctMaxNode.waW[p], uctMaxNode.naW,
+          uctMaxNode.waB[p], uctMaxNode.naB, uctMaxNode.na);
+        uctMaxNode.pa[p] = averageBackPropagate(
+          uctMaxNode.paR[p], uctMaxNode.naR,
+          uctMaxNode.paG[p], uctMaxNode.naG,
+          uctMaxNode.paW[p], uctMaxNode.naW,
+          uctMaxNode.paB[p], uctMaxNode.naB, uctMaxNode.na);
+      }
+      //println("->",int(uctMaxNode.na)+":"+int(uctMaxNode.naR)+":"+int(uctMaxNode.naG)+":"+int(uctMaxNode.naW)+":"+int(uctMaxNode.naB));
+    } else {
+
+      for (int p=1; p<=4; p++) {
+        uctMaxNode.wa[p] += this.randomPlayWinPoint.points[p];//2回め以降は和
+        uctMaxNode.pa[p] += this.randomPlayWinPoint.panels[p];//2回め以降は和
+        // このタイミングで、「差」を計算しておく。
+      }
     }
-    if (nextplayer==1) {
-      for (int p=1; p<=4; p++) {
-        uctMaxNode.waR[p] += wDeltas[p];
-        uctMaxNode.paR[p] += pDeltas[p];
-      }
-      uctMaxNode.naR ++;
-    } else if (nextplayer==2) {
-      for (int p=1; p<=4; p++) {
-        uctMaxNode.waG[p] += wDeltas[p];
-        uctMaxNode.paG[p] += pDeltas[p];
-      }
-      uctMaxNode.naG ++;
-    } else if (nextplayer==3) {
-      for (int p=1; p<=4; p++) {
-        uctMaxNode.waW[p] += wDeltas[p];
-        uctMaxNode.paW[p] += pDeltas[p];
-      }
-      uctMaxNode.naW ++;
-    } else if (nextplayer==4) {
-      for (int p=1; p<=4; p++) {
-        uctMaxNode.waB[p] += wDeltas[p];
-        uctMaxNode.paB[p] += pDeltas[p];
-      }
-      uctMaxNode.naB ++;
-    }
-    for (int p=1; p<=4; p++) {
-      uctMaxNode.wa[p] = averageBackPropagate(
-        uctMaxNode.waR[p], uctMaxNode.naR,
-        uctMaxNode.waG[p], uctMaxNode.naG,
-        uctMaxNode.waW[p], uctMaxNode.naW,
-        uctMaxNode.waB[p], uctMaxNode.naB, uctMaxNode.na);
-      uctMaxNode.pa[p] = averageBackPropagate(
-        uctMaxNode.paR[p], uctMaxNode.naR,
-        uctMaxNode.paG[p], uctMaxNode.naG,
-        uctMaxNode.paW[p], uctMaxNode.naW,
-        uctMaxNode.paB[p], uctMaxNode.naB, uctMaxNode.na);
-    }
-    //println("->",int(uctMaxNode.na)+":"+int(uctMaxNode.naR)+":"+int(uctMaxNode.naG)+":"+int(uctMaxNode.naW)+":"+int(uctMaxNode.naB));
-    
     //println("親にさかのぼってデータを更新する");
     uctNode nd0 = uctMaxNode;
     uctNode ndC = null;
