@@ -553,9 +553,9 @@ int uctMctsMainLoop(player pl) {
           }//ここまで、４人分のノード展開
           //println("uctMctsBrain:展開　終了　"+uctMaxNode.id);
         } 
-        //else if (remaingInBd(uctMaxNode.bd)==0){
-        //  println(""+uctMaxNode.id+","+uctMaxNode.wa[1]+","+uctMaxNode.wa[2]+","+uctMaxNode.wa[3]+","+uctMaxNode.wa[4]+","+uctMaxNode.pa[1]+","+uctMaxNode.pa[2]+","+uctMaxNode.pa[3]+","+uctMaxNode.pa[4]+","+uctMaxNode.na+"");
-        //}
+        else if (remaingInBd(uctMaxNode.bd)==0){
+          println(""+uctMaxNode.id+","+uctMaxNode.wa[1]+","+uctMaxNode.wa[2]+","+uctMaxNode.wa[3]+","+uctMaxNode.wa[4]+","+uctMaxNode.pa[1]+","+uctMaxNode.pa[2]+","+uctMaxNode.pa[3]+","+uctMaxNode.pa[4]+","+uctMaxNode.na+"");
+        }
       }// アクティブノード削除からの展開、ここまで
       //uctMctsMainLoop block 02-2-5
       if (pl.myBoard.simulatorNumber >= uct.terminateThreshold) {//
