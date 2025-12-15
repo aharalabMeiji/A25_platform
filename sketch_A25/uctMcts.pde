@@ -136,13 +136,13 @@ int uctMctsBrainFirstSimulation(player pl) {
     }
     //println("uctMctsBrain:最後までシミュレーションを_count回行う");
     // ここをUCBにするアイディアもあるが、結局淘汰されるようなので、０でなければなんでもいいみたい。
-    for (int count=0; count<_count; count++) {
-      int nextplayer = int(random(4))+1;
+    //for (int count=0; count<_count; count++) {
+    for (int count=0; count<4; count++) {
+      int nextplayer = count+1;
       uct.mainBoard.copyBdToBoard(nd.bd);
       uct.winPoint = playSimulatorToEnd(uct.mainBoard, uct.participants, nextplayer);//ここは次手番をnextplayerとする。
       if(uct.chanceNodeOn){// 「新式」//uct.chanceNodeOn=true;
         pl.myBoard.simulatorNumber ++;
-        nd.na ++;
         if(nextplayer==1){
           nd.naR ++;
           for (int p=1; p<=4; p++) {
@@ -313,7 +313,7 @@ int uctMctsMainLoop(player pl) {
         uctNode nd = ancestor.activeNodes.get(zz);
         if (nd.na >= uct.expandThreshold && nd.depth >= uct.depthMax) {//試行回数がマックス、かつ深さもマックス
           //println("試行回数がマックス、かつ深さもマックスなので、"+nd.id+"を展開せずにアクティブノードのリストから消去");
-          ancestor.activeNodes.remove(zz);// 展開せずにアクティブノードのリストから消去
+          ancestor.activeNodes.remove(zz);// 展開せずにアクティブノードのリストから消去          
         } else if (nd.uct[nd.player]>uctMax) {// uct局所最大なら、記録しておく。
           uctMax=nd.uct[nd.player];
           uctMaxNode = nd;
@@ -372,7 +372,7 @@ int uctMctsMainLoop(player pl) {
       // uctMaxNodeから最後までランダムに打って
       // そののちに親までさかのぼって褒章データを更新する。
       pl.myBoard.simulatorNumber ++;
-      uct.randomPlayAndBackPropagate(uctMaxNode);
+      uct.randomPlayAndBackPropagate(uctMaxNode,0);
 
       //uctMctsMainLoop block 02-2-4
       //println("uctMctsBrain:ノード ",uctMaxNode.id, "のデータ("+uctMaxNode.wa[1]+","+uctMaxNode.wa[2]+","+uctMaxNode.wa[3]+","+uctMaxNode.wa[4]+")/"+uctMaxNode.na);
@@ -388,7 +388,6 @@ int uctMctsMainLoop(player pl) {
           }
         }
         if (uctMaxNode.depth<uct.depthMax && uctMaxNode.id!="" && remaingInBd(uctMaxNode.bd)>0) {   // 展開するための条件
-
           //println("uctMctsBrain:展開　"+uctMaxNode.id);////展開開始展開開始展開開始展開開始展開開始展開開始
           //println(uctMaxNode.id+"を展開中");//+returnFriquentChildFromRoot(uct.rootNode).id);
 
@@ -475,9 +474,10 @@ int uctMctsMainLoop(player pl) {
               //uctMctsMainLoop block 02-2-4-3-1
               // アタックチャンスでないときの、子ノードのぶらさげ//ただいま展開中
               uctMaxNode.attackChanceNode=false;
-
+              int vpCount=0;
               for (int k=0; k<25; k++) {   // 合法手ごとのforループ、パスは含まない
                 if (uct.mainBoard.vp[k]>0) { // 子ノードをぶら下げる
+                  vpCount++;
                   uct.newNode = new uctNode();
                   uct.newNode.setItem(p, k);
                   uct.newNode.id = uctMaxNode.id+":"+kifu.playerColCode[p]+nf(k+1, 2);
@@ -510,12 +510,16 @@ int uctMctsMainLoop(player pl) {
                   uct.newNode.initRewardOfNode();
                   // ５回、最後まで打ち切ってバックプロパゲートしておく。
                   // uct値を有効にするため。
-                  for (int count=0; count<5; count++) {
+                  for (int count=0; count<4; count++) {
                     pl.myBoard.simulatorNumber ++;
-                    uct.randomPlayAndBackPropagate(uct.newNode);
+                    uct.randomPlayAndBackPropagate(uct.newNode, count+1);
                   }
                 }
               }// 合法手ごとのforループ ここまで
+              // 合法手がない時は消去
+              if (vpCount==0){
+                println("id="+uctMaxNode.id+"["+uctMaxNode.wa[1]+","+uctMaxNode.wa[2]+","+uctMaxNode.wa[3]+","+uctMaxNode.wa[4]+"]["+uctMaxNode.pa[1]+","+uctMaxNode.pa[2]+","+uctMaxNode.pa[3]+","+uctMaxNode.pa[4]+"]"); //<>//
+              }
             } else {
               //uctMctsMainLoop block 02-2-4-3-2
               // アタックチャンスのときの、子ノードのぶらさげ//ただいま展開中
@@ -556,11 +560,11 @@ int uctMctsMainLoop(player pl) {
                     // println("新しいノードで５回ランダム試行を行う。");// アタックチャンスのとき//展開中
                     // uct.newNodeの報酬データを初期化
                     uct.newNode.initRewardOfNode();
-                    // ５回、最後まで打ち切ってバックプロパゲートしておく。
+                    // 4回、最後まで打ち切ってバックプロパゲートしておく。
                     // uct値を有効にするため。
-                    for (int count=0; count<5; count++) {
+                    for (int count=0; count<4; count++) {
                       pl.myBoard.simulatorNumber ++;
-                      uct.randomPlayAndBackPropagate(uct.newNode);
+                      uct.randomPlayAndBackPropagate(uct.newNode, count+1);
                     }
                     //新規ノードの処理ここまで/// アタックチャンスのとき//展開中
                   }

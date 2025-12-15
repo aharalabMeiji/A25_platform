@@ -138,10 +138,10 @@ class uctClass {
       return nd0.childB;
     }
   }
-  void randomPlayAndBackPropagate(uctNode uctMaxNode) {
+  void randomPlayAndBackPropagate(uctNode uctMaxNode, int _nextPlayer) {
     float[] wDeltas = new float[5];
     float[] pDeltas = new float[5];
-    //println("uctMctsBrain:",uctMaxNode.id, "のノードを調べる");
+    //print("uctMctsBrain:",uctMaxNode.id, "のノードを調べる",int(uctMaxNode.na)+":"+int(uctMaxNode.naR)+":"+int(uctMaxNode.naG)+":"+int(uctMaxNode.naW)+":"+int(uctMaxNode.naB));
     //println("uctMctsBrain:uct.mainBoardへ盤面をコピー");
     if (this.randomPlayBoard==null) {
       this.randomPlayBoard = new board();
@@ -152,6 +152,9 @@ class uctClass {
     this.randomPlayBoard.copyBdToBoard(uctMaxNode.bd);
     //println("uctMctsBrain:uct.mainBoardを最後まで打ち切る");
     int nextplayer = int(random(4))+1;
+    if (1<=_nextPlayer && _nextPlayer<=4){
+      nextplayer = _nextPlayer;
+    }
     this.randomPlayWinPoint = playSimulatorToEnd(this.randomPlayBoard, this.participants, nextplayer);
     //println("uctMctsBrain:nd.wa[p]、nd.pa[p]、nd.uct[p]");
     uctMaxNode.na ++;//
@@ -198,7 +201,8 @@ class uctClass {
         uctMaxNode.paW[p], uctMaxNode.naW,
         uctMaxNode.paB[p], uctMaxNode.naB, uctMaxNode.na);
     }
-
+    //println("->",int(uctMaxNode.na)+":"+int(uctMaxNode.naR)+":"+int(uctMaxNode.naG)+":"+int(uctMaxNode.naW)+":"+int(uctMaxNode.naB));
+    
     //println("親にさかのぼってデータを更新する");
     uctNode nd0 = uctMaxNode;
     uctNode ndC = null;
@@ -208,6 +212,7 @@ class uctClass {
         nd0 = nd0.parent;
         // chance node であるなしに関わらず、上に合流するのが「旧式」//uct.chanceNodeOn=false;
         // chance node から上にあげるときには式を変更するのが「新式」//uct.chanceNodeOn=true;
+        //print("->["+ndC.id+"]");
         nd0.na ++;
         if (uct.chanceNodeOn) {// 「新式」//uct.chanceNodeOn=true;
           if ( ndC.player == 1) { // 次がRの手番
@@ -259,13 +264,13 @@ class uctClass {
   }
   float averageBackPropagate(float wR, float nR, float wG, float nG, float wW, float nW, float wB, float nB, float na) {
     if (nR+nG+nW+nB!=na) {
-      println("illegal move in averageBackPropagate", wR, nR, wG, nG, wW, nW, wB, nB, na);
+      println("averageBackPropagate","("+wR+"/"+nR+")("+wG+"/"+nG+")("+wW+"/"+nW+")("+wB+"/"+nB+")na="+na);
     }
     float sum=0f;
     if (nR!=0) sum += (wR/nR*0.25);
-    if (nR!=0) sum += (wG/nG*0.25);
-    if (nR!=0) sum += (wW/nW*0.25);
-    if (nR!=0) sum += (wB/nB*0.25);
+    if (nG!=0) sum += (wG/nG*0.25);
+    if (nW!=0) sum += (wW/nW*0.25);
+    if (nB!=0) sum += (wB/nB*0.25);
     return sum*na;
   }
 };
