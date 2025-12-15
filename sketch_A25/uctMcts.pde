@@ -231,6 +231,30 @@ int uctMctsBrainFirstSimulation(player pl) {
   return -1;
 }
 
+void printAllWaPa(uctNode nd){
+  println(""+nd.id+","+(nd.wa[1]/nd.na)+","+(nd.wa[2]/nd.na)+","+(nd.wa[3]/nd.na)+","+(nd.wa[4]/nd.na)+","+(nd.pa[1]/nd.na)+","+(nd.pa[2]/nd.na)+","+(nd.pa[3]/nd.na)+","+(nd.pa[4]/nd.na)+","+nd.na+"");
+  if (nd.childR!=null && nd.childR.size()>0){
+    for(uctNode nd2: nd.childR){
+      printAllWaPa(nd2);
+    }
+  }
+  if (nd.childG!=null && nd.childG.size()>0){
+    for(uctNode nd2: nd.childG){
+      printAllWaPa(nd2);
+    }
+  }
+  if (nd.childW!=null && nd.childW.size()>0){
+    for(uctNode nd2: nd.childW){
+      printAllWaPa(nd2);
+    }
+  }
+  if (nd.childB!=null && nd.childB.size()>0){
+    for(uctNode nd2: nd.childB){
+      printAllWaPa(nd2);
+    }
+  }
+}
+
 int uctMctsMainLoop(player pl) {
   //uctMctsMainLoop block 01
   // console に計算経過を出力（マストではない。）
@@ -316,6 +340,10 @@ int uctMctsMainLoop(player pl) {
           println("すべてのancestorでアクティブノードが尽きた");
           println("試行回数(",pl.myBoard.simulatorNumber,")");
           println("time=", millis()-startTime, "(ms)");
+          //printAllWaPa();
+          for(uctNode anc : uct.rootNode.legalMoves){
+            printAllWaPa(anc);
+          }
           // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする
           int ret = returnBestChildFromRoot(pl, uct.rootNode);
           if (pl.myBoard.attackChanceP()) {
@@ -553,9 +581,9 @@ int uctMctsMainLoop(player pl) {
           }//ここまで、４人分のノード展開
           //println("uctMctsBrain:展開　終了　"+uctMaxNode.id);
         } 
-        else if (remaingInBd(uctMaxNode.bd)==0){
-          println(""+uctMaxNode.id+","+uctMaxNode.wa[1]+","+uctMaxNode.wa[2]+","+uctMaxNode.wa[3]+","+uctMaxNode.wa[4]+","+uctMaxNode.pa[1]+","+uctMaxNode.pa[2]+","+uctMaxNode.pa[3]+","+uctMaxNode.pa[4]+","+uctMaxNode.na+"");
-        }
+        //else if (remaingInBd(uctMaxNode.bd)==0){
+        //  println(""+uctMaxNode.id+","+uctMaxNode.wa[1]+","+uctMaxNode.wa[2]+","+uctMaxNode.wa[3]+","+uctMaxNode.wa[4]+","+uctMaxNode.pa[1]+","+uctMaxNode.pa[2]+","+uctMaxNode.pa[3]+","+uctMaxNode.pa[4]+","+uctMaxNode.na+"");
+        //}
       }// アクティブノード削除からの展開、ここまで
       //uctMctsMainLoop block 02-2-5
       if (pl.myBoard.simulatorNumber >= uct.terminateThreshold) {//

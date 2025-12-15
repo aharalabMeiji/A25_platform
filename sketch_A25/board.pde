@@ -427,7 +427,7 @@ int remaingInBd(int[] bd){
   int len = min(bd.length,25);
   int count=0;
   for(int k=0; k<len; k++){
-    if(bd[k]==0){
+    if(bd[k]==0 || bd[k]==5){
       count++;
     }
   }
