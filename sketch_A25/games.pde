@@ -28,13 +28,25 @@ void showScreenCapture() {
 
 void showSaveBoard() {
   float dx=utils.subL+textWidth("[Return to menu]")+utils.hSpace+textWidth("[Save screenshot]")+utils.hSpace, dy=utils.subU+utils.mainH*1.5+utils.hOffset;
-  // 保存 ボタン
+  // 保存 ボタン（ゲームでのみ使用）
   fill(0);
   textSize(utils.fontSize);
   textAlign(LEFT, CENTER);
   String buttonSaveBoardText="[Save board]";
   text(buttonSaveBoardText, dx, dy);
   buttonSaveBoard.setLT(dx, dy, buttonSaveBoardText);
+}
+
+void showSaveTree(){
+  float dx=utils.subL+textWidth("[Return to menu]")+utils.hSpace+textWidth("[Save screenshot]")+utils.hSpace;
+  float dy=utils.subU+utils.mainH*1.5+utils.hOffset;
+  // ゲーム木保存 ボタン（シミュレーターでのみ使用）
+  fill(0);
+  textSize(utils.fontSize);
+  textAlign(LEFT, CENTER);
+  String buttonSaveTreeText="[Save Game Tree]";
+  text(buttonSaveTreeText, dx, dy);
+  buttonSaveTree.setLT(dx, dy, buttonSaveTreeText);
 }
 
 void showPassButton() { //

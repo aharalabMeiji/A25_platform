@@ -52,6 +52,7 @@ void setup() {
   buttonReturnToMenu = new button();
   buttonSaveScreenShot = new button();
   buttonSaveBoard = new button();
+  buttonSaveTree = new button();
   buttonPass = new button();
   displayManager = dP.onContents;
   managerPhase = mP.GameStart;

@@ -938,9 +938,13 @@ void mousePreesedSimulator() {
     managerPhase=mP.GameStart;
     return;
   }
-  if (buttonSaveScreenShot.mouseOn()) {//　メニューに戻る、をクリックされたとき
+  if (buttonSaveScreenShot.mouseOn()) {//　スクショ、をクリックされたとき
     selectOutput("スクリーンショットを保存", "saveScreenShotSelected");
     //save("screenshot.png");
+  }
+  if (buttonSaveTree.mouseOn()){//　ゲーム木保存、をクリックされたとき
+    selectOutput("ゲーム木を保存", "saveTreeSelected");
+    // uct.SaveGameTree(simulator.nextPlayer);
   }
   if (gameOptions.get("SimMethod")==1) {
     if (buttonPrevSV.mouseOn()) {
@@ -977,5 +981,18 @@ void saveScreenShotSelected(File selection) {
     }
     println("選択されたファイルパス: " + filePath);
     save(filePath);
+  }
+}
+
+void saveTreeSelected(File selection) {
+  if (selection == null) {
+    println("ファイルが選択されませんでした。");
+  } else {
+    filePath = selection.getAbsolutePath();
+    if (differentExt(filePath, ".txt")==true) {
+      filePath += ".png";
+    }
+    println("選択されたファイルパス: " + filePath);
+    uct.saveTree(filePath);
   }
 }

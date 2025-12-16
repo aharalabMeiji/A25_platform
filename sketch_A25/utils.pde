@@ -45,6 +45,7 @@ button buttonPrevBoard, buttonNextBoard;
 button buttonReturnToMenu, buttonMenuGame, buttonMenuSimulation, buttonPass;
 button buttonSaveScreenShot;// スクショのボタン
 button buttonSaveBoard;// 盤面保存のボタン
+button buttonSaveTree;// 盤面保存のボタン
 
 // games
 games game = new games();
@@ -279,5 +280,9 @@ class uctClass {
     if (nW!=0) sum += (wW/nW*0.25);
     if (nB!=0) sum += (wB/nB*0.25);
     return sum*na;
+  }
+  void saveTree(String filepath){
+    
+    
   }
 };
