@@ -232,7 +232,9 @@ int uctMctsBrainFirstSimulation(player pl) {
 }
 
 void printAllWaPa(uctNode nd){
-  println(""+nd.id+","+(nd.wa[1]/nd.na)+","+(nd.wa[2]/nd.na)+","+(nd.wa[3]/nd.na)+","+(nd.wa[4]/nd.na)+","+(nd.pa[1]/nd.na)+","+(nd.pa[2]/nd.na)+","+(nd.pa[3]/nd.na)+","+(nd.pa[4]/nd.na)+","+nd.na+"");
+  if ( nd.depth<=3){
+    println(""+nd.id+","+(nd.wa[1]/nd.na)+","+(nd.wa[2]/nd.na)+","+(nd.wa[3]/nd.na)+","+(nd.wa[4]/nd.na)+","+(nd.pa[1]/nd.na)+","+(nd.pa[2]/nd.na)+","+(nd.pa[3]/nd.na)+","+(nd.pa[4]/nd.na)+","+nd.na+"");
+  }
   if (nd.childR!=null && nd.childR.size()>0){
     for(uctNode nd2: nd.childR){
       printAllWaPa(nd2);
