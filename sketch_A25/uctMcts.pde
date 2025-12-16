@@ -340,10 +340,10 @@ int uctMctsMainLoop(player pl) {
           println("すべてのancestorでアクティブノードが尽きた");
           println("試行回数(",pl.myBoard.simulatorNumber,")");
           println("time=", millis()-startTime, "(ms)");
-          //printAllWaPa();
-          for(uctNode anc : uct.rootNode.legalMoves){
-            printAllWaPa(anc);
-          }
+          //内部データのチェック用;
+          //for(uctNode anc : uct.rootNode.legalMoves){
+          //  printAllWaPa(anc);
+          //}
           // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする
           int ret = returnBestChildFromRoot(pl, uct.rootNode);
           if (pl.myBoard.attackChanceP()) {

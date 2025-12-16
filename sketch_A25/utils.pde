@@ -159,7 +159,6 @@ class uctClass {
     //println("uctMctsBrain:nd.wa[p]、nd.pa[p]、nd.uct[p]");
     uctMaxNode.na ++;//
     if (uct.chanceNodeOn) {
-
       // このタイミングで、「差」を計算しておく。
       for (int p=1; p<=4; p++) {
         wDeltas[p] = this.randomPlayWinPoint.points[p];
@@ -191,24 +190,20 @@ class uctClass {
         uctMaxNode.naB ++;
       }
       for (int p=1; p<=4; p++) {
-        uctMaxNode.wa[p] = averageBackPropagate(
-          uctMaxNode.waR[p], uctMaxNode.naR,
-          uctMaxNode.waG[p], uctMaxNode.naG,
-          uctMaxNode.waW[p], uctMaxNode.naW,
-          uctMaxNode.waB[p], uctMaxNode.naB, uctMaxNode.na);
-        uctMaxNode.pa[p] = averageBackPropagate(
-          uctMaxNode.paR[p], uctMaxNode.naR,
-          uctMaxNode.paG[p], uctMaxNode.naG,
-          uctMaxNode.paW[p], uctMaxNode.naW,
-          uctMaxNode.paB[p], uctMaxNode.naB, uctMaxNode.na);
+        wDeltas[p] = averageBackPropagate(
+          uctMaxNode.waR[p], uctMaxNode.naR, uctMaxNode.waG[p], uctMaxNode.naG,
+          uctMaxNode.waW[p], uctMaxNode.naW, uctMaxNode.waB[p], uctMaxNode.naB, uctMaxNode.na)-uctMaxNode.wa[p];
+        uctMaxNode.wa[p] += wDeltas[p];
+        pDeltas[p] = averageBackPropagate(
+          uctMaxNode.paR[p], uctMaxNode.naR, uctMaxNode.paG[p], uctMaxNode.naG,
+          uctMaxNode.paW[p], uctMaxNode.naW, uctMaxNode.paB[p], uctMaxNode.naB, uctMaxNode.na)-uctMaxNode.pa[p];
+        uctMaxNode.pa[p] += pDeltas[p];
       }
       //println("->",int(uctMaxNode.na)+":"+int(uctMaxNode.naR)+":"+int(uctMaxNode.naG)+":"+int(uctMaxNode.naW)+":"+int(uctMaxNode.naB));
-    } else {
-
+    } else {// 旧式
       for (int p=1; p<=4; p++) {
         uctMaxNode.wa[p] += this.randomPlayWinPoint.points[p];//2回め以降は和
         uctMaxNode.pa[p] += this.randomPlayWinPoint.panels[p];//2回め以降は和
-        // このタイミングで、「差」を計算しておく。
       }
     }
     //println("親にさかのぼってデータを更新する");
@@ -252,9 +247,13 @@ class uctClass {
           }
           for (int p=1; p<=4; p++) {
             // このタイミングで、「差」を計算しておく。
-            wDeltas[p] = averageBackPropagate(nd0.waR[p], nd0.naR, nd0.waG[p], nd0.naG, nd0.waW[p], nd0.naW, nd0.waB[p], nd0.naB, nd0.na) - nd0.wa[p];
+            wDeltas[p] = averageBackPropagate(
+              nd0.waR[p], nd0.naR, nd0.waG[p], nd0.naG, 
+              nd0.waW[p], nd0.naW, nd0.waB[p], nd0.naB, nd0.na) - nd0.wa[p];
             nd0.wa[p] += wDeltas[p];//
-            pDeltas[p] = averageBackPropagate(nd0.paR[p], nd0.naR, nd0.paG[p], nd0.naG, nd0.paW[p], nd0.naW, nd0.paB[p], nd0.naB, nd0.na) - nd0.pa[p];
+            pDeltas[p] = averageBackPropagate(
+              nd0.paR[p], nd0.naR, nd0.paG[p], nd0.naG, 
+              nd0.paW[p], nd0.naW, nd0.paB[p], nd0.naB, nd0.na) - nd0.pa[p];
             nd0.pa[p] += pDeltas[p];//
           }
         } else {//「旧式」//uct.chanceNodeOn=false;
