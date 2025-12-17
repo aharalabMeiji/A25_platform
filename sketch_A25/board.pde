@@ -117,7 +117,7 @@ class board {
       if(gameOptions.get("Absence0G")==1) simMethod += "G";
       if(gameOptions.get("Absence0W")==1) simMethod += "W";
       if(gameOptions.get("Absence0B")==1) simMethod += "B";
-      simMethod += "<";
+      simMethod += "|";
       if(gameOptions.get("Absence1R")==1) simMethod += "R";
       if(gameOptions.get("Absence1G")==1) simMethod += "G";
       if(gameOptions.get("Absence1W")==1) simMethod += "W";
