@@ -281,8 +281,5 @@ class uctClass {
     if (nB!=0) sum += (wB/nB*0.25);
     return sum*na;
   }
-  void saveTree(String filepath){
-    
-    
-  }
+
 };

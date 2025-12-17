@@ -224,8 +224,6 @@ void fullRandomMC() {
     simulator.Participants = new player[5];
     simulator.rootNode = new uctNode();
     simulator.rootNode.legalMoves = new ArrayList<uctNode>();
-    //attackChanceSV = new float[625];//いらなくなる
-    //attackChanceSV2 = new float[625];//いらなくなる
     attackChanceVP = new int[625];//
     prevWinrate1=prevWinrate2=prevPanels1=prevPanels2=0;//収束の計算
     // プレーヤーをランダムプレーヤーに設定
@@ -929,7 +927,7 @@ void showMcts(player nextPlayer) {
   }
   showReturnButton();
   showScreenCapture();
-
+  showSaveTree();
 }
 
 void mousePreesedSimulator() {
@@ -957,6 +955,7 @@ void mousePreesedSimulator() {
       displayAllStats(attackChanceCursor, simulator.nextPlayer);
       showReturnButton();
       showScreenCapture();
+      showSaveTree();
     } else if (buttonNextSV.mouseOn()) {
       int loopSize=simulator.rootNode.legalMoves.size();
       attackChanceCursor = (attackChanceCursor+1)%loopSize;
@@ -967,6 +966,7 @@ void mousePreesedSimulator() {
       displayAllStats(attackChanceCursor, simulator.nextPlayer);
       showReturnButton();
       showScreenCapture();
+      showSaveTree();
     }
   }
 }
@@ -993,6 +993,47 @@ void saveTreeSelected(File selection) {
       filePath += ".png";
     }
     println("選択されたファイルパス: " + filePath);
-    uct.saveTree(filePath);
+    saveGameTree(filePath);
+  }
+}
+
+PrintWriter outputGameTree;
+void saveGameTree(String filepath){
+  // 出力用ファイルを作成
+  outputGameTree = createWriter(filepath);
+  for (uctNode nd : uct.rootNode.legalMoves) {
+    fileOutputAllWaPa(nd);
+  }
+  // 書き込み終了時は必ず close()
+  outputGameTree.close();
+    
+}
+
+void fileOutputAllWaPa(uctNode nd){
+  if ( nd.depth<=3){
+    outputGameTree.println(""+nd.id+",("+nf(nd.wa[1]/nd.na,1,6)+","+nf(nd.pa[1]/nd.na,2,6)+")"+
+    "("+nf(nd.wa[2]/nd.na,1,6)+","+nf(nd.pa[2]/nd.na,2,6)+")"+
+    "("+nf(nd.wa[3]/nd.na,1,6)+","+nf(nd.pa[3]/nd.na,2,6)+")"+
+    "("+nf(nd.wa[4]/nd.na,1,6)+","+nf(nd.pa[4]/nd.na,2,6)+")");
+  }
+  if (nd.childR!=null && nd.childR.size()>0){
+    for(uctNode nd2: nd.childR){
+      fileOutputAllWaPa(nd2);
+    }
+  }
+  if (nd.childG!=null && nd.childG.size()>0){
+    for(uctNode nd2: nd.childG){
+      fileOutputAllWaPa(nd2);
+    }
+  }
+  if (nd.childW!=null && nd.childW.size()>0){
+    for(uctNode nd2: nd.childW){
+      fileOutputAllWaPa(nd2);
+    }
+  }
+  if (nd.childB!=null && nd.childB.size()>0){
+    for(uctNode nd2: nd.childB){
+      fileOutputAllWaPa(nd2);
+    }
   }
 }

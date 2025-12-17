@@ -102,19 +102,27 @@ class board {
       String simMethod = "Monte Carlo Tree Search(UCT) ";
       
       text(simMethod, utils.subL, utils.subU);
-      if (gameOptions.get("SimTimes") == 21) simMethod = "(Depth4/wCancel)";
-      else if (gameOptions.get("SimTimes") == 22) simMethod = "(Depth4/woCancel)";
-      else if (gameOptions.get("SimTimes") == 23) simMethod = "(Depth5/wCancel)";
-      else if (gameOptions.get("SimTimes") == 24) simMethod = "(Depth5/woCancel)";
+      if (gameOptions.get("SimTimes") == 21) simMethod = "(D4/wCancel)";
+      else if (gameOptions.get("SimTimes") == 22) simMethod = "(D4/woCancel)";
+      else if (gameOptions.get("SimTimes") == 23) simMethod = "(D5/wCancel)";
+      else if (gameOptions.get("SimTimes") == 24) simMethod = "(D5/woCancel)";
       else {
-        simMethod="(E"+str(gameOptions.get("expandThreshold"))+"/T"+str(gameOptions.get("terminateThreshold"))+"/D"+str(gameOptions.get("depthMax"));
+        simMethod="(E"+str(gameOptions.get("expandThreshold"))+"/D"+str(gameOptions.get("depthMax"));
         if (gameOptions.get("wCancel")==1) simMethod += "/wCancel)";
         else simMethod += "/woCancel)";
       }
-      if(gameOptions.get("Absence1R")==1) simMethod += "<R>";
-      if(gameOptions.get("Absence1G")==1) simMethod += "<G>";
-      if(gameOptions.get("Absence1W")==1) simMethod += "<W>";
-      if(gameOptions.get("Absence1B")==1) simMethod += "<B>";
+      if (gameOptions.get("chanceNodeOn")==1) simMethod += "(CN)";
+      simMethod += "<";
+      if(gameOptions.get("Absence0R")==1) simMethod += "R";
+      if(gameOptions.get("Absence0G")==1) simMethod += "G";
+      if(gameOptions.get("Absence0W")==1) simMethod += "W";
+      if(gameOptions.get("Absence0B")==1) simMethod += "B";
+      simMethod += "<";
+      if(gameOptions.get("Absence1R")==1) simMethod += "R";
+      if(gameOptions.get("Absence1G")==1) simMethod += "G";
+      if(gameOptions.get("Absence1W")==1) simMethod += "W";
+      if(gameOptions.get("Absence1B")==1) simMethod += "B";
+      simMethod += ">";
       text(simMethod, utils.subL, utils.subU+utils.vStep);
       stroke(0);
       fill(utils.playerColor[simulator.nextPlayer]);
