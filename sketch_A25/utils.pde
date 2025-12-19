@@ -46,6 +46,7 @@ button buttonReturnToMenu, buttonMenuGame, buttonMenuSimulation, buttonPass;
 button buttonSaveScreenShot;// スクショのボタン
 button buttonSaveBoard;// 盤面保存のボタン
 button buttonSaveTree;// 盤面保存のボタン
+button buttonNNNext;// 3手先データのボタン化
 
 // games
 games game = new games();
@@ -125,6 +126,8 @@ class uctClass {
   int uctMainLoopOption=1;// ここを２にすると、並列処理になる。が、今は使わない。
   float maxNodeWinrate=0.0;
   boolean chanceNodeOn=false;
+  player nextPlayer=null;
+  int nnNextPlayer=1;
   uctClass() {
   }
   ArrayList<uctNode> GetChildOfUctNode(int player, uctNode nd0) {

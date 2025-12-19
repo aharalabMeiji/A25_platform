@@ -65,7 +65,7 @@ class winPoints {
   }
 }
 
-winPoints playSimulatorToEnd(board sub, player[] _participants, int nextplayer) {// 
+winPoints playSimulatorToEnd(board sub, player[] _participants, int nextplayer) {//
   // TODO アタックチャンスの判定と処理
   // n(0)=4 -> AC_flag==false -> アタックチャンス, AC_flag=true
   //
@@ -79,7 +79,7 @@ winPoints playSimulatorToEnd(board sub, player[] _participants, int nextplayer) 
     //println("playSimulatorToEnd:ループ開始");
     do {
       int simulatorNextPlayer;
-      if (nextplayer==0){// 次の手番をランダムに定める
+      if (nextplayer==0) {// 次の手番をランダムに定める
         simulatorNextPlayer = int(random(4))+1;
       } else {// 次の手番をnextplayerによって定め、以降はランダムに定める
         simulatorNextPlayer = nextplayer;
@@ -358,7 +358,7 @@ void fullRandomMC() {
         prevPanels1 = prize.getPanels(1);
         prevPanels2=prize.getPanels(2);
 
-        displayBestStats(prize,utils.subU+utils.fontSize*1.5);
+        displayBestStats(prize, utils.subU+utils.fontSize*1.5);
         displayAllStats(attackChanceCursor, simulator.nextPlayer);
         showReturnButton();
         showScreenCapture();
@@ -611,7 +611,7 @@ void UCB1(ucbClass ucb) {
         simulator.mainBoard.display(11);// Ucb1 ディスプレイ
         prize prize=new prize();
         prize.getPrize3FromNodeList(simulator.nextPlayer, ucb.rootNode.legalMoves);
-        displayBestStats(prize,utils.subU+utils.fontSize*1.5);
+        displayBestStats(prize, utils.subU+utils.fontSize*1.5);
         showReturnButton();
         showScreenCapture();
         if (abs(prevWinrate1-prize.getWinrate(1))<0.0005 && abs(prevWinrate2-prize.getWinrate(2))<0.0005 )
@@ -717,7 +717,6 @@ void UCB1(ucbClass ucb) {
 
 
 void UCT1() {
-  player nextPlayer=null;
   int SimTimes = gameOptions.get("SimTimes");
   if (simulationManager==sP.GameStart) {
     startTime=millis();
@@ -748,23 +747,23 @@ void UCT1() {
         uct.terminateThreshold = uct.expandThreshold*10000;
       } else if (gameOptions.get("terminateThreshold")==5) {
         uct.terminateThreshold = uct.expandThreshold*100000;
-      } else if (gameOptions.get("terminateThreshold")==6){
+      } else if (gameOptions.get("terminateThreshold")==6) {
         uct.terminateThreshold = uct.expandThreshold*1000000;
       } else {
         uct.terminateThreshold = uct.expandThreshold*10000000;
       }
       uct.depthMax=gameOptions.get("depthMax");
-      if (gameOptions.get("wCancel")==1){
+      if (gameOptions.get("wCancel")==1) {
         uct.cancelCountMax=5;
       } else if (gameOptions.get("wCancel")==3) {
         uct.cancelCountMax=10;
-      } else if (gameOptions.get("wCancel")==4){
+      } else if (gameOptions.get("wCancel")==4) {
         uct.cancelCountMax=20;
-      } else if (gameOptions.get("wCancel")==5){
+      } else if (gameOptions.get("wCancel")==5) {
         uct.cancelCountMax=50;
-      } else if (gameOptions.get("wCancel")==6){
-        uct.cancelCountMax=100;        
-      } else if (gameOptions.get("wCancel")==2){
+      } else if (gameOptions.get("wCancel")==6) {
+        uct.cancelCountMax=100;
+      } else if (gameOptions.get("wCancel")==2) {
         uct.cancelCountMax=100000;
       }
     }
@@ -782,8 +781,8 @@ void UCT1() {
       simulator.mainBoard.s[i].marked = 0;
     }
     simulator.nextPlayer = simulatorStartBoard.get(simulator.StartBoardId).nextPlayer;
-    nextPlayer=simulator.Participants[simulator.nextPlayer];
-    simulator.mainBoard.copyBoardToSub(nextPlayer.myBoard);
+    uct.nextPlayer=simulator.Participants[simulator.nextPlayer];
+    simulator.mainBoard.copyBoardToSub(uct.nextPlayer.myBoard);
     //int answer = uctMctsStartingJoseki(nextPlayer);
     //if (answer!=-1) {
     //  simulator.mainBoard.sv[answer]=1;
@@ -795,54 +794,54 @@ void UCT1() {
     //  showReturnButton();
     //  showScreenCapture();
     //} else
-    {
-      int answer = uctMctsBrainPreparation(nextPlayer);
-      if (answer==-1) {
+
+    int answer = uctMctsBrainPreparation(uct.nextPlayer);
+    if (answer==-1) {
+      simulationManager=sP.GameEnd;
+    } else {
+      answer = uctMctsBrainFirstSimulation(uct.nextPlayer);
+      if (answer!=-1) {
+        uctNode nd = uct.rootNode.legalMoves.get(0);
+        simulator.mainBoard.sv[answer]=nd.wa[uct.nextPlayer.position] / nd.na;
+        simulator.mainBoard.sv2[answer]=nd.pa[uct.nextPlayer.position] / nd.na;
+        simulator.mainBoard.s[answer].marked=1;
         simulationManager=sP.GameEnd;
+        simulator.mainBoard.display(12);
+        showReturnButton();
+        showScreenCapture();
       } else {
-        answer = uctMctsBrainFirstSimulation(nextPlayer);
-        if (answer!=-1) {
-          uctNode nd = uct.rootNode.legalMoves.get(0);
-          simulator.mainBoard.sv[answer]=nd.wa[nextPlayer.position] / nd.na;
-          simulator.mainBoard.sv2[answer]=nd.pa[nextPlayer.position] / nd.na;
-          simulator.mainBoard.s[answer].marked=1;
-          simulationManager=sP.GameEnd;
-          simulator.mainBoard.display(12);
-          showReturnButton();
-          showScreenCapture();
+        if (uct.cancelCountMax>1000) {
+          println("uct:E"+uct.expandThreshold+"D"+uct.depthMax+"woC");//+"T"+uct.terminateThreshold
         } else {
-          if(uct.cancelCountMax>1000){
-            println("uct:E"+uct.expandThreshold+"D"+uct.depthMax+"woC");//+"T"+uct.terminateThreshold
-          } else {
-            println("uct:E"+uct.expandThreshold+"D"+uct.depthMax+"C"+uct.cancelCountMax);
-          }
-          uct.simulationTag=10000;
-          simulationManager=sP.setStartBoard;
+          println("uct:E"+uct.expandThreshold+"D"+uct.depthMax+"C"+uct.cancelCountMax);
         }
+        uct.simulationTag=10000;
+        simulationManager=sP.setStartBoard;
       }
     }
+    uct.nnNextPlayer = uct.nextPlayer.position;
   } else if (simulationManager==sP.setStartBoard) {
-    nextPlayer=simulator.Participants[simulator.nextPlayer];
+    uct.nextPlayer=simulator.Participants[simulator.nextPlayer];
     int answer=-1;
-    answer = uctMctsMainLoop(nextPlayer);
+    answer = uctMctsMainLoop(uct.nextPlayer);
     // 1000回に1回、svにデータを埋める。
     //if (uct.rootNode.attackChanceNode==false) {
-    if (nextPlayer.myBoard.attackChanceP==false){
+    if (uct.nextPlayer.myBoard.attackChanceP==false) {
       for (uctNode nd : uct.rootNode.legalMoves) {
         int k = nd.move;//たぶん、kは0～２５
         if (0<=k && k<=25) {
-          simulator.mainBoard.sv[k] = nd.wa[nextPlayer.position] / nd.na;
-          simulator.mainBoard.sv2[k] = nd.pa[nextPlayer.position] / nd.na;
+          simulator.mainBoard.sv[k] = nd.wa[uct.nextPlayer.position] / nd.na;
+          simulator.mainBoard.sv2[k] = nd.pa[uct.nextPlayer.position] / nd.na;
           if (k<25) {
             simulator.mainBoard.s[k].marked = 1;
           }
         }
       }
     } else {
-      // アタックチャンスのときには、sv,sv2を使わずに表示する。 
+      // アタックチャンスのときには、sv,sv2を使わずに表示する。
     }
-    simulator.mainBoard.simulatorNumber=nextPlayer.myBoard.simulatorNumber;
-    showMcts(nextPlayer);//
+    simulator.mainBoard.simulatorNumber=uct.nextPlayer.myBoard.simulatorNumber;
+    showMcts(uct.nextPlayer);//
     //printlnAllNodes(uct.rootNode, 2);//
     if (answer!=-1) {
       simulationManager=sP.GameEnd;
@@ -873,37 +872,39 @@ void printlnAllNodes(uctNode nd, int p) {
 }
 
 void showMcts(player nextPlayer) {
-  uct.prize.getPrize3FromNodeList(nextPlayer.position, uct.rootNode.legalMoves);
+  uct.prize.getPrize1FromNodeList(nextPlayer.position, uct.rootNode.legalMoves);
   String[] message=new String[5];
   prize localPrize=new prize();
-  uctNode nd1=null, nd2=null, nd3=null, nd4=null;
-  nd1 = uct.prize.getMove(1);
-  if (nd1==null) {
-    return;
-  }
-  for (int p2=1; p2<=4; p2++) {
+  uctNode nd1=null, nd2=null, nd3=null;
+  //uct.nnNextPlayer=1;
+  nd1 = uct.prize.getMove(1);// トップ合法手
+  if (nd1==null)  return;// ルートに子ノードがなければヤメ
+  for (int p2=1; p2<=4; p2++) {// nNext = p2;
     if (nd1.totalChildNullP()==false && nd1.totalChildSize()>0) {
-      localPrize.getBPrize1FromNodeListWithChanceNode(p2, nd1);
+      switch(p2){
+        case 1: localPrize.getPrize1FromNodeList(1, nd1.childR); break;
+        case 2: localPrize.getPrize1FromNodeList(2, nd1.childG); break;
+        case 3: localPrize.getPrize1FromNodeList(3, nd1.childW); break;
+        case 4: localPrize.getPrize1FromNodeList(4, nd1.childB); break;
+      }
       nd2 = localPrize.getMove(1);
       if (nd2==null) {
         message[p2]=nd1.id;
       } else if (nd2.totalChildNullP()==false && nd2.totalChildSize()>0) {
-        localPrize.getBXPrize1FromNodeListWithChanceNode(nd2);
+        switch(uct.nnNextPlayer){
+          case 1: localPrize.getPrize1FromNodeList(1, nd2.childR); break;
+          case 2: localPrize.getPrize1FromNodeList(2, nd2.childG); break;
+          case 3: localPrize.getPrize1FromNodeList(3, nd2.childW); break;
+          case 4: localPrize.getPrize1FromNodeList(4, nd2.childB); break;
+        }
         nd3 = localPrize.getMove(1);
         if (nd3==null) {
-          message[p2] = nd2.id;
-        } else if (nd3.totalChildNullP()==false && nd3.totalChildSize()>0) {
-          localPrize.getBXPrize1FromNodeListWithChanceNode(nd3);
-          nd4 = localPrize.getMove(1);
-          if (nd4!=null)
-            message[p2] = nd4.id;
-          else
-          message[p2] = nd3.id;
+          message[p2] = nd2.id+" ("+nf(nd2.wa[p2]/nd2.na,1,3)+":"+nf(nd2.pa[p2]/nd2.na,2,3)+")";
         } else {
-          message[p2] = nd3.id;
+          message[p2] = nd3.id+" ("+nf(nd3.wa[uct.nnNextPlayer]/nd3.na,1,3)+":"+nf(nd3.pa[uct.nnNextPlayer]/nd3.na,2,3)+")";
         }
       } else {
-        message[p2]=nd2.id;
+        message[p2]=nd2.id+": ("+nf(nd2.wa[p2]/nd2.na,1,3)+":"+nf(nd2.pa[p2]/nd2.na,2,3)+")";
       }
     } else {
       message[p2]=nd1.id;
@@ -913,17 +914,24 @@ void showMcts(player nextPlayer) {
   textAlign(LEFT, CENTER);
   fill(0);
   //if (!simulator.mainBoard.attackChanceP){
-  if (nextPlayer.myBoard.attackChanceP==false){
+  if (nextPlayer.myBoard.attackChanceP==false) {
     text(1.0*simulator.mainBoard.sv[25], utils.mainL, utils.mainU-utils.fontSize);
     text(1.0*simulator.mainBoard.sv2[25], utils.mainL+utils.fontSize*3, utils.mainU-utils.fontSize);
-  }else {
+  } else {
     prize prize=new prize();
     prize.getPrize3FromNodeList(nextPlayer.position, uct.rootNode.legalMoves);
-    displayBestStats(prize,utils.subU+utils.fontSize*3);
-    
+    displayBestStats(prize, utils.subU+utils.fontSize*3);
   }
   for (int p=1; p<=4; p++) {
-    text(message[p], utils.unitSize/2, utils.subU+utils.vStep*(p-1));
+    fill(0);
+    textSize(utils.fontSize);
+    textAlign(LEFT, CENTER);
+    String buttonNNNextText=message[p];
+    text(buttonNNNextText, utils.unitSize/2, utils.subU+utils.vStep*(p-1));
+    buttonNNNext.left = utils.unitSize/2;
+    buttonNNNext.top = utils.subU+utils.vStep*1.5;
+    buttonNNNext.wid = textWidth(buttonNNNextText)+5;
+    buttonNNNext.hei=utils.vStep*4;
   }
   showReturnButton();
   showScreenCapture();
@@ -940,9 +948,17 @@ void mousePreesedSimulator() {
     selectOutput("スクリーンショットを保存", "saveScreenShotSelected");
     //save("screenshot.png");
   }
-  if (buttonSaveTree.mouseOn()){//　ゲーム木保存、をクリックされたとき
+  if (buttonSaveTree.mouseOn()) {//　ゲーム木保存、をクリックされたとき
     selectOutput("ゲーム木を保存", "saveTreeSelected");
     // uct.SaveGameTree(simulator.nextPlayer);
+  }
+  if (buttonNNNext.mouseOn()){// ３手先のデータ、をクリックされたとき    
+    //println("buttonNNNext.mouseOn()");
+    uct.nnNextPlayer ++;
+    if (uct.nnNextPlayer==5){
+      uct.nnNextPlayer = 1;
+    }
+    showMcts(uct.nextPlayer);
   }
   if (gameOptions.get("SimMethod")==1) {
     if (buttonPrevSV.mouseOn()) {
@@ -951,7 +967,7 @@ void mousePreesedSimulator() {
       simulator.mainBoard.display(10);
       prize prize=new prize();
       prize.getPrize3FromNodeList(simulator.nextPlayer, simulator.rootNode.legalMoves);
-      displayBestStats(prize,utils.subU+utils.fontSize*1.5);
+      displayBestStats(prize, utils.subU+utils.fontSize*1.5);
       displayAllStats(attackChanceCursor, simulator.nextPlayer);
       showReturnButton();
       showScreenCapture();
@@ -962,7 +978,7 @@ void mousePreesedSimulator() {
       simulator.mainBoard.display(10);
       prize prize=new prize();
       prize.getPrize3FromNodeList(simulator.nextPlayer, simulator.rootNode.legalMoves);
-      displayBestStats(prize,utils.subU+utils.fontSize*1.5);
+      displayBestStats(prize, utils.subU+utils.fontSize*1.5);
       displayAllStats(attackChanceCursor, simulator.nextPlayer);
       showReturnButton();
       showScreenCapture();
@@ -998,7 +1014,7 @@ void saveTreeSelected(File selection) {
 }
 
 PrintWriter outputGameTree;
-void saveGameTree(String filepath){
+void saveGameTree(String filepath) {
   // 出力用ファイルを作成
   outputGameTree = createWriter(filepath);
   for (uctNode nd : uct.rootNode.legalMoves) {
@@ -1006,33 +1022,32 @@ void saveGameTree(String filepath){
   }
   // 書き込み終了時は必ず close()
   outputGameTree.close();
-    
 }
 
-void fileOutputAllWaPa(uctNode nd){
-  if ( nd.depth<=3){
-    outputGameTree.println(""+nd.id+",("+nf(nd.wa[1]/nd.na,1,6)+","+nf(nd.pa[1]/nd.na,2,6)+")"+
-    "("+nf(nd.wa[2]/nd.na,1,6)+","+nf(nd.pa[2]/nd.na,2,6)+")"+
-    "("+nf(nd.wa[3]/nd.na,1,6)+","+nf(nd.pa[3]/nd.na,2,6)+")"+
-    "("+nf(nd.wa[4]/nd.na,1,6)+","+nf(nd.pa[4]/nd.na,2,6)+")");
+void fileOutputAllWaPa(uctNode nd) {
+  if ( nd.depth<=3) {
+    outputGameTree.println(""+nd.id+",("+nf(nd.wa[1]/nd.na, 1, 6)+","+nf(nd.pa[1]/nd.na, 2, 6)+")"+
+      "("+nf(nd.wa[2]/nd.na, 1, 6)+","+nf(nd.pa[2]/nd.na, 2, 6)+")"+
+      "("+nf(nd.wa[3]/nd.na, 1, 6)+","+nf(nd.pa[3]/nd.na, 2, 6)+")"+
+      "("+nf(nd.wa[4]/nd.na, 1, 6)+","+nf(nd.pa[4]/nd.na, 2, 6)+")");
   }
-  if (nd.childR!=null && nd.childR.size()>0){
-    for(uctNode nd2: nd.childR){
+  if (nd.childR!=null && nd.childR.size()>0) {
+    for (uctNode nd2 : nd.childR) {
       fileOutputAllWaPa(nd2);
     }
   }
-  if (nd.childG!=null && nd.childG.size()>0){
-    for(uctNode nd2: nd.childG){
+  if (nd.childG!=null && nd.childG.size()>0) {
+    for (uctNode nd2 : nd.childG) {
       fileOutputAllWaPa(nd2);
     }
   }
-  if (nd.childW!=null && nd.childW.size()>0){
-    for(uctNode nd2: nd.childW){
+  if (nd.childW!=null && nd.childW.size()>0) {
+    for (uctNode nd2 : nd.childW) {
       fileOutputAllWaPa(nd2);
     }
   }
-  if (nd.childB!=null && nd.childB.size()>0){
-    for(uctNode nd2: nd.childB){
+  if (nd.childB!=null && nd.childB.size()>0) {
+    for (uctNode nd2 : nd.childB) {
       fileOutputAllWaPa(nd2);
     }
   }
