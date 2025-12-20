@@ -128,6 +128,7 @@ class uctClass {
   boolean chanceNodeOn=false;
   player nextPlayer=null;
   int nnNextPlayer=1;
+  int underCalculation=0;
   uctClass() {
   }
   ArrayList<uctNode> GetChildOfUctNode(int player, uctNode nd0) {
@@ -278,11 +279,29 @@ class uctClass {
       println("averageBackPropagate","("+wR+"/"+nR+")("+wG+"/"+nG+")("+wW+"/"+nW+")("+wB+"/"+nB+")na="+na);
     }
     float sum=0f;
-    if (nR!=0) sum += (wR/nR*0.25);
-    if (nG!=0) sum += (wG/nG*0.25);
-    if (nW!=0) sum += (wW/nW*0.25);
-    if (nB!=0) sum += (wB/nB*0.25);
-    return sum*na;
+    int numer=0;
+    int denom=0;
+    if (nR!=0) {
+      numer = gameOptions.get("Rrate");
+      sum += (wR/nR*numer) ;
+      denom += numer;
+    }
+    if (nG!=0) {
+      numer = gameOptions.get("Grate");
+      sum += (wG/nG*numer);
+      denom += numer;
+    }
+    if (nW!=0){
+      numer = gameOptions.get("Wrate");
+      sum += (wW/nW*numer);
+      denom += numer;
+    }
+    if (nB!=0){
+      numer = gameOptions.get("Brate");
+      sum += (wB/nB*numer);
+      denom += numer;
+    }
+    return sum*na/denom;
   }
 
 };

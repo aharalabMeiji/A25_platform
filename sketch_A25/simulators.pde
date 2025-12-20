@@ -1006,7 +1006,7 @@ void saveTreeSelected(File selection) {
   } else {
     filePath = selection.getAbsolutePath();
     if (differentExt(filePath, ".txt")==true) {
-      filePath += ".png";
+      filePath += ".txt";
     }
     println("選択されたファイルパス: " + filePath);
     saveGameTree(filePath);

@@ -99,13 +99,30 @@ class board {
       int total = simulatorStartBoard.size();
       int now = (simulator.StartBoardId) % total;
       text(filenamePath+"("+now+")", utils.mainL+utils.fontSize*20, utils.mainU-utils.fontSize);
+      stroke(0);
+      switch(uct.underCalculation){
+        case 0: fill(#1E90FF);
+        ellipse(utils.mainL+utils.fontSize*27.5, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
+        break;
+        case 1: fill(#1E90FF);
+        ellipse(utils.mainL+utils.fontSize*28, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
+        break;
+        case 2: fill(#1E90FF);
+        ellipse(utils.mainL+utils.fontSize*28.5, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
+        break;
+        default: fill(#4CAF50);
+        text("✓", utils.mainL+utils.fontSize*28, utils.mainU-utils.fontSize);// 
+        break;
+      }
+      
+      fill(0);
       String simMethod = "Monte Carlo Tree Search(UCT) ";
       
       text(simMethod, utils.subL, utils.subU);
-      if (gameOptions.get("SimTimes") == 21) simMethod = "(D4/wCancel)";
-      else if (gameOptions.get("SimTimes") == 22) simMethod = "(D4/woCancel)";
-      else if (gameOptions.get("SimTimes") == 23) simMethod = "(D5/wCancel)";
-      else if (gameOptions.get("SimTimes") == 24) simMethod = "(D5/woCancel)";
+      if (gameOptions.get("SimTimes") == 21) simMethod = "(E10/D4/wCancel)";
+      else if (gameOptions.get("SimTimes") == 22) simMethod = "(E10/D4/woCancel)";
+      else if (gameOptions.get("SimTimes") == 23) simMethod = "(E10/D5/wCancel)";
+      else if (gameOptions.get("SimTimes") == 24) simMethod = "(E10/D5/woCancel)";
       else {
         simMethod="(E"+str(gameOptions.get("expandThreshold"))+"/D"+str(gameOptions.get("depthMax"));
         if (gameOptions.get("wCancel")==1) simMethod += "/wCancel)";

@@ -122,6 +122,7 @@ int uctMctsBrainPreparation(player pl) {
   for (int k=0; k<25; k++) {// 何も表示しない。念のため。
     pl.myBoard.s[k].marked = 0;
   }//たぶん不要
+  uct.underCalculation=0;
   return 0;// トラブルなく終わる
 }
 
@@ -271,11 +272,13 @@ int uctMctsMainLoop(player pl) {
       secondRate=uct.prize.w2;
     }
     if (winRate-secondRate>error) {
-      print(++uct.cancelCount);
+      //print(++uct.cancelCount);////////////////////////消すよ
+      
       if ((uct.cancelCount)>=uct.cancelCountMax) {
         println("勝率の推定により着手が確定した");
         println("試行回数(",pl.myBoard.simulatorNumber,")");
         println("time=", millis()-startTime, "(ms)");
+        uct.underCalculation=10;
         // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする
         int ret = returnBestChildFromRoot(pl, uct.rootNode);
         if (pl.myBoard.attackChanceP()) {
@@ -292,7 +295,9 @@ int uctMctsMainLoop(player pl) {
       uct.cancelCount=0;
     }
   }
-  print(".");////////////////////////////////////////////////time stump
+  //print(".");////////////////////////////////////////////////消すよ。
+  uct.underCalculation ++;
+  if (uct.underCalculation==3) uct.underCalculation=0;
   //uctMctsMainLoop block 02
   for (int repeat=0; repeat<1000; repeat++) {
     //uctMctsMainLoop block 02-1
@@ -342,6 +347,7 @@ int uctMctsMainLoop(player pl) {
           println("すべてのancestorでアクティブノードが尽きた");
           println("試行回数(",pl.myBoard.simulatorNumber,")");
           println("time=", millis()-startTime, "(ms)");
+          uct.underCalculation=10;
           //内部データのチェック用;
           //for(uctNode anc : uct.rootNode.legalMoves){
           //  printAllWaPa(anc);
@@ -590,6 +596,7 @@ int uctMctsMainLoop(player pl) {
       //uctMctsMainLoop block 02-2-5
       if (pl.myBoard.simulatorNumber >= uct.terminateThreshold) {//
         println("試行回数上限到達(",pl.myBoard.simulatorNumber,")");
+        uct.underCalculation=10;
         // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする。
         int ret = returnBestChildFromRoot(pl, uct.rootNode);
         println("time=", millis()-startTime, "(ms)");
