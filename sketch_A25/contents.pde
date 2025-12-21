@@ -682,54 +682,54 @@ void showContents() {
         top += utils.vStep;
         left=utils.hOffset;
         //
-        captionText = "max # of nodes:";
-        fill(0);
-        text(captionText, left, top);
-        left += (textWidth(captionText)+utils.hSpace);
-        //
-        buttonText = "[10K]";
-        button buttonTerminateThreshold1=new button();
-        buttonTerminateThreshold1.setLT(left, top, buttonText);
-        buttonTerminateThreshold1.setItem("terminateThreshold", 4);
-        buttons.add(buttonTerminateThreshold1);
-        if (gameOptions.get("terminateThreshold")==4) fill(255, 0, 0);
-        else fill(0);
-        text(buttonText, left, top);
-        left += (textWidth(buttonText)+utils.hSpace);
-        //
-        buttonText = "[100K]";
-        button buttonTerminateThreshold2=new button();
-        buttonTerminateThreshold2.setLT(left, top, buttonText);
-        buttonTerminateThreshold2.setItem("terminateThreshold", 5);
-        buttons.add(buttonTerminateThreshold2);
-        if (gameOptions.get("terminateThreshold")==5) fill(255, 0, 0);
-        else fill(0);
-        text(buttonText, left, top);
-        left += (textWidth(buttonText)+utils.hSpace);
-        //
-        buttonText = "[1M]";
-        button buttonTerminateThreshold3=new button();
-        buttonTerminateThreshold3.setLT(left, top, buttonText);
-        buttonTerminateThreshold3.setItem("terminateThreshold", 6);
-        buttons.add(buttonTerminateThreshold3);
-        if (gameOptions.get("terminateThreshold")==6) fill(255, 0, 0);
-        else fill(0);
-        text(buttonText, left, top);
-        left += (textWidth(buttonText)+utils.hSpace);
-        //
-        buttonText = "[10M]";
-        button buttonTerminateThreshold4=new button();
-        buttonTerminateThreshold4.setLT(left, top, buttonText);
-        buttonTerminateThreshold4.setItem("terminateThreshold", 7);
-        buttons.add(buttonTerminateThreshold4);
-        if (gameOptions.get("terminateThreshold")==7) fill(255, 0, 0);
-        else fill(0);
-        text(buttonText, left, top);
-        left += (textWidth(buttonText)+utils.hSpace);
-        //
-        top += utils.vStep;
-        left=utils.hOffset;
-        //
+        //captionText = "max # of nodes:";
+        //fill(0);
+        //text(captionText, left, top);
+        //left += (textWidth(captionText)+utils.hSpace);
+        ////
+        //buttonText = "[10K]";
+        //button buttonTerminateThreshold1=new button();
+        //buttonTerminateThreshold1.setLT(left, top, buttonText);
+        //buttonTerminateThreshold1.setItem("terminateThreshold", 4);
+        //buttons.add(buttonTerminateThreshold1);
+        //if (gameOptions.get("terminateThreshold")==4) fill(255, 0, 0);
+        //else fill(0);
+        //text(buttonText, left, top);
+        //left += (textWidth(buttonText)+utils.hSpace);
+        ////
+        //buttonText = "[100K]";
+        //button buttonTerminateThreshold2=new button();
+        //buttonTerminateThreshold2.setLT(left, top, buttonText);
+        //buttonTerminateThreshold2.setItem("terminateThreshold", 5);
+        //buttons.add(buttonTerminateThreshold2);
+        //if (gameOptions.get("terminateThreshold")==5) fill(255, 0, 0);
+        //else fill(0);
+        //text(buttonText, left, top);
+        //left += (textWidth(buttonText)+utils.hSpace);
+        ////
+        //buttonText = "[1M]";
+        //button buttonTerminateThreshold3=new button();
+        //buttonTerminateThreshold3.setLT(left, top, buttonText);
+        //buttonTerminateThreshold3.setItem("terminateThreshold", 6);
+        //buttons.add(buttonTerminateThreshold3);
+        //if (gameOptions.get("terminateThreshold")==6) fill(255, 0, 0);
+        //else fill(0);
+        //text(buttonText, left, top);
+        //left += (textWidth(buttonText)+utils.hSpace);
+        ////
+        //buttonText = "[10M]";
+        //button buttonTerminateThreshold4=new button();
+        //buttonTerminateThreshold4.setLT(left, top, buttonText);
+        //buttonTerminateThreshold4.setItem("terminateThreshold", 7);
+        //buttons.add(buttonTerminateThreshold4);
+        //if (gameOptions.get("terminateThreshold")==7) fill(255, 0, 0);
+        //else fill(0);
+        //text(buttonText, left, top);
+        //left += (textWidth(buttonText)+utils.hSpace);
+        ////
+        //top += utils.vStep;
+        //left=utils.hOffset;
+        ////
         captionText = "max depth:";
         fill(0);
         text(captionText, left, top);

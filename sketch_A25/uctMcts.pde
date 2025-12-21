@@ -8,7 +8,7 @@ int uctMctsBrain(player pl) { //
   answer = uctMctsBrainFirstSimulation(pl);
 
   if (answer!=-1) return answer;
-  println("uct ", uct.expandThreshold, uct.terminateThreshold, uct.depthMax, uct.cancelCountMax);
+  println("uct ", uct.expandThreshold, uct.depthMax, uct.cancelCountMax);//uct.terminateThreshold, 
   //uct.simulationTag=uct.expandThreshold*10;
   while (true) {
     if (uct.uctMainLoopOption==1) {
@@ -594,26 +594,26 @@ int uctMctsMainLoop(player pl) {
         //}
       }// アクティブノード削除からの展開、ここまで
       //uctMctsMainLoop block 02-2-5
-      if (pl.myBoard.simulatorNumber >= uct.terminateThreshold) {//
-        println("試行回数上限到達(",pl.myBoard.simulatorNumber,")");
-        uct.underCalculation=10;
-        // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする。
-        int ret = returnBestChildFromRoot(pl, uct.rootNode);
-        println("time=", millis()-startTime, "(ms)");
-        //PrintWriter output = createWriter("output.txt");
-        //showAllMct(uct.rootNode, pl.myBoard.simulatorNumber, output);
-        //output.flush();
-        //output.close();
-        if (pl.myBoard.attackChanceP()) {
-          pl.yellow = int(ret/25);
-          println("[",(ret%25+1)+"-"+(pl.yellow+1),"]");
-          return ret%25;
-        } else {
-          println("[",(ret+1),"]");
-          println(""+simulator.mainBoard.sv[ret]+" : "+simulator.mainBoard.sv2[ret]);
-          return ret;
-        }
-      }
+      //if (pl.myBoard.simulatorNumber >= uct.terminateThreshold) {//
+      //  println("試行回数上限到達(",pl.myBoard.simulatorNumber,")");
+      //  uct.underCalculation=10;
+      //  // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする。
+      //  int ret = returnBestChildFromRoot(pl, uct.rootNode);
+      //  println("time=", millis()-startTime, "(ms)");
+      //  //PrintWriter output = createWriter("output.txt");
+      //  //showAllMct(uct.rootNode, pl.myBoard.simulatorNumber, output);
+      //  //output.flush();
+      //  //output.close();
+      //  if (pl.myBoard.attackChanceP()) {
+      //    pl.yellow = int(ret/25);
+      //    println("[",(ret%25+1)+"-"+(pl.yellow+1),"]");
+      //    return ret%25;
+      //  } else {
+      //    println("[",(ret+1),"]");
+      //    println(""+simulator.mainBoard.sv[ret]+" : "+simulator.mainBoard.sv2[ret]);
+      //    return ret;
+      //  }
+      //}
     }//for (uctNode ancestor : uct.rootNode.children)ここまで
   }
   return -1;

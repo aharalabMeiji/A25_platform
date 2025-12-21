@@ -742,16 +742,17 @@ void UCT1() {
       uct.depthMax=5;
       uct.cancelCountMax=100000;
     } else if (SimTimes == 25) {
-      uct.expandThreshold=gameOptions.get("expandThreshold");
-      if (gameOptions.get("terminateThreshold")==4) {
-        uct.terminateThreshold = uct.expandThreshold*10000;
-      } else if (gameOptions.get("terminateThreshold")==5) {
-        uct.terminateThreshold = uct.expandThreshold*100000;
-      } else if (gameOptions.get("terminateThreshold")==6) {
-        uct.terminateThreshold = uct.expandThreshold*1000000;
-      } else {
-        uct.terminateThreshold = uct.expandThreshold*10000000;
-      }
+      //uct.expandThreshold=gameOptions.get("expandThreshold");
+      //if (gameOptions.get("terminateThreshold")==4) {
+      //  uct.terminateThreshold = uct.expandThreshold*10000;
+      //} else if (gameOptions.get("terminateThreshold")==5) {
+      //  uct.terminateThreshold = uct.expandThreshold*100000;
+      //} else if (gameOptions.get("terminateThreshold")==6) {
+      //  uct.terminateThreshold = uct.expandThreshold*1000000;
+      //} else {
+      //  uct.terminateThreshold = uct.expandThreshold*10000000;
+      //}
+      uct.terminateThreshold = uct.expandThreshold*1000000;
       uct.depthMax=gameOptions.get("depthMax");
       if (gameOptions.get("wCancel")==1) {
         uct.cancelCountMax=5;
