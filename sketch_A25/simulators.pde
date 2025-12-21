@@ -733,12 +733,12 @@ void UCT1() {
       uct.cancelCountMax=1000000;
     } else if (SimTimes == 23) {
       uct.expandThreshold=10;
-      uct.terminateThreshold = uct.expandThreshold*1000000;
+      uct.terminateThreshold = uct.expandThreshold*10000000;
       uct.depthMax=5;
       uct.cancelCountMax=20;
     } else if (SimTimes == 24) {
       uct.expandThreshold=10;
-      uct.terminateThreshold = uct.expandThreshold*1000000;
+      uct.terminateThreshold = uct.expandThreshold*10000000;
       uct.depthMax=5;
       uct.cancelCountMax=100000;
     } else if (SimTimes == 25) {
