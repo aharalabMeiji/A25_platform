@@ -301,6 +301,9 @@ class uctClass {
       sum += (wB/nB*numer);
       denom += numer;
     }
+    //if (denom<4.0){
+    //  println("average by 3");
+    //}
     return sum*na/denom;
   }
 

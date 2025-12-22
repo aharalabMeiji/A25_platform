@@ -742,7 +742,7 @@ void UCT1() {
       uct.depthMax=5;
       uct.cancelCountMax=100000;
     } else if (SimTimes == 25) {
-      //uct.expandThreshold=gameOptions.get("expandThreshold");
+      uct.expandThreshold=gameOptions.get("expandThreshold");
       //if (gameOptions.get("terminateThreshold")==4) {
       //  uct.terminateThreshold = uct.expandThreshold*10000;
       //} else if (gameOptions.get("terminateThreshold")==5) {

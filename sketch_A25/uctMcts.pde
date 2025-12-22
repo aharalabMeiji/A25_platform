@@ -349,9 +349,9 @@ int uctMctsMainLoop(player pl) {
           println("time=", millis()-startTime, "(ms)");
           uct.underCalculation=10;
           //内部データのチェック用;
-          //for(uctNode anc : uct.rootNode.legalMoves){
-          //  printAllWaPa(anc);
-          //}
+          for(uctNode anc : uct.rootNode.legalMoves){
+            printAllWaPa(anc);
+          }
           // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする
           int ret = returnBestChildFromRoot(pl, uct.rootNode);
           if (pl.myBoard.attackChanceP()) {
@@ -504,10 +504,10 @@ int uctMctsMainLoop(player pl) {
                   uct.subBoard.move(p, k);// 1手着手する
                   uct.subBoard.copyBoardToBd(uct.newNode.bd);
                   //uct.newNode.printlnBd();
-                  // println("新しいノードで５回ランダム試行を行う。");// アタックチャンスでないとき//展開中
+                  // println("新しいノードで4回ランダム試行を行う。");// アタックチャンスでないとき//展開中
                   // uct.newNodeの報酬データを初期化
                   uct.newNode.initRewardOfNode();
-                  // ５回、最後まで打ち切ってバックプロパゲートしておく。
+                  // 4回、最後まで打ち切ってバックプロパゲートしておく。
                   // uct値を有効にするため。
                   for (int count=0; count<4; count++) {
                     pl.myBoard.simulatorNumber ++;
