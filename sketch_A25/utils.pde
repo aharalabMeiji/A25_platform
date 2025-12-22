@@ -155,9 +155,13 @@ class uctClass {
     }
     //println("uctMctsBrain:uct.mainBoardへ盤面をコピー");
     this.randomPlayBoard.copyBdToBoard(uctMaxNode.bd);
-    int nextplayer = int(random(4))+1;
+    int nextplayer = 1;
     if (1<=_nextPlayer && _nextPlayer<=4){
       nextplayer = _nextPlayer;
+    } else {
+      do {
+        nextplayer = int(random(4)+1);
+      } while (uctMaxNode.onRGWB[nextplayer]==false);
     }
     //println("uctMctsBrain:uct.mainBoardを最後まで打ち切る");
     this.randomPlayWinPoint = playSimulatorToEnd(this.randomPlayBoard, this.participants, nextplayer);
@@ -274,6 +278,16 @@ class uctClass {
       }
     } while (true);//println("親にさかのぼってデータを更新する");//おわり
   }
+  //float averageBackPropagate(uctNode nd, int p, boolean wp) {
+    //float wR = (wp)? nd.waR[p]: nd.paR[p];
+    //float nR = nd.naR;
+    //float wG = (wp)? nd.waR[p]: nd.paR[p];;
+    //float nG = nd.naR;
+    //float wW = (wp)? nd.waR[p]: nd.paR[p];;
+    //float nW = nd.naR; 
+    //float wB = (wp)? nd.waR[p]: nd.paR[p];;
+    //float nB = nd.naR;
+    //float na = nd.na;
   float averageBackPropagate(float wR, float nR, float wG, float nG, float wW, float nW, float wB, float nB, float na) {
     if (nR+nG+nW+nB!=na) {
       println("averageBackPropagate","("+wR+"/"+nR+")("+wG+"/"+nG+")("+wW+"/"+nW+")("+wB+"/"+nB+")na="+na);
@@ -281,7 +295,7 @@ class uctClass {
     float sum=0f;
     int numer=0;
     int denom=0;
-    if (nR!=0) {
+    if (nR!=0) {// if (nd.onRGWB[1])
       numer = gameOptions.get("Rrate");
       sum += (wR/nR*numer) ;
       denom += numer;

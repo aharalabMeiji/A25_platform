@@ -79,6 +79,10 @@ int uctMctsBrainPreparation(player pl) {
         uct.rootNode.legalMoves.add(uct.newNode);//ルートノードにぶら下げる
         uct.newNode.ancestor = uct.newNode;// 自分自身が先祖
         uct.newNode.parent = null;//逆伝播をここで切りたいので
+        uct.newNode.onRGWB = new boolean[5];
+        for(int p=1; p<5; p++){
+          uct.newNode.onRGWB[p]=true;
+        }//4つのチャンスノードは有効
         pl.myBoard.copyBoardToSub(uct.mainBoard);
         uct.mainBoard.move(pl.position, k);//一手進める
         uct.mainBoard.copyBoardToBd(uct.newNode.bd);
@@ -94,6 +98,11 @@ int uctMctsBrainPreparation(player pl) {
       uct.rootNode.legalMoves.add(uct.newNode);//ルートノードにぶら下げる
       uct.newNode.ancestor = uct.newNode;
       uct.newNode.parent = null;//
+      uct.newNode.onRGWB = new boolean[5];
+      for(int p=1; p<5; p++){
+        if (pl.position==p) uct.newNode.onRGWB[p]=false;
+        else uct.newNode.onRGWB[p]=true;
+      } //ノードをつるさない場合はフラグを倒しておく
       pl.myBoard.copyBoardToSub(uct.mainBoard);
       uct.mainBoard.copyBoardToBd(uct.newNode.bd);
       uct.newNode.attackChanceNode=false;//念のため倒しておく。
@@ -112,6 +121,10 @@ int uctMctsBrainPreparation(player pl) {
           uct.rootNode.legalMoves.add(uct.newNode);//ぶら下げる
           uct.newNode.ancestor = uct.newNode;
           uct.newNode.parent = null;//
+          uct.newNode.onRGWB = new boolean[5];
+          for(int p=1; p<5; p++){
+            uct.newNode.onRGWB[p]=true;
+          }//4つのチャンスノードは有効
           pl.myBoard.copyBoardToSub(uct.mainBoard);
           uct.mainBoard.move(pl.position, j);// 1手着手する
           uct.mainBoard.s[i].col = 5;// 黄色を置く
@@ -142,7 +155,7 @@ int uctMctsBrainFirstSimulation(player pl) {
     for (int count=0; count<4; count++) {
       //ndが26番（パス）の場合、そのプレーヤの文の初期シミュレーションは行わない。
       int nextplayer = count+1;
-      if (nd.move==25 && nd.player==nextplayer){
+      if (nd.onRGWB[nextplayer]==false){
         continue;
       }
       uct.mainBoard.copyBdToBoard(nd.bd);
@@ -221,11 +234,7 @@ int uctMctsBrainFirstSimulation(player pl) {
   //ここがバージョン２//深さ１のノードのそれぞれにアクティブなノードをぶら下げる。
   for (uctNode nd : uct.rootNode.legalMoves) {
     nd.activeNodes = new ArrayList<uctNode>();
-    //ndが26番（パス）の場合、アクティブなノードは設定しない。
-    if (nd.move==25){
-      continue;
-    }
-    nd.activeNodes.add(nd);
+    nd.activeNodes.add(nd);// 26番であっても、アクティブなノードである。
     nd.ancestor = nd;
   }
   //
@@ -283,8 +292,6 @@ int uctMctsMainLoop(player pl) {
       secondRate=uct.prize.w2;
     }
     if (winRate-secondRate>error) {
-      //print(++uct.cancelCount);////////////////////////消すよ
-      
       if ((uct.cancelCount)>=uct.cancelCountMax) {
         println("勝率の推定により着手が確定した");
         println("試行回数(",pl.myBoard.simulatorNumber,")");
@@ -312,8 +319,8 @@ int uctMctsMainLoop(player pl) {
   for (int repeat=0; repeat<1000; repeat++) {
     //uctMctsMainLoop block 02-1
     // VERSION2
-    for (uctNode ancestor : uct.rootNode.legalMoves) {//root直下に、アクティブノードがぶら下がっている。
-      for (uctNode nd : ancestor.activeNodes) {
+    for (uctNode ancestor : uct.rootNode.legalMoves) {//root直下に、先祖たちがぶら下がっている。
+      for (uctNode nd : ancestor.activeNodes) {// 先祖たちにはアクティブノード（葉）がぶら下がっている。
         for (int p=1; p<=4; p++) {
           // シミュレーション総回数はpl.myBoard.simulatorNumber
           // 平均パネル枚数に0.04かけて、加算している。
@@ -325,8 +332,6 @@ int uctMctsMainLoop(player pl) {
 
     //uctMctsMainLoop block 02-2
     for (uctNode ancestor : uct.rootNode.legalMoves) {//
-      //pl.myBoard.simulatorNumber ++;
-      //println("uctMctsBrain:シミュレーション回数"+pl.myBoard.simulatorNumber);
 
       //println("ancestorごとに、uct値が最大となるアクティブノードを見つける");
       //uctMctsMainLoop block 02-2-1
