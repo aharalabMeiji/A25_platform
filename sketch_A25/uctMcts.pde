@@ -77,6 +77,7 @@ int uctMctsBrainPreparation(player pl) {
         uct.newNode.id = uct.rootNode.id + (":"+kifu.playerColCode[pl.position]+nf(k+1, 2));
         uct.newNode.depth = 1;
         uct.rootNode.legalMoves.add(uct.newNode);//ルートノードにぶら下げる
+        uct.newNode.ancestor = uct.newNode;// 自分自身が先祖
         uct.newNode.parent = null;//逆伝播をここで切りたいので
         pl.myBoard.copyBoardToSub(uct.mainBoard);
         uct.mainBoard.move(pl.position, k);//一手進める
@@ -91,6 +92,7 @@ int uctMctsBrainPreparation(player pl) {
       uct.newNode.id = uct.rootNode.id+(":"+kifu.playerColCode[pl.position]+nf(26, 2));
       uct.newNode.depth = 1;
       uct.rootNode.legalMoves.add(uct.newNode);//ルートノードにぶら下げる
+      uct.newNode.ancestor = uct.newNode;
       uct.newNode.parent = null;//
       pl.myBoard.copyBoardToSub(uct.mainBoard);
       uct.mainBoard.copyBoardToBd(uct.newNode.bd);
@@ -108,6 +110,7 @@ int uctMctsBrainPreparation(player pl) {
           uct.newNode.id = uct.rootNode.id + (":"+kifu.playerColCode[pl.position]+nf(j+1, 2)) + (":Y"+nf(i+1, 2));
           uct.newNode.depth = 1;
           uct.rootNode.legalMoves.add(uct.newNode);//ぶら下げる
+          uct.newNode.ancestor = uct.newNode;
           uct.newNode.parent = null;//
           pl.myBoard.copyBoardToSub(uct.mainBoard);
           uct.mainBoard.move(pl.position, j);// 1手着手する
@@ -122,7 +125,7 @@ int uctMctsBrainPreparation(player pl) {
   for (int k=0; k<25; k++) {// 何も表示しない。念のため。
     pl.myBoard.s[k].marked = 0;
   }//たぶん不要
-  uct.underCalculation=0;
+  uct.underCalculation=0;//計算厨であることを示すフラグ
   return 0;// トラブルなく終わる
 }
 
@@ -137,7 +140,11 @@ int uctMctsBrainFirstSimulation(player pl) {
     //println("uctMctsBrain:最後までシミュレーションを_count回行う");
     // ここをUCBにするアイディアもあるが、結局淘汰されるようなので、０でなければなんでもいいみたい。
     for (int count=0; count<4; count++) {
+      //ndが26番（パス）の場合、そのプレーヤの文の初期シミュレーションは行わない。
       int nextplayer = count+1;
+      if (nd.move==25 && nd.player==nextplayer){
+        continue;
+      }
       uct.mainBoard.copyBdToBoard(nd.bd);
       uct.winPoint = playSimulatorToEnd(uct.mainBoard, uct.participants, nextplayer);//ここは次手番をnextplayerとする。
       pl.myBoard.simulatorNumber ++;
@@ -214,6 +221,10 @@ int uctMctsBrainFirstSimulation(player pl) {
   //ここがバージョン２//深さ１のノードのそれぞれにアクティブなノードをぶら下げる。
   for (uctNode nd : uct.rootNode.legalMoves) {
     nd.activeNodes = new ArrayList<uctNode>();
+    //ndが26番（パス）の場合、アクティブなノードは設定しない。
+    if (nd.move==25){
+      continue;
+    }
     nd.activeNodes.add(nd);
     nd.ancestor = nd;
   }
@@ -261,7 +272,7 @@ void printAllWaPa(uctNode nd){
 int uctMctsMainLoop(player pl) {
   //uctMctsMainLoop block 01
   // console に計算経過を出力（マストではない。）
-  uct.prize.getPrize3FromNodeList(pl.position, uct.rootNode.legalMoves);
+  uct.prize.getPrize3FromNodeList(pl.position, uct.rootNode.legalMoves); //<>//
   if (uct.prize.getMove(1)!=null) {
     float winRate=uct.prize.w1;
     float error = sqrt(winRate*(1.0-winRate)/uct.prize.getMove(1).na)*1.96;
@@ -295,7 +306,6 @@ int uctMctsMainLoop(player pl) {
       uct.cancelCount=0;
     }
   }
-  //print(".");////////////////////////////////////////////////消すよ。
   uct.underCalculation ++;
   if (uct.underCalculation==3) uct.underCalculation=0;
   //uctMctsMainLoop block 02
@@ -326,7 +336,7 @@ int uctMctsMainLoop(player pl) {
         uctNode nd = ancestor.activeNodes.get(zz);
         if (nd.na >= uct.expandThreshold && nd.depth >= uct.depthMax) {//試行回数がマックス、かつ深さもマックス
           //println("試行回数がマックス、かつ深さもマックスなので、"+nd.id+"を展開せずにアクティブノードのリストから消去");
-          ancestor.activeNodes.remove(zz);// 展開せずにアクティブノードのリストから消去          
+          ancestor.activeNodes.remove(zz);// 展開せずにアクティブノードのリストから消去        
         } else if (nd.uct[nd.player]>uctMax) {// uct局所最大なら、記録しておく。
           uctMax=nd.uct[nd.player];
           uctMaxNode = nd;
@@ -349,11 +359,11 @@ int uctMctsMainLoop(player pl) {
           println("time=", millis()-startTime, "(ms)");
           uct.underCalculation=10;
           //内部データのチェック用;
-          for(uctNode anc : uct.rootNode.legalMoves){
-            printAllWaPa(anc);
-          }
+          //for(uctNode anc : uct.rootNode.legalMoves){
+          //  printAllWaPa(anc);
+          //}
           // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする
-          int ret = returnBestChildFromRoot(pl, uct.rootNode);
+          int ret = returnBestChildFromRoot(pl, uct.rootNode); //<>//
           if (pl.myBoard.attackChanceP()) {
             pl.yellow = int(ret/25);
             println("[",(ret%25+1)+"-"+(pl.yellow+1),"]");
@@ -394,19 +404,20 @@ int uctMctsMainLoop(player pl) {
 
           uct.newNode=null;
           uctMaxNode.legalMoves=null;
+          // チャンスノードを別途ぶら下げる案を却下。
+          //旧来のノード構成で、ぶら下げる場所を4か所作る（メモリとスピードの節約のため）
           if (uctMaxNode.childR==null) uctMaxNode.childR = new ArrayList<uctNode>();
           if (uctMaxNode.childG==null) uctMaxNode.childG = new ArrayList<uctNode>();
           if (uctMaxNode.childW==null) uctMaxNode.childW = new ArrayList<uctNode>();
           if (uctMaxNode.childB==null) uctMaxNode.childB = new ArrayList<uctNode>();
           for (int p=1; p<5; p++) {// 4人分の作業ここから
             //uctMctsMainLoop block 02-2-4-1
-            // チャンスノードを別途ぶら下げる案を却下。
-            //旧来のノード構成で、ぶら下げる場所を4か所作る（メモリとスピードの節約のため）
-            if (ancestor.move==25){// パス選択のノードには、繰り返し同じプレイヤーを扱わない。
-              if (uctMaxNode.depth==1 && ancestor.player==p) {
-                print("[pass]");
-                continue;
-              }
+            // パス選択のノードには、繰り返し同じプレイヤーを扱わない。
+            if (ancestor.move==25 && uctMaxNode.depth==1){
+              print("[pass]");
+              continue;
+            }
+            if (ancestor.move==25){
               if (uctMaxNode.depth==1){
                 if (gameOptions.get("Absence0R")==1 && p==1){
                   print("[R]");

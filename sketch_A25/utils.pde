@@ -291,6 +291,10 @@ class uctClass {
       sum += (wG/nG*numer);
       denom += numer;
     }
+    else {
+      if( wG!=0)
+        println("wG="+wG+"nG="+nG);
+    }
     if (nW!=0){
       numer = gameOptions.get("Wrate");
       sum += (wW/nW*numer);
@@ -306,5 +310,4 @@ class uctClass {
     //}
     return sum*na/denom;
   }
-
 };
