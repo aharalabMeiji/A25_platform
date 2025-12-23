@@ -733,25 +733,26 @@ void UCT1() {
       uct.cancelCountMax=1000000;
     } else if (SimTimes == 23) {
       uct.expandThreshold=10;
-      uct.terminateThreshold = uct.expandThreshold*1000000;
+      uct.terminateThreshold = uct.expandThreshold*10000000;
       uct.depthMax=5;
       uct.cancelCountMax=20;
     } else if (SimTimes == 24) {
       uct.expandThreshold=10;
-      uct.terminateThreshold = uct.expandThreshold*1000000;
+      uct.terminateThreshold = uct.expandThreshold*10000000;
       uct.depthMax=5;
       uct.cancelCountMax=100000;
     } else if (SimTimes == 25) {
       uct.expandThreshold=gameOptions.get("expandThreshold");
-      if (gameOptions.get("terminateThreshold")==4) {
-        uct.terminateThreshold = uct.expandThreshold*10000;
-      } else if (gameOptions.get("terminateThreshold")==5) {
-        uct.terminateThreshold = uct.expandThreshold*100000;
-      } else if (gameOptions.get("terminateThreshold")==6) {
-        uct.terminateThreshold = uct.expandThreshold*1000000;
-      } else {
-        uct.terminateThreshold = uct.expandThreshold*10000000;
-      }
+      //if (gameOptions.get("terminateThreshold")==4) {
+      //  uct.terminateThreshold = uct.expandThreshold*10000;
+      //} else if (gameOptions.get("terminateThreshold")==5) {
+      //  uct.terminateThreshold = uct.expandThreshold*100000;
+      //} else if (gameOptions.get("terminateThreshold")==6) {
+      //  uct.terminateThreshold = uct.expandThreshold*1000000;
+      //} else {
+      //  uct.terminateThreshold = uct.expandThreshold*10000000;
+      //}
+      uct.terminateThreshold = uct.expandThreshold*1000000;
       uct.depthMax=gameOptions.get("depthMax");
       if (gameOptions.get("wCancel")==1) {
         uct.cancelCountMax=5;
@@ -872,7 +873,7 @@ void printlnAllNodes(uctNode nd, int p) {
 }
 
 void showMcts(player nextPlayer) {
-  uct.prize.getPrize1FromNodeList(nextPlayer.position, uct.rootNode.legalMoves);
+  uct.prize.getPrize1FromNodeList(nextPlayer.position, uct.rootNode.legalMoves); //<>//
   String[] message=new String[5];
   prize localPrize=new prize();
   uctNode nd1=null, nd2=null, nd3=null;

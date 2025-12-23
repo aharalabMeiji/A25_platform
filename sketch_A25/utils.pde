@@ -129,6 +129,7 @@ class uctClass {
   player nextPlayer=null;
   int nnNextPlayer=1;
   int underCalculation=0;
+  float Rrate=1, Grate=1, Wrate=1, Brate=1;
   uctClass() {
   }
   ArrayList<uctNode> GetChildOfUctNode(int player, uctNode nd0) {
@@ -155,9 +156,13 @@ class uctClass {
     }
     //println("uctMctsBrain:uct.mainBoardへ盤面をコピー");
     this.randomPlayBoard.copyBdToBoard(uctMaxNode.bd);
-    int nextplayer = int(random(4))+1;
-    if (1<=_nextPlayer && _nextPlayer<=4){
+    int nextplayer = 1;
+    if (1<=_nextPlayer && _nextPlayer<=4) {
       nextplayer = _nextPlayer;
+    } else {
+      do {
+        nextplayer = int(random(4))+1;
+      } while (uctMaxNode.onRGWB[nextplayer]==false);
     }
     //println("uctMctsBrain:uct.mainBoardを最後まで打ち切る");
     this.randomPlayWinPoint = playSimulatorToEnd(this.randomPlayBoard, this.participants, nextplayer);
@@ -195,13 +200,9 @@ class uctClass {
         uctMaxNode.naB ++;
       }
       for (int p=1; p<=4; p++) {
-        wDeltas[p] = averageBackPropagate(
-          uctMaxNode.waR[p], uctMaxNode.naR, uctMaxNode.waG[p], uctMaxNode.naG,
-          uctMaxNode.waW[p], uctMaxNode.naW, uctMaxNode.waB[p], uctMaxNode.naB, uctMaxNode.na)-uctMaxNode.wa[p];
+        wDeltas[p] = averageBackPropagate(uctMaxNode, p, true)-uctMaxNode.wa[p];
         uctMaxNode.wa[p] += wDeltas[p];
-        pDeltas[p] = averageBackPropagate(
-          uctMaxNode.paR[p], uctMaxNode.naR, uctMaxNode.paG[p], uctMaxNode.naG,
-          uctMaxNode.paW[p], uctMaxNode.naW, uctMaxNode.paB[p], uctMaxNode.naB, uctMaxNode.na)-uctMaxNode.pa[p];
+        pDeltas[p] = averageBackPropagate(uctMaxNode, p, false)-uctMaxNode.pa[p];
         uctMaxNode.pa[p] += pDeltas[p];
       }
       //println("->",int(uctMaxNode.na)+":"+int(uctMaxNode.naR)+":"+int(uctMaxNode.naG)+":"+int(uctMaxNode.naW)+":"+int(uctMaxNode.naB));
@@ -252,13 +253,9 @@ class uctClass {
           }
           for (int p=1; p<=4; p++) {
             // このタイミングで、「差」を計算しておく。
-            wDeltas[p] = averageBackPropagate(
-              nd0.waR[p], nd0.naR, nd0.waG[p], nd0.naG, 
-              nd0.waW[p], nd0.naW, nd0.waB[p], nd0.naB, nd0.na) - nd0.wa[p];
+            wDeltas[p] = averageBackPropagate(nd0, p, true) - nd0.wa[p];
             nd0.wa[p] += wDeltas[p];//
-            pDeltas[p] = averageBackPropagate(
-              nd0.paR[p], nd0.naR, nd0.paG[p], nd0.naG, 
-              nd0.paW[p], nd0.naW, nd0.paB[p], nd0.naB, nd0.na) - nd0.pa[p];
+            pDeltas[p] = averageBackPropagate(nd0, p, false) - nd0.pa[p];
             nd0.pa[p] += pDeltas[p];//
           }
         } else {//「旧式」//uct.chanceNodeOn=false;
@@ -274,34 +271,104 @@ class uctClass {
       }
     } while (true);//println("親にさかのぼってデータを更新する");//おわり
   }
-  float averageBackPropagate(float wR, float nR, float wG, float nG, float wW, float nW, float wB, float nB, float na) {
+  float averageBackPropagate(uctNode nd, int p, boolean wp) {
+    float wR = (wp)? nd.waR[p]: nd.paR[p];
+    float nR = nd.naR;
+    float wG = (wp)? nd.waG[p]: nd.paG[p];
+    float nG = nd.naG;
+    float wW = (wp)? nd.waW[p]: nd.paW[p];
+    float nW = nd.naW;
+    float wB = (wp)? nd.waB[p]: nd.paB[p];
+    float nB = nd.naB;
+    float na = nd.na;
+    //float averageBackPropagate(float wR, float nR, float wG, float nG, float wW, float nW, float wB, float nB, float na) {
     if (nR+nG+nW+nB!=na) {
-      println("averageBackPropagate","("+wR+"/"+nR+")("+wG+"/"+nG+")("+wW+"/"+nW+")("+wB+"/"+nB+")na="+na);
+      println("averageBackPropagate", "("+wR+"/"+nR+")("+wG+"/"+nG+")("+wW+"/"+nW+")("+wB+"/"+nB+")na="+na); //<>//
+    }
+    if (nd.onRGWB[2]==false && nG>0) {
+      println("something is wrong on childG at averageBackPropagat"); //<>//
     }
     float sum=0f;
-    int numer=0;
+    float numer=0;
     int denom=0;
-    if (nR!=0) {
-      numer = gameOptions.get("Rrate");
+    if (nd.onRGWB[1] && nR!=0) {// if (nd.onRGWB[1])
+      numer = Rrate;
       sum += (wR/nR*numer) ;
       denom += numer;
     }
-    if (nG!=0) {
-      numer = gameOptions.get("Grate");
+    if (nd.onRGWB[2] && nG!=0) {
+      numer = Grate;
       sum += (wG/nG*numer);
       denom += numer;
     }
-    if (nW!=0){
-      numer = gameOptions.get("Wrate");
+    if (nd.onRGWB[3] && nW!=0) {
+      numer = Wrate;
       sum += (wW/nW*numer);
       denom += numer;
     }
-    if (nB!=0){
-      numer = gameOptions.get("Brate");
+    if (nd.onRGWB[4] && nB!=0) {
+      numer = Brate;
       sum += (wB/nB*numer);
       denom += numer;
     }
     return sum*na/denom;
+  }
+  boolean isPassAtDepth1Node(uctNode nd, int _p) {// uct.rootNode.legalMove 内の話。
+    if (nd.depth==1) {
+      if (nd.move==25) {
+        if (nd.player==_p) {
+          return true;
+        }
+        if (gameOptions.get("Absence0R")==1 && nd.player==1) {
+          return true;
+        }
+        if (gameOptions.get("Absence0G")==1 && nd.player==2) {
+          return true;
+        }
+        if (gameOptions.get("Absence0W")==1 && nd.player==3) {
+          return true;
+        }
+        if (gameOptions.get("Absence0B")==1 && nd.player==4) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  boolean isPassAtDepth2Node(uctNode nd, int _p) {
+    if (nd.ancestor.move==25) {
+      if (nd.depth==3) {
+        if (gameOptions.get("Absence1R")==1 && _p==1) {
+          return true;
+        }
+        if (gameOptions.get("Absence1G")==1 && _p==2) {
+          return true;
+        }
+        if (gameOptions.get("Absence1W")==1 && _p==3) {
+          return true;
+        }
+        if (gameOptions.get("Absence1B")==1 && _p==4) {
+          return true;
+        }
+      }
+    } else {
+      if (nd.depth==2) {
+        if (gameOptions.get("Absence1R")==1 && _p==1) {
+          return true;
+        }
+        if (gameOptions.get("Absence1G")==1 && _p==2) {
+          return true;
+        }
+        if (gameOptions.get("Absence1W")==1 && _p==3) {
+          return true;
+        }
+        if (gameOptions.get("Absence1B")==1 && _p==4) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
 };
