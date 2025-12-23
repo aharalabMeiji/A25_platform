@@ -295,7 +295,7 @@ int uctMctsMainLoop(player pl) {
     // VERSION2 バージョン１は消去済み
     for (uctNode ancestor : uct.rootNode.legalMoves) {//root直下に、先祖たちがぶら下がっている。
       for (uctNode nd : ancestor.activeNodes) {// 先祖たちにはアクティブノード（葉）がぶら下がっている。
-        for (int p=1; p<=4; p++) {
+        for (int p=1; p<=4; p++) { //<>//
           // シミュレーション総回数はpl.myBoard.simulatorNumber
           // 平均パネル枚数に0.04かけて、加算している。２点満点
           nd.uct[p] = nd.UCTwp(p, pl.myBoard.simulatorNumber);
@@ -317,7 +317,7 @@ int uctMctsMainLoop(player pl) {
           ancestor.activeNodes.remove(zz);// アクティブノードのリストから消去        
         } else if (nd.uct[nd.player]>uctMax) {// uct局所最大なら、記録しておく。
           uctMax=nd.uct[nd.player];
-          uctMaxNode = nd;
+          uctMaxNode = nd; //<>//
         }
       }
       //uctMctsMainLoop block 02-2-2

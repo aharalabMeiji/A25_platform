@@ -161,7 +161,7 @@ class uctClass {
       nextplayer = _nextPlayer;
     } else {
       do {
-        nextplayer = int(random(4)+1);
+        nextplayer = int(random(4))+1;
       } while (uctMaxNode.onRGWB[nextplayer]==false);
     }
     //println("uctMctsBrain:uct.mainBoardを最後まで打ち切る");
@@ -291,22 +291,22 @@ class uctClass {
     float sum=0f;
     float numer=0;
     int denom=0;
-    if (nd.onRGWB[1]) {// if (nd.onRGWB[1])
+    if (nd.onRGWB[1] && nR!=0) {// if (nd.onRGWB[1])
       numer = Rrate;
       sum += (wR/nR*numer) ;
       denom += numer;
     }
-    if (nd.onRGWB[2]) {
+    if (nd.onRGWB[2] && nG!=0) {
       numer = Grate;
       sum += (wG/nG*numer);
       denom += numer;
     }
-    if (nd.onRGWB[3]) {
+    if (nd.onRGWB[3] && nW!=0) {
       numer = Wrate;
       sum += (wW/nW*numer);
       denom += numer;
     }
-    if (nd.onRGWB[4]) {
+    if (nd.onRGWB[4] && nB!=0) {
       numer = Brate;
       sum += (wB/nB*numer);
       denom += numer;

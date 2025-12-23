@@ -873,7 +873,7 @@ void printlnAllNodes(uctNode nd, int p) {
 }
 
 void showMcts(player nextPlayer) {
-  uct.prize.getPrize1FromNodeList(nextPlayer.position, uct.rootNode.legalMoves);
+  uct.prize.getPrize1FromNodeList(nextPlayer.position, uct.rootNode.legalMoves); //<>//
   String[] message=new String[5];
   prize localPrize=new prize();
   uctNode nd1=null, nd2=null, nd3=null;
