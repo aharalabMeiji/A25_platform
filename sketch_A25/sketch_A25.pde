@@ -71,7 +71,7 @@ void setup() {
 void draw() {
   
   if (displayManager == dP.onSimulator) {
-    showSimulator();
+    showSimulator(); //<>//
   } else if (displayManager == dP.onGame) {// 通常のゲーム進行
     showGames();
   } else if (displayManager == dP.onContents) {
