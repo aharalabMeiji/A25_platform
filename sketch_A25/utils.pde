@@ -123,7 +123,7 @@ class uctClass {
   int terminateThreshold = 10000000;
   int depthMax = 4;
   int cancelCountMax=10;
-  int uctMainLoopOption=1;// ここを２にすると、並列処理になる。が、今は使わない。
+  //int uctMainLoopOption=1;// ここを２にすると、並列処理になる。が、今は使わない。
   float maxNodeWinrate=0.0;
   boolean chanceNodeOn=false;
   player nextPlayer=null;

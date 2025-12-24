@@ -11,11 +11,11 @@ int uctMctsBrain(player pl) { //
   println("uct ", uct.expandThreshold, uct.depthMax, uct.cancelCountMax);//uct.terminateThreshold, 
   //uct.simulationTag=uct.expandThreshold*10;
   while (true) {
-    if (uct.uctMainLoopOption==1) {
-      answer = uctMctsMainLoop(pl);
-    } else {
-      answer = uctMctsMainLoopVer2(pl);
-    }
+    //if (uct.uctMainLoopOption==1) {
+    answer = uctMctsMainLoop(pl);
+    //} else {
+    //  answer = uctMctsMainLoopVer2(pl);
+    //}
     for (int k=0; k<25; k++) {// 今のところ、この書き換えは反映されない。
       utils.gameMainBoard.s[k].shaded=pl.myBoard.s[k].shaded;
     }
