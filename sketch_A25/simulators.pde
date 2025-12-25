@@ -245,10 +245,8 @@ void fullRandomMC() {
 
     // 着手可能点を計算しておく。
     simulator.mainBoard.buildVP(simulator.nextPlayer);// 0~24の話
-    //for (int k=0; k<625; k++) {//いらなくなる
-    //  attackChanceSV[k]=0;//いらなくなる
-    //  attackChanceSV2[k]=0;//いらなくなる
-    //}//いらなくなる
+    //数字の色
+    simulator.mainBoard.svColor = simulator.nextPlayer;
     simulator.mainBoard.simulatorNumber=0;
     simulationManager=sP.setStartBoard;
   } else if (simulationManager == sP.setStartBoard) {
@@ -468,6 +466,9 @@ void UCB1(ucbClass ucb) {
       simulator.mainBoard.s[i].marked = 0;
     }
     simulator.nextPlayer = simulatorStartBoard.get(simulator.StartBoardId).nextPlayer;
+    //数字の色
+    simulator.mainBoard.svColor = simulator.nextPlayer;
+
     // root nodeの設置と、
     ucb.rootNode = new uctNode();
     for (int j=0; j<25; j++) {

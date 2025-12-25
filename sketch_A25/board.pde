@@ -37,6 +37,7 @@ class board {
         s[i].display(mode);
       }
       // 左上、パスの場合のデータ
+      fill(0);
       textSize(utils.fontSize);
       if (!attackChanceP) {
         text(1.0*sv[25], utils.mainL, utils.mainU-utils.fontSize);
@@ -45,6 +46,7 @@ class board {
       //
       setSvColor();
       //
+      fill(0);
       text("("+simulatorNumber+")", utils.mainL+utils.fontSize*7, utils.mainU-utils.fontSize);
       text("player:", utils.mainL+utils.fontSize*12, utils.mainU-utils.fontSize);
       textAlign(LEFT, CENTER);
@@ -74,6 +76,7 @@ class board {
         text(1.0*sv2[25], utils.mainL+utils.fontSize*3.5, utils.mainU-utils.fontSize);
       }
       setSvColor();
+      fill(0);
       text("("+simulatorNumber+")", utils.mainL+utils.fontSize*7, utils.mainU-utils.fontSize);
       text("player:", utils.mainL+utils.fontSize*12, utils.mainU-utils.fontSize);
       textAlign(LEFT, CENTER);
