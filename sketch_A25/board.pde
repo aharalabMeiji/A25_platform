@@ -8,6 +8,7 @@ class board {
   float[] sv2;
   int simulatorNumber;
   boolean attackChanceP;
+  int svColor=0;
   board() {
     s = new panel[25];
     vp = new int[25];
@@ -35,11 +36,15 @@ class board {
         s[i].sv2=sv2[i];
         s[i].display(mode);
       }
+      // 左上、パスの場合のデータ
       textSize(utils.fontSize);
       if (!attackChanceP) {
         text(1.0*sv[25], utils.mainL, utils.mainU-utils.fontSize);
         text(1.0*sv2[25], utils.mainL+utils.fontSize*3.5, utils.mainU-utils.fontSize);
       }
+      //
+      setSvColor();
+      //
       text("("+simulatorNumber+")", utils.mainL+utils.fontSize*7, utils.mainU-utils.fontSize);
       text("player:", utils.mainL+utils.fontSize*12, utils.mainU-utils.fontSize);
       textAlign(LEFT, CENTER);
@@ -68,6 +73,7 @@ class board {
         text(1.0*sv[25], utils.mainL, utils.mainU-utils.fontSize);
         text(1.0*sv2[25], utils.mainL+utils.fontSize*3.5, utils.mainU-utils.fontSize);
       }
+      setSvColor();
       text("("+simulatorNumber+")", utils.mainL+utils.fontSize*7, utils.mainU-utils.fontSize);
       text("player:", utils.mainL+utils.fontSize*12, utils.mainU-utils.fontSize);
       textAlign(LEFT, CENTER);
@@ -92,6 +98,7 @@ class board {
         s[i].sv2=sv2[i];
         s[i].display(mode);
       }
+      setSvColor();
       textSize(utils.fontSize);
       text("("+simulatorNumber+")", utils.mainL+utils.fontSize*8, utils.mainU-utils.fontSize);
       text("player:", utils.mainL+utils.fontSize*12, utils.mainU-utils.fontSize);
@@ -148,6 +155,11 @@ class board {
       //}
     }
     return true;
+  }
+  void setSvColor(){
+    for (int i=0; i<25; i++){
+      s[i].markColor = svColor;
+    }
   }
   boolean buildOP(int pn) {
     boolean ret = false;
@@ -467,65 +479,61 @@ class panel {
   int shaded = 0;
   float  sv =0.0;
   float sv2 =0.0;
+  int dx=0, dy=0;
+  int markColor = 0;
   panel(int _x, int _y, int _n) {
     x = _x;
     y = _y;
     n = _n;
   }
+  void drawBackground(){
+    dx = utils.mainL + utils.mainW * x;
+    dy = utils.mainU + utils.mainH * y;
+    fill(utils.playerColor[col]);//
+    rect(dx, dy, utils.mainW, utils.mainH);
+    if ( col==5 ){
+      float offset = utils.mainH*0.1;
+      fill(utils.playerColor[0]);
+      rect(dx+offset, dy+offset, utils.mainW-2*offset, utils.mainH-2*offset);        
+    }
+  }
+  void drawLargeNumber(){
+    fill(0);
+    textSize(utils.fontSize*2);
+    text(n, dx+utils.mainW/2, dy+utils.mainH/2-5);
+  }
+  void markData(){
+    if (markColor==0){
+      fill(0);
+    } else {
+      fill(utils.playerColor[markColor]);
+    }
+    textSize(utils.fontSize*0.7);
+    text(sv, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*0.7);
+    text(sv2, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*1.4);
+  }
   boolean display(int mode) {
     if (mode == 0) {
-      int dx = utils.mainL + utils.mainW * x;
-      int dy = utils.mainU + utils.mainH * y;
-      fill(utils.playerColor[col]);//
-      rect(dx, dy, utils.mainW, utils.mainH);
-      fill(0);
-      textSize(utils.fontSize*2);
-      text(n, dx+utils.mainW/2, dy+utils.mainH/2);
+      drawBackground();
+      drawLargeNumber();
       if (marked>0) {
         fill(utils.playerColor[marked]);
         textSize(utils.fontSize*3);
         text("o", dx+utils.mainW/2, dy+utils.mainH/2);
       }
-    } else if (mode ==10) {
-      int dx = utils.mainL + utils.mainW * x;
-      int dy = utils.mainU + utils.mainH * y;
-      fill(utils.playerColor[col]);//
-      rect(dx, dy, utils.mainW, utils.mainH);
-      fill(0);
-      textSize(utils.fontSize*2);
-      text(n, dx+utils.mainW/2, dy+utils.mainH/2-5);
-      if (marked>0) {
-        fill(0);
-        textSize(utils.fontSize*0.7);
-        text(sv, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*0.7);
-        text(sv2, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*1.4);
-      }
+    } else if (mode ==10) {// random ディスプレイ
+      drawBackground();
+      drawLargeNumber();
+      if (marked>0) markData();
     } else if (mode==11) {// Ucb ディスプレイ
-      int dx = utils.mainL + utils.mainW * x;
-      int dy = utils.mainU + utils.mainH * y;
-      fill(utils.playerColor[col]);//
-      rect(dx, dy, utils.mainW, utils.mainH);
-      fill(0);
-      textSize(utils.fontSize*2);
-      text(n, dx+utils.mainW/2, dy+utils.mainH/2-5);
+      drawBackground();
+      drawLargeNumber();
       if (marked>0) {
-        textSize(utils.fontSize*0.7);
-        text(sv, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*0.7);
-        text(sv2, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*1.4);
       }
     } else if (mode==12) {// Uct ディスプレイ
-      int dx = utils.mainL + utils.mainW * x;
-      int dy = utils.mainU + utils.mainH * y;
-      fill(utils.playerColor[col]);//
-      rect(dx, dy, utils.mainW, utils.mainH);
-      fill(0);
-      textSize(utils.fontSize*2);
-      text(n, dx+utils.mainW/2, dy+utils.mainH/2-5);
-      if (marked>0) {
-        textSize(utils.fontSize*0.7);
-        text(sv, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*0.7);
-        text(sv2, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*1.4);
-      }
+      drawBackground();
+      drawLargeNumber();
+      if (marked>0) markData();
       if (shaded>0) {
         fill(utils.playerShade[shaded]);
         rect(dx+10, dy+10, utils.mainW-20, utils.mainH-20);
