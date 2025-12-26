@@ -59,6 +59,7 @@ void setup() {
   buttonSaveTree = new button();
   buttonPass = new button();
   buttonNNNext = new button();
+  buttonMainBoard = new button();
   displayManager = dP.onContents;
   managerPhase = mP.GameStart;
   simulationManager = sP.setStartBoard;

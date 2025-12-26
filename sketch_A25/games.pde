@@ -51,7 +51,7 @@ void showSaveTree(){
 
 void showPassButton() { //
   float dx=utils.subL+int(utils.mainW+utils.hSpace)*4, dy=utils.subU+utils.mainH*1.5+utils.hOffset;
-  // pass ボタン
+  // pass ボタン（ゲームでのみ使用）
   fill(0);
   textSize(utils.fontSize);
   textAlign(LEFT, CENTER);
@@ -59,6 +59,16 @@ void showPassButton() { //
   text(buttonPassText, dx, dy);
   buttonPass.setLT(dx, dy, buttonPassText);
 }
+
+void showMainBoardButton(){
+  float dx=utils.mainL, dy=utils.mainU+utils.mainH*2.5;
+  // メインボードをボタン扱いする。
+  buttonMainBoard.left = dx;
+  buttonMainBoard.top = dy;
+  buttonMainBoard.wid = utils.mainW*5;
+  buttonMainBoard.hei=utils.mainH*5;
+}
+
 
 void initRandomOrder() {
   randomOrderCount=0;

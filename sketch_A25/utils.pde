@@ -47,6 +47,7 @@ button buttonSaveScreenShot;// スクショのボタン
 button buttonSaveBoard;// 盤面保存のボタン
 button buttonSaveTree;// 盤面保存のボタン
 button buttonNNNext;// 3手先データのボタン化
+button buttonMainBoard;// メインボードのボタン化
 
 // games
 games game = new games();

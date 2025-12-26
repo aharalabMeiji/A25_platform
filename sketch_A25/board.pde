@@ -75,6 +75,7 @@ class board {
         text(1.0*sv[25], utils.mainL, utils.mainU-utils.fontSize);
         text(1.0*sv2[25], utils.mainL+utils.fontSize*3.5, utils.mainU-utils.fontSize);
       }
+      //
       setSvColor();
       fill(0);
       text("("+simulatorNumber+")", utils.mainL+utils.fontSize*7, utils.mainU-utils.fontSize);
@@ -532,6 +533,7 @@ class panel {
       drawBackground();
       drawLargeNumber();
       if (marked>0) {
+        markData();
       }
     } else if (mode==12) {// Uct ディスプレイ
       drawBackground();

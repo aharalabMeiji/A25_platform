@@ -252,7 +252,7 @@ void fullRandomMC() {
   } else if (simulationManager == sP.setStartBoard) {
     // 問題がアタックチャンス問題のときには、別処理にする。
     if (simulator.mainBoard.attackChanceP()) {
-      // ///////////////////////////////////////////////////////////////////問題がアタックチャンス問題のときの「準備」
+      // ////////問題がアタックチャンス問題のときの「準備」
       // vpの初期化と、svの初期化
       simulator.mainBoard.attackChanceP=true;
       simulator.mainBoard.buildVP(simulator.nextPlayer);
@@ -282,7 +282,7 @@ void fullRandomMC() {
       }
       simulationManager = sP.runMC;
     } else {
-      // ///////////////////////////////////////////////////////////////////問題がアタックチャンスでないときの「準備」
+      // //問題がアタックチャンスでないときの「準備」
       simulator.mainBoard.attackChanceP=false;
       simulator.mainBoard.buildVP(simulator.nextPlayer);
       simulator.rootNode.legalMoves.clear();
@@ -304,7 +304,7 @@ void fullRandomMC() {
     }
   } else if (simulationManager == sP.runMC) {
     if (simulator.mainBoard.attackChanceP()) {
-      // ///////////////////////////////////////////////////////////////////問題がアタックチャンス問題のときの「ループ」
+      // ////問題がアタックチャンス問題のときの「ループ」
       //int loopLen = simulator.rootNode.legalMoves.size();
       for (uctNode nd : simulator.rootNode.legalMoves) {
         for (int i=0; i<25; i++) {// 問題画面をsimulatorSubにコピー
@@ -325,28 +325,29 @@ void fullRandomMC() {
 
       simulator.mainBoard.simulatorNumber ++;//シミュレーション回数（分母）
       //表示データの更新
-
-      if (gameOptions.get("SimTimes")==1) {// 1000 times
+      int simTimes = gameOptions.get("SimTimes");
+      if (simTimes==1) {// 1000 times
         if (simulator.mainBoard.simulatorNumber>=1000) {
           simulationManager=sP.GameEnd;
         }
-      } else if (gameOptions.get("SimTimes")==2) {// 10000 times
+      } else if (simTimes==2) {// 10000 times
         if (simulator.mainBoard.simulatorNumber>=10000) {
           simulationManager=sP.GameEnd;
         }
-      } else {// gameOptions.get("SimTimes")==3 // 収束するまで
+      } else {// simTimes==3 // 収束するまで
         if (winrateConvergents && panelsConvergent) {
           simulationManager=sP.GameEnd;
         }
       }
       if (simulator.mainBoard.simulatorNumber%500==0) {
-        simulator.mainBoard.display(10);
+        // 収束判定
         prize prize=new prize();
         prize.getPrize3FromNodeList(simulator.nextPlayer, simulator.rootNode.legalMoves);
         if (abs(prevWinrate1-prize.getWinrate(1))<0.0005 && abs(prevWinrate2-prize.getWinrate(2))<0.0005 )
           winrateConvergents=true;
         else
           winrateConvergents=false;
+        // 収束判定
         prevWinrate1=prize.getWinrate(1);
         prevWinrate2=prize.getWinrate(2);
         if (abs(prevPanels1-prize.getPanels(1))<0.005 && abs(prevPanels2-prize.getPanels(2))<0.005 )
@@ -354,15 +355,19 @@ void fullRandomMC() {
         else
           panelsConvergent=false;
         prevPanels1 = prize.getPanels(1);
-        prevPanels2=prize.getPanels(2);
-
+        prevPanels2 = prize.getPanels(2);
+        // 盤表示
+        simulator.mainBoard.display(10);
+        // 左下表示
         displayBestStats(prize, utils.subU+utils.fontSize*1.5);
+        // 右下表示
         displayAllStats(attackChanceCursor, simulator.nextPlayer);
+        // 下部ボタン表示
         showReturnButton();
         showScreenCapture();
       }
     } else {// 通常時
-      ///////////////////////////////////////////////////////////////////通常営業の「ループ」
+      ///////////////////通常営業の「ループ」
       for (uctNode nd : simulator.rootNode.legalMoves) {
         // 問題画面をsimulatorSubにコピー
         for (int k=0; k<25; k++) {
@@ -400,27 +405,30 @@ void fullRandomMC() {
         }
       }
       simulator.mainBoard.simulatorNumber ++;//シミュレーション回数（分母）
-      if (gameOptions.get("SimTimes")==1) {// 1000 times
+      int simTimes = gameOptions.get("SimTimes");
+      if (simTimes==1) {// 1000 times
         if (simulator.mainBoard.simulatorNumber>=1000) {
           simulationManager=sP.GameEnd;
         }
-      } else if (gameOptions.get("SimTimes")==2) {// 10000 times
+      } else if (simTimes==2) {// 10000 times
         if (simulator.mainBoard.simulatorNumber>=10000) {
           simulationManager=sP.GameEnd;
         }
-      } else {// gameOptions.get("SimTimes")==3 //
+      } else {// simTimes==3 //
         // 収束するまで
         if (winrateConvergents && panelsConvergent) {
           simulationManager=sP.GameEnd;
         }
       }
       if (simulator.mainBoard.simulatorNumber%500==0) {
+        // 収束判定
         prize prize=new prize();
         prize.getPrize3FromNodeList(simulator.nextPlayer, simulator.rootNode.legalMoves);
         if (abs(prevWinrate1-prize.getWinrate(1))<0.0005 && abs(prevWinrate2-prize.getWinrate(2))<0.0005 )
           winrateConvergents=true;
         else
           winrateConvergents=false;
+        // 収束判定
         prevWinrate1=prize.getWinrate(1);
         prevWinrate2=prize.getWinrate(2);
         if (abs(prevPanels1-prize.getPanels(1))<0.005 && abs(prevPanels2-prize.getPanels(2))<0.005 )
@@ -428,8 +436,11 @@ void fullRandomMC() {
         else
           panelsConvergent=false;
         prevPanels1 = prize.getPanels(1);
-        prevPanels2=prize.getPanels(2);
+        prevPanels2 = prize.getPanels(2);
+        // 盤表示
         simulator.mainBoard.display(10);
+        // 下部ボタン表示
+        showMainBoardButton();
         showReturnButton();
         showScreenCapture();
       }
@@ -961,6 +972,20 @@ void mousePreesedSimulator() {
       uct.nnNextPlayer = 1;
     }
     showMcts(uct.nextPlayer);
+  }
+  if (buttonMainBoard.mouseOn()){
+    if (! simulator.mainBoard.attackChanceP()) {
+      simulator.mainBoard.svColor = (simulator.mainBoard.svColor)%4+1;
+      println("main board has been clicked"+simulator.mainBoard.svColor);
+      for (uctNode nd : simulator.rootNode.legalMoves) {
+        simulator.mainBoard.sv[nd.move] = nd.wa[simulator.mainBoard.svColor]/nd.na;//　その着手点はちょっと優秀ということになる。
+        simulator.mainBoard.sv2[nd.move] = nd.pa[simulator.mainBoard.svColor]/nd.na;// 最終パネル数の累積
+      }
+      // 盤表示
+      simulator.mainBoard.display(10);
+      showReturnButton();
+      showScreenCapture();
+    }
   }
   if (gameOptions.get("SimMethod")==1) {
     if (buttonPrevSV.mouseOn()) {
