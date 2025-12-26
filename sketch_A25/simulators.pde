@@ -1,4 +1,4 @@
-//// simulate line 2651
+//// simulate line 2651 //<>//
 
 class startBoard {
   int[] theArray;
@@ -624,6 +624,7 @@ void UCB1(ucbClass ucb) {
         prize prize=new prize();
         prize.getPrize3FromNodeList(simulator.nextPlayer, ucb.rootNode.legalMoves);
         displayBestStats(prize, utils.subU+utils.fontSize*1.5);
+
         showReturnButton();
         showScreenCapture();
         if (abs(prevWinrate1-prize.getWinrate(1))<0.0005 && abs(prevWinrate2-prize.getWinrate(2))<0.0005 )
@@ -716,6 +717,7 @@ void UCB1(ucbClass ucb) {
       }
       if (simulator.mainBoard.simulatorNumber%500==0) {
         simulator.mainBoard.display(11);// Uct1 ディスプレイ
+        showMainBoardButton();
         showReturnButton();
         showScreenCapture();
       }
@@ -755,15 +757,6 @@ void UCT1() {
       uct.cancelCountMax=100000;
     } else if (SimTimes == 25) {
       uct.expandThreshold=gameOptions.get("expandThreshold");
-      //if (gameOptions.get("terminateThreshold")==4) {
-      //  uct.terminateThreshold = uct.expandThreshold*10000;
-      //} else if (gameOptions.get("terminateThreshold")==5) {
-      //  uct.terminateThreshold = uct.expandThreshold*100000;
-      //} else if (gameOptions.get("terminateThreshold")==6) {
-      //  uct.terminateThreshold = uct.expandThreshold*1000000;
-      //} else {
-      //  uct.terminateThreshold = uct.expandThreshold*10000000;
-      //}
       uct.terminateThreshold = uct.expandThreshold*1000000;
       uct.depthMax=gameOptions.get("depthMax");
       if (gameOptions.get("wCancel")==1) {
@@ -795,18 +788,10 @@ void UCT1() {
     }
     simulator.nextPlayer = simulatorStartBoard.get(simulator.StartBoardId).nextPlayer;
     uct.nextPlayer=simulator.Participants[simulator.nextPlayer];
+    //数字の色
+    simulator.mainBoard.svColor = simulator.nextPlayer;
+
     simulator.mainBoard.copyBoardToSub(uct.nextPlayer.myBoard);
-    //int answer = uctMctsStartingJoseki(nextPlayer);
-    //if (answer!=-1) {
-    //  simulator.mainBoard.sv[answer]=1;
-    //  if(answer<25){
-    //    simulator.mainBoard.s[answer].marked=1;
-    //  }
-    //  simulationManager=sP.GameEnd;
-    //  simulator.mainBoard.display(12);
-    //  showReturnButton();
-    //  showScreenCapture();
-    //} else
 
     int answer = uctMctsBrainPreparation(uct.nextPlayer);
     if (answer==-1) {
@@ -834,11 +819,11 @@ void UCT1() {
     }
     uct.nnNextPlayer = uct.nextPlayer.position;
   } else if (simulationManager==sP.setStartBoard) {
+    
+    simulator.mainBoard.simulatorNumber=uct.nextPlayer.myBoard.simulatorNumber;
     uct.nextPlayer=simulator.Participants[simulator.nextPlayer];
     int answer=-1;
     answer = uctMctsMainLoop(uct.nextPlayer);
-    // 1000回に1回、svにデータを埋める。
-    //if (uct.rootNode.attackChanceNode==false) {
     if (uct.nextPlayer.myBoard.attackChanceP==false) {
       for (uctNode nd : uct.rootNode.legalMoves) {
         int k = nd.move;//たぶん、kは0～２５
@@ -853,9 +838,7 @@ void UCT1() {
     } else {
       // アタックチャンスのときには、sv,sv2を使わずに表示する。
     }
-    simulator.mainBoard.simulatorNumber=uct.nextPlayer.myBoard.simulatorNumber;
     showMcts(uct.nextPlayer);//
-    //printlnAllNodes(uct.rootNode, 2);//
     if (answer!=-1) {
       simulationManager=sP.GameEnd;
     }
@@ -885,7 +868,7 @@ void printlnAllNodes(uctNode nd, int p) {
 }
 
 void showMcts(player nextPlayer) {
-  uct.prize.getPrize1FromNodeList(nextPlayer.position, uct.rootNode.legalMoves); //<>//
+  uct.prize.getPrize1FromNodeList(nextPlayer.position, uct.rootNode.legalMoves);
   String[] message=new String[5];
   prize localPrize=new prize();
   uctNode nd1=null, nd2=null, nd3=null;
@@ -894,30 +877,46 @@ void showMcts(player nextPlayer) {
   if (nd1==null)  return;// ルートに子ノードがなければヤメ
   for (int p2=1; p2<=4; p2++) {// nNext = p2;
     if (nd1.totalChildNullP()==false && nd1.totalChildSize()>0) {
-      switch(p2){
-        case 1: localPrize.getPrize1FromNodeList(1, nd1.childR); break;
-        case 2: localPrize.getPrize1FromNodeList(2, nd1.childG); break;
-        case 3: localPrize.getPrize1FromNodeList(3, nd1.childW); break;
-        case 4: localPrize.getPrize1FromNodeList(4, nd1.childB); break;
+      switch(p2) {
+      case 1:
+        localPrize.getPrize1FromNodeList(1, nd1.childR);
+        break;
+      case 2:
+        localPrize.getPrize1FromNodeList(2, nd1.childG);
+        break;
+      case 3:
+        localPrize.getPrize1FromNodeList(3, nd1.childW);
+        break;
+      case 4:
+        localPrize.getPrize1FromNodeList(4, nd1.childB);
+        break;
       }
       nd2 = localPrize.getMove(1);
       if (nd2==null) {
         message[p2]=nd1.id;
       } else if (nd2.totalChildNullP()==false && nd2.totalChildSize()>0) {
-        switch(uct.nnNextPlayer){
-          case 1: localPrize.getPrize1FromNodeList(1, nd2.childR); break;
-          case 2: localPrize.getPrize1FromNodeList(2, nd2.childG); break;
-          case 3: localPrize.getPrize1FromNodeList(3, nd2.childW); break;
-          case 4: localPrize.getPrize1FromNodeList(4, nd2.childB); break;
+        switch(uct.nnNextPlayer) {
+        case 1:
+          localPrize.getPrize1FromNodeList(1, nd2.childR);
+          break;
+        case 2:
+          localPrize.getPrize1FromNodeList(2, nd2.childG);
+          break;
+        case 3:
+          localPrize.getPrize1FromNodeList(3, nd2.childW);
+          break;
+        case 4:
+          localPrize.getPrize1FromNodeList(4, nd2.childB);
+          break;
         }
         nd3 = localPrize.getMove(1);
         if (nd3==null) {
-          message[p2] = nd2.id+" ("+nf(nd2.wa[p2]/nd2.na,1,3)+":"+nf(nd2.pa[p2]/nd2.na,2,3)+")";
+          message[p2] = nd2.id+" ("+nf(nd2.wa[p2]/nd2.na, 1, 3)+":"+nf(nd2.pa[p2]/nd2.na, 2, 3)+")";
         } else {
-          message[p2] = nd3.id+" ("+nf(nd3.wa[uct.nnNextPlayer]/nd3.na,1,3)+":"+nf(nd3.pa[uct.nnNextPlayer]/nd3.na,2,3)+")";
+          message[p2] = nd3.id+" ("+nf(nd3.wa[uct.nnNextPlayer]/nd3.na, 1, 3)+":"+nf(nd3.pa[uct.nnNextPlayer]/nd3.na, 2, 3)+")";
         }
       } else {
-        message[p2]=nd2.id+": ("+nf(nd2.wa[p2]/nd2.na,1,3)+":"+nf(nd2.pa[p2]/nd2.na,2,3)+")";
+        message[p2]=nd2.id+": ("+nf(nd2.wa[p2]/nd2.na, 1, 3)+":"+nf(nd2.pa[p2]/nd2.na, 2, 3)+")";
       }
     } else {
       message[p2]=nd1.id;
@@ -928,8 +927,7 @@ void showMcts(player nextPlayer) {
   fill(0);
   //if (!simulator.mainBoard.attackChanceP){
   if (nextPlayer.myBoard.attackChanceP==false) {
-    text(1.0*simulator.mainBoard.sv[25], utils.mainL, utils.mainU-utils.fontSize);
-    text(1.0*simulator.mainBoard.sv2[25], utils.mainL+utils.fontSize*3, utils.mainU-utils.fontSize);
+    ;
   } else {
     prize prize=new prize();
     prize.getPrize3FromNodeList(nextPlayer.position, uct.rootNode.legalMoves);
@@ -946,6 +944,7 @@ void showMcts(player nextPlayer) {
     buttonNNNext.wid = textWidth(buttonNNNextText)+5;
     buttonNNNext.hei=utils.vStep*4;
   }
+  showMainBoardButton();
   showReturnButton();
   showScreenCapture();
   showSaveTree();
@@ -965,24 +964,38 @@ void mousePreesedSimulator() {
     selectOutput("ゲーム木を保存", "saveTreeSelected");
     // uct.SaveGameTree(simulator.nextPlayer);
   }
-  if (buttonNNNext.mouseOn()){// ３手先のデータ、をクリックされたとき    
+  if (buttonNNNext.mouseOn()) {// ３手先のデータ、をクリックされたとき
     //println("buttonNNNext.mouseOn()");
     uct.nnNextPlayer ++;
-    if (uct.nnNextPlayer==5){
+    if (uct.nnNextPlayer==5) {
       uct.nnNextPlayer = 1;
     }
     showMcts(uct.nextPlayer);
   }
-  if (buttonMainBoard.mouseOn()){
+  if (buttonMainBoard.mouseOn()) {
     if (! simulator.mainBoard.attackChanceP()) {
       simulator.mainBoard.svColor = (simulator.mainBoard.svColor)%4+1;
       println("main board has been clicked"+simulator.mainBoard.svColor);
-      for (uctNode nd : simulator.rootNode.legalMoves) {
-        simulator.mainBoard.sv[nd.move] = nd.wa[simulator.mainBoard.svColor]/nd.na;//　その着手点はちょっと優秀ということになる。
-        simulator.mainBoard.sv2[nd.move] = nd.pa[simulator.mainBoard.svColor]/nd.na;// 最終パネル数の累積
+      if (gameOptions.get("SimMethod")==1) {
+        for (uctNode nd : simulator.rootNode.legalMoves) {
+          simulator.mainBoard.sv[nd.move] = nd.wa[simulator.mainBoard.svColor]/nd.na;//　その着手点はちょっと優秀ということになる。
+          simulator.mainBoard.sv2[nd.move] = nd.pa[simulator.mainBoard.svColor]/nd.na;// 最終パネル数の累積
+        }
+        simulator.mainBoard.display(10);
+      }else if(gameOptions.get("SimMethod")==2) {
+        for (uctNode nd : ucb1.fullNodes) {
+          simulator.mainBoard.sv[nd.move] = nd.wa[simulator.mainBoard.svColor]/nd.na;//　その着手点はちょっと優秀ということになる。
+          simulator.mainBoard.sv2[nd.move] = nd.pa[simulator.mainBoard.svColor]/nd.na;// 最終パネル数の累積
+        }
+        simulator.mainBoard.display(11);
+      }else if(gameOptions.get("SimMethod")==3) {
+        for (uctNode nd : uct.rootNode.legalMoves) {
+          simulator.mainBoard.sv[nd.move] = nd.wa[simulator.mainBoard.svColor]/nd.na;//　その着手点はちょっと優秀ということになる。
+          simulator.mainBoard.sv2[nd.move] = nd.pa[simulator.mainBoard.svColor]/nd.na;// 最終パネル数の累積
+        }
+        showMcts(uct.nextPlayer);
       }
       // 盤表示
-      simulator.mainBoard.display(10);
       showReturnButton();
       showScreenCapture();
     }
