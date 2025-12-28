@@ -38,17 +38,19 @@ class board {
         s[i].sv2=sv2[i];
         s[i].display(mode);
       }
+      textSize(utils.fontSize);
+      textAlign(LEFT, CENTER);
       //ヘッダA、パスの場合のデータ
-      if (!attackChanceP) {
+      if (!attackChanceP()) {
         if (svColor==3) fill(0);
         else fill(utils.playerColor[svColor]);
-        textAlign(LEFT, CENTER);
-        textSize(utils.fontSize);
+  
         text(1.0*sv[25], utils.mainL, utils.mainU-utils.fontSize);
         text(1.0*sv2[25], utils.mainL+utils.fontSize*3.5, utils.mainU-utils.fontSize);
       }
       //ヘッダB、シミュレーション回数
       fill(0);
+      textSize(utils.fontSize);
       text("("+simulatorNumber+")", utils.mainL+utils.fontSize*7, utils.mainU-utils.fontSize);
       //ヘッダC、プレイヤー色
       text("player:", utils.mainL+utils.fontSize*12, utils.mainU-utils.fontSize);
@@ -70,6 +72,7 @@ class board {
       background(255);
       //色つけ
       setSvColor();
+      textAlign(CENTER, CENTER);
       for (int i = 0; i < 25; i ++) {
         s[i].sv=sv[i];
         s[i].sv2=sv2[i];
@@ -77,7 +80,8 @@ class board {
       }
       textAlign(LEFT, CENTER);
       //ヘッダA、パスの場合のデータ
-      if (!attackChanceP) {
+      textSize(utils.fontSize);
+      if (!attackChanceP()) {
         if (svColor==3) fill(0);
         else fill(utils.playerColor[svColor]);
         textSize(utils.fontSize);
@@ -107,6 +111,7 @@ class board {
       background(255);
       //色つけ
       setSvColor();
+      textAlign(CENTER, CENTER);
       for (int i = 0; i < 25; i ++) {
         s[i].sv=sv[i];
         s[i].sv2=sv2[i];
@@ -114,7 +119,8 @@ class board {
       }
       textAlign(LEFT, CENTER);
       //ヘッダA、パスの場合のデータ
-      if (!attackChanceP) {
+      textSize(utils.fontSize);
+      if (!attackChanceP()) {
         if (svColor==3) fill(0);
         else fill(utils.playerColor[svColor]);
         textSize(utils.fontSize);

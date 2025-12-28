@@ -56,8 +56,11 @@ void setup() {
   buttonReturnToMenu = new button();
   buttonSaveScreenShot = new button();
   buttonSaveBoard = new button();
+  buttonSaveReplace = new button();
+  buttonSaveAppend = new button();
   buttonSaveTree = new button();
   buttonPass = new button();
+  buttonUndo = new button();
   buttonNNNext = new button();
   buttonMainBoard = new button();
   displayManager = dP.onContents;

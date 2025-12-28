@@ -42,9 +42,9 @@ ArrayList<button> buttons;
 button buttonStart;
 button buttonNew, buttonOpenFile, buttonOpenPsrFile, buttonSaveFile, buttonDeleteFromList, buttonKifuFolder;
 button buttonPrevBoard, buttonNextBoard;
-button buttonReturnToMenu, buttonMenuGame, buttonMenuSimulation, buttonPass;
+button buttonReturnToMenu, buttonMenuGame, buttonMenuSimulation, buttonPass, buttonUndo;
 button buttonSaveScreenShot;// スクショのボタン
-button buttonSaveBoard;// 盤面保存のボタン
+button buttonSaveBoard, buttonSaveReplace, buttonSaveAppend;// 盤面保存のボタン
 button buttonSaveTree;// 盤面保存のボタン
 button buttonNNNext;// 3手先データのボタン化
 button buttonMainBoard;// メインボードのボタン化
@@ -55,6 +55,8 @@ class games {
   int nextPlayer;//1~4 // これは整理したい
   player[] participants; // これは整理したい。
   int previousPlayer=0;
+  boolean editMode=false;
+  ArrayList<board> editBoard=null;
 }
 
 // simulators
@@ -284,10 +286,10 @@ class uctClass {
     float na = nd.na;
     //float averageBackPropagate(float wR, float nR, float wG, float nG, float wW, float nW, float wB, float nB, float na) {
     if (nR+nG+nW+nB!=na) {
-      println("averageBackPropagate", "("+wR+"/"+nR+")("+wG+"/"+nG+")("+wW+"/"+nW+")("+wB+"/"+nB+")na="+na); //<>//
+      println("averageBackPropagate", "("+wR+"/"+nR+")("+wG+"/"+nG+")("+wW+"/"+nW+")("+wB+"/"+nB+")na="+na);
     }
     if (nd.onRGWB[2]==false && nG>0) {
-      println("something is wrong on childG at averageBackPropagat"); //<>//
+      println("something is wrong on childG at averageBackPropagat");
     }
     float sum=0f;
     float numer=0;

@@ -21,24 +21,44 @@ void showScreenCapture() {
   fill(0);
   textSize(utils.fontSize);
   textAlign(LEFT, CENTER);
-  String buttonScreenshotText="[Save screenshot]";
+  String buttonScreenshotText="[Screenshot]";
   text(buttonScreenshotText, dx, dy);
   buttonSaveScreenShot.setLT(dx, dy, buttonScreenshotText);
 }
 
+void showSaveReplaceButton() { //
+  float dx=utils.subL+utils.hSpace, dy=utils.subU+utils.mainH*1.5-utils.vStep+utils.hOffset;
+  // return ボタン
+  fill(0);
+  textSize(utils.fontSize);
+  textAlign(LEFT, CENTER);
+  String buttonSaveReplaceText="[Save & replace]";
+  text(buttonSaveReplaceText, dx, dy);
+  buttonSaveReplace.setLT(dx, dy, buttonSaveReplaceText);
+}
+void showSaveAppendButton() { //
+  float dx=utils.subL+textWidth("[Save & replace] ")+utils.hSpace, dy=utils.subU+utils.mainH*1.5-utils.vStep+utils.hOffset;
+  // return ボタン
+  fill(0);
+  textSize(utils.fontSize);
+  textAlign(LEFT, CENTER);
+  String buttonSaveAppendText="[Save & append]";
+  text(buttonSaveAppendText, dx, dy);
+  buttonSaveAppend.setLT(dx, dy, buttonSaveAppendText);
+}
 void showSaveBoard() {
-  float dx=utils.subL+textWidth("[Return to menu]")+utils.hSpace+textWidth("[Save screenshot]")+utils.hSpace, dy=utils.subU+utils.mainH*1.5+utils.hOffset;
+  float dx=utils.subL+textWidth("[Save & replace] [Save & append] ")+utils.hSpace, dy=utils.subU+utils.mainH*1.5-utils.vStep+utils.hOffset;
   // 保存 ボタン（ゲームでのみ使用）
   fill(0);
   textSize(utils.fontSize);
   textAlign(LEFT, CENTER);
-  String buttonSaveBoardText="[Save board]";
+  String buttonSaveBoardText="[Save to last]";
   text(buttonSaveBoardText, dx, dy);
   buttonSaveBoard.setLT(dx, dy, buttonSaveBoardText);
 }
 
 void showSaveTree(){
-  float dx=utils.subL+textWidth("[Return to menu]")+utils.hSpace+textWidth("[Save screenshot]")+utils.hSpace;
+  float dx=utils.subL+textWidth("[Return to menu]")+utils.hSpace+textWidth("[Screenshot]")+utils.hSpace;
   float dy=utils.subU+utils.mainH*1.5+utils.hOffset;
   // ゲーム木保存 ボタン（シミュレーターでのみ使用）
   fill(0);
@@ -50,7 +70,7 @@ void showSaveTree(){
 }
 
 void showPassButton() { //
-  float dx=utils.subL+int(utils.mainW+utils.hSpace)*4, dy=utils.subU+utils.mainH*1.5+utils.hOffset;
+  float dx=utils.subL+int(utils.mainW+utils.hSpace)*3.5, dy=utils.subU+utils.mainH*1.5+utils.hOffset;
   // pass ボタン（ゲームでのみ使用）
   fill(0);
   textSize(utils.fontSize);
@@ -67,6 +87,17 @@ void showMainBoardButton(){
   buttonMainBoard.top = dy;
   buttonMainBoard.wid = utils.mainW*5;
   buttonMainBoard.hei=utils.mainH*5;
+}
+
+void showUndoButton() { //
+  float dx=utils.subL+int(utils.mainW+utils.hSpace)*3.5+textWidth("[Pass] "), dy=utils.subU+utils.mainH*1.5+utils.hOffset;
+  // undo ボタン
+  fill(0);
+  textSize(utils.fontSize);
+  textAlign(LEFT, CENTER);
+  String buttonUndoText="[Undo]";
+  text(buttonUndoText, dx, dy);
+  buttonUndo.setLT(dx, dy, buttonUndoText);
 }
 
 
@@ -205,6 +236,17 @@ void showGames() {
       }
       kifu.csvPath = folder.getAbsolutePath() + "\\" + "csv"+ kifu.mmddhhmm+".csv";
     }
+    // 全員人間の場合には、エディットモードに入る。
+    if (gameOptions.get("Player1")==0 && gameOptions.get("Player2")==0 && gameOptions.get("Player3")==0 && gameOptions.get("Player4")==0){
+      game.editMode = true;
+      game.editBoard=new ArrayList<board>();
+      board tmpNewBoard=new board();
+      utils.gameMainBoard.copyBoardToSub(tmpNewBoard);
+      game.editBoard.add(tmpNewBoard);
+    } else {
+      game.editMode=false;
+      game.editBoard=null;
+    }
     kifu.string="";// 初期盤面以降の着手をここに記録する。
     // 試しに、「ターン回数を均等にするランダム」を作ってみる
     initRandomOrder();
@@ -248,21 +290,26 @@ void showGames() {
       game.participants[game.nextPlayer].turn = true;
       managerPhase = mP.AfterChoosePlayer;
     }
-
-    
     background(255);
     utils.gameMainBoard.display(0);
     for (int p = 1; p<=4; p++) {
       game.participants[p].display(0);//
     }
+    if (game.editMode){
+      //showSaveReplaceButton();
+      //showSaveAppendButton();
+      if (game.editBoard.size()>1){
+        showUndoButton();
+      }
+    }
     showReturnButton();
     showScreenCapture();
-    showSaveBoard();
+    //showSaveBoard();
+    //棋譜の表示
     fill(0);
     textAlign(LEFT, CENTER);
     textSize(utils.fontSize*0.6);
-    text(kifu.string, utils.subL, utils.subU + utils.mainH + utils.hOffset);     //残り枚数のカウントと分岐処理
-    
+    text(kifu.string, utils.subL, utils.subU + utils.mainH + utils.hOffset);     //残り枚数のカウントと分岐処理    
     //managerPhase = mP.AfterChoosePlayer;
 
   } else if (managerPhase==mP.AfterChoosePlayer) {
@@ -298,6 +345,13 @@ void showGames() {
     showScreenCapture();
     showSaveBoard();
     showPassButton();
+    if (game.editMode){
+      showSaveReplaceButton();
+      showSaveAppendButton();
+      if (game.editBoard.size()>1){
+        showUndoButton();
+      }
+    }
     // CPUのときのムーブ処理
     if (game.participants[game.nextPlayer].myBrain!=brain.Human) {// call strategy algorithm
       utils.gameMainBoard.copyBoardToSub(game.participants[game.nextPlayer].myBoard);// copy a current board to the player's.
@@ -341,6 +395,13 @@ void showGames() {
     showReturnButton();
     showScreenCapture();
     showSaveBoard();
+    if (game.editMode){
+      showSaveReplaceButton();
+      showSaveAppendButton();
+      if (game.editBoard.size()>1){
+        showUndoButton();
+      }
+    }
     int remain05 = 0;
     int remain0 =0;
     for (int i=0; i<25; i++) {
@@ -366,6 +427,13 @@ void showGames() {
     }
     showReturnButton();
     showScreenCapture();
+    if (game.editMode){
+      showSaveReplaceButton();
+      showSaveAppendButton();
+      if (game.editBoard.size()>1){
+        showUndoButton();
+      }
+    }
     utils.gameMainBoard.simulatorNumber ++;
     // スコア計算
     int[] count=new int[5];
@@ -421,6 +489,13 @@ void showGames() {
       }
       showReturnButton();
       showScreenCapture();
+      if (game.editMode){
+        showSaveReplaceButton();
+        showSaveAppendButton();
+        if (game.editBoard.size()>1){
+          showUndoButton();
+        }
+      }
       fill(0);
       textAlign(LEFT, CENTER);
       textSize(utils.fontSize*0.6);
@@ -501,6 +576,13 @@ void showGames() {
       }
       showReturnButton();
       showScreenCapture();
+      if (game.editMode){
+        showSaveReplaceButton();
+        showSaveAppendButton();
+        if (game.editBoard.size()>1){
+          showUndoButton();
+        }
+      }
       managerPhase=mP.AfterAttackChance;
     }
   } else if (managerPhase==mP.AfterAttackChance) {//
@@ -530,6 +612,67 @@ void mousePreesedGame() {// ゲーム中のキーボード待ちの処理
     simulatorStartBoard.add (new startBoard(tmpBoard, game.nextPlayer));
     float dx=utils.subL+textWidth("[Return to menu]")+utils.hSpace+textWidth("[Save screenshot]")+utils.hSpace+textWidth("[Save board]")+utils.hSpace, dy=utils.subU+utils.mainH+30;
     text("saved", dx, dy);
+  } else if (buttonSaveReplace.mouseOn()) {
+    if (game.editMode){ 
+      println("save replace");
+      int now = simulator.StartBoardId%simulatorStartBoard.size();
+      int[] tmpBoard = new int[25];
+      for (int k=0; k<25; k++) {
+        tmpBoard[k]=utils.gameMainBoard.s[k].col;
+      }
+      simulatorStartBoard.remove(now);
+      simulatorStartBoard.add (now, new startBoard(tmpBoard, game.nextPlayer));
+      println("replace completes ("+now+")");
+      float dx=utils.subL+textWidth("[Return to menu]")+utils.hSpace+textWidth("[Screenshot]")+utils.hSpace, dy=utils.subU+utils.mainH+30;
+      text("saved", dx, dy);
+    }
+  } else if (buttonSaveAppend.mouseOn()) {
+    if (game.editMode){ 
+      int now = simulator.StartBoardId%simulatorStartBoard.size();
+      println("save append");
+      int[] tmpBoard = new int[25];
+      for (int k=0; k<25; k++) {
+        tmpBoard[k]=utils.gameMainBoard.s[k].col;
+      }
+      simulatorStartBoard.add (now+1, new startBoard(tmpBoard, game.nextPlayer));
+      println("replace completes ("+(now+1)+")");
+      float dx=utils.subL+textWidth("[Return to menu]")+utils.hSpace+textWidth("[Screenshot]")+utils.hSpace, dy=utils.subU+utils.mainH+30;
+      text("saved", dx, dy);
+    }
+  } else if (buttonUndo.mouseOn()) {
+    if (game.editMode){ 
+      println("undo");
+      if (game.editBoard.size()>1){
+        // game.editBoardの最後の一つを消す
+        int lastId=game.editBoard.size()-1;
+        game.editBoard.remove(lastId);
+        // utils.gameMainBoardを更新する。
+        game.editBoard.get(lastId-1).copyBoardToSub(utils.gameMainBoard);
+        //処々の調整を行う。
+        int kifuStringLength = kifu.string.length();
+        kifu.string = kifu.string.substring(0, kifuStringLength-3);
+        // 表示を修正する。
+        for(int k=0;k<25; k++){
+          utils.gameMainBoard.s[k].marked=0;
+        }
+        background(255);
+        utils.gameMainBoard.display(0);
+        for (int p = 1; p<=4; p++) {
+          game.participants[p].display(0);
+        }
+        showReturnButton();
+        showScreenCapture();
+        showSaveBoard();
+        if (game.editMode){
+          showSaveReplaceButton();
+          showSaveAppendButton();
+          if (game.editBoard.size()>1){
+            showUndoButton();
+          }
+        }
+        managerPhase=mP.WaitChoosePlayer;
+      }
+    }
   } else if (managerPhase==mP.WaitChoosePlayer) {// 次の手番がマニュアルのとき
     if (gameOptions.get("Order") == 1) {// マウスクリックで次の手番を指定する
       for (int p = 1; p<=4; p++) { //
@@ -554,6 +697,7 @@ void mousePreesedGame() {// ゲーム中のキーボード待ちの処理
       attack= mx+my*5;
       utils.gameMainBoard.buildVP(game.nextPlayer);
       if (utils.gameMainBoard.vp[attack]>0) {
+        // クリックが有効だとわかったので、着手を処理する
         String strAttack=str(attack+1);
         if (strAttack.length()<2) {
           kifu.string += (kifu.playerColCode[game.nextPlayer]+"0"+strAttack);
@@ -574,6 +718,18 @@ void mousePreesedGame() {// ゲーム中のキーボード待ちの処理
         utils.gameMainBoard.display(0);
         for (int p = 1; p<=4; p++) {
           game.participants[p].display(0);//
+        }
+        // edit modeならではの作業
+        if (game.editMode){
+          board tmpNewBoard = new board();
+          utils.gameMainBoard.copyBoardToSub(tmpNewBoard);
+          game.editBoard.add(tmpNewBoard);
+          println("new board has been recorded.");
+          showSaveReplaceButton();
+          showSaveAppendButton();
+          if (game.editBoard.size()>1){
+            showUndoButton();
+          }
         }
         showReturnButton();
         showScreenCapture();
@@ -597,6 +753,13 @@ void mousePreesedGame() {// ゲーム中のキーボード待ちの処理
       showReturnButton();
       showScreenCapture();
       showPassButton();
+      if (game.editMode){
+        showSaveReplaceButton();
+        showSaveAppendButton();
+        if (game.editBoard.size()>1){
+          showUndoButton();
+        }
+      }
     }
   } else if (managerPhase==mP.OnAttackChance) {
     if (game.participants[game.nextPlayer].myBrain==brain.Human) {// 人がアタックチャンスで消すとき

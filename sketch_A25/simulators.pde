@@ -241,7 +241,8 @@ void fullRandomMC() {
       simulator.mainBoard.s[i].marked = 0;
     }
     //次の手番の指定
-    simulator.nextPlayer = simulatorStartBoard.get(simulator.StartBoardId).nextPlayer;
+    simulator.nextPlayer = simulatorStartBoard.get(simulator.StartBoardId).nextPlayer; //<>//
+    if (simulator.nextPlayer==0) simulator.nextPlayer=1;
 
     // 着手可能点を計算しておく。
     simulator.mainBoard.buildVP(simulator.nextPlayer);// 0~24の話
@@ -477,6 +478,7 @@ void UCB1(ucbClass ucb) {
       simulator.mainBoard.s[i].marked = 0;
     }
     simulator.nextPlayer = simulatorStartBoard.get(simulator.StartBoardId).nextPlayer;
+    if (simulator.nextPlayer==0) simulator.nextPlayer=1;
     //数字の色
     simulator.mainBoard.svColor = simulator.nextPlayer;
 
@@ -787,11 +789,12 @@ void UCT1() {
       simulator.mainBoard.s[i].marked = 0;
     }
     simulator.nextPlayer = simulatorStartBoard.get(simulator.StartBoardId).nextPlayer;
+    if(simulator.nextPlayer==0) simulator.nextPlayer=1;
     uct.nextPlayer=simulator.Participants[simulator.nextPlayer];
     //数字の色
     simulator.mainBoard.svColor = simulator.nextPlayer;
 
-    simulator.mainBoard.copyBoardToSub(uct.nextPlayer.myBoard);
+    simulator.mainBoard.copyBoardToSub(uct.nextPlayer.myBoard); //<>//
 
     int answer = uctMctsBrainPreparation(uct.nextPlayer);
     if (answer==-1) {
@@ -1011,7 +1014,7 @@ void mousePreesedSimulator() {
       displayAllStats(attackChanceCursor, simulator.nextPlayer);
       showReturnButton();
       showScreenCapture();
-      showSaveTree();
+      //showSaveTree();
     } else if (buttonNextSV.mouseOn()) {
       int loopSize=simulator.rootNode.legalMoves.size();
       attackChanceCursor = (attackChanceCursor+1)%loopSize;
@@ -1022,7 +1025,7 @@ void mousePreesedSimulator() {
       displayAllStats(attackChanceCursor, simulator.nextPlayer);
       showReturnButton();
       showScreenCapture();
-      showSaveTree();
+      //showSaveTree();
     }
   }
 }
