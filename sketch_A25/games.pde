@@ -414,7 +414,7 @@ void showGames() {
     }
     if (remain05 == 0) {
       managerPhase = mP.GameEnd;
-    } else if (utils.gameMainBoard.attackChanceP==false && remain0 == 4) {// アタックチャンス（着手後に色を消すことができる。）
+    } else if (utils.gameMainBoard.attackChanceP==false && remain05 == 4 && remain0 == 4) {// アタックチャンス（着手後に色を消すことができる。）
       utils.gameMainBoard.attackChanceP=true;
       managerPhase = mP.BeforeAttackChance;
     } else {
@@ -430,9 +430,9 @@ void showGames() {
     if (game.editMode){
       showSaveReplaceButton();
       showSaveAppendButton();
-      if (game.editBoard.size()>1){
-        showUndoButton();
-      }
+      //if (game.editBoard.size()>1){
+      //  showUndoButton();
+      //}//ゲームが終わったら、undoできない。
     }
     utils.gameMainBoard.simulatorNumber ++;
     // スコア計算
@@ -536,7 +536,7 @@ void showGames() {
       // 棋譜文字列の初期化
       kifu.string="";
       initRandomOrder();
-      managerPhase = mP.WaitChoosePlayer;
+      managerPhase = mP.WaitChoosePlayer; //<>//
     }
     ///////mP.GameEndここまで
   } else if (managerPhase==mP.BeforeAttackChance) {///////mP.BeforeAttackChance
@@ -639,7 +639,7 @@ void mousePreesedGame() {// ゲーム中のキーボード待ちの処理
       float dx=utils.subL+textWidth("[Return to menu]")+utils.hSpace+textWidth("[Screenshot]")+utils.hSpace, dy=utils.subU+utils.mainH+30;
       text("saved", dx, dy);
     }
-  } else if (buttonUndo.mouseOn()) {
+  } else if (buttonUndo.mouseOn()) {///undo
     if (game.editMode){ 
       println("undo");
       if (game.editBoard.size()>1){
@@ -650,7 +650,15 @@ void mousePreesedGame() {// ゲーム中のキーボード待ちの処理
         game.editBoard.get(lastId-1).copyBoardToSub(utils.gameMainBoard);
         //処々の調整を行う。
         int kifuStringLength = kifu.string.length();
-        kifu.string = kifu.string.substring(0, kifuStringLength-3);
+        if (kifuStringLength>=3 && kifu.string.charAt(kifuStringLength-3) == 'Y'){
+          if (kifuStringLength>=6)
+            kifu.string = kifu.string.substring(0, kifuStringLength-6);
+          utils.gameMainBoard.attackChanceP=false;
+        }
+        else {
+          if (kifuStringLength>=3)
+            kifu.string = kifu.string.substring(0, kifuStringLength-3);
+        }
         // 表示を修正する。
         for(int k=0;k<25; k++){
           utils.gameMainBoard.s[k].marked=0;
@@ -696,6 +704,8 @@ void mousePreesedGame() {// ゲーム中のキーボード待ちの処理
     if ((0<=mx && mx<=4) && (0<=my && my<=4)) {
       attack= mx+my*5;
       utils.gameMainBoard.buildVP(game.nextPlayer);
+      boolean ACP=false;
+      if (utils.gameMainBoard.attackChanceP()) ACP=true;
       if (utils.gameMainBoard.vp[attack]>0) {
         // クリックが有効だとわかったので、着手を処理する
         String strAttack=str(attack+1);
@@ -710,7 +720,7 @@ void mousePreesedGame() {// ゲーム中のキーボード待ちの処理
           utils.gameMainBoard.s[i].marked=0;
         }
         game.participants[game.nextPlayer].noPass = max(0, game.participants[game.nextPlayer].noPass-1);
-        managerPhase = mP.AfterMoving;
+        
         for (int p = 1; p<=4; p++) {
           game.participants[p].turn = false;
         }
@@ -721,10 +731,14 @@ void mousePreesedGame() {// ゲーム中のキーボード待ちの処理
         }
         // edit modeならではの作業
         if (game.editMode){
-          board tmpNewBoard = new board();
-          utils.gameMainBoard.copyBoardToSub(tmpNewBoard);
-          game.editBoard.add(tmpNewBoard);
-          println("new board has been recorded.");
+          if (ACP){
+            print("thru here, cause of Attack chnace::");
+          } else {
+            board tmpNewBoard = new board();
+            utils.gameMainBoard.copyBoardToSub(tmpNewBoard);
+            game.editBoard.add(tmpNewBoard);
+            println("new board has been recorded.");
+          } 
           showSaveReplaceButton();
           showSaveAppendButton();
           if (game.editBoard.size()>1){
@@ -734,6 +748,7 @@ void mousePreesedGame() {// ゲーム中のキーボード待ちの処理
         showReturnButton();
         showScreenCapture();
         showPassButton();
+        managerPhase = mP.AfterMoving;
       }
     } else if (buttonPass.mouseOn() && game.participants[game.nextPlayer].noPass==0) {
       kifu.string += (kifu.playerColCode[game.nextPlayer]+"26");
@@ -777,6 +792,13 @@ void mousePreesedGame() {// ゲーム中のキーボード待ちの処理
           utils.gameMainBoard.s[attack].col=5;
           for (int i=0; i<25; i++) {
             utils.gameMainBoard.s[i].marked=0;
+          }
+          //ここでエディットモードのときには盤面を保存。
+          if (game.editMode){
+            board tmpNewBoard = new board();
+            utils.gameMainBoard.copyBoardToSub(tmpNewBoard);
+            game.editBoard.add(tmpNewBoard);
+            println("new board has been recorded.");
           }
           managerPhase = mP.AfterAttackChance;
         }

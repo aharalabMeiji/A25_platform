@@ -358,11 +358,14 @@ class board {
     return true;
   }
   boolean attackChanceP() {
-    int count=0;
+    int count0=0, count5=0;
     for (int i=0; i<25; i++) {
-      if (s[i].col==0) count ++;
+      if (s[i].col==0) 
+        count0 ++;
+      else if (s[i].col==5)
+        count5 ++;
     }
-    if (count==5) {
+    if (count0==5 && count5==0) {
       return true;
     }
     return false;
