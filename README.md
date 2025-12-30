@@ -1,4 +1,4 @@
-[English page](#English)
+[English](#English)
 
 # A25_platform
 AI研究のためのアタック25のシミュレータ
@@ -35,14 +35,32 @@ UCT（4手読み）はUCB（1手読み）より強くなければいけません
 ## English
 
 # A25_platform
-AI Research Simulator for Attack 25
+AI Simulator for Attack 25 boardgame
 
 ## About This System
 
-This system focuses solely on the board game aspect of “Panel Quiz Attack 25,” omitting the quiz portion and having four players take panels in random order. It provides AI based on the Monte Carlo method using the UCB algorithm and AI based on Monte Carlo tree search using the UCT algorithm. The language used is 
-processing. The content consists of two parts: one is the “game mode” where games can be played between AI and humans, and the other is the “simulation mode” where AI analysis is performed on specific board layouts.
+This system focuses solely on the board game aspect of "Panel Quiz Attack 25," omitting the quiz portion and having four players take panels in random order. It provides AI based on the Monte Carlo method using the UCB algorithm and AI based on Monte Carlo tree search using the UCT algorithm. The language used is 
+processing. The content consists of two parts: the "game mode," where games are played between AI and humans, and the "simulation mode," where AI analysis is performed on specific board layouts.
 
 The latest release is version A25_251002 [https://github.com/aharalabMeiji/A25_platform/releases/tag/251002]. It can be run on Processing 4.
 
 The authors of this system are Kazushi Ahara (Meiji University) and Nao Hamamuki (Hokkaido University).
 
+## Important Request Regarding This System
+
+1. This system was developed for AI research purposes. Commercial use is prohibited without the author's permission.
+2. Do not misuse this system in ways that violate the program operators' rules on Panel Quiz Attack 25 or similar programs. The author will not be held responsible for any damages caused by those who misuse the system.
+3. This system uses well-known game-theoretic methods, such as UCB and UCT. It does not promise that the AI's moves are perfect. The AI's calculations may be wrong, and different views could still be right.
+4. When referencing this system's screens or calculation results in web articles, such as blogs, or in videos, such as YouTube, you must include the URL of this page: https://github.com/aharalabMeiji/A25_platform/tree/main
+Unauthorized use without proper attribution is prohibited.
+5. This system declares the GNU General Public License v3.0. Modification or secondary use of the system must comply with the terms of this license.
+
+## Requests Regarding This System
+
+If you happen to encounter any issues with this system, please let them know. Additionally, some parts of the system are still under development, and we plan to add content as needed.
+
+## About the AI Using UCT
+
+This program performs a breadth-first search at depths 4 and 5. If the goal is to select the move with the highest probability, it is best to terminate the search once a statistically significant result is reached. The option labeled wC implements this early termination. The UCT option in the game mode is the depth 4 (4-move lookahead) version with termination enabled (D4wC).
+
+UCT (4-move lookahead) must be stronger than UCB (1-move lookahead). However, when pitting one UCT player against three UCB players in 1,000 matches, the UCT player's win rate was approximately 27%.
