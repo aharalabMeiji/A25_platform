@@ -1,4 +1,4 @@
-[English page]
+[English page](#English)
 
 # A25_platform
 AI研究のためのアタック25のシミュレータ
@@ -31,4 +31,18 @@ https://github.com/aharalabMeiji/A25_platform/tree/main
 深さ４と深さ５の2種類で、幅優先探索をするプログラムです。最高確率のものを限定するだけでしたら、統計的に有意になったところで打ち切るのがよく、ｗCと書いたオプションでは、この途中打ち切りが行われています。ゲームモードにあるUCTは深さ４（４手読み）打ち切りアリ（D4wC)の版です。
 
 UCT（4手読み）はUCB（1手読み）より強くなければいけませんが、UCT一人とUCB3人で1000回対戦させたところ約27パーセントの勝率でした。
+
+## English
+
+# A25_platform
+AI Research Simulator for Attack 25
+
+## About This System
+
+This system focuses solely on the board game aspect of “Panel Quiz Attack 25,” omitting the quiz portion and having four players take panels in random order. It provides AI based on the Monte Carlo method using the UCB algorithm and AI based on Monte Carlo tree search using the UCT algorithm. The language used is 
+processing. The content consists of two parts: one is the “game mode” where games can be played between AI and humans, and the other is the “simulation mode” where AI analysis is performed on specific board layouts.
+
+The latest release is version A25_251002 [https://github.com/aharalabMeiji/A25_platform/releases/tag/251002]. It can be run on Processing 4.
+
+The authors of this system are Kazushi Ahara (Meiji University) and Nao Hamamuki (Hokkaido University).
 
