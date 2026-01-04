@@ -1,17 +1,17 @@
-enum brain{
+enum brainType{
   Human, Random, UCBold, UCB1, UCB2, UCTE10D4, UCBUCT
 }
 
 class player {
   int position;// 1~4
   String name;
-  brain myBrain;// 
+  brainType myBrain;// 
   boolean turn;
   board myBoard;
   float score;
   int yellow=-1;
   int noPass=0;
-  player(int _p, String _n, brain _b) {
+  player(int _p, String _n, brainType _b) {
     position = _p;
     name = _n;
     myBrain = _b;
@@ -57,7 +57,7 @@ class player {
     return false;
   }
   int callBrain(){
-    if (myBrain==brain.Random){
+    if (myBrain==brainType.Random){
       myBoard.buildVP(position);
       if (myBoard.attackChanceP()){
         yellow=-1;//黄色にするパネルをこの変数に入れておけば、あとでそのように処理をする。
@@ -66,14 +66,14 @@ class player {
         return chooseOne(myBoard.vp);
       }
     } 
-    //else if (myBrain==brain.UCBold){
+    //else if (myBrain==brainType.UCBold){
     //  return ucbMcBrain(this);
     //} 
-    else if (myBrain==brain.UCB1){
+    else if (myBrain==brainType.UCB1){
       return ucbFastBrain(this, ucb1);
-    } else if (myBrain==brain.UCB2){
+    } else if (myBrain==brainType.UCB2){
       return ucbFastBrain(this, ucb2);
-    } else if (myBrain==brain.UCTE10D4){
+    } else if (myBrain==brainType.UCTE10D4){
       uct.expandThreshold=10;
       uct.terminateThreshold = uct.expandThreshold*1000000;
       uct.depthMax=4;
@@ -81,14 +81,14 @@ class player {
       uct.chanceNodeOn=true;
       return uctMctsBrain(this);//250618 現在の一つの解
     } 
-    //else if (myBrain==brain.UCBUCT){
+    //else if (myBrain==brainType.UCBUCT){
     //  return uctMctsABrain(this, 1000, 1000000, 4);
     //}
     return -1; // error or gameEnd
   }
   int callAttackChance(){// すでにある色を黄色へ変更するアルゴリズム
     if (yellow!=-1) return yellow;// 黄色にするパネルをすでに決定済みであれば、それを回答する。
-    if (myBrain==brain.Random || myBrain==brain.UCB1 || myBrain==brain.UCTE10D4 || myBrain==brain.UCBUCT ){
+    if (myBrain==brainType.Random || myBrain==brainType.UCB1 || myBrain==brainType.UCTE10D4 || myBrain==brainType.UCBUCT ){
       int[] ac = new int[25];
       for (int i=0; i<25; i++){
         if (1<=myBoard.s[i].col && myBoard.s[i].col<=4){

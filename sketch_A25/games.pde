@@ -151,40 +151,40 @@ void showGames() {
   if (managerPhase==mP.GameStart) {
     //println("ゲームモードのプレイヤー初期化");
     if (gameOptions.get("Player1")==0) {
-      game.participants[1] = new player(1, "human1", brain.Human);
+      game.participants[1] = new player(1, "human1", brainType.Human);
     } else if (gameOptions.get("Player1")==3) {
-      game.participants[1] = new player(1, "ucb-1", brain.UCB1);
+      game.participants[1] = new player(1, "ucb-1", brainType.UCB1);
     } else if (gameOptions.get("Player1")==4) {
-      game.participants[1] = new player(1, "uct-1", brain.UCTE10D4);
+      game.participants[1] = new player(1, "uct-1", brainType.UCTE10D4);
     } else {
-      game.participants[1] = new player(1, "random1", brain.Random);
+      game.participants[1] = new player(1, "random1", brainType.Random);
     }
     if (gameOptions.get("Player2")==0) {
-      game.participants[2] = new player(2, "human2", brain.Human);
+      game.participants[2] = new player(2, "human2", brainType.Human);
     } else if (gameOptions.get("Player2")==3) {
-      game.participants[2] = new player(2, "ucb-2", brain.UCB1);
+      game.participants[2] = new player(2, "ucb-2", brainType.UCB1);
     } else if (gameOptions.get("Player2")==4) {
-      game.participants[2] = new player(2, "uct-2", brain.UCTE10D4);
+      game.participants[2] = new player(2, "uct-2", brainType.UCTE10D4);
     } else {
-      game.participants[2] = new player(2, "random2", brain.Random);
+      game.participants[2] = new player(2, "random2", brainType.Random);
     }
     if (gameOptions.get("Player3")==0) {
-      game.participants[3] = new player(3, "human3", brain.Human);
+      game.participants[3] = new player(3, "human3", brainType.Human);
     } else if (gameOptions.get("Player3")==3) {
-      game.participants[3] = new player(3, "ucb-3", brain.UCB1);
+      game.participants[3] = new player(3, "ucb-3", brainType.UCB1);
     } else if (gameOptions.get("Player3")==4) {
-      game.participants[3] = new player(3, "uct-3", brain.UCTE10D4);
+      game.participants[3] = new player(3, "uct-3", brainType.UCTE10D4);
     } else {
-      game.participants[3] = new player(3, "random3", brain.Random);
+      game.participants[3] = new player(3, "random3", brainType.Random);
     }
     if (gameOptions.get("Player4")==0) {
-      game.participants[4] = new player(4, "human4", brain.Human);
+      game.participants[4] = new player(4, "human4", brainType.Human);
     } else if (gameOptions.get("Player4")==3) {
-      game.participants[4] = new player(4, "ucb-4", brain.UCB1);
+      game.participants[4] = new player(4, "ucb-4", brainType.UCB1);
     } else if (gameOptions.get("Player4")==4) {
-      game.participants[4] = new player(4, "uct-4", brain.UCTE10D4);
+      game.participants[4] = new player(4, "uct-4", brainType.UCTE10D4);
     } else {
-      game.participants[4] = new player(4, "random4", brain.Random);
+      game.participants[4] = new player(4, "random4", brainType.Random);
     }
     utils.gameMainBoard.attackChanceP=false;//アタックチャンス終了フラグはいったん寝せておく
     game.previousPlayer=0;
@@ -322,9 +322,9 @@ void showGames() {
       managerPhase = mP.ErrorStop;
     }
   } else if (managerPhase==mP.BeforeMoving) {
-    if (game.participants[game.nextPlayer].myBrain!=brain.Human) {// non-human player uses algorithm
+    if (game.participants[game.nextPlayer].myBrain!=brainType.Human) {// non-human player uses algorithm
       managerPhase = mP.OnMoving;
-    } else if (game.participants[game.nextPlayer].myBrain==brain.Human) {// Human player uses mouse click
+    } else if (game.participants[game.nextPlayer].myBrain==brainType.Human) {// Human player uses mouse click
       // 着手可能地点にマークを表示する
       utils.gameMainBoard.buildVP(game.nextPlayer);
       for (int i=0; i<25; i++) {
@@ -353,7 +353,7 @@ void showGames() {
       }
     }
     // CPUのときのムーブ処理
-    if (game.participants[game.nextPlayer].myBrain!=brain.Human) {// call strategy algorithm
+    if (game.participants[game.nextPlayer].myBrain!=brainType.Human) {// call strategy algorithm
       utils.gameMainBoard.copyBoardToSub(game.participants[game.nextPlayer].myBoard);// copy a current board to the player's.
       int attack = game.participants[game.nextPlayer].callBrain();
       if (attack==-2){// refrainのコード
@@ -541,7 +541,7 @@ void showGames() {
     ///////mP.GameEndここまで
   } else if (managerPhase==mP.BeforeAttackChance) {///////mP.BeforeAttackChance
     //人間のプレーのときには、アタックチャンスで消せる枠にマークを付ける
-    if (game.participants[game.nextPlayer].myBrain==brain.Human) {
+    if (game.participants[game.nextPlayer].myBrain==brainType.Human) {
       for (int i=0; i<25; i++) {
         if (1 <= utils.gameMainBoard.s[i].col && utils.gameMainBoard.s[i].col <= 4) {
           utils.gameMainBoard.s[i].marked=game.nextPlayer;
@@ -556,7 +556,7 @@ void showGames() {
     // CPU ならば、callAttackChanceを実行
     // 選ばれた箇所を黄色（コード５）へ変更
     // 人ならば、マウスクリック入力待ち
-    if (game.participants[game.nextPlayer].myBrain!=brain.Human) {
+    if (game.participants[game.nextPlayer].myBrain!=brainType.Human) {
       utils.gameMainBoard.copyBoardToSub(game.participants[game.nextPlayer].myBoard);
       int attack = game.participants[game.nextPlayer].callAttackChance();
       if (1 <= utils.gameMainBoard.s[attack].col && utils.gameMainBoard.s[attack].col <= 4) {
@@ -697,7 +697,7 @@ void mousePreesedGame() {// ゲーム中のキーボード待ちの処理
         utils.gameMainBoard.display(0);
       }
     }
-  } else if (managerPhase==mP.OnMoving && game.participants[game.nextPlayer].myBrain==brain.Human) {// 人がプレイするとき
+  } else if (managerPhase==mP.OnMoving && game.participants[game.nextPlayer].myBrain==brainType.Human) {// 人がプレイするとき
     int attack=0;
     int mx = int((mouseX-utils.mainL)/utils.mainW);
     int my = int((mouseY-utils.mainU)/utils.mainH);
@@ -777,7 +777,7 @@ void mousePreesedGame() {// ゲーム中のキーボード待ちの処理
       }
     }
   } else if (managerPhase==mP.OnAttackChance) {
-    if (game.participants[game.nextPlayer].myBrain==brain.Human) {// 人がアタックチャンスで消すとき
+    if (game.participants[game.nextPlayer].myBrain==brainType.Human) {// 人がアタックチャンスで消すとき
       int mx = int((mouseX-utils.mainL)/utils.mainW);
       int my = int((mouseY-utils.mainU)/utils.mainH);
       if ((0<=mx && mx<=4) && (0<=my && my<=4)) {

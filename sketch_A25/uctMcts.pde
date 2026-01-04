@@ -29,7 +29,7 @@ int uctMctsBrainPreparation(player pl) {
   //println("uctMctsBrain:プレーヤーをランダムエージェントに設定");
   uct.participants = new player[5];
   for (int p=1; p<5; p++) {
-    uct.participants[p] = new player(p, "random", brain.Random);
+    uct.participants[p] = new player(p, "random", brainType.Random);
   }
   //println("uctMctsBrain:着手可能点を計算しておく");
   pl.myBoard.buildVP(pl.position);

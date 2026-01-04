@@ -228,8 +228,8 @@ void fullRandomMC() {
     prevWinrate1=prevWinrate2=prevPanels1=prevPanels2=0;//収束の計算
     // プレーヤーをランダムプレーヤーに設定
     for (int p=1; p<5; p++) {
-      simulator.Participants[p] = new player(p, "random", brain.Random);
-      //simulator.Participants[p] = new player(p, "random", brain.UCB1);//ここを引数にしてもよい。
+      simulator.Participants[p] = new player(p, "random", brainType.Random);
+      //simulator.Participants[p] = new player(p, "random", brainType.UCB1);//ここを引数にしてもよい。
     }
     for (int j=0; j<=25; j++) {
       simulator.mainBoard.sv[j]=0;
@@ -466,7 +466,7 @@ void UCB1(ucbClass ucb) {
     panelsConvergent=false;
     // プレーヤーをランダムに設定
     for (int p=1; p<5; p++) {
-      simulator.Participants[p] = new player(p, "random", brain.Random);
+      simulator.Participants[p] = new player(p, "random", brainType.Random);
     }
     ucb.fullNodes = new ArrayList<uctNode>();
     // 評価値のクリア
@@ -778,7 +778,7 @@ void UCT1() {
     uct.chanceNodeOn=(gameOptions.get("chanceNodeOn")==1);
     simulator.Participants = new player[5];
     for (int p=1; p<5; p++) {
-      simulator.Participants[p] = new player(p, "random", brain.Random);
+      simulator.Participants[p] = new player(p, "random", brainType.Random);
     }
     for (int j=0; j<=25; j++) {
       simulator.mainBoard.sv[j]=0;

@@ -16,11 +16,11 @@ int ucbFastBrain(player pl, ucbClass ucb) {
   player[] ucbMcParticipants = new player[5];
   //if (ucb == ucb1){
   //  for (int p=1; p<5; p++) {
-  //    ucbMcParticipants[p] = new player(p, "random", brain.UCB2);
+  //    ucbMcParticipants[p] = new player(p, "random", brainType.UCB2);
   //  }
   //}else {
   for (int p=1; p<5; p++) {
-    ucbMcParticipants[p] = new player(p, "random", brain.Random);
+    ucbMcParticipants[p] = new player(p, "random", brainType.Random);
   }
     
   //}
