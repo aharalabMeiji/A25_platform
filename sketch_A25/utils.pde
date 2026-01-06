@@ -126,14 +126,16 @@ class uctClass {
   int terminateThreshold = 10000000;
   int depthMax = 4;
   int cancelCountMax=10;
-  //int uctMainLoopOption=1;// ここを２にすると、並列処理になる。が、今は使わない。
   float maxNodeWinrate=0.0;
   boolean chanceNodeOn=false;
   player nextPlayer=null;
   int nnNextPlayer=1;
   int underCalculation=0;
   float Rrate=1, Grate=1, Wrate=1, Brate=1;
+  int qtyPlayouts=0;
+  int[] qtyNodes=null;
   uctClass() {
+    qtyNodes = new int[7];// 7 = maxdepth+1
   }
   ArrayList<uctNode> GetChildOfUctNode(int player, uctNode nd0) {
     switch(player) {
@@ -148,6 +150,7 @@ class uctClass {
     }
   }
   void randomPlayAndBackPropagate(uctNode uctMaxNode, int _nextPlayer) {
+    uct.qtyPlayouts ++;
     float[] wDeltas = new float[5];
     float[] pDeltas = new float[5];
     //print("randomPlayAndBackPropagate:",uctMaxNode.id, "のノードを調べる",int(uctMaxNode.na)+":"+int(uctMaxNode.naR)+":"+int(uctMaxNode.naG)+":"+int(uctMaxNode.naW)+":"+int(uctMaxNode.naB));

@@ -67,15 +67,21 @@ int uctMctsBrainPreparation(player pl) {
   uct.rootNode.legalMoves = new ArrayList<uctNode>();
   uct.cancelCount=0;
   pl.myBoard.copyBoardToBd(uct.rootNode.bd);
+  uct.qtyPlayouts=0;
+  for(int d=0;d<=uct.depthMax;d++){
+    uct.qtyNodes[d]=0;
+  }
   //uct.rootNodeに子供をぶら下げる
   if (pl.myBoard.attackChanceP()==false) {
     //println("uctMctsBrain:通常時、uct.rootNodeに子供をぶら下げる");
     for (int k=0; k<25; k++) {
       if (pl.myBoard.vp[k]>0) {
         uct.newNode = new uctNode();
+        uct.qtyNodes[0] ++;
         uct.newNode.setItem(pl.position, k);
         uct.newNode.id = uct.rootNode.id + (":"+kifu.playerColCode[pl.position]+nf(k+1, 2));
         uct.newNode.depth = 1;
+        uct.qtyNodes[1] ++;
         uct.rootNode.legalMoves.add(uct.newNode);//ルートノードにぶら下げる
         uct.newNode.ancestor = uct.newNode;// 自分自身が先祖
         uct.newNode.parent = null;//逆伝播をここで切りたいので
@@ -93,9 +99,10 @@ int uctMctsBrainPreparation(player pl) {
     // １手目パス
     if (pl.noPass==0) {
       uct.newNode = new uctNode();
+      uct.qtyNodes[0] ++;
       uct.newNode.setItem(pl.position, 25);
       uct.newNode.id = uct.rootNode.id+(":"+kifu.playerColCode[pl.position]+nf(26, 2));
-      uct.newNode.depth = 1;
+      uct.newNode.depth = 1;uct.qtyNodes[1] ++;
       uct.rootNode.legalMoves.add(uct.newNode);//ルートノードにぶら下げる
       uct.newNode.ancestor = uct.newNode;
       uct.newNode.parent = null;//
@@ -116,9 +123,10 @@ int uctMctsBrainPreparation(player pl) {
         int k = i*25+j;
         if ((pl.myBoard.vp[j]>0 && (pl.myBoard.s[i].col>=1 && pl.myBoard.s[i].col<=4)) || (pl.myBoard.vp[j]>0 && i==j)) {
           uct.newNode = new uctNode();
+          uct.qtyNodes[0] ++;
           uct.newNode.setItem(pl.position, k);
           uct.newNode.id = uct.rootNode.id + (":"+kifu.playerColCode[pl.position]+nf(j+1, 2)) + (":Y"+nf(i+1, 2));
-          uct.newNode.depth = 1;
+          uct.newNode.depth = 1;uct.qtyNodes[1] ++;
           uct.rootNode.legalMoves.add(uct.newNode);//ぶら下げる
           uct.newNode.ancestor = uct.newNode;
           uct.newNode.parent = null;//
@@ -418,9 +426,11 @@ int uctMctsMainLoop(player pl) {
               for (int k=0; k<25; k++) {   // 合法手ごとのforループ、パスは含まない
                 if (uct.mainBoard.vp[k]>0) { // 子ノードをぶら下げる条件
                   uct.newNode = new uctNode();
+                  uct.qtyNodes[0] ++;
                   uct.newNode.setItem(p, k);
                   uct.newNode.id = uctMaxNode.id+":"+kifu.playerColCode[p]+nf(k+1, 2);
                   uct.newNode.depth = uctMaxNode.depth+1;//=newChancenode.depth
+                  uct.qtyNodes[uct.newNode.depth] ++;
                   //println("新しいノード "+uct.newNode.id+"を追加した！");
                   switch(p) {
                   case 1:
@@ -476,9 +486,11 @@ int uctMctsMainLoop(player pl) {
                   int k = i*25+j;
                   if ((uct.mainBoard.vp[j]>0 && (uct.mainBoard.s[i].col>=1 && uct.mainBoard.s[i].col<=4)) || (uct.mainBoard.vp[j]>0 && i==j)) {
                     uct.newNode = new uctNode();
+                    uct.qtyNodes[0] ++;
                     uct.newNode.setItem(p, k);
                     uct.newNode.id = uctMaxNode.id + (":"+kifu.playerColCode[p]+nf(j+1, 2)) + (":Y"+nf(i+1, 2));
                     uct.newNode.depth = uctMaxNode.depth + 1;//=newChancenode.depth
+                    uct.qtyNodes[uct.newNode.depth] ++;
                     //println("uctMctsBrain: id="+uct.newNode.id);
                     switch(p) {
                     case 1:
