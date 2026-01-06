@@ -536,6 +536,7 @@ class panel {
     dx = utils.mainL + utils.mainW * x;
     dy = utils.mainU + utils.mainH * y;
     fill(utils.playerColor[col]);//
+    stroke(0);
     rect(dx, dy, utils.mainW, utils.mainH);
     if ( col==5 ){
       float offset = utils.mainH*0.1;
@@ -545,18 +546,28 @@ class panel {
   }
   void drawLargeNumber(){
     fill(0);
+    textAlign(CENTER, CENTER);
     textSize(utils.fontSize*2);
     text(n, dx+utils.mainW/2, dy+utils.mainH/2-5);
   }
   void markData(){
-    if (markColor==0){
+    textAlign(CENTER, CENTER);
+    textSize(utils.fontSize*0.7);
+    if (markColor==0 || markColor==3){
+    fill(255);stroke(255);
+    } else {
+      fill(235);stroke(255);
+    }
+    float wid = textWidth("0000000");
+    float hei = utils.fontSize*1.3;
+    rect(dx+utils.mainW/2-wid*0.5, dy+utils.mainH/2+utils.fontSize*1.2-hei*0.5, wid, hei);
+    if (markColor==0 || markColor==3){
       fill(0);
     } else {
       fill(utils.playerColor[markColor]);
     }
-    textSize(utils.fontSize*0.7);
-    text(sv, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*0.7);
-    text(sv2, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*1.4);
+    text(sv, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*0.9);
+    text(sv2, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*1.5);
   }
   boolean display(int mode) {
     if (mode == 0) {
@@ -569,18 +580,18 @@ class panel {
       }
     } else if (mode ==10) {// random ディスプレイ
       drawBackground();
-      drawLargeNumber();
       if (marked>0) markData();
+      drawLargeNumber();
     } else if (mode==11) {// Ucb ディスプレイ
       drawBackground();
-      drawLargeNumber();
       if (marked>0) {
         markData();
       }
+      drawLargeNumber();
     } else if (mode==12) {// Uct ディスプレイ
       drawBackground();
-      drawLargeNumber();
       if (marked>0) markData();
+      drawLargeNumber();
       if (shaded>0) {
         fill(utils.playerShade[shaded]);
         rect(dx+10, dy+10, utils.mainW-20, utils.mainH-20);
