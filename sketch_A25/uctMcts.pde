@@ -167,6 +167,7 @@ int uctMctsBrainFirstSimulation(player pl) {
       }
       uct.mainBoard.copyBdToBoard(nd.bd);
       uct.winPoint = playSimulatorToEnd(uct.mainBoard, uct.participants, nextplayer);//ここは次手番をnextplayerとする。
+      uct.qtyPlayouts ++;
       pl.myBoard.simulatorNumber ++;
       if(uct.chanceNodeOn){// 新方式//uct.chanceNodeOn=true;
         if(nextplayer==1){
@@ -348,6 +349,10 @@ int uctMctsMainLoop(player pl) {
           //for(uctNode anc : uct.rootNode.legalMoves){
           //  printAllWaPa(anc);
           //}
+          // プレイアウトの回数、ノードの個数を個別にカウントしたものを表示
+          println("プレイアウト回数："+uct.qtyPlayouts);
+          println("ノード総数："+uct.qtyNodes[0]);
+          println("("+uct.qtyNodes[1]+","+uct.qtyNodes[2]+","+uct.qtyNodes[3]+","+uct.qtyNodes[4]+","+uct.qtyNodes[5]+")");
           // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする
           int ret = returnBestChildFromRoot(pl, uct.rootNode);
           if (pl.myBoard.attackChanceP()) {

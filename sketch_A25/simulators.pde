@@ -821,9 +821,8 @@ void UCT1() {
       }
     }
     uct.nnNextPlayer = uct.nextPlayer.position;
-  } else if (simulationManager==sP.setStartBoard) {
-    
-    simulator.mainBoard.simulatorNumber=uct.nextPlayer.myBoard.simulatorNumber;
+  } else if (simulationManager==sP.setStartBoard) { 
+    simulator.mainBoard.simulatorNumber=uct.nextPlayer.myBoard.simulatorNumber=uct.qtyPlayouts;
     uct.nextPlayer=simulator.Participants[simulator.nextPlayer];
     int answer=-1;
     answer = uctMctsMainLoop(uct.nextPlayer);

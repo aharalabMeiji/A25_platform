@@ -150,7 +150,6 @@ class uctClass {
     }
   }
   void randomPlayAndBackPropagate(uctNode uctMaxNode, int _nextPlayer) {
-    uct.qtyPlayouts ++;
     float[] wDeltas = new float[5];
     float[] pDeltas = new float[5];
     //print("randomPlayAndBackPropagate:",uctMaxNode.id, "のノードを調べる",int(uctMaxNode.na)+":"+int(uctMaxNode.naR)+":"+int(uctMaxNode.naG)+":"+int(uctMaxNode.naW)+":"+int(uctMaxNode.naB));
@@ -172,8 +171,9 @@ class uctClass {
     }
     //println("uctMctsBrain:uct.mainBoardを最後まで打ち切る");
     this.randomPlayWinPoint = playSimulatorToEnd(this.randomPlayBoard, this.participants, nextplayer);
-    //println("uctMctsBrain:nd.wa[p]、nd.pa[p]、nd.uct[p]");
     uctMaxNode.na ++;//
+    uct.qtyPlayouts ++;
+    //println("uctMctsBrain:nd.wa[p]、nd.pa[p]、nd.uct[p]");
     if (uct.chanceNodeOn) {
       // このタイミングで、「差」を計算しておく。
       for (int p=1; p<=4; p++) {
