@@ -769,6 +769,10 @@ void mousePreesedGame() {// ゲーム中のキーボード待ちの処理
       showScreenCapture();
       showPassButton();
       if (game.editMode){
+        board tmpNewBoard = new board();
+        utils.gameMainBoard.copyBoardToSub(tmpNewBoard);
+        game.editBoard.add(tmpNewBoard);
+        println("new board has been recorded.");
         showSaveReplaceButton();
         showSaveAppendButton();
         if (game.editBoard.size()>1){

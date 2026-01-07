@@ -821,8 +821,7 @@ void UCT1() {
       }
     }
     uct.nnNextPlayer = uct.nextPlayer.position;
-  } else if (simulationManager==sP.setStartBoard) { 
-    simulator.mainBoard.simulatorNumber=uct.nextPlayer.myBoard.simulatorNumber=uct.qtyPlayouts;
+  } else if (simulationManager==sP.setStartBoard) {     
     uct.nextPlayer=simulator.Participants[simulator.nextPlayer];
     int answer=-1;
     answer = uctMctsMainLoop(uct.nextPlayer);
@@ -840,6 +839,7 @@ void UCT1() {
     } else {
       // アタックチャンスのときには、sv,sv2を使わずに表示する。
     }
+    simulator.mainBoard.simulatorNumber=uct.nextPlayer.myBoard.simulatorNumber;
     showMcts(uct.nextPlayer);//
     if (answer!=-1) {
       simulationManager=sP.GameEnd;
