@@ -793,10 +793,11 @@ void UCT1() {
     uct.nextPlayer=simulator.Participants[simulator.nextPlayer];
     //数字の色
     simulator.mainBoard.svColor = simulator.nextPlayer;
-
+    
+    //盤面データ
     simulator.mainBoard.copyBoardToSub(uct.nextPlayer.myBoard); //<>//
-
-    int answer = uctMctsBrainPreparation(uct.nextPlayer);
+    // brain 準備
+    int answer = uct.mctsBrainPreparation(uct.nextPlayer);
     if (answer==-1) {
       simulationManager=sP.GameEnd;
     } else {

@@ -13,6 +13,7 @@ class multiUcbClass {
   int[] tmpBoard = null;
   uctNode rootNode = null;
   uctNode newNode = null;
+  float thresholdWinRate=0.9;
   multiUcbClass(){
     tmpBoard = new int[25]; 
   }

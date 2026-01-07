@@ -79,7 +79,7 @@ class player {
       uct.depthMax=4;
       uct.cancelCountMax=10;
       uct.chanceNodeOn=true;
-      return uctMctsBrain(this);//250618 現在の一つの解
+      return uct.mctsBrain(this);//250618 現在の一つの解
     } 
     //else if (myBrain==brainType.UCBUCT){
     //  return uctMctsABrain(this, 1000, 1000000, 4);
