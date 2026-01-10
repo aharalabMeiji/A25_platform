@@ -736,7 +736,7 @@ void UCT1() {
   int SimTimes = gameOptions.get("SimTimes");
   if (simulationManager==sP.GameStart) {
     startTime=millis();
-    uct.chanceNodeOn=false;
+    uct.chanceNodeOn=0;
     if (SimTimes == 21) {
       uct.expandThreshold=10;
       uct.terminateThreshold = uct.expandThreshold*1000000;
@@ -775,7 +775,7 @@ void UCT1() {
         uct.cancelCountMax=100000;
       }
     }
-    uct.chanceNodeOn=(gameOptions.get("chanceNodeOn")==1);
+    uct.chanceNodeOn=gameOptions.get("chanceNodeOn");
     simulator.Participants = new player[5];
     for (int p=1; p<5; p++) {
       simulator.Participants[p] = new player(p, "random", brainType.Random);
@@ -801,7 +801,7 @@ void UCT1() {
     if (answer==-1) {
       simulationManager=sP.GameEnd;
     } else {
-      answer = uctMctsBrainFirstSimulation(uct.nextPlayer);
+      answer = uct.mctsBrainFirstSimulation(uct.nextPlayer);
       if (answer!=-1) {
         uctNode nd = uct.rootNode.legalMoves.get(0);
         simulator.mainBoard.sv[answer]=nd.wa[uct.nextPlayer.position] / nd.na;

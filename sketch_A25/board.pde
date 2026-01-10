@@ -109,7 +109,7 @@ class board {
       text(simMethod, utils.subL, utils.subU);
     } else if (mode==12) {// Uct ディスプレイ
       background(255);
-      //色つけ
+      //Uct :色つけ
       setSvColor();
       textAlign(CENTER, CENTER);
       for (int i = 0; i < 25; i ++) {
@@ -118,29 +118,30 @@ class board {
         s[i].display(mode);
       }
       textAlign(LEFT, CENTER);
-      //ヘッダA、パスの場合のデータ
+      //Uct :ヘッダA、パスの場合のデータ
       textSize(utils.fontSize);
       if (!attackChanceP()) {
         if (svColor==3) fill(0);
+        else if(svColor==2) fill(0,128,0);
         else fill(utils.playerColor[svColor]);
         textSize(utils.fontSize);
         text(1.0*sv[25], utils.mainL, utils.mainU-utils.fontSize);
         text(1.0*sv2[25], utils.mainL+utils.fontSize*3.5, utils.mainU-utils.fontSize);
       }
-      //ヘッダB、シミュレーション回数
+      //Uct :ヘッダB、シミュレーション回数
       fill(0);
       text("("+simulatorNumber+")", utils.mainL+utils.fontSize*7, utils.mainU-utils.fontSize);
-      //ヘッダC、プレイヤー色
+      //Uct :ヘッダC、プレイヤー色
       text("player:", utils.mainL+utils.fontSize*12, utils.mainU-utils.fontSize);
       stroke(0);
       fill(utils.playerColor[simulator.nextPlayer]);
       rect(utils.mainL+utils.fontSize*12+textWidth("player: "), utils.mainU-utils.fontSize*1.3, utils.fontSize*2, utils.fontSize*0.8);
-      //ヘッダD、ファイル名（とおし番号）      
+      //Uct :ヘッダD、ファイル名（とおし番号）      
       fill(0);
       int total = simulatorStartBoard.size();
       int now = (simulator.StartBoardId) % total;
       text(filenamePath+"("+now+")", utils.mainL+utils.fontSize*18.5, utils.mainU-utils.fontSize);
-      //ヘッダE、ぐるぐる
+      //Uct :ヘッダE、ぐるぐる
       switch(uct.underCalculation){
         case 0: 
         fill(#1E90FF);
@@ -170,7 +171,7 @@ class board {
         text("✓", utils.mainL+utils.fontSize*28, utils.mainU-utils.fontSize);// 
         break;
       }
-      //盤左下
+      //Uct :盤左下
       fill(0);
       String simMethod = "Monte Carlo Tree Search(UCT) ";
       text(simMethod, utils.subL, utils.subU);
@@ -563,6 +564,8 @@ class panel {
     rect(dx+utils.mainW/2-wid*0.5, dy+utils.mainH/2+utils.fontSize*1.2-hei*0.5, wid, hei);
     if (markColor==0 || markColor==3){
       fill(0);
+    } else if (markColor==2){
+      fill(0,128,0);
     } else {
       fill(utils.playerColor[markColor]);
     }

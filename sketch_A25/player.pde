@@ -78,7 +78,7 @@ class player {
       uct.terminateThreshold = uct.expandThreshold*1000000;
       uct.depthMax=4;
       uct.cancelCountMax=10;
-      uct.chanceNodeOn=true;
+      uct.chanceNodeOn=1;
       return uct.mctsBrain(this);//250618 現在の一つの解
     } 
     //else if (myBrain==brainType.UCBUCT){
