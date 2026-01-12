@@ -688,6 +688,7 @@ int uctMctsMainLoop(player pl) {
           //println("uctMctsBrain:展開："+uctMaxNode.id+"を展開中");
           uct.newNode=null;
           uctMaxNode.legalMoves=null;
+          println("展開："+uctMaxNode.id);
           // チャンスノードを別途ぶら下げる <- この案を却下。
           //旧来のノード構成で、ぶら下げる場所を4か所作る（メモリとスピードの節約のため）
           if (uctMaxNode.childR==null) uctMaxNode.childR = new ArrayList<uctNode>();
