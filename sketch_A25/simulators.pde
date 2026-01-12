@@ -795,7 +795,7 @@ void UCT1() {
     simulator.mainBoard.svColor = simulator.nextPlayer;
     
     //盤面データ
-    simulator.mainBoard.copyBoardToSub(uct.nextPlayer.myBoard); //<>//
+    simulator.mainBoard.copyBoardToSub(uct.nextPlayer.myBoard);
     // brain 準備
     int answer = uct.mctsBrainPreparation(uct.nextPlayer);
     if (answer==-1) {

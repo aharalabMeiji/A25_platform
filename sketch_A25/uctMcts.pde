@@ -1,4 +1,4 @@
-uctClass uct = new uctClass(); //<>//
+uctClass uct = new uctClass();
 class uctClass {
   player[] participants;
   winPoints winPoint;
