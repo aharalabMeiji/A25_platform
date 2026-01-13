@@ -13,12 +13,13 @@ class uctClass {
   int simulationTag=0;
   int cancelCount=0;
   int loopCount=0;
-  int expandThreshold = 10;// ここらあたりの変数があるんだったら、brainの引数要りませんね。
+  int expandThreshold = 10;// 
   int terminateThreshold = 10000000;
   int depthMax = 4;
   int cancelCountMax=10;
   float maxNodeWinrate=0.0;
   int chanceNodeOn=0;
+  int noChildrenThreshold=2;
   player nextPlayer=null;
   int nnNextPlayer=1;
   int underCalculation=0;
@@ -521,9 +522,11 @@ class uctClass {
     }
     return false;
   }
-};
+  
 
+}; // class uctClass のおわり
 
+/////////////////////////////////
 
 // utilsへ移籍予定
 void printAllWaPa(uctNode nd) {// デバッグのためのコンソール出力
@@ -671,8 +674,6 @@ int uctMctsMainLoop(player pl) {
       uct.randomPlayAndBackPropagate(uctMaxNode, 0);
 
       //uctMctsMainLoop  02-2-4
-      //println("uctMctsBrain:ノード ",uctMaxNode.id, "のデータ("+uctMaxNode.wa[1]+","+uctMaxNode.wa[2]+","+uctMaxNode.wa[3]+","+uctMaxNode.wa[4]+")/"+uctMaxNode.na);
-      //println("uctMctsBrain:",uctMaxNode.na, uctMaxNode.wa[uctMaxNode.player], uctMaxNode.pa[uctMaxNode.player]);
       if (uctMaxNode.na >= uct.expandThreshold) {// 削除するための条件
         //println("uctMctsBrain:uctMaxNodeはuct.activeNodesから削除");
         //展開するにせよしないにせよ、この作業は等価に必要。
@@ -683,14 +684,40 @@ int uctMctsMainLoop(player pl) {
             break;
           }
         }
-        if (uctMaxNode.depth<uct.depthMax && uctMaxNode.id!="" && remaingInBd(uctMaxNode.bd)>0) {   // 展開するための条件
+        // 親の状況を確認（直接の兄弟が何人いるか）
+        boolean expandOK=false;
+        if (uctMaxNode.depth==1) expandOK=true;
+        else {
+          if(uctMaxNode.parent==null) expandOK=false;// これは起こらない
+          else {
+            if (uctMaxNode.player==1){
+              uctMaxNode.parent.ncR++;
+              if (uctMaxNode.parent.ncR >uct.noChildrenThreshold) expandOK=false; else expandOK=true;
+            } else if (uctMaxNode.player==2){
+              uctMaxNode.parent.ncG++;
+              if (uctMaxNode.parent.ncG >uct.noChildrenThreshold) expandOK=false; else expandOK=true;
+            } else if (uctMaxNode.player==3){
+              uctMaxNode.parent.ncW++;
+              if (uctMaxNode.parent.ncW >uct.noChildrenThreshold) expandOK=false; else expandOK=true;
+            } else if (uctMaxNode.player==4){
+              uctMaxNode.parent.ncB++;
+              if (uctMaxNode.parent.ncB >uct.noChildrenThreshold) expandOK=false; else expandOK=true;
+            }
+          }
+        }
+        //if(expandOK==false){
+        //  println(uctMaxNode.parent.id+"->"+uctMaxNode.id);         
+        //}
+        if (uctMaxNode.depth<uct.depthMax && uctMaxNode.id!="" && remaingInBd(uctMaxNode.bd)>0 && expandOK ) {   // 展開するための条件
           // remaingInBd(uctMaxNode.bd) : 残り空パネルの個数（黄色も含む）
-          //println("uctMctsBrain:展開："+uctMaxNode.id+"を展開中");
+          //if (uctMaxNode.id.length()==12 && uctMaxNode.id.substring(0,4).equals(":R07")){
+            //println("展開"+uctMaxNode.id);
+          //}
           uct.newNode=null;
           uctMaxNode.legalMoves=null;
-          println("展開："+uctMaxNode.id);
+          
           // チャンスノードを別途ぶら下げる <- この案を却下。
-          //旧来のノード構成で、ぶら下げる場所を4か所作る（メモリとスピードの節約のため）
+          // ぶら下げる場所を4か所作る（メモリとスピードの節約のため）
           if (uctMaxNode.childR==null) uctMaxNode.childR = new ArrayList<uctNode>();
           if (uctMaxNode.childG==null) uctMaxNode.childG = new ArrayList<uctNode>();
           if (uctMaxNode.childW==null) uctMaxNode.childW = new ArrayList<uctNode>();

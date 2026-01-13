@@ -6,7 +6,7 @@ class uctNode {
   float[] waR, waG, waW, waB ;// このノードの（誰にとっての）勝利回数
   float[] pa;// このノードの（誰にとっての）累積パネル数
   float[] paR, paG, paW, paB;// このノードの（誰にとっての）累積パネル数
-  int ncR, ncG, ncW, ncB;//このノードの（誰にとっての）子ノードの上限数
+  int ncR, ncG, ncW, ncB;//このノードの（誰にとっての）展開済みの子ノードの数
   int []bd;// 盤面// ここをboard 型にするかどうか。
   //float NN=1;// 累計試行回数
   float[] uct;
@@ -42,7 +42,7 @@ class uctNode {
     for (int p=0; p<5; p++) uct[p]=0;
     legalMoves = null;
     childR = childG = childW = childB = null;
-    ncR=ncG=ncW=ncB=999;//小ノードの上限数、最初は大きくしておく。
+    ncR=ncG=ncW=ncB=0;//小ノードの数
     id="";
     depth=0;    
     attackChanceNode=false;
