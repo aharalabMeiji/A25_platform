@@ -1,5 +1,5 @@
 enum brainType{
-  Human, Random, UCBold, UCB1, UCB2, UCTE10D4, UCBUCT
+  Human, Random, UCBold, UCB1, UCB2, UCTE10D4, UCBUCT, UCTE10D4C1, UCTE10D4C2
 }
 
 class player {
@@ -79,6 +79,23 @@ class player {
       uct.depthMax=4;
       uct.cancelCountMax=10;
       uct.chanceNodeOn=1;
+      uct.noChildrenThreshold=999;
+      return uct.mctsBrain(this);//250618 現在の一つの解
+    } else if (myBrain==brainType.UCTE10D4C1){
+      uct.expandThreshold=100;
+      uct.terminateThreshold = uct.expandThreshold*1000000;
+      uct.depthMax=4;
+      uct.cancelCountMax=100;
+      uct.chanceNodeOn=1;
+      uct.noChildrenThreshold=1;
+      return uct.mctsBrain(this);//250618 現在の一つの解
+    } else if (myBrain==brainType.UCTE10D4C2){
+      uct.expandThreshold=100;
+      uct.terminateThreshold = uct.expandThreshold*1000000;
+      uct.depthMax=4;
+      uct.cancelCountMax=10;
+      uct.chanceNodeOn=1;
+      uct.noChildrenThreshold=2;
       return uct.mctsBrain(this);//250618 現在の一つの解
     } 
     //else if (myBrain==brainType.UCBUCT){

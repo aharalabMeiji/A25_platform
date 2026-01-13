@@ -19,7 +19,7 @@ class uctClass {
   int cancelCountMax=10;
   float maxNodeWinrate=0.0;
   int chanceNodeOn=0;
-  int noChildrenThreshold=2;
+  int noChildrenThreshold=999;
   player nextPlayer=null;
   int nnNextPlayer=1;
   int underCalculation=0;
