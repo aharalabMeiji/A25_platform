@@ -47,6 +47,7 @@ void setup() {
   gameOptions.set("Absence1W", 0);
   gameOptions.set("Absence1B", 0);
   gameOptions.set("chanceNodeOn", 1);
+  gameOptions.set("pruning", 999);
   gameOptions.set("Rrate",1);
   gameOptions.set("Grate",1);
   gameOptions.set("Wrate",1);

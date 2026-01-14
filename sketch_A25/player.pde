@@ -79,7 +79,7 @@ class player {
       uct.depthMax=4;
       uct.cancelCountMax=10;
       uct.chanceNodeOn=1;
-      uct.noChildrenThreshold=999;
+      uct.pruningThreshold=999;
       return uct.mctsBrain(this);//250618 現在の一つの解
     } else if (myBrain==brainType.UCTE10D4N1){
       uct.expandThreshold=100;
@@ -87,7 +87,7 @@ class player {
       uct.depthMax=4;
       uct.cancelCountMax=100;
       uct.chanceNodeOn=1;
-      uct.noChildrenThreshold=1;
+      uct.pruningThreshold=1;
       return uct.mctsBrain(this);//260114 枝切りの提案１
     } else if (myBrain==brainType.UCTE10D4N2){
       uct.expandThreshold=100;
@@ -95,7 +95,7 @@ class player {
       uct.depthMax=4;
       uct.cancelCountMax=100;
       uct.chanceNodeOn=1;
-      uct.noChildrenThreshold=2;
+      uct.pruningThreshold=2;
       return uct.mctsBrain(this);//260114 枝切りの提案２
     } 
     //else if (myBrain==brainType.UCBUCT){

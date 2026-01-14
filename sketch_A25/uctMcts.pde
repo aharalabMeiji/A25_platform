@@ -19,7 +19,7 @@ class uctClass {
   int cancelCountMax=10;
   float maxNodeWinrate=0.0;
   int chanceNodeOn=0;
-  int noChildrenThreshold=999;
+  int pruningThreshold=999;
   player nextPlayer=null;
   int nnNextPlayer=1;
   int underCalculation=0;
@@ -692,16 +692,16 @@ int uctMctsMainLoop(player pl) {
           else {
             if (uctMaxNode.player==1){
               uctMaxNode.parent.ncR++;
-              if (uctMaxNode.parent.ncR >uct.noChildrenThreshold) expandOK=false; else expandOK=true;
+              if (uctMaxNode.parent.ncR >uct.pruningThreshold) expandOK=false; else expandOK=true;
             } else if (uctMaxNode.player==2){
               uctMaxNode.parent.ncG++;
-              if (uctMaxNode.parent.ncG >uct.noChildrenThreshold) expandOK=false; else expandOK=true;
+              if (uctMaxNode.parent.ncG >uct.pruningThreshold) expandOK=false; else expandOK=true;
             } else if (uctMaxNode.player==3){
               uctMaxNode.parent.ncW++;
-              if (uctMaxNode.parent.ncW >uct.noChildrenThreshold) expandOK=false; else expandOK=true;
+              if (uctMaxNode.parent.ncW >uct.pruningThreshold) expandOK=false; else expandOK=true;
             } else if (uctMaxNode.player==4){
               uctMaxNode.parent.ncB++;
-              if (uctMaxNode.parent.ncB >uct.noChildrenThreshold) expandOK=false; else expandOK=true;
+              if (uctMaxNode.parent.ncB >uct.pruningThreshold) expandOK=false; else expandOK=true;
             }
           }
         }
