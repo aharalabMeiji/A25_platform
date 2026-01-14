@@ -757,6 +757,33 @@ void UCT1() {
       uct.terminateThreshold = uct.expandThreshold*10000000;
       uct.depthMax=5;
       uct.cancelCountMax=100000;
+    } else if (SimTimes == 26) {
+      uct.expandThreshold=100;
+      uct.terminateThreshold = uct.expandThreshold*1000000;
+      uct.depthMax=4;
+      uct.cancelCountMax=1000000;
+      gameOptions.set("pruning", 1);
+      uct.pruningThreshold = 1;
+    } else if (SimTimes == 27) {
+      uct.expandThreshold=100;
+      uct.terminateThreshold = uct.expandThreshold*1000000;
+      uct.depthMax=4;
+      uct.cancelCountMax=1000000;
+      gameOptions.set("pruning", 2);
+      uct.pruningThreshold = 2;
+    } else if (SimTimes == 28) {
+      uct.expandThreshold=100;
+      uct.terminateThreshold = uct.expandThreshold*1000000;
+      uct.depthMax=5;
+      uct.cancelCountMax=1000000;
+      gameOptions.set("pruning", 1);
+      uct.pruningThreshold = 1;
+    } else if (SimTimes == 29) {
+      uct.expandThreshold=100;
+      uct.terminateThreshold = uct.expandThreshold*1000000;
+      uct.depthMax=5;
+      uct.cancelCountMax=1000000;
+      uct.pruningThreshold = 2;
     } else if (SimTimes == 25) {
       uct.expandThreshold=gameOptions.get("expandThreshold");
       uct.terminateThreshold = uct.expandThreshold*1000000;
@@ -776,6 +803,7 @@ void UCT1() {
       }
     }
     uct.chanceNodeOn=gameOptions.get("chanceNodeOn");
+    uct.pruningThreshold=gameOptions.get("pruning");
     simulator.Participants = new player[5];
     for (int p=1; p<5; p++) {
       simulator.Participants[p] = new player(p, "random", brainType.Random);

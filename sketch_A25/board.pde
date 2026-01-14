@@ -175,16 +175,22 @@ class board {
       fill(0);
       String simMethod = "Monte Carlo Tree Search(UCT) ";
       text(simMethod, utils.subL, utils.subU);
-      if (gameOptions.get("SimTimes") == 21) simMethod = "(E10/D4/wCancel)";
-      else if (gameOptions.get("SimTimes") == 22) simMethod = "(E10/D4/woCancel)";
-      else if (gameOptions.get("SimTimes") == 23) simMethod = "(E10/D5/wCancel)";
-      else if (gameOptions.get("SimTimes") == 24) simMethod = "(E10/D5/woCancel)";
+      if (gameOptions.get("SimTimes") == 21) simMethod = "E10/D4/wC";
+      else if (gameOptions.get("SimTimes") == 22) simMethod = "E10/D4/woC";
+      else if (gameOptions.get("SimTimes") == 23) simMethod = "E10/D5/wC";
+      else if (gameOptions.get("SimTimes") == 24) simMethod = "E10/D5/woC";
+      else if (gameOptions.get("SimTimes") == 26) simMethod = "E100/D4";
+      else if (gameOptions.get("SimTimes") == 27) simMethod = "E100/D4";
+      else if (gameOptions.get("SimTimes") == 28) simMethod = "E100/D5";
+      else if (gameOptions.get("SimTimes") == 29) simMethod = "E100/D5";
       else {
-        simMethod="(E"+str(gameOptions.get("expandThreshold"))+"/D"+str(gameOptions.get("depthMax"));
-        if (gameOptions.get("wCancel")==1) simMethod += "/wCancel)";
-        else simMethod += "/woCancel)";
+        simMethod="E"+str(gameOptions.get("expandThreshold"))+"/D"+str(gameOptions.get("depthMax"));
+        if (gameOptions.get("wCancel")==1) simMethod += "/wC";
+        else simMethod += "/woC";
       }
-      if (gameOptions.get("chanceNodeOn")==1) simMethod += "(CN)";
+      if (gameOptions.get("chanceNodeOn")==1) simMethod += "/CN";
+      if(gameOptions.get("pruning")==1) simMethod += "/P1";
+      if(gameOptions.get("pruning")==2) simMethod += "/P2";
       simMethod += "<";
       if(gameOptions.get("Absence0R")==1) simMethod += "R";
       if(gameOptions.get("Absence0G")==1) simMethod += "G";

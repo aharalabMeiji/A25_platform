@@ -38,6 +38,9 @@ void setup() {
   gameOptions.set("Times", 1);// 1:once, 100:100 times, 10000:10000 times
   gameOptions.set("SimTimes", 2);
   gameOptions.set("SimMethod", 1);
+  gameOptions.set("expandThreshold", 10);
+  gameOptions.set("depthMax", 4);
+  gameOptions.set("wCancel", 1);
   gameOptions.set("Absence0R", 0);
   gameOptions.set("Absence0G", 0);
   gameOptions.set("Absence0W", 0);
@@ -146,10 +149,14 @@ void mousePressed() {
           } else if (b.dictKey=="SimMethod" && b.dictInt==3) {
             gameOptions.set("SimTimes", 21);
           } else if (b.dictKey=="SimTimes" && b.dictInt==25) {
-            gameOptions.set("expandThreshold", 10);
+            gameOptions.set("expandThreshold", 10); //<>//
             gameOptions.set("terminateThreshold", 5);
             gameOptions.set("depthMax", 4);
             gameOptions.set("wCancel", 1);
+          } else if (b.dictKey=="SimTimes" && (b.dictInt==26 || b.dictInt==28)){
+            gameOptions.set("pruning", 1);  //<>//
+          } else if (b.dictKey=="SimTimes" && (b.dictInt==27 || b.dictInt==29)){
+            gameOptions.set("pruning", 2); 
           }
           //println(gameOptions.get("SimMethod"), gameOptions.get("SimTimes"));
           return;

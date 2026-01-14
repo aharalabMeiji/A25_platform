@@ -567,7 +567,7 @@ void showContents() {
       //println("L561@contents",gameOptions.get("SimTimes"));
       top += utils.vStep;
       left=utils.hOffset;
-      captionText = "Time:";
+      captionText = "Option:";
       fill(0);
       text(captionText, left, top);
       left += (textWidth(captionText)+utils.hSpace);
@@ -622,16 +622,67 @@ void showContents() {
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
       ////
+      top += utils.vStep;
+      left=utils.hOffset;
+      captionText = "      ";
+      fill(0);
+      text(captionText, left, top);
+      left += (textWidth(captionText)+utils.hSpace);
+      //
+      buttonText = "[D4/E100/P1]";
+      button buttontimes6=new button();
+      buttontimes6.setLT(left, top, buttonText);
+      buttontimes6.setItem("SimTimes", 26);
+      buttons.add(buttontimes6);
+      if (gameOptions.get("SimTimes") == 26) fill(255, 0, 0);
+      else fill(0);
+      text(buttonText, left, top);
+      left += (textWidth(buttonText)+utils.hSpace);
+      //
+      buttonText = "[D4/E100/P2]";
+      button buttontimes7=new button();
+      buttontimes7.setLT(left, top, buttonText);
+      buttontimes7.setItem("SimTimes", 27);
+      buttons.add(buttontimes7);
+      if (gameOptions.get("SimTimes") == 27) fill(255, 0, 0);
+      else fill(0);
+      text(buttonText, left, top);
+      left += (textWidth(buttonText)+utils.hSpace);
+      //
+      buttonText = "[D5/E100/P1]";
+      button buttontimes8=new button();
+      buttontimes8.setLT(left, top, buttonText);
+      buttontimes8.setItem("SimTimes", 28);
+      buttons.add(buttontimes8);
+      if (gameOptions.get("SimTimes") == 28) fill(255, 0, 0);
+      else fill(0);
+      text(buttonText, left, top);
+      left += (textWidth(buttonText)+utils.hSpace);
+      //
+      buttonText = "[D5/E100/P2]";
+      button buttontimes9=new button();
+      buttontimes9.setLT(left, top, buttonText);
+      buttontimes9.setItem("SimTimes", 29);
+      buttons.add(buttontimes9);
+      if (gameOptions.get("SimTimes") == 29) fill(255, 0, 0);
+      else fill(0);
+      text(buttonText, left, top);
+      left += (textWidth(buttonText)+utils.hSpace);
+      //
     }
     if (gameOptions.get("SimMethod") == 3 ){
       top += utils.vStep;
       left=utils.hOffset;
       //
       fill(255, 0, 0);
-      if (gameOptions.get("SimTimes") == 21) text("visit/node=10, max depth=4, with cancelling",left,top);
-      else if (gameOptions.get("SimTimes") == 22) text("visit/node=10, max depth=4, w/o cancelling",left,top);
-      else if (gameOptions.get("SimTimes") == 23) text("visit/node=10, max depth=5, with cancelling",left,top);
-      else if (gameOptions.get("SimTimes") == 24) text("visit/node=10, max depth=5, w/o cancelling",left,top);
+      if (gameOptions.get("SimTimes") == 21) text("max depth=4, visit/node=10, with cancelling",left,top);
+      else if (gameOptions.get("SimTimes") == 22) text("max depth=4, visit/node=10, w/o cancelling",left,top);
+      else if (gameOptions.get("SimTimes") == 23) text("max depth=5, visit/node=10, with cancelling",left,top);
+      else if (gameOptions.get("SimTimes") == 24) text("max depth=5, visit/node=10, w/o cancelling",left,top);
+      else if (gameOptions.get("SimTimes") == 26) text("max depth=4, visit/node=100, pruning 1",left,top);
+      else if (gameOptions.get("SimTimes") == 27) text("max depth=4, visit/node=100, pruning 2",left,top);
+      else if (gameOptions.get("SimTimes") == 28) text("max depth=5, visit/node=100, pruning 1",left,top);
+      else if (gameOptions.get("SimTimes") == 29) text("max depth=5, visit/node=100, pruning 2",left,top);
       else if (gameOptions.get("SimTimes") == 25) {
         //
         captionText = "visit/node:";
@@ -975,7 +1026,46 @@ void showContents() {
       else fill(0);
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
-      }
+      //
+      top += utils.vStep;
+      left=utils.hOffset;
+      //
+      captionText = "Pruning:";
+      fill(0);
+      text(captionText, left, top);
+      left += (textWidth(captionText)+utils.hSpace);
+      //
+      buttonText = "[P1]";
+      button buttonPruning1=new button();
+      buttonPruning1.setLT(left, top, buttonText);
+      buttonPruning1.setItem("pruning", 1);
+      buttons.add(buttonPruning1);
+      if (gameOptions.get("pruning")==1) fill(255, 0, 0);
+      else fill(0);
+      text(buttonText, left, top);
+      left += (textWidth(buttonText)+utils.hSpace);
+      //
+      buttonText = "[P2]";
+      button buttonPruning2=new button();
+      buttonPruning2.setLT(left, top, buttonText);
+      buttonPruning2.setItem("pruning", 2);
+      buttons.add(buttonPruning2);
+      if (gameOptions.get("pruning")==2) fill(255, 0, 0);
+      else fill(0);
+      text(buttonText, left, top);
+      left += (textWidth(buttonText)+utils.hSpace);
+      //
+      buttonText = "[no pruning]";
+      button buttonPruning999=new button();
+      buttonPruning999.setLT(left, top, buttonText);
+      buttonPruning999.setItem("pruning", 999);
+      buttons.add(buttonPruning999);
+      if (gameOptions.get("pruning")==999) fill(255, 0, 0);
+      else fill(0);
+      text(buttonText, left, top);
+      left += (textWidth(buttonText)+utils.hSpace);
+      //
+    }
     //
     top += utils.vStep;
     left=utils.hOffset;
