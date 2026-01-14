@@ -93,6 +93,16 @@ void showContents() {
     else fill(0);
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
+    //
+    buttonText = "[pUCT]";
+    buttonUCTMCTS1=new button();
+    buttonUCTMCTS1.setLT(left, top, buttonText);
+    buttonUCTMCTS1.setItem("Player1", 5);
+    buttons.add(buttonUCTMCTS1);
+    if (gameOptions.get("Player1")%10==5) fill(255, 0, 0);
+    else fill(0);
+    text(buttonText, left, top);
+    left += (textWidth(buttonText)+utils.hSpace);
 
     // Player2
     top += utils.vStep;
@@ -149,6 +159,16 @@ void showContents() {
     buttonUCTMCTS1.setItem("Player2", 4);
     buttons.add(buttonUCTMCTS1);
     if (gameOptions.get("Player2")%10==4) fill(255, 0, 0);
+    else fill(0);
+    text(buttonText, left, top);
+    left += (textWidth(buttonText)+utils.hSpace);
+    //
+    buttonText = "[pUCT]";
+    buttonUCTMCTS1=new button();
+    buttonUCTMCTS1.setLT(left, top, buttonText);
+    buttonUCTMCTS1.setItem("Player2", 5);
+    buttons.add(buttonUCTMCTS1);
+    if (gameOptions.get("Player2")%10==5) fill(255, 0, 0);
     else fill(0);
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
@@ -211,6 +231,16 @@ void showContents() {
     else fill(0);
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
+    //
+    buttonText = "[pUCT]";
+    buttonUCTMCTS1=new button();
+    buttonUCTMCTS1.setLT(left, top, buttonText);
+    buttonUCTMCTS1.setItem("Player3", 5);
+    buttons.add(buttonUCTMCTS1);
+    if (gameOptions.get("Player3")%10==5) fill(255, 0, 0);
+    else fill(0);
+    text(buttonText, left, top);
+    left += (textWidth(buttonText)+utils.hSpace);
 
     // Player4
     top += utils.vStep;
@@ -270,7 +300,16 @@ void showContents() {
     else fill(0);
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
-
+    //
+    buttonText = "[pUCT]";
+    buttonUCTMCTS1=new button();
+    buttonUCTMCTS1.setLT(left, top, buttonText);
+    buttonUCTMCTS1.setItem("Player4", 5);
+    buttons.add(buttonUCTMCTS1);
+    if (gameOptions.get("Player4")%10==5) fill(255, 0, 0);
+    else fill(0);
+    text(buttonText, left, top);
+    left += (textWidth(buttonText)+utils.hSpace);
 
     // Order
     top += utils.vStep;

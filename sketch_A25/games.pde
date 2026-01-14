@@ -155,7 +155,9 @@ void showGames() {
     } else if (gameOptions.get("Player1")==3) {
       game.participants[1] = new player(1, "ucb-1", brainType.UCB1);
     } else if (gameOptions.get("Player1")==4) {
-      game.participants[1] = new player(1, "uct-1", brainType.UCTE10D4N2);
+      game.participants[1] = new player(1, "uct-1", brainType.UCTE10D4);
+    } else if (gameOptions.get("Player1")==5) {
+      game.participants[1] = new player(1, "p-uct-1", brainType.UCTE10D4N1);
     } else {
       game.participants[1] = new player(1, "random1", brainType.Random);
     }
@@ -165,6 +167,8 @@ void showGames() {
       game.participants[2] = new player(2, "ucb-2", brainType.UCB1);
     } else if (gameOptions.get("Player2")==4) {
       game.participants[2] = new player(2, "uct-2", brainType.UCTE10D4);
+    } else if (gameOptions.get("Player1")==5) {
+      game.participants[2] = new player(2, "p-uct-2", brainType.UCTE10D4N1);
     } else {
       game.participants[2] = new player(2, "random2", brainType.Random);
     }
@@ -174,6 +178,8 @@ void showGames() {
       game.participants[3] = new player(3, "ucb-3", brainType.UCB1);
     } else if (gameOptions.get("Player3")==4) {
       game.participants[3] = new player(3, "uct-3", brainType.UCTE10D4);
+    } else if (gameOptions.get("Player3")==5) {
+      game.participants[3] = new player(3, "p-uct-3", brainType.UCTE10D4N1);
     } else {
       game.participants[3] = new player(3, "random3", brainType.Random);
     }
@@ -183,6 +189,8 @@ void showGames() {
       game.participants[4] = new player(4, "ucb-4", brainType.UCB1);
     } else if (gameOptions.get("Player4")==4) {
       game.participants[4] = new player(4, "uct-4", brainType.UCTE10D4);
+    } else if (gameOptions.get("Player4")==5) {
+      game.participants[1] = new player(4, "p-uct-4", brainType.UCTE10D4N1);
     } else {
       game.participants[4] = new player(4, "random4", brainType.Random);
     }
@@ -500,7 +508,7 @@ void showGames() {
       textAlign(LEFT, CENTER);
       textSize(utils.fontSize*0.6);
       text(kifu.string, utils.subL, utils.subU + utils.mainH + utils.hOffset);     //残り枚数のカウントと分岐処理
-
+      save(kifu.kifuFullPath+".png");//save("screenshot.png");
       // 棋譜文字列の初期化
       kifu.string="";
       managerPhase = mP.Halt;
@@ -536,7 +544,7 @@ void showGames() {
       // 棋譜文字列の初期化
       kifu.string="";
       initRandomOrder();
-      managerPhase = mP.WaitChoosePlayer; //<>//
+      managerPhase = mP.WaitChoosePlayer; //<>// //<>//
     }
     ///////mP.GameEndここまで
   } else if (managerPhase==mP.BeforeAttackChance) {///////mP.BeforeAttackChance
