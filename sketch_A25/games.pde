@@ -155,7 +155,7 @@ void showGames() {
     } else if (gameOptions.get("Player1")==3) {
       game.participants[1] = new player(1, "ucb-1", brainType.UCB1);
     } else if (gameOptions.get("Player1")==4) {
-      game.participants[1] = new player(1, "uct-1", brainType.UCTE10D4C1);
+      game.participants[1] = new player(1, "uct-1", brainType.UCTE10D4N2);
     } else {
       game.participants[1] = new player(1, "random1", brainType.Random);
     }
