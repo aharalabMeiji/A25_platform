@@ -742,41 +742,42 @@ void UCT1() {
       uct.terminateThreshold = uct.expandThreshold*1000000;
       uct.depthMax=4;
       uct.cancelCountMax=10;
+      uct.pruningThreshold = 999;
     } else if (SimTimes == 22) {
       uct.expandThreshold=10;
       uct.terminateThreshold = uct.expandThreshold*1000000;
       uct.depthMax=4;
       uct.cancelCountMax=1000000;
+      uct.pruningThreshold = 999;
     } else if (SimTimes == 23) {
       uct.expandThreshold=10;
       uct.terminateThreshold = uct.expandThreshold*10000000;
       uct.depthMax=5;
       uct.cancelCountMax=20;
+      uct.pruningThreshold = 999;
     } else if (SimTimes == 24) {
       uct.expandThreshold=10;
       uct.terminateThreshold = uct.expandThreshold*10000000;
       uct.depthMax=5;
       uct.cancelCountMax=100000;
+      uct.pruningThreshold = 999;
     } else if (SimTimes == 26) {
       uct.expandThreshold=100;
       uct.terminateThreshold = uct.expandThreshold*1000000;
       uct.depthMax=4;
       uct.cancelCountMax=1000000;
-      gameOptions.set("pruning", 1);
       uct.pruningThreshold = 1;
     } else if (SimTimes == 27) {
       uct.expandThreshold=100;
       uct.terminateThreshold = uct.expandThreshold*1000000;
       uct.depthMax=4;
       uct.cancelCountMax=1000000;
-      gameOptions.set("pruning", 2);
       uct.pruningThreshold = 2;
     } else if (SimTimes == 28) {
       uct.expandThreshold=100;
       uct.terminateThreshold = uct.expandThreshold*1000000;
       uct.depthMax=5;
       uct.cancelCountMax=1000000;
-      gameOptions.set("pruning", 1);
       uct.pruningThreshold = 1;
     } else if (SimTimes == 29) {
       uct.expandThreshold=100;
@@ -840,10 +841,10 @@ void UCT1() {
         showReturnButton();
         showScreenCapture();
       } else {
-        if (uct.cancelCountMax>1000) {
+        if (uct.cancelCountMax>10000) {
           println("uct:E"+uct.expandThreshold+"D"+uct.depthMax+"woC");//+"T"+uct.terminateThreshold
         } else {
-          println("uct:E"+uct.expandThreshold+"D"+uct.depthMax+"C"+uct.cancelCountMax);
+          println("uct:E"+uct.expandThreshold+"D"+uct.depthMax+"C"+(uct.cancelCountMax));
         }
         uct.simulationTag=10000;
         simulationManager=sP.setStartBoard;
@@ -910,37 +911,35 @@ void showMcts(player nextPlayer) {
     if (nd1.totalChildNullP()==false && nd1.totalChildSize()>0) {
       switch(p2) {
       case 1:
-        localPrize.getPrize1FromNodeList(1, nd1.childR);
+        nd2=nd1.bcR;
         break;
       case 2:
-        localPrize.getPrize1FromNodeList(2, nd1.childG);
+        nd2=nd1.bcG;
         break;
       case 3:
-        localPrize.getPrize1FromNodeList(3, nd1.childW);
+        nd2=nd1.bcW;
         break;
       case 4:
-        localPrize.getPrize1FromNodeList(4, nd1.childB);
+        nd2=nd1.bcB;
         break;
       }
-      nd2 = localPrize.getMove(1);
       if (nd2==null) {
         message[p2]=nd1.id;
       } else if (nd2.totalChildNullP()==false && nd2.totalChildSize()>0) {
         switch(uct.nnNextPlayer) {
         case 1:
-          localPrize.getPrize1FromNodeList(1, nd2.childR);
+          nd3=nd2.bcR;
           break;
         case 2:
-          localPrize.getPrize1FromNodeList(2, nd2.childG);
+          nd3=nd2.bcG;
           break;
         case 3:
-          localPrize.getPrize1FromNodeList(3, nd2.childW);
+          nd3=nd2.bcW;
           break;
         case 4:
-          localPrize.getPrize1FromNodeList(4, nd2.childB);
+          nd3=nd2.bcB;
           break;
         }
-        nd3 = localPrize.getMove(1);
         if (nd3==null) {
           message[p2] = nd2.id+" ("+nf(nd2.wa[p2]/nd2.na, 1, 3)+":"+nf(nd2.pa[p2]/nd2.na, 2, 3)+")";
         } else {

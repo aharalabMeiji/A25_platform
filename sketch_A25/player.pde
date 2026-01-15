@@ -85,7 +85,7 @@ class player {
       uct.expandThreshold=100;
       uct.terminateThreshold = uct.expandThreshold*1000000;
       uct.depthMax=4;
-      uct.cancelCountMax=100;
+      uct.cancelCountMax=1000;
       uct.chanceNodeOn=1;
       uct.pruningThreshold=1;
       return uct.mctsBrain(this);//260114 枝切りの提案１
@@ -93,7 +93,7 @@ class player {
       uct.expandThreshold=100;
       uct.terminateThreshold = uct.expandThreshold*1000000;
       uct.depthMax=4;
-      uct.cancelCountMax=100;
+      uct.cancelCountMax=1000;
       uct.chanceNodeOn=1;
       uct.pruningThreshold=2;
       return uct.mctsBrain(this);//260114 枝切りの提案２

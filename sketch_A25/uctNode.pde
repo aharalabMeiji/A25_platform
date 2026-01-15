@@ -14,6 +14,7 @@ class uctNode {
   int move=-1;// attack chance時には、625までの数が入る。
   ArrayList<uctNode> legalMoves=null;// children から変更。深さ１の子供たち。
   ArrayList<uctNode> childR,childG,childW,childB;// チャンスノードの代わりに、子供を４つに分ける251018
+  uctNode bcR, bcG, bcW, bcB;// best child
   String id;
   int depth;
   uctNode parent=null;//必要
@@ -43,6 +44,7 @@ class uctNode {
     legalMoves = null;
     childR = childG = childW = childB = null;
     ncR=ncG=ncW=ncB=0;//小ノードの数
+    bcR=bcG=bcW=bcB=null;// best child
     id="";
     depth=0;    
     attackChanceNode=false;

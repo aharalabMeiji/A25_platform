@@ -41,7 +41,7 @@ class uctClass {
     answer = mctsBrainFirstSimulation(pl);
 
     if (answer!=-1) return answer;
-    println("uct ", uct.expandThreshold, uct.depthMax, uct.cancelCountMax);//uct.terminateThreshold,
+    println("uct ", uct.expandThreshold, uct.depthMax, (uct.cancelCountMax));//uct.terminateThreshold,
     //uct.simulationTag=uct.expandThreshold*10;
     while (true) {
       //if (uct.uctMainLoopOption==1) {
@@ -569,8 +569,9 @@ int uctMctsMainLoop(player pl) {
       secondRate=uct.prize.w2;
     }
     if (winRate-secondRate>error) {
-      uct.cancelCount++;
-      if ((uct.cancelCount)>=uct.cancelCountMax) {
+      uct.cancelCount += uct.loopCount;
+      //print("["+(uct.cancelCount/1000.0)+"]");
+      if ((uct.cancelCount)>=uct.cancelCountMax*1000) {
         println("勝率の推定により着手が確定した");
         println("試行回数(", pl.myBoard.simulatorNumber, ")");
         println("time=", millis()-startTime, "(ms)");
@@ -693,15 +694,19 @@ int uctMctsMainLoop(player pl) {
             if (uctMaxNode.player==1){
               uctMaxNode.parent.ncR++;
               if (uctMaxNode.parent.ncR >uct.pruningThreshold) expandOK=false; else expandOK=true;
+              if (uctMaxNode.parent.bcR==null) uctMaxNode.parent.bcR=uctMaxNode; 
             } else if (uctMaxNode.player==2){
               uctMaxNode.parent.ncG++;
               if (uctMaxNode.parent.ncG >uct.pruningThreshold) expandOK=false; else expandOK=true;
+              if (uctMaxNode.parent.bcG==null) uctMaxNode.parent.bcG=uctMaxNode; 
             } else if (uctMaxNode.player==3){
               uctMaxNode.parent.ncW++;
               if (uctMaxNode.parent.ncW >uct.pruningThreshold) expandOK=false; else expandOK=true;
+              if (uctMaxNode.parent.bcW==null) uctMaxNode.parent.bcW=uctMaxNode; 
             } else if (uctMaxNode.player==4){
               uctMaxNode.parent.ncB++;
               if (uctMaxNode.parent.ncB >uct.pruningThreshold) expandOK=false; else expandOK=true;
+              if (uctMaxNode.parent.bcB==null) uctMaxNode.parent.bcB=uctMaxNode; 
             }
           }
         }
