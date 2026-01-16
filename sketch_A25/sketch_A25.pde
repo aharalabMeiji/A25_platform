@@ -2,13 +2,14 @@ import javax.swing.JOptionPane; //
 import org.apache.commons.math3.random.MersenneTwister;
 
 MersenneTwister mt;
+String filename = sketchPath()+"\\"+"data"+"\\"+"default.txt";
 
 void setup() {
   size(960, 960);
   mt = new MersenneTwister();
-  
   frameRate(10000);//draw()の実行をできるだけ早く繰り返す
-
+  filename = sketchPath()+"\\"+"data"+"\\"+"default.txt";
+  
   utils.unitSize = width;
   utils.mainL = int(utils.unitSize/12);
   utils.mainU = int(utils.unitSize/16);
@@ -210,7 +211,7 @@ boolean differentExt(String s1, String ext){
   return false;
 }
 String filePath; // 選択されたファイルのフルパスを保存する変数
-String filenamePath="default.txt";// 選択されたファイルのファイル名部分を保存する変数
+String filenamePath=sketchPath()+"\\"+"data"+"\\"+"default.txt";// 選択されたファイルのファイル名部分を保存する変数
 // ダイアログで選択されたファイルパスを取得する関数
 void saveFileSelected(File selection) {
   if (selection == null) {

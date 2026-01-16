@@ -33,8 +33,6 @@ class globals {
 IntDict gameOptions = new IntDict(); // 0:PlayGame 1:Simulate
 int winPointRule = 1;// 0: 単独勝利のみ勝ち、 1:トップ者で按分、2:トップであれば勝ち
 
-//String filename = "default.txt";
-String filename = sketchPath()+"\\"+"data"+"\\"+"default.txt";
 
 // buttons
 ArrayList<button> buttons;

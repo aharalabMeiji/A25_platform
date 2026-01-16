@@ -744,7 +744,7 @@ int uctMctsMainLoop(player pl) {
           }
           for (int p=1; p<5; p++) {// 4人分の作業ここから
             //uctMctsMainLoop 02-2-4-2
-            if (! uctMaxNode.onRGWB[p]) continue; // 枝切では作業省略
+            if (! uctMaxNode.onRGWB[p]) continue; // 「お立ち」では作業省略
             //println("プレイヤー"+p+の子供ノードをuctMaxNodeに追加);//展開中
             //println("uctMaxNodeの盤面をuct.mainBoardにコピー。");
             uct.mainBoard.copyBdToBoard(uctMaxNode.bd);
@@ -809,6 +809,62 @@ int uctMctsMainLoop(player pl) {
                   }
                 }
               }// 合法手ごとのforループ ここまで
+              //if (uctMaxNode.depth==1){
+              //  // パス(move=26)をここに含めるかどうか。
+              //  // 現状では、初手以外ではパスを入れていない。
+              //  // その結果「ほかの人がパスをしない前提で自分のパスを考える」ことになっている。
+              //  // これがよいか.深さ２だけ２６番を入れるという考え方もある。
+              //  uct.newNode = new uctNode();
+              //  uct.qtyNodes[0] ++;
+              //  uct.newNode.setItem(p, 25);
+              //  uct.newNode.id = uctMaxNode.id+":"+kifu.playerColCode[p]+nf(26, 2);
+              //  uct.newNode.depth = uctMaxNode.depth+1;//=newChancenode.depth
+              //  uct.qtyNodes[uct.newNode.depth] ++;
+              //  //println("新しいノード "+uct.newNode.id+"を追加した！");
+              //  switch(p) {
+              //  case 1:
+              //    uctMaxNode.childR.add(uct.newNode);// uct.newNodeをuctMaxNodeの子に設定
+              //    break;
+              //  case 2:
+              //    uctMaxNode.childG.add(uct.newNode);// uct.newNodeをuctMaxNodeの子に設定
+              //    break;
+              //  case 3:
+              //    uctMaxNode.childW.add(uct.newNode);// uct.newNodeをuctMaxNodeの子に設定
+              //    break;
+              //  case 4:
+              //    uctMaxNode.childB.add(uct.newNode);// uct.newNodeをuctMaxNodeの子に設定
+              //    break;
+              //  }
+              //  uct.newNode.parent = uctMaxNode;//uctMaxNodeをuct.newNodeの親に設定
+              //  uct.newNode.ancestor = ancestor;//uct.newNodeのご先祖さまを記録
+              //  uct.newNode.onRGWB = new boolean[5];
+              //  for (int p0=1; p0<5; p0++) {// 4人分の作業ここから
+              //    // 深さ２以上のパスによる枝切
+              //    if (uct.isPassAtDepth2Node(uct.newNode, p0)) {
+              //      //print("[pass at"+uctMaxNode.id+";"+p0+"]");
+              //      uct.newNode.onRGWB[p0]=false;
+              //      continue;
+              //    } else {
+              //      uct.newNode.onRGWB[p0]=true;
+              //    }
+              //  }
+              //  ancestor.activeNodes.add(uct.newNode);//ご先祖様のアクティブノードに登録
+              //  //println("新しいノードに盤情報を記入");
+              //  uct.mainBoard.copyBoardToSub(uct.subBoard);
+              //  // 1手パスする
+              //  uct.subBoard.copyBoardToBd(uct.newNode.bd);
+              //  // uct.newNodeの報酬データを初期化
+              //  uct.newNode.initRewardOfNode();
+              //  // 4回、最後まで打ち切ってバックプロパゲートしておく。
+              //  // uct値を有効にするため。
+              //  for (int count=0; count<4; count++) {
+              //    if (uctMaxNode.onRGWB[count+1]) {
+              //      pl.myBoard.simulatorNumber ++;
+              //      uct.randomPlayAndBackPropagate(uct.newNode, count+1);
+              //    }
+              //  }                
+              //}
+              // アタックチャンスでないときの、子ノードのぶらさげ終了
             } else {
               //uctMctsMainLoop block 02-2-4-3-2
               // アタックチャンスのときの、子ノードのぶらさげ//ただいま展開中
