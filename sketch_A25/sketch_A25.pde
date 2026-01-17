@@ -2,13 +2,13 @@ import javax.swing.JOptionPane; //
 import org.apache.commons.math3.random.MersenneTwister;
 
 MersenneTwister mt;
-String filename = sketchPath()+"\\"+"data"+"\\"+"default.txt";
 
 void setup() {
   size(960, 960);
   mt = new MersenneTwister();
   frameRate(10000);//draw()の実行をできるだけ早く繰り返す
-  filename = sketchPath()+"\\"+"data"+"\\"+"default.txt";
+  utils.filename = "default.txt";
+  utils.filenamePath = sketchPath()+"\\"+"data"+"\\"+"default.txt";
   
   utils.unitSize = width;
   utils.mainL = int(utils.unitSize/12);
@@ -99,7 +99,19 @@ void mousePressed() {
       }
       for (button b : buttons) {
         if (b.mouseOn()) {
-          gameOptions.set(b.dictKey, b.dictInt);
+          if (b.dictKey.equals("Times") && b.dictInt==game.times100 && gameOptions.get("Times")==game.times100){
+              game.times100 += 100;
+              if (game.times100 == 1000) game.times100 = 100;
+              gameOptions.set("Times", game.times100);
+          }
+          else if (b.dictKey.equals("Times") && b.dictInt==game.times1000 && gameOptions.get("Times")==game.times1000){
+              game.times1000 += 1000;
+              if (game.times1000 == 11000) game.times1000 = 1000;
+              gameOptions.set("Times", game.times1000);
+          }
+          else {
+            gameOptions.set(b.dictKey, b.dictInt);
+          }
           //println(b.dictKey, b.dictInt);
           return;
         }
@@ -210,19 +222,19 @@ boolean differentExt(String s1, String ext){
   }
   return false;
 }
-String filePath; // 選択されたファイルのフルパスを保存する変数
-String filenamePath=sketchPath()+"\\"+"data"+"\\"+"default.txt";// 選択されたファイルのファイル名部分を保存する変数
 // ダイアログで選択されたファイルパスを取得する関数
 void saveFileSelected(File selection) {
   if (selection == null) {
     println("ファイルが選択されませんでした。");
   } else {
-    filePath = selection.getAbsolutePath();
+    utils.filePath = selection.getAbsolutePath();
     
-    if (differentExt(filePath,".txt")==true ){
-      filePath += ".txt";
+    if (differentExt(utils.filePath,".txt")==true ){
+      utils.filePath += ".txt";
     }
-    println("選択されたファイルパス: " + filePath);
+    println("選択されたファイルパス: " + utils.filePath);
+    utils.filenamePath = utils.filePath;
+    utils.filename = filenameFromPath(utils.filePath);
     int lineSize = simulatorStartBoard.size();
     String[] lines = new String[lineSize];
 
@@ -234,7 +246,7 @@ void saveFileSelected(File selection) {
       }
       lines[i] += (""+sb.nextPlayer);
     }
-    saveStrings(filePath, lines);
+    saveStrings(utils.filePath, lines);
   }
 }
 
@@ -268,10 +280,11 @@ void openFileSelected(File selection) {
   if (selection == null) {
     println("ファイルが選択されませんでした。");
   } else {
-    filePath = selection.getAbsolutePath(); 
-    println("選択されたファイルパス: " + filePath);
-    filenamePath = filenameFromPath(filePath);
-    String[] lines = loadStrings(filePath);
+    utils.filePath = selection.getAbsolutePath(); 
+    println("選択されたファイルパス: " + utils.filePath);
+    utils.filenamePath = utils.filePath;
+    utils.filename = filenameFromPath(utils.filePath);
+    String[] lines = loadStrings(utils.filePath);
     int lineSize=lines.length;
     if (lines[0].charAt(0)=='0' && lines[0].charAt(1)==',') {
       //println(lines[0].substring(0, 4));
@@ -371,8 +384,10 @@ void openPsrFileSelected(File selection) {
   if (selection == null) {
     println("ファイルが選択されませんでした。");
   } else {
-    filePath = selection.getAbsolutePath(); //
-    String[] lines = loadStrings(filePath);
+    utils.filePath = selection.getAbsolutePath(); //
+    utils.filenamePath = utils.filePath;
+    utils.filename = filenameFromPath(utils.filePath);
+    String[] lines = loadStrings(utils.filePath);
     int lineSize=lines.length;
     simulatorStartBoard.clear();
     int p=9;

@@ -31,7 +31,7 @@ startBoard startBoard0;
 
 void initStartBoard() {
   simulatorStartBoard.clear();
-  String[] rows = loadStrings(filename);
+  String[] rows = loadStrings(utils.filenamePath);
   for (int i = 0; i < rows.length; ++i) {
     String[] fruits = splitTokens(rows[i], ",");
     int[] nums = new int [26];
@@ -902,7 +902,7 @@ void printlnAllNodes(uctNode nd, int p) {
 void showMcts(player nextPlayer) {
   uct.prize.getPrize1FromNodeList(nextPlayer.position, uct.rootNode.legalMoves);
   String[] message=new String[5];
-  prize localPrize=new prize();
+  //prize localPrize=new prize();
   uctNode nd1=null, nd2=null, nd3=null;
   //uct.nnNextPlayer=1;
   nd1 = uct.prize.getMove(1);// トップ合法手
@@ -1061,12 +1061,12 @@ void saveScreenShotSelected(File selection) {
   if (selection == null) {
     println("ファイルが選択されませんでした。");
   } else {
-    filePath = selection.getAbsolutePath();
-    if (differentExt(filePath, ".png")==true) {
-      filePath += ".png";
+    utils.filePath = selection.getAbsolutePath();
+    if (differentExt(utils.filePath, ".png")==true) {
+      utils.filePath += ".png";
     }
-    println("選択されたファイルパス: " + filePath);
-    save(filePath);
+    println("選択されたファイルパス: " + utils.filePath);
+    save(utils.filePath);
   }
 }
 
@@ -1074,12 +1074,12 @@ void saveTreeSelected(File selection) {
   if (selection == null) {
     println("ファイルが選択されませんでした。");
   } else {
-    filePath = selection.getAbsolutePath();
-    if (differentExt(filePath, ".txt")==true) {
-      filePath += ".txt";
+    utils.filePath = selection.getAbsolutePath();
+    if (differentExt(utils.filePath, ".txt")==true) {
+      utils.filePath += ".txt";
     }
-    println("選択されたファイルパス: " + filePath);
-    saveGameTree(filePath);
+    println("選択されたファイルパス: " + utils.filePath);
+    saveGameTree(utils.filePath);
   }
 }
 

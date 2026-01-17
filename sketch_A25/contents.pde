@@ -33,7 +33,7 @@ void showContents() {
   text(buttonText, left, top);
   //
   fill(0);
-  text(filenamePath, utils.mainL+utils.fontSize*22, utils.mainU-utils.fontSize);
+  text(utils.filename, utils.mainL+utils.fontSize*22, utils.mainU-utils.fontSize);
   //
   top += utils.vStep;
   left=utils.hOffset;
@@ -63,16 +63,16 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    buttonText = "[Heuristic]";
-    button buttonHeuristic1=new button();
-    buttonHeuristic1.setLT(left, top, buttonText);
-    buttonHeuristic1.setItem("Player1", 2);
-    //buttons.add(buttonHeuristic1);
-    if (gameOptions.get("Player1")%10 == 2) fill(255, 0, 0);
-    else fill(0);
-    fill(200, 200, 200);
-    text(buttonText, left, top);
-    left += (textWidth(buttonText)+utils.hSpace);
+    //buttonText = "[Heuristic]";
+    //button buttonHeuristic1=new button();
+    //buttonHeuristic1.setLT(left, top, buttonText);
+    //buttonHeuristic1.setItem("Player1", 2);
+    ////buttons.add(buttonHeuristic1);
+    //if (gameOptions.get("Player1")%10 == 2) fill(255, 0, 0);
+    //else fill(0);
+    //fill(200, 200, 200);
+    //text(buttonText, left, top);
+    //left += (textWidth(buttonText)+utils.hSpace);
     //
     buttonText = "[UCB]";
     button buttonUCT1=new button();
@@ -131,16 +131,16 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    buttonText = "[Heuristic]";
-    buttonHeuristic1=new button();
-    buttonHeuristic1.setLT(left, top, buttonText);
-    buttonHeuristic1.setItem("Player2", 2);
-    //buttons.add(buttonHeuristic1);
-    if (gameOptions.get("Player2") == 2) fill(255, 0, 0);
-    else fill(0);
-    fill(200, 200, 200);
-    text(buttonText, left, top);
-    left += (textWidth(buttonText)+utils.hSpace);
+    //buttonText = "[Heuristic]";
+    //buttonHeuristic1=new button();
+    //buttonHeuristic1.setLT(left, top, buttonText);
+    //buttonHeuristic1.setItem("Player2", 2);
+    ////buttons.add(buttonHeuristic1);
+    //if (gameOptions.get("Player2") == 2) fill(255, 0, 0);
+    //else fill(0);
+    //fill(200, 200, 200);
+    //text(buttonText, left, top);
+    //left += (textWidth(buttonText)+utils.hSpace);
     //
     buttonText = "[UCB]";
     buttonUCT1=new button();
@@ -200,16 +200,16 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    buttonText = "[Heuristic]";
-    buttonHeuristic1=new button();
-    buttonHeuristic1.setLT(left, top, buttonText);
-    buttonHeuristic1.setItem("Player3", 2);
-    //buttons.add(buttonHeuristic1);
-    if (gameOptions.get("Player3") == 2) fill(255, 0, 0);
-    else fill(0);
-    fill(200, 200, 200);
-    text(buttonText, left, top);
-    left += (textWidth(buttonText)+utils.hSpace);
+    //buttonText = "[Heuristic]";
+    //buttonHeuristic1=new button();
+    //buttonHeuristic1.setLT(left, top, buttonText);
+    //buttonHeuristic1.setItem("Player3", 2);
+    ////buttons.add(buttonHeuristic1);
+    //if (gameOptions.get("Player3") == 2) fill(255, 0, 0);
+    //else fill(0);
+    //fill(200, 200, 200);
+    //text(buttonText, left, top);
+    //left += (textWidth(buttonText)+utils.hSpace);
     //
     buttonText = "[UCB]";
     buttonUCT1=new button();
@@ -269,16 +269,16 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    buttonText = "[Heuristic]";
-    buttonHeuristic1=new button();
-    buttonHeuristic1.setLT(left, top, buttonText);
-    buttonHeuristic1.setItem("Player4", 2);
-    //buttons.add(buttonHeuristic1);
-    if (gameOptions.get("Player4") == 2) fill(255, 0, 0);
-    else fill(0);
-    fill(200, 200, 200);
-    text(buttonText, left, top);
-    left += (textWidth(buttonText)+utils.hSpace);
+    //buttonText = "[Heuristic]";
+    //buttonHeuristic1=new button();
+    //buttonHeuristic1.setLT(left, top, buttonText);
+    //buttonHeuristic1.setItem("Player4", 2);
+    ////buttons.add(buttonHeuristic1);
+    //if (gameOptions.get("Player4") == 2) fill(255, 0, 0);
+    //else fill(0);
+    //fill(200, 200, 200);
+    //text(buttonText, left, top);
+    //left += (textWidth(buttonText)+utils.hSpace);
     //
     buttonText = "[UCB]";
     buttonUCT1=new button();
@@ -388,22 +388,22 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    buttonText = "[100 times]";
+    buttonText = "["+game.times100+" times]";
     buttonRandom1=new button();
     buttonRandom1.setLT(left, top, buttonText);
-    buttonRandom1.setItem("Times", 100);
+    buttonRandom1.setItem("Times", game.times100);
     buttons.add(buttonRandom1);
-    if (gameOptions.get("Times") == 100) fill(255, 0, 0);
+    if (gameOptions.get("Times") == game.times100) fill(255, 0, 0);
     else fill(0);
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    buttonText = "[1000 times]";
+    buttonText = "["+game.times1000+" times]";
     buttonRandom1=new button();
     buttonRandom1.setLT(left, top, buttonText);
-    buttonRandom1.setItem("Times", 1000);
+    buttonRandom1.setItem("Times", game.times1000);
     buttons.add(buttonRandom1);
-    if (gameOptions.get("Times") == 1000) fill(255, 0, 0);
+    if (gameOptions.get("Times") == game.times1000) fill(255, 0, 0);
     else fill(0);
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
@@ -484,7 +484,7 @@ void showContents() {
     text(buttonText, left, top);
   } else if (gameOptions.get("gameMode") == 1) {///////////////////////////////////////// Simulation options
     fill(0);
-    text(filenamePath, utils.mainL+utils.fontSize*22, utils.mainU-utils.fontSize);
+    text(utils.filename, utils.mainL+utils.fontSize*22, utils.mainU-utils.fontSize);
     // シミュレーション方法選択
     //top += utils.vStep;
     left=utils.hOffset;
@@ -1123,7 +1123,7 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    buttonText = "("+filenamePath+")";
+    //buttonText = "("+filenamePath+")";
     //buttonOpenPsrFile = new button();
     //buttonOpenPsrFile.setLT(left, top, buttonText);
     //fill(0);

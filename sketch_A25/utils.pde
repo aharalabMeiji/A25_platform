@@ -25,6 +25,10 @@ class globals {
   int mainL, mainU, mainW, mainH, subL, subU;
   float fontSize, hOffset, hSpace, vStep;
   String headerText="";
+  String filePath; // 選択されたファイルのフルパスを保存する変数
+  String filename = "default.txt";//選択されたファイルのファイル名部分
+  String filenamePath=sketchPath()+"\\"+"data"+"\\"+"default.txt";// 選択されたファイルのフルパス
+
 };
 
 
@@ -55,6 +59,8 @@ class games {
   int previousPlayer=0;
   boolean editMode=false;
   ArrayList<board> editBoard=null;
+  int times100=100;
+  int times1000=1000;
 }
 
 // simulators

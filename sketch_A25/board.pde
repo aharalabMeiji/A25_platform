@@ -61,7 +61,7 @@ class board {
       fill(0);
       int total = simulatorStartBoard.size();
       int now = (simulator.StartBoardId) % total;
-      text(filenamePath+"("+now+")", utils.mainL+utils.fontSize*18.5, utils.mainU-utils.fontSize);
+      text(utils.filename+"("+now+")", utils.mainL+utils.fontSize*18.5, utils.mainU-utils.fontSize);
       //盤右下
       String simMethod = "Monte Carlo Method";
       if (gameOptions.get("SimTimes") == 1) simMethod += "(1k)";
@@ -100,7 +100,7 @@ class board {
       fill(0);
       int total = simulatorStartBoard.size();
       int now = (simulator.StartBoardId) % total;
-      text(filenamePath+"("+now+")", utils.mainL+utils.fontSize*18.5, utils.mainU-utils.fontSize);
+      text(utils.filename+"("+now+")", utils.mainL+utils.fontSize*18.5, utils.mainU-utils.fontSize);
       //盤左下
       String simMethod = "Monte Carlo Method(UCB) ";
       if (gameOptions.get("SimTimes") == 11) simMethod += "(10 sec)";
@@ -140,7 +140,7 @@ class board {
       fill(0);
       int total = simulatorStartBoard.size();
       int now = (simulator.StartBoardId) % total;
-      text(filenamePath+"("+now+")", utils.mainL+utils.fontSize*18.5, utils.mainU-utils.fontSize);
+      text(utils.filename+"("+now+")", utils.mainL+utils.fontSize*18.5, utils.mainU-utils.fontSize);
       //Uct :ヘッダE、ぐるぐる
       switch(uct.underCalculation){
         case 0: 
