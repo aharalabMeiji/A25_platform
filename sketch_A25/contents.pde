@@ -378,12 +378,12 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    buttonText = "[10 times]";
+    buttonText = "["+game.times10+" times]";
     buttonRandom1=new button();
     buttonRandom1.setLT(left, top, buttonText);
-    buttonRandom1.setItem("Times", 10);
+    buttonRandom1.setItem("Times", game.times10);
     buttons.add(buttonRandom1);
-    if (gameOptions.get("Times") == 10) fill(255, 0, 0);
+    if (gameOptions.get("Times") == game.times10) fill(255, 0, 0);
     else fill(0);
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);

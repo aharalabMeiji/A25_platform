@@ -59,6 +59,7 @@ class games {
   int previousPlayer=0;
   boolean editMode=false;
   ArrayList<board> editBoard=null;
+  int times10=10;
   int times100=100;
   int times1000=1000;
 }

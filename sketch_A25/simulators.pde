@@ -1075,8 +1075,8 @@ void saveTreeSelected(File selection) {
     println("ファイルが選択されませんでした。");
   } else {
     utils.filePath = selection.getAbsolutePath();
-    if (differentExt(utils.filePath, ".txt")==true) {
-      utils.filePath += ".txt";
+    if (differentExt(utils.filePath, ".csv")==true) {
+      utils.filePath += ".csv";
     }
     println("選択されたファイルパス: " + utils.filePath);
     saveGameTree(utils.filePath);
@@ -1087,6 +1087,7 @@ PrintWriter outputGameTree;
 void saveGameTree(String filepath) {
   // 出力用ファイルを作成
   outputGameTree = createWriter(filepath);
+  outputGameTree.println("node,depth,Rwin,Rpanel,Gwin,Gpanel,Wwin,Wpanel,Bwin,Bpanel,playout");
   for (uctNode nd : uct.rootNode.legalMoves) {
     fileOutputAllWaPa(nd);
   }
@@ -1095,12 +1096,13 @@ void saveGameTree(String filepath) {
 }
 
 void fileOutputAllWaPa(uctNode nd) {
-  if ( nd.depth<=3) {
-    outputGameTree.println(""+nd.id+",("+nf(nd.wa[1]/nd.na, 1, 6)+","+nf(nd.pa[1]/nd.na, 2, 6)+")"+
-      "("+nf(nd.wa[2]/nd.na, 1, 6)+","+nf(nd.pa[2]/nd.na, 2, 6)+")"+
-      "("+nf(nd.wa[3]/nd.na, 1, 6)+","+nf(nd.pa[3]/nd.na, 2, 6)+")"+
-      "("+nf(nd.wa[4]/nd.na, 1, 6)+","+nf(nd.pa[4]/nd.na, 2, 6)+")");
-  }
+  //if ( nd.depth<=3) {
+    outputGameTree.println(""+nd.id+","+nd.depth+","+
+      nf(nd.wa[1]/nd.na, 1, 6)+","+nf(nd.pa[1]/nd.na, 2, 6)+","+
+      nf(nd.wa[2]/nd.na, 1, 6)+","+nf(nd.pa[2]/nd.na, 2, 6)+","+
+      nf(nd.wa[3]/nd.na, 1, 6)+","+nf(nd.pa[3]/nd.na, 2, 6)+","+
+      nf(nd.wa[4]/nd.na, 1, 6)+","+nf(nd.pa[4]/nd.na, 2, 6)+","+ int(nd.na));
+  //}
   if (nd.childR!=null && nd.childR.size()>0) {
     for (uctNode nd2 : nd.childR) {
       fileOutputAllWaPa(nd2);

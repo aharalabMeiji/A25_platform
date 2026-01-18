@@ -99,12 +99,15 @@ void mousePressed() {
       }
       for (button b : buttons) {
         if (b.mouseOn()) {
-          if (b.dictKey.equals("Times") && b.dictInt==game.times100 && gameOptions.get("Times")==game.times100){
+          if (b.dictKey.equals("Times") && b.dictInt==game.times10 && gameOptions.get("Times")==game.times10){
+              game.times10 += 10;
+              if (game.times10 == 100) game.times10 = 10;
+              gameOptions.set("Times", game.times10);
+          } else if (b.dictKey.equals("Times") && b.dictInt==game.times100 && gameOptions.get("Times")==game.times100){
               game.times100 += 100;
               if (game.times100 == 1000) game.times100 = 100;
               gameOptions.set("Times", game.times100);
-          }
-          else if (b.dictKey.equals("Times") && b.dictInt==game.times1000 && gameOptions.get("Times")==game.times1000){
+          } else if (b.dictKey.equals("Times") && b.dictInt==game.times1000 && gameOptions.get("Times")==game.times1000){
               game.times1000 += 1000;
               if (game.times1000 == 11000) game.times1000 = 1000;
               gameOptions.set("Times", game.times1000);

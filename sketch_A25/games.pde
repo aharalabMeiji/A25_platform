@@ -64,7 +64,7 @@ void showSaveTree(){
   fill(0);
   textSize(utils.fontSize);
   textAlign(LEFT, CENTER);
-  String buttonSaveTreeText="[Save Game Tree]";
+  String buttonSaveTreeText="[Save Tree (csv)]";
   text(buttonSaveTreeText, dx, dy);
   buttonSaveTree.setLT(dx, dy, buttonSaveTreeText);
 }
@@ -202,16 +202,14 @@ void showGames() {
       utils.gameMainBoard.clearMarked();
       game.nextPlayer=0;//最初のプレーヤーは決めない。
       kifu.kifuValid=true;// １つ１つの棋譜ファイルを出力します。
-      if (kifu.kifuFullPath=="") {
-        kifu.mmddhhmm = nf(month(), 2) + nf(day(), 2) + "-" + nf(hour(), 2) + nf(minute(), 2);
-        File folder = new File(sketchPath("kifu/kifu"+ kifu.mmddhhmm));
-        if (!folder.exists()) {
-          folder.mkdirs();
-          println("フォルダを作成しました。"+folder.getAbsolutePath());
-        }
-        // 特に保存ファイル名が指定されていなければ、自分でフォルダを作って、そこに保存する。
-        kifu.kifuFullPath = folder.getAbsolutePath() + "\\" + kifu.mmddhhmm+"_";
+      kifu.mmddhhmm = nf(month(), 2) + nf(day(), 2) + "-" + nf(hour(), 2) + nf(minute(), 2);
+      File folder = new File(sketchPath("kifu/kifu"+ kifu.mmddhhmm));
+      if (!folder.exists()) {
+        folder.mkdirs();
+        println("フォルダを作成しました。"+folder.getAbsolutePath());
       }
+      // 特に保存ファイル名が指定されていなければ、自分でフォルダを作って、そこに保存する。
+      kifu.kifuFullPath = folder.getAbsolutePath() + "\\" + kifu.mmddhhmm+"_";
     } else {// 途中盤面から始める
       int now = simulator.StartBoardId%simulatorStartBoard.size();
       // println("mP.GameStart:盤面をDBからコピーする");
@@ -222,9 +220,6 @@ void showGames() {
         if (c==0) {
           remaining ++;
         }
-        //if (c==5) {//// println("mP.GameStart:黄色いパネルが存在した");
-        //  utils.gameMainBoard.attackChanceP=true;//アタックチャンス終了フラグをたてる
-        //}
       }
       if (remaining<=4) {// 空きパネルが４枚以下なら、黄色の有無に関わらずアタックチャンス後。
         //println("mP.GameStart:空きパネルが４枚以下");
