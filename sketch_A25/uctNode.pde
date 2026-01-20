@@ -1,5 +1,6 @@
 class uctNode {
   float na=0;// このノードの試行回数
+  //以下、意図的にRGWBについては配列を用いていない。エラーを回避するため。
   float naR=0, naG=0, naW=0, naB=0;// このノードの試行回数
   boolean[] onRGWB;
   float[] wa;// このノードの（誰にとっての）勝利回数
@@ -55,6 +56,33 @@ class uctNode {
     for (int p=0; p<5; p++) wa[p]=0;
     pa=new float[5];
     for (int p=0; p<5; p++) pa[p]=0;
+  }
+  void addNa(int player, float offset){
+    switch(player){
+      case 0: na += offset; break;
+      case 1: naR += offset; break;
+      case 2: naG += offset; break;
+      case 3: naW += offset; break;
+      default: naB += offset; break;
+    }
+  }
+  void addWa(int player, int p, float offset){
+    switch(player){
+      case 0: wa[p] += offset; break;
+      case 1: waR[p] += offset; break;
+      case 2: waG[p] += offset; break;
+      case 3: waW[p] += offset; break;
+      default: waB[p] += offset; break;
+    }
+  }
+  void addPa(int player, int p, float offset){
+    switch(player){
+      case 0: pa[p] += offset; break;
+      case 1: paR[p] += offset; break;
+      case 2: paG[p] += offset; break;
+      case 3: paW[p] += offset; break;
+      default: paB[p] += offset; break;
+    }
   }
   boolean setItem(int _p, int _m) {
     player=_p;
@@ -128,6 +156,12 @@ class uctNode {
       total += childB.size();
     }
     return total;
+  }
+  ArrayList<uctNode> getChildList(int p){
+    if (p==1) return childR;
+    else if (p==2) return childG;
+    else if (p==3) return childW;
+    else return childB;
   }
   uctNode totalChildGet(int index){
     int size=totalChildSize();

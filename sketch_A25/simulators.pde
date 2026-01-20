@@ -841,11 +841,7 @@ void UCT1() {
         showReturnButton();
         showScreenCapture();
       } else {
-        if (uct.cancelCountMax>10000) {
-          println("uct:E"+uct.expandThreshold+"D"+uct.depthMax+"woC");//+"T"+uct.terminateThreshold
-        } else {
-          println("uct:E"+uct.expandThreshold+"D"+uct.depthMax+"C"+(uct.cancelCountMax));
-        }
+        uct.printUctParameters();
         uct.simulationTag=10000;
         simulationManager=sP.setStartBoard;
       }

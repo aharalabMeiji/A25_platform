@@ -39,9 +39,8 @@ class uctClass {
     answer = mctsBrainPreparation(pl);
     if (answer==-1) return -1;
     answer = mctsBrainFirstSimulation(pl);
-
+    printUctParameters();
     if (answer!=-1) return answer;
-    println("uct ", uct.expandThreshold, uct.depthMax, (uct.cancelCountMax));//uct.terminateThreshold,
     //uct.simulationTag=uct.expandThreshold*10;
     while (true) {
       //if (uct.uctMainLoopOption==1) {
@@ -56,6 +55,17 @@ class uctClass {
     }// end of while(true)
   }
 
+  void printUctParameters(){
+    print ("uct ");
+    print ("E"+expandThreshold+" ");
+    print ("D"+depthMax+" ");
+    if (cancelCountMax<10000) print ("C"+cancelCountMax+" ");//uct.terminateThreshold,
+    else print ("woC ");
+    if (chanceNodeOn==1) print("CN ");
+    if (pruningThreshold<999) print("P"+uct.pruningThreshold+" ");
+    println();
+  }
+  
   int mctsBrainPreparation(player pl) {
     //println("uctMctsBrain:プレーヤーをランダムエージェントに設定");
     participants = new player[5];
@@ -217,31 +227,36 @@ class uctClass {
         qtyPlayouts ++;
         pl.myBoard.simulatorNumber ++;
         if (chanceNodeOn==1) {// //chanceNodeOn=1; waRには「積み上げ」、waには「平均化」
-          if (nextplayer==1) {
-            nd.naR ++;
-            for (int p=1; p<=4; p++) {
-              nd.waR[p] += winPoint.points[p];//
-              nd.paR[p] += winPoint.panels[p];//
-            }
-          } else if (nextplayer==2) {
-            nd.naG ++;
-            for (int p=1; p<=4; p++) {
-              nd.waG[p] += winPoint.points[p];//
-              nd.paG[p] += winPoint.panels[p];//
-            }
-          } else if (nextplayer==3) {
-            nd.naW ++;
-            for (int p=1; p<=4; p++) {
-              nd.waW[p] += winPoint.points[p];//
-              nd.paW[p] += winPoint.panels[p];//
-            }
-          } else { //if(nextplayer==4){
-            nd.naB ++;
-            for (int p=1; p<=4; p++) {
-              nd.waB[p] += winPoint.points[p];//
-              nd.paB[p] += winPoint.panels[p];//
-            }
+          nd.addNa(nextplayer,1);
+          for (int p=1; p<=4; p++) {
+            nd.addWa(nextplayer, p, winPoint.points[p]);
+            nd.addPa(nextplayer, p, winPoint.panels[p]);
           }
+          //if (nextplayer==1) {
+          //  nd.naR ++;
+          //  for (int p=1; p<=4; p++) {
+          //    nd.waR[p] += //
+          //    nd.paR[p] += winPoint.panels[p];//
+          //  }
+          //} else if (nextplayer==2) {
+          //  nd.naG ++;
+          //  for (int p=1; p<=4; p++) {
+          //    nd.waG[p] += winPoint.points[p];//
+          //    nd.paG[p] += winPoint.panels[p];//
+          //  }
+          //} else if (nextplayer==3) {
+          //  nd.naW ++;
+          //  for (int p=1; p<=4; p++) {
+          //    nd.waW[p] += winPoint.points[p];//
+          //    nd.paW[p] += winPoint.panels[p];//
+          //  }
+          //} else { //if(nextplayer==4){
+          //  nd.naB ++;
+          //  for (int p=1; p<=4; p++) {
+          //    nd.waB[p] += winPoint.points[p];//
+          //    nd.paB[p] += winPoint.panels[p];//
+          //  }
+          //}
           nd.na ++;//
           // nd.na = nd.naR + nd.naG + nd.naW + nd.naB;
           for (int p=1; p<=4; p++) {
@@ -523,7 +538,13 @@ class uctClass {
     return false;
   }
   
-
+  void printQtyNodes(){
+    print("(");
+    for (int d=1; d<=depthMax; d++){
+      print(qtyNodes[d]+" ");
+    }
+    println(")");
+  }
 }; // class uctClass のおわり
 
 /////////////////////////////////
@@ -555,6 +576,7 @@ void printAllWaPa(uctNode nd) {// デバッグのためのコンソール出力
   }
 }
 
+
 int uctMctsMainLoop(player pl) {
   //uctMctsMainLoop  01
   // 勝率３位までをリストアップし、大差かどうかを調べる
@@ -578,7 +600,7 @@ int uctMctsMainLoop(player pl) {
         uct.underCalculation=10;//十分大きな値
         println("プレイアウト回数："+uct.qtyPlayouts);
         println("ノード総数："+uct.qtyNodes[0]);
-        println("("+uct.qtyNodes[1]+","+uct.qtyNodes[2]+","+uct.qtyNodes[3]+","+uct.qtyNodes[4]+","+uct.qtyNodes[5]+")");
+        uct.printQtyNodes();
         // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする
         int ret = returnBestChildFromRoot(pl, uct.rootNode);
         if (pl.myBoard.attackChanceP()) {
@@ -651,7 +673,7 @@ int uctMctsMainLoop(player pl) {
           // プレイアウトの回数、ノードの個数を個別にカウントしたものを表示
           println("プレイアウト回数："+uct.qtyPlayouts);
           println("ノード総数："+uct.qtyNodes[0]);
-          println("("+uct.qtyNodes[1]+","+uct.qtyNodes[2]+","+uct.qtyNodes[3]+","+uct.qtyNodes[4]+","+uct.qtyNodes[5]+")");
+          uct.printQtyNodes();
           // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする
           int ret = returnBestChildFromRoot(pl, uct.rootNode);
           if (pl.myBoard.attackChanceP()) {
@@ -694,7 +716,7 @@ int uctMctsMainLoop(player pl) {
             if (uctMaxNode.player==1){
               uctMaxNode.parent.ncR++;
               if (uctMaxNode.parent.ncR >uct.pruningThreshold) expandOK=false; else expandOK=true;
-              if (uctMaxNode.parent.bcR==null) uctMaxNode.parent.bcR=uctMaxNode; 
+              if (uctMaxNode.parent.bcR==null) uctMaxNode.parent.bcR=uctMaxNode;// bc = best child
             } else if (uctMaxNode.player==2){
               uctMaxNode.parent.ncG++;
               if (uctMaxNode.parent.ncG >uct.pruningThreshold) expandOK=false; else expandOK=true;
@@ -715,12 +737,9 @@ int uctMctsMainLoop(player pl) {
         //}
         if (uctMaxNode.depth<uct.depthMax && uctMaxNode.id!="" && remaingInBd(uctMaxNode.bd)>0 && expandOK ) {   // 展開するための条件
           // remaingInBd(uctMaxNode.bd) : 残り空パネルの個数（黄色も含む）
-          //if (uctMaxNode.id.length()==12 && uctMaxNode.id.substring(0,4).equals(":R07")){
-            //println("展開"+uctMaxNode.id);
-          //}
           uct.newNode=null;
           uctMaxNode.legalMoves=null;
-          
+          // uctMaxNode.parent.ncB == uct.pruningThresholdのとき、残されたアクティブノードをリストからはずす、というアイディアはある。
           // チャンスノードを別途ぶら下げる <- この案を却下。
           // ぶら下げる場所を4か所作る（メモリとスピードの節約のため）
           if (uctMaxNode.childR==null) uctMaxNode.childR = new ArrayList<uctNode>();
@@ -765,20 +784,7 @@ int uctMctsMainLoop(player pl) {
                   uct.newNode.depth = uctMaxNode.depth+1;//=newChancenode.depth
                   uct.qtyNodes[uct.newNode.depth] ++;
                   //println("新しいノード "+uct.newNode.id+"を追加した！");
-                  switch(p) {
-                  case 1:
-                    uctMaxNode.childR.add(uct.newNode);// uct.newNodeをuctMaxNodeの子に設定
-                    break;
-                  case 2:
-                    uctMaxNode.childG.add(uct.newNode);// uct.newNodeをuctMaxNodeの子に設定
-                    break;
-                  case 3:
-                    uctMaxNode.childW.add(uct.newNode);// uct.newNodeをuctMaxNodeの子に設定
-                    break;
-                  case 4:
-                    uctMaxNode.childB.add(uct.newNode);// uct.newNodeをuctMaxNodeの子に設定
-                    break;
-                  }
+                  uctMaxNode.getChildList(p).add(uct.newNode);// uct.newNodeをuctMaxNodeの子に設定
                   uct.newNode.parent = uctMaxNode;//uctMaxNodeをuct.newNodeの親に設定
                   uct.newNode.ancestor = ancestor;//uct.newNodeのご先祖さまを記録
                   uct.newNode.onRGWB = new boolean[5];
