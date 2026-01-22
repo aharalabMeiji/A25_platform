@@ -23,188 +23,200 @@ class board {
     simulatorNumber=0;
     attackChanceP=false;
   }
-  boolean display(int mode) {
+  void displayGame(){
     textAlign(CENTER, CENTER);
-    if (mode == 0) {// ゲームモード
-      for (int i = 0; i < 25; i ++) {
-        s[i].display(mode);
-      }
-    } else if (mode==10) {// Simulator ランダムディスプレイ
-      background(255);
-      //色つけ
-      setSvColor();
-      for (int i = 0; i < 25; i ++) {
-        s[i].sv=sv[i];
-        s[i].sv2=sv2[i];
-        s[i].display(mode);
-      }
-      textSize(utils.fontSize);
-      textAlign(LEFT, CENTER);
-      //ヘッダA、パスの場合のデータ
-      if (!attackChanceP()) {
-        if (svColor==3) fill(0);
-        else fill(utils.playerColor[svColor]);
-  
-        text(1.0*sv[25], utils.mainL, utils.mainU-utils.fontSize);
-        text(1.0*sv2[25], utils.mainL+utils.fontSize*3.5, utils.mainU-utils.fontSize);
-      }
-      //ヘッダB、シミュレーション回数
-      fill(0);
-      textSize(utils.fontSize);
-      text("("+simulatorNumber+")", utils.mainL+utils.fontSize*7, utils.mainU-utils.fontSize);
-      //ヘッダC、プレイヤー色
-      text("player:", utils.mainL+utils.fontSize*12, utils.mainU-utils.fontSize);
-      stroke(0);
-      fill(utils.playerColor[simulator.nextPlayer]);
-      rect(utils.mainL+utils.fontSize*12+textWidth("player: "), utils.mainU-utils.fontSize*1.3, utils.fontSize*2, utils.fontSize*0.8);
-      //ヘッダD、ファイル名（とおし番号）      
-      fill(0);
-      int total = simulatorStartBoard.size();
-      int now = (simulator.StartBoardId) % total;
-      text(utils.filename+"("+now+")", utils.mainL+utils.fontSize*18.5, utils.mainU-utils.fontSize);
-      //盤右下
-      String simMethod = "Monte Carlo Method";
-      if (gameOptions.get("SimTimes") == 1) simMethod += "(1k)";
-      else if (gameOptions.get("SimTimes") == 2) simMethod += "(10k)";
-      else simMethod += "(limit)";      
-      text(simMethod, utils.subL, utils.subU);
-    } else if (mode==11) {// Ucb ディスプレイ
-      background(255);
-      //色つけ
-      setSvColor();
-      textAlign(CENTER, CENTER);
-      for (int i = 0; i < 25; i ++) {
-        s[i].sv=sv[i];
-        s[i].sv2=sv2[i];
-        s[i].display(mode);
-      }
-      textAlign(LEFT, CENTER);
-      //ヘッダA、パスの場合のデータ
-      textSize(utils.fontSize);
-      if (!attackChanceP()) {
-        if (svColor==3) fill(0);
-        else fill(utils.playerColor[svColor]);
-        textSize(utils.fontSize);
-        text(1.0*sv[25], utils.mainL, utils.mainU-utils.fontSize);
-        text(1.0*sv2[25], utils.mainL+utils.fontSize*3.5, utils.mainU-utils.fontSize);
-      }
-      //ヘッダB、シミュレーション回数
-      fill(0);
-      text("("+simulatorNumber+")", utils.mainL+utils.fontSize*7, utils.mainU-utils.fontSize);
-      //ヘッダC、プレイヤー色
-      text("player:", utils.mainL+utils.fontSize*12, utils.mainU-utils.fontSize);
-      stroke(0);
-      fill(utils.playerColor[simulator.nextPlayer]);
-      rect(utils.mainL+utils.fontSize*12+textWidth("player: "), utils.mainU-utils.fontSize*1.3, utils.fontSize*2, utils.fontSize*0.8);
-      //ヘッダD、ファイル名（とおし番号）      
-      fill(0);
-      int total = simulatorStartBoard.size();
-      int now = (simulator.StartBoardId) % total;
-      text(utils.filename+"("+now+")", utils.mainL+utils.fontSize*18.5, utils.mainU-utils.fontSize);
-      //盤左下
-      String simMethod = "Monte Carlo Method(UCB) ";
-      if (gameOptions.get("SimTimes") == 11) simMethod += "(10 sec)";
-      else if (gameOptions.get("SimTimes") == 12) simMethod += "(60sec)";
-      else simMethod += "(limit)";
-      text(simMethod, utils.subL, utils.subU);
-    } else if (mode==12) {// Uct ディスプレイ
-      background(255);
-      //Uct :色つけ
-      setSvColor();
-      textAlign(CENTER, CENTER);
-      for (int i = 0; i < 25; i ++) {
-        s[i].sv=sv[i];
-        s[i].sv2=sv2[i];
-        s[i].display(mode);
-      }
-      textAlign(LEFT, CENTER);
-      //Uct :ヘッダA、パスの場合のデータ
-      textSize(utils.fontSize);
-      if (!attackChanceP()) {
-        if (svColor==3) fill(0);
-        else if(svColor==2) fill(0,128,0);
-        else fill(utils.playerColor[svColor]);
-        textSize(utils.fontSize);
-        text(1.0*sv[25], utils.mainL, utils.mainU-utils.fontSize);
-        text(1.0*sv2[25], utils.mainL+utils.fontSize*3.5, utils.mainU-utils.fontSize);
-      }
-      //Uct :ヘッダB、シミュレーション回数
-      fill(0);
-      text("("+simulatorNumber+")", utils.mainL+utils.fontSize*7, utils.mainU-utils.fontSize);
-      //Uct :ヘッダC、プレイヤー色
-      text("player:", utils.mainL+utils.fontSize*12, utils.mainU-utils.fontSize);
-      stroke(0);
-      fill(utils.playerColor[simulator.nextPlayer]);
-      rect(utils.mainL+utils.fontSize*12+textWidth("player: "), utils.mainU-utils.fontSize*1.3, utils.fontSize*2, utils.fontSize*0.8);
-      //Uct :ヘッダD、ファイル名（とおし番号）      
-      fill(0);
-      int total = simulatorStartBoard.size();
-      int now = (simulator.StartBoardId) % total;
-      text(utils.filename+"("+now+")", utils.mainL+utils.fontSize*18.5, utils.mainU-utils.fontSize);
-      //Uct :ヘッダE、ぐるぐる
-      switch(uct.underCalculation){
-        case 0: 
-        fill(#1E90FF);
-        ellipse(utils.mainL+utils.fontSize*27.5, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
-        fill(#80c0ff);
-        ellipse(utils.mainL+utils.fontSize*28, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
-        fill(#dcecfc);
-        ellipse(utils.mainL+utils.fontSize*28.5, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
-        break;
-        case 1:
-        fill(#1E90FF);
-        ellipse(utils.mainL+utils.fontSize*28, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
-        fill(#80c0ff);
-        ellipse(utils.mainL+utils.fontSize*28.5, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
-        fill(#dcecfc);
-        ellipse(utils.mainL+utils.fontSize*27.5, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
-        break;
-        case 2: 
-        fill(#1E90FF);
-        ellipse(utils.mainL+utils.fontSize*28.5, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
-        fill(#80c0ff);
-        ellipse(utils.mainL+utils.fontSize*27.5, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
-        fill(#dcecfc);
-        ellipse(utils.mainL+utils.fontSize*28, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
-        break;
-        default: fill(#4CAF50);
-        text("✓", utils.mainL+utils.fontSize*28, utils.mainU-utils.fontSize);// 
-        break;
-      }
-      //Uct :盤左下
-      fill(0);
-      String simMethod = "Monte Carlo Tree Search(UCT) ";
-      text(simMethod, utils.subL, utils.subU);
-      if (gameOptions.get("SimTimes") == 21) simMethod = "E10/D4/wC";
-      else if (gameOptions.get("SimTimes") == 22) simMethod = "E10/D4/woC";
-      else if (gameOptions.get("SimTimes") == 23) simMethod = "E10/D5/wC";
-      else if (gameOptions.get("SimTimes") == 24) simMethod = "E10/D5/woC";
-      else if (gameOptions.get("SimTimes") == 26) simMethod = "E100/D4";
-      else if (gameOptions.get("SimTimes") == 27) simMethod = "E100/D4";
-      else if (gameOptions.get("SimTimes") == 28) simMethod = "E100/D5";
-      else if (gameOptions.get("SimTimes") == 29) simMethod = "E100/D5";
-      else {
-        simMethod="E"+str(gameOptions.get("expandThreshold"))+"/D"+str(gameOptions.get("depthMax"));
-        if (gameOptions.get("wCancel")==1) simMethod += "/wC";
-        else simMethod += "/woC";
-      }
-      if (gameOptions.get("chanceNodeOn")==1) simMethod += "/CN";
-      if(gameOptions.get("pruning")==1) simMethod += "/P1";
-      if(gameOptions.get("pruning")==2) simMethod += "/P2";
-      simMethod += "<";
-      if(gameOptions.get("Absence0R")==1) simMethod += "R";
-      if(gameOptions.get("Absence0G")==1) simMethod += "G";
-      if(gameOptions.get("Absence0W")==1) simMethod += "W";
-      if(gameOptions.get("Absence0B")==1) simMethod += "B";
-      simMethod += "|";
-      if(gameOptions.get("Absence1R")==1) simMethod += "R";
-      if(gameOptions.get("Absence1G")==1) simMethod += "G";
-      if(gameOptions.get("Absence1W")==1) simMethod += "W";
-      if(gameOptions.get("Absence1B")==1) simMethod += "B";
-      simMethod += ">";
-      text(simMethod, utils.subL, utils.subU+utils.vStep);
+    for (int i = 0; i < 25; i ++) {
+      s[i].displayGame();
     }
-    return true;
+  }
+  void displaySimRandom(){
+    textAlign(CENTER, CENTER);
+    background(255);
+    //色つけ
+    setSvColor();
+    for (int i = 0; i < 25; i ++) {
+      s[i].sv=sv[i];
+      s[i].sv2=sv2[i];
+      s[i].displaySimRandom();
+    }
+    textSize(utils.fontSize);
+    textAlign(LEFT, CENTER);
+    //ヘッダA、パスの場合のデータ
+    if (!attackChanceP()) {
+      if (svColor==3) fill(0);
+      else fill(utils.playerColor[svColor]);
+      text(1.0*sv[25], utils.mainL, utils.mainU-utils.fontSize);
+      text(1.0*sv2[25], utils.mainL+utils.fontSize*3.5, utils.mainU-utils.fontSize);
+    }
+    //ヘッダB、シミュレーション回数
+    fill(0);
+    textSize(utils.fontSize);
+    text("("+simulatorNumber+")", utils.mainL+utils.fontSize*7, utils.mainU-utils.fontSize);
+    //ヘッダC、プレイヤー色
+    text("player:", utils.mainL+utils.fontSize*12, utils.mainU-utils.fontSize);
+    stroke(0);
+    fill(utils.playerColor[simulator.nextPlayer]);
+    rect(utils.mainL+utils.fontSize*12+textWidth("player: "), utils.mainU-utils.fontSize*1.3, utils.fontSize*2, utils.fontSize*0.8);
+    //ヘッダD、ファイル名（とおし番号）      
+    fill(0);
+    int total = simulatorStartBoard.size();
+    int now = (simulator.StartBoardId) % total;
+    text(utils.filename+"("+now+")", utils.mainL+utils.fontSize*18.5, utils.mainU-utils.fontSize);
+    //盤右下
+    String simMethod = "Monte Carlo Method";
+    if (gameOptions.get("SimTimes") == 1) simMethod += "(1k)";
+    else if (gameOptions.get("SimTimes") == 2) simMethod += "(10k)";
+    else simMethod += "(limit)";      
+    text(simMethod, utils.subL, utils.subU);
+  }
+  void displaySimUcb(){
+    textAlign(CENTER, CENTER);
+    background(255);
+    //色つけ
+    setSvColor();
+    textAlign(CENTER, CENTER);
+    for (int i = 0; i < 25; i ++) {
+      s[i].sv=sv[i];
+      s[i].sv2=sv2[i];
+      s[i].displaySimUcb();
+    }
+    textAlign(LEFT, CENTER);
+    //ヘッダA、パスの場合のデータ
+    textSize(utils.fontSize);
+    if (!attackChanceP()) {
+      if (svColor==3) fill(0);
+      else fill(utils.playerColor[svColor]);
+      textSize(utils.fontSize);
+      text(1.0*sv[25], utils.mainL, utils.mainU-utils.fontSize);
+      text(1.0*sv2[25], utils.mainL+utils.fontSize*3.5, utils.mainU-utils.fontSize);
+    }
+    //ヘッダB、シミュレーション回数
+    fill(0);
+    text("("+simulatorNumber+")", utils.mainL+utils.fontSize*7, utils.mainU-utils.fontSize);
+    //ヘッダC、プレイヤー色
+    text("player:", utils.mainL+utils.fontSize*12, utils.mainU-utils.fontSize);
+    stroke(0);
+    fill(utils.playerColor[simulator.nextPlayer]);
+    rect(utils.mainL+utils.fontSize*12+textWidth("player: "), utils.mainU-utils.fontSize*1.3, utils.fontSize*2, utils.fontSize*0.8);
+    //ヘッダD、ファイル名（とおし番号）      
+    fill(0);
+    int total = simulatorStartBoard.size();
+    int now = (simulator.StartBoardId) % total;
+    text(utils.filename+"("+now+")", utils.mainL+utils.fontSize*18.5, utils.mainU-utils.fontSize);
+    //盤左下
+    String simMethod = "Monte Carlo Method(UCB) ";
+    if (gameOptions.get("SimTimes") == 11) simMethod += "(10 sec)";
+    else if (gameOptions.get("SimTimes") == 12) simMethod += "(60sec)";
+    else simMethod += "(limit)";
+    text(simMethod, utils.subL, utils.subU);
+  }
+  void displaySimUct() {
+    textAlign(CENTER, CENTER);
+    background(255);
+    //Uct :色つけ
+    setSvColor();
+    textAlign(CENTER, CENTER);
+    for (int i = 0; i < 25; i ++) {
+      s[i].sv=sv[i];
+      s[i].sv2=sv2[i];
+      s[i].displaySimUct();
+    }
+    textAlign(LEFT, CENTER);
+    //Uct :ヘッダA、パスの場合のデータ
+    textSize(utils.fontSize);
+    if (!attackChanceP()) {
+      if (svColor==3) fill(0);
+      else if(svColor==2) fill(0,128,0);
+      else fill(utils.playerColor[svColor]);
+      textSize(utils.fontSize);
+      text(1.0*sv[25], utils.mainL, utils.mainU-utils.fontSize);
+      text(1.0*sv2[25], utils.mainL+utils.fontSize*3.5, utils.mainU-utils.fontSize);
+    }
+    //Uct :ヘッダB、シミュレーション回数
+    fill(0);
+    text("("+simulatorNumber+")", utils.mainL+utils.fontSize*7, utils.mainU-utils.fontSize);
+    //Uct :ヘッダC、プレイヤー色
+    text("player:", utils.mainL+utils.fontSize*12, utils.mainU-utils.fontSize);
+    stroke(0);
+    fill(utils.playerColor[simulator.nextPlayer]);
+    rect(utils.mainL+utils.fontSize*12+textWidth("player: "), utils.mainU-utils.fontSize*1.3, utils.fontSize*2, utils.fontSize*0.8);
+    //Uct :ヘッダD、ファイル名（とおし番号）      
+    fill(0);
+    int total = simulatorStartBoard.size();
+    int now = (simulator.StartBoardId) % total;
+    text(utils.filename+"("+now+")", utils.mainL+utils.fontSize*18.5, utils.mainU-utils.fontSize);
+    //Uct :ヘッダE、ぐるぐる
+    switch(uct.underCalculation){
+      case 0: 
+      fill(#1E90FF);
+      ellipse(utils.mainL+utils.fontSize*27.5, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
+      fill(#80c0ff);
+      ellipse(utils.mainL+utils.fontSize*28, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
+      fill(#dcecfc);
+      ellipse(utils.mainL+utils.fontSize*28.5, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
+      break;
+      case 1:
+      fill(#1E90FF);
+      ellipse(utils.mainL+utils.fontSize*28, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
+      fill(#80c0ff);
+      ellipse(utils.mainL+utils.fontSize*28.5, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
+      fill(#dcecfc);
+      ellipse(utils.mainL+utils.fontSize*27.5, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
+      break;
+      case 2: 
+      fill(#1E90FF);
+      ellipse(utils.mainL+utils.fontSize*28.5, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
+      fill(#80c0ff);
+      ellipse(utils.mainL+utils.fontSize*27.5, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
+      fill(#dcecfc);
+      ellipse(utils.mainL+utils.fontSize*28, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
+      break;
+      default: fill(#4CAF50);
+      text("✓", utils.mainL+utils.fontSize*28, utils.mainU-utils.fontSize);// 
+      break;
+    }
+    //Uct :盤左下
+    fill(0);
+    String simMethod = "Monte Carlo Tree Search(UCT) ";
+    text(simMethod, utils.subL, utils.subU);
+    if (gameOptions.get("SimTimes") == 21) simMethod = "E10/D4/wC";
+    else if (gameOptions.get("SimTimes") == 22) simMethod = "E10/D4/woC";
+    else if (gameOptions.get("SimTimes") == 23) simMethod = "E10/D5/wC";
+    else if (gameOptions.get("SimTimes") == 24) simMethod = "E10/D5/woC";
+    else if (gameOptions.get("SimTimes") == 26) simMethod = "E100/D4";
+    else if (gameOptions.get("SimTimes") == 27) simMethod = "E100/D4";
+    else if (gameOptions.get("SimTimes") == 28) simMethod = "E100/D5";
+    else if (gameOptions.get("SimTimes") == 29) simMethod = "E100/D5";
+    else {
+      simMethod="E"+str(gameOptions.get("expandThreshold"))+"/D"+str(gameOptions.get("depthMax"));
+      if (gameOptions.get("wCancel")==1) simMethod += "/wC";
+      else simMethod += "/woC";
+    }
+    if (gameOptions.get("chanceNodeOn")==1) simMethod += "/CN";
+    if(gameOptions.get("pruning")==1) simMethod += "/P1";
+    if(gameOptions.get("pruning")==2) simMethod += "/P2";
+    simMethod += "<";
+    if(gameOptions.get("Absence0R")==1) simMethod += "R";
+    if(gameOptions.get("Absence0G")==1) simMethod += "G";
+    if(gameOptions.get("Absence0W")==1) simMethod += "W";
+    if(gameOptions.get("Absence0B")==1) simMethod += "B";
+    simMethod += "|";
+    if(gameOptions.get("Absence1R")==1) simMethod += "R";
+    if(gameOptions.get("Absence1G")==1) simMethod += "G";
+    if(gameOptions.get("Absence1W")==1) simMethod += "W";
+    if(gameOptions.get("Absence1B")==1) simMethod += "B";
+    simMethod += ">";
+    text(simMethod, utils.subL, utils.subU+utils.vStep);
+  }
+  //着手可能点のカウント
+  int countVp(){
+    int no=0;
+    for (int k=0; k<25; k++) {
+      if (vp[k]>0) {
+        no ++;
+      }
+    }
+    return no;
   }
   void setSvColor(){
     for (int i=0; i<25; i++){
@@ -323,7 +335,7 @@ class board {
     }
     return true;
   }
-  void ClearSv() {
+  void clearSv() {
     for (int i=0; i<25; i++) {
       sv[i]=sv2[i]=0;
     }
@@ -578,34 +590,32 @@ class panel {
     text(sv, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*0.9);
     text(sv2, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*1.5);
   }
-  boolean display(int mode) {
-    if (mode == 0) {
-      drawBackground();
-      drawLargeNumber();
-      if (marked>0) {
-        fill(utils.playerColor[marked]);
-        textSize(utils.fontSize*3);
-        text("o", dx+utils.mainW/2, dy+utils.mainH/2);
-      }
-    } else if (mode ==10) {// random ディスプレイ
-      drawBackground();
-      if (marked>0) markData();
-      drawLargeNumber();
-    } else if (mode==11) {// Ucb ディスプレイ
-      drawBackground();
-      if (marked>0) {
-        markData();
-      }
-      drawLargeNumber();
-    } else if (mode==12) {// Uct ディスプレイ
-      drawBackground();
-      if (marked>0) markData();
-      drawLargeNumber();
-      if (shaded>0) {
-        fill(utils.playerShade[shaded]);
-        rect(dx+10, dy+10, utils.mainW-20, utils.mainH-20);
-      }
+  void displayGame(){
+    drawBackground();
+    drawLargeNumber();
+    if (marked>0) {
+      fill(utils.playerColor[marked]);
+      textSize(utils.fontSize*3);
+      text("o", dx+utils.mainW/2, dy+utils.mainH/2);
     }
-    return true;
+  }
+  void displaySimRandom(){
+    drawBackground();
+    if (marked>0) markData();
+    drawLargeNumber();
+  }
+  void displaySimUcb(){
+    drawBackground();
+    if (marked>0) markData();
+    drawLargeNumber();
+  }
+  void displaySimUct() {
+    drawBackground();
+    if (marked>0) markData();
+    drawLargeNumber();
+    if (shaded>0) {
+      fill(utils.playerShade[shaded]);
+      rect(dx+10, dy+10, utils.mainW-20, utils.mainH-20);
+    }
   }
 };

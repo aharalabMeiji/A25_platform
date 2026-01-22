@@ -358,7 +358,7 @@ void fullRandomMC() {
         prevPanels1 = prize.getPanels(1);
         prevPanels2 = prize.getPanels(2);
         // 盤表示
-        simulator.mainBoard.display(10);
+        simulator.mainBoard.displaySimRandom();
         // 左下表示
         displayBestStats(prize, utils.subU+utils.fontSize*1.5);
         // 右下表示
@@ -439,7 +439,7 @@ void fullRandomMC() {
         prevPanels1 = prize.getPanels(1);
         prevPanels2 = prize.getPanels(2);
         // 盤表示
-        simulator.mainBoard.display(10);
+        simulator.mainBoard.displaySimRandom();
         // 下部ボタン表示
         showMainBoardButton();
         showReturnButton();
@@ -622,7 +622,7 @@ void UCB1(ucbClass ucb) {
       }
       if (simulator.mainBoard.simulatorNumber%500==0) {
         // 間歇的に表示を更新する。
-        simulator.mainBoard.display(11);// Ucb1 ディスプレイ
+        simulator.mainBoard.displaySimUcb();// Ucb1 ディスプレイ
         prize prize=new prize();
         prize.getPrize3FromNodeList(simulator.nextPlayer, ucb.rootNode.legalMoves);
         displayBestStats(prize, utils.subU+utils.fontSize*1.5);
@@ -718,7 +718,7 @@ void UCB1(ucbClass ucb) {
         }
       }
       if (simulator.mainBoard.simulatorNumber%500==0) {
-        simulator.mainBoard.display(11);// Uct1 ディスプレイ
+        simulator.mainBoard.displaySimUcb();// Uct1 ディスプレイ
         showMainBoardButton();
         showReturnButton();
         showScreenCapture();
@@ -837,7 +837,7 @@ void UCT1() {
         simulator.mainBoard.sv2[answer]=nd.pa[uct.nextPlayer.position] / nd.na;
         simulator.mainBoard.s[answer].marked=1;
         simulationManager=sP.GameEnd;
-        simulator.mainBoard.display(12);
+        simulator.mainBoard.displaySimUct();
         showReturnButton();
         showScreenCapture();
       } else {
@@ -948,7 +948,7 @@ void showMcts(player nextPlayer) {
       message[p2]=nd1.id;
     }
   }
-  simulator.mainBoard.display(12);// UCTディスプレイ
+  simulator.mainBoard.displaySimUct();// UCTディスプレイ
   textAlign(LEFT, CENTER);
   fill(0);
   //if (!simulator.mainBoard.attackChanceP){
@@ -1007,13 +1007,13 @@ void mousePreesedSimulator() {
           simulator.mainBoard.sv[nd.move] = nd.wa[simulator.mainBoard.svColor]/nd.na;//　その着手点はちょっと優秀ということになる。
           simulator.mainBoard.sv2[nd.move] = nd.pa[simulator.mainBoard.svColor]/nd.na;// 最終パネル数の累積
         }
-        simulator.mainBoard.display(10);
+        simulator.mainBoard.displaySimRandom();
       }else if(gameOptions.get("SimMethod")==2) {
         for (uctNode nd : ucb1.fullNodes) {
           simulator.mainBoard.sv[nd.move] = nd.wa[simulator.mainBoard.svColor]/nd.na;//　その着手点はちょっと優秀ということになる。
           simulator.mainBoard.sv2[nd.move] = nd.pa[simulator.mainBoard.svColor]/nd.na;// 最終パネル数の累積
         }
-        simulator.mainBoard.display(11);
+        simulator.mainBoard.displaySimUcb();
       }else if(gameOptions.get("SimMethod")==3) {
         for (uctNode nd : uct.rootNode.legalMoves) {
           simulator.mainBoard.sv[nd.move] = nd.wa[simulator.mainBoard.svColor]/nd.na;//　その着手点はちょっと優秀ということになる。
@@ -1030,7 +1030,7 @@ void mousePreesedSimulator() {
     if (buttonPrevSV.mouseOn()) {
       int loopSize=simulator.rootNode.legalMoves.size();
       attackChanceCursor = (attackChanceCursor+loopSize-1)%loopSize;
-      simulator.mainBoard.display(10);
+      simulator.mainBoard.displaySimRandom();
       prize prize=new prize();
       prize.getPrize3FromNodeList(simulator.nextPlayer, simulator.rootNode.legalMoves);
       displayBestStats(prize, utils.subU+utils.fontSize*1.5);
@@ -1041,7 +1041,7 @@ void mousePreesedSimulator() {
     } else if (buttonNextSV.mouseOn()) {
       int loopSize=simulator.rootNode.legalMoves.size();
       attackChanceCursor = (attackChanceCursor+1)%loopSize;
-      simulator.mainBoard.display(10);
+      simulator.mainBoard.displaySimRandom();
       prize prize=new prize();
       prize.getPrize3FromNodeList(simulator.nextPlayer, simulator.rootNode.legalMoves);
       displayBestStats(prize, utils.subU+utils.fontSize*1.5);

@@ -89,6 +89,16 @@ class uctNode {
     move=_m;
     return false;
   }
+  void setParameters(int _p, int _m, String _id, int _depth, 
+    uctNode _ancestor, uctNode _parent, boolean _acn) {
+    player=_p;
+    move=_m;
+    id = _id;
+    depth=_depth;
+    ancestor = _ancestor;
+    parent = _parent;
+    attackChanceNode = _acn;
+  }
   float UCTa(int player, int NN) {// NN:　累計試行回数
     float u1 = wa[player]/na;
     //float u2 = 1.0*sqrt(log(NN)/na);

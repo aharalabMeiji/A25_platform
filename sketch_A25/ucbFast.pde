@@ -25,7 +25,7 @@ int ucbFastBrain(player pl, ucbClass ucb) {
     
   //}
   //println("pl の変数の初期化");
-  pl.myBoard.ClearSv();
+  pl.myBoard.clearSv();
   pl.yellow=-1;
 
   //println("シミュレーション用のサブボード");

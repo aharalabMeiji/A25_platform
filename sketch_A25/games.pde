@@ -256,9 +256,9 @@ void showGames() {
     //randomOrderCount=0;
     //盤面を一度表示
     background(255);
-    utils.gameMainBoard.display(0);
+    utils.gameMainBoard.displayGame();
     for (int p = 1; p<=4; p++) {
-      game.participants[p].display(0);//
+      game.participants[p].displayGame();//
     }
     showReturnButton();
     showScreenCapture();
@@ -294,9 +294,9 @@ void showGames() {
       managerPhase = mP.AfterChoosePlayer;
     }
     background(255);
-    utils.gameMainBoard.display(0);
+    utils.gameMainBoard.displayGame();
     for (int p = 1; p<=4; p++) {
-      game.participants[p].display(0);//
+      game.participants[p].displayGame();//
     }
     if (game.editMode){
       //showSaveReplaceButton();
@@ -340,9 +340,9 @@ void showGames() {
   } else if (managerPhase == mP.OnMoving) {
     // とりま画面表示
     background(255);
-    utils.gameMainBoard.display(0);
+    utils.gameMainBoard.displayGame();
     for (int p = 1; p<=4; p++) {
-      game.participants[p].display(0);//
+      game.participants[p].displayGame();//
     }
     showReturnButton();
     showScreenCapture();
@@ -391,9 +391,9 @@ void showGames() {
   } else if (managerPhase==mP.AfterMoving) {
     //とりま表示
     background(255);
-    utils.gameMainBoard.display(0);
+    utils.gameMainBoard.displayGame();
     for (int p = 1; p<=4; p++) {
-      game.participants[p].display(0);//
+      game.participants[p].displayGame();//
     }
     showReturnButton();
     showScreenCapture();
@@ -426,7 +426,7 @@ void showGames() {
   } else if (managerPhase==mP.GameEnd) {///////mP.GameEnd
     background(255);
     for (int p = 1; p<=4; p++) {
-      game.participants[p].display(0);
+      game.participants[p].displayGame();
     }
     showReturnButton();
     showScreenCapture();
@@ -486,9 +486,9 @@ void showGames() {
     if (utils.gameMainBoard.simulatorNumber == gameOptions.get("Times") ) {
       // 結果の表示
       background(255);
-      utils.gameMainBoard.display(0);
+      utils.gameMainBoard.displayGame();
       for (int p = 1; p<=4; p++) {
-        game.participants[p].display(0);
+        game.participants[p].displayGame();
       }
       showReturnButton();
       showScreenCapture();
@@ -552,7 +552,7 @@ void showGames() {
           utils.gameMainBoard.s[i].marked=0;
         }
       }
-      utils.gameMainBoard.display(0);
+      utils.gameMainBoard.displayGame();
     }
     managerPhase=mP.OnAttackChance;
   } else if (managerPhase==mP.OnAttackChance) {//
@@ -573,9 +573,9 @@ void showGames() {
       }
       // 結果の表示
       background(255);
-      utils.gameMainBoard.display(0);
+      utils.gameMainBoard.displayGame();
       for (int p = 1; p<=4; p++) {
-        game.participants[p].display(0);
+        game.participants[p].displayGame();
       }
       showReturnButton();
       showScreenCapture();
@@ -667,9 +667,9 @@ void mousePreesedGame() {// ゲーム中のキーボード待ちの処理
           utils.gameMainBoard.s[k].marked=0;
         }
         background(255);
-        utils.gameMainBoard.display(0);
+        utils.gameMainBoard.displayGame();
         for (int p = 1; p<=4; p++) {
-          game.participants[p].display(0);
+          game.participants[p].displayGame();
         }
         showReturnButton();
         showScreenCapture();
@@ -697,7 +697,7 @@ void mousePreesedGame() {// ゲーム中のキーボード待ちの処理
         }
         game.participants[game.nextPlayer].turn = true;
         managerPhase = mP.AfterChoosePlayer;
-        utils.gameMainBoard.display(0);
+        utils.gameMainBoard.displayGame();
       }
     }
   } else if (managerPhase==mP.OnMoving && game.participants[game.nextPlayer].myBrain==brainType.Human) {// 人がプレイするとき
@@ -728,9 +728,9 @@ void mousePreesedGame() {// ゲーム中のキーボード待ちの処理
           game.participants[p].turn = false;
         }
         background(255);
-        utils.gameMainBoard.display(0);
+        utils.gameMainBoard.displayGame();
         for (int p = 1; p<=4; p++) {
-          game.participants[p].display(0);//
+          game.participants[p].displayGame();//
         }
         // edit modeならではの作業
         if (game.editMode){
@@ -764,9 +764,9 @@ void mousePreesedGame() {// ゲーム中のキーボード待ちの処理
         game.participants[p].turn = false;
       }
       background(255);
-      utils.gameMainBoard.display(0);
+      utils.gameMainBoard.displayGame();
       for (int p = 1; p<=4; p++) {
-        game.participants[p].display(0);//
+        game.participants[p].displayGame();//
       }
       showReturnButton();
       showScreenCapture();

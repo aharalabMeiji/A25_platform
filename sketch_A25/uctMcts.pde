@@ -57,11 +57,11 @@ class uctClass {
 
   void printUctParameters(){
     print ("uct ");
-    print ("E"+expandThreshold+" ");
-    print ("D"+depthMax+" ");
-    if (cancelCountMax<10000) print ("C"+cancelCountMax+" ");//uct.terminateThreshold,
-    else print ("woC ");
-    if (chanceNodeOn==1) print("CN ");
+    print ("E"+expandThreshold+"/");
+    print ("D"+depthMax+"/");
+    if (cancelCountMax<10000) print ("C"+cancelCountMax+"/");//uct.terminateThreshold,
+    else print ("woC/");
+    if (chanceNodeOn==1) print("CN/");
     if (pruningThreshold<999) print("P"+uct.pruningThreshold+" ");
     println();
   }
@@ -75,30 +75,18 @@ class uctClass {
     //println("uctMctsBrain:着手可能点を計算しておく");
     pl.myBoard.buildVP(pl.position);
     //pl.myBoard.deleteSymmetricVp();
-    //pl.myBoard.vp に、候補を整数値（大きい値ほど選ばれる確率が大きい）で入れておく。
-    int noVp=0;//着手可能点のカウント
-    for (int k=0; k<25; k++) {
-      if (pl.myBoard.vp[k]>0) {
-        noVp ++;
-      }
-    }
-    if (noVp==0) {// ゲーム終了盤面ならば－１を返す。
+    if (pl.myBoard.countVp()==0) {// ゲーム終了盤面ならば－１を返す。
       return -1;
     }
 
     //println("uctMctsBrain:pl の変数の初期化");
-    for (int k=0; k<=25; k++) {//たぶん不要
-      pl.myBoard.sv[k]=0;
-      pl.myBoard.sv2[k]=0;
-    }//たぶん不要
+    pl.myBoard.clearSv();//たぶん不要
     pl.yellow=-1;
     winPoint=null;
     prize=new prize();
     //println("uctMctsBrain:シミュレーション用のサブボード");
     mainBoard = new board();
     subBoard = new board();
-    //println("uctMctsBrain:アクティブなノードのArrayList");
-    //uct.activeNodes = new ArrayList<uctNode>();
     //println("uctMctsBrain:ループ回数のカウント");
     pl.myBoard.simulatorNumber=0;
     //println("uctMctsBrain:UCT準備");
@@ -118,14 +106,13 @@ class uctClass {
       for (int k=0; k<25; k++) {
         if (pl.myBoard.vp[k]>0) {
           newNode = new uctNode();
+          // 自分自身が先祖// 逆伝播をここで切りたい// アタックチャンスではない
+          newNode.setParameters(pl.position, k, 
+            rootNode.id + (":"+kifu.playerColCode[pl.position]+nf(k+1, 2)), 
+            1, newNode, null, false);
           qtyNodes[0] ++;
-          newNode.setItem(pl.position, k);
-          newNode.id = uct.rootNode.id + (":"+kifu.playerColCode[pl.position]+nf(k+1, 2));
-          newNode.depth = 1;
           qtyNodes[1] ++;
           rootNode.legalMoves.add(uct.newNode);//ルートノードにぶら下げる
-          newNode.ancestor = uct.newNode;// 自分自身が先祖
-          newNode.parent = null;//逆伝播をここで切りたいので
           newNode.onRGWB = new boolean[5];
           for (int p=1; p<5; p++) {//4つのチャンスノードは有効
             newNode.onRGWB[p]=true;
@@ -133,21 +120,18 @@ class uctClass {
           pl.myBoard.copyBoardToSub(uct.mainBoard);
           mainBoard.move(pl.position, k);//一手進める
           mainBoard.copyBoardToBd(uct.newNode.bd);
-          newNode.attackChanceNode=false;
         }
       }
       //println("uctMctsBrain:手抜きという選択肢を考える");
       // １手目パス
       if (pl.noPass==0) {
         newNode = new uctNode();
+        newNode.setParameters(pl.position, 25,
+          uct.rootNode.id+(":"+kifu.playerColCode[pl.position]+nf(26, 2)),
+          1, newNode, null, false);          
         qtyNodes[0] ++;
-        newNode.setItem(pl.position, 25);
-        newNode.id = uct.rootNode.id+(":"+kifu.playerColCode[pl.position]+nf(26, 2));
-        newNode.depth = 1;
         qtyNodes[1] ++;
         rootNode.legalMoves.add(newNode);//ルートノードにぶら下げる
-        newNode.ancestor = newNode;
-        newNode.parent = null;//
         newNode.onRGWB = new boolean[5];
         for (int p=1; p<5; p++) {//ノードをつるさない場合はフラグを倒しておく
           if (isPassAtDepth1Node(newNode, p)) newNode.onRGWB[p]=false;
@@ -155,7 +139,6 @@ class uctClass {
         }
         pl.myBoard.copyBoardToSub(mainBoard);
         mainBoard.copyBoardToBd(newNode.bd);
-        newNode.attackChanceNode=false;//念のため倒しておく。
       }
     } else {
       //println("uctMctsBrain:AC時、uct.rootNodeに子供をぶら下げる");
@@ -166,13 +149,11 @@ class uctClass {
           if ((pl.myBoard.vp[j]>0 && (pl.myBoard.s[i].col>=1 && pl.myBoard.s[i].col<=4)) || (pl.myBoard.vp[j]>0 && i==j)) {
             newNode = new uctNode();
             qtyNodes[0] ++;
-            newNode.setItem(pl.position, k);
-            newNode.id = rootNode.id + (":"+kifu.playerColCode[pl.position]+nf(j+1, 2)) + (":Y"+nf(i+1, 2));
-            newNode.depth = 1;
             qtyNodes[1] ++;
+            newNode.setParameters(pl.position, k, 
+              rootNode.id + (":"+kifu.playerColCode[pl.position]+nf(j+1, 2)) + (":Y"+nf(i+1, 2)),
+              1, newNode, null, true );
             rootNode.legalMoves.add(newNode);//ぶら下げる
-            newNode.ancestor = newNode;
-            newNode.parent = null;//
             newNode.onRGWB = new boolean[5];
             for (int p=1; p<5; p++) {
               newNode.onRGWB[p]=true;
@@ -181,7 +162,6 @@ class uctClass {
             mainBoard.move(pl.position, j);// 1手着手する
             mainBoard.s[i].col = 5;// 黄色を置く
             mainBoard.copyBoardToBd(newNode.bd);
-            newNode.attackChanceNode=true;
           }
         }
       }

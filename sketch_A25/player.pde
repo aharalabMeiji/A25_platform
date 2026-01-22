@@ -18,31 +18,28 @@ class player {
     turn = false;
     myBoard= new board();
   }
-  boolean display(int mode) {
-    if (mode==0) {
-      int dx = utils.subL+int(utils.mainW+utils.hSpace)*(position-1);
-      int dy = utils.subU;
-      if (turn)
-        strokeWeight(10);
-      else
+  void displayGame(){
+    int dx = utils.subL+int(utils.mainW+utils.hSpace)*(position-1);
+    int dy = utils.subU;
+    if (turn)
+      strokeWeight(10);
+    else
       strokeWeight(2);
-      fill(utils.playerColor[position]);
-      rect(dx, dy, utils.mainW, utils.mainH);
-      strokeWeight(1);
-      fill(0);
-      textSize(utils.fontSize*0.6);      
-      textAlign(CENTER, CENTER);
-      text(name, dx+utils.mainW/2, dy+utils.mainH/4);
-      int count=0;
-      for (int i=0; i<25; i++){
-        if (utils.gameMainBoard.s[i].col==position){
-          count ++;
-        }
+    fill(utils.playerColor[position]);
+    rect(dx, dy, utils.mainW, utils.mainH);
+    strokeWeight(1);
+    fill(0);
+    textSize(utils.fontSize*0.6);      
+    textAlign(CENTER, CENTER);
+    text(name, dx+utils.mainW/2, dy+utils.mainH/4);
+    int count=0;
+    for (int i=0; i<25; i++){
+      if (utils.gameMainBoard.s[i].col==position){
+        count ++;
       }
-      text(count, dx+utils.mainW/2,dy+utils.mainH/2);
-      text(score, dx+utils.mainW/2,dy+utils.mainH*3/4);
     }
-    return true;
+    text(count, dx+utils.mainW/2,dy+utils.mainH/2);
+    text(score, dx+utils.mainW/2,dy+utils.mainH*3/4);
   }
   boolean mouseOn(int mode){
     if (mode==0){
