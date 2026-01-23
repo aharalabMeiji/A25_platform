@@ -136,49 +136,19 @@ void backgroundHeader(){
 void showGames() {
   if (managerPhase==mP.GameStart) {
     //println("ゲームモードのプレイヤー初期化");
-    if (gameOptions.get("Player1")==0) {
-      game.participants[1] = new player(1, "human1", brainType.Human);
-    } else if (gameOptions.get("Player1")==3) {
-      game.participants[1] = new player(1, "ucb-1", brainType.UCB1);
-    } else if (gameOptions.get("Player1")==4) {
-      game.participants[1] = new player(1, "uct-1", brainType.UCTE10D4);
-    } else if (gameOptions.get("Player1")==5) {
-      game.participants[1] = new player(1, "p-uct-1", brainType.UCTE10D4P1);
-    } else {
-      game.participants[1] = new player(1, "random1", brainType.Random);
-    }
-    if (gameOptions.get("Player2")==0) {
-      game.participants[2] = new player(2, "human2", brainType.Human);
-    } else if (gameOptions.get("Player2")==3) {
-      game.participants[2] = new player(2, "ucb-2", brainType.UCB1);
-    } else if (gameOptions.get("Player2")==4) {
-      game.participants[2] = new player(2, "uct-2", brainType.UCTE10D4);
-    } else if (gameOptions.get("Player2")==5) {
-      game.participants[2] = new player(2, "p-uct-2", brainType.UCTE10D4P1);
-    } else {
-      game.participants[2] = new player(2, "random2", brainType.Random);
-    }
-    if (gameOptions.get("Player3")==0) {
-      game.participants[3] = new player(3, "human3", brainType.Human);
-    } else if (gameOptions.get("Player3")==3) {
-      game.participants[3] = new player(3, "ucb-3", brainType.UCB1);
-    } else if (gameOptions.get("Player3")==4) {
-      game.participants[3] = new player(3, "uct-3", brainType.UCTE10D4);
-    } else if (gameOptions.get("Player3")==5) {
-      game.participants[3] = new player(3, "p-uct-3", brainType.UCTE10D4P1);
-    } else {
-      game.participants[3] = new player(3, "random3", brainType.Random);
-    }
-    if (gameOptions.get("Player4")==0) {
-      game.participants[4] = new player(4, "human4", brainType.Human);
-    } else if (gameOptions.get("Player4")==3) {
-      game.participants[4] = new player(4, "ucb-4", brainType.UCB1);
-    } else if (gameOptions.get("Player4")==4) {
-      game.participants[4] = new player(4, "uct-4", brainType.UCTE10D4);
-    } else if (gameOptions.get("Player4")==5) {
-      game.participants[4] = new player(4, "p-uct-4", brainType.UCTE10D4P1);
-    } else {
-      game.participants[4] = new player(4, "random4", brainType.Random);
+    for(int p=1; p<=4; p++){
+      String pp = ""+p;
+      if (gameOptions.get("Player"+pp)==0) {
+        game.participants[p] = new player(p, "human"+pp, brainType.Human);
+      } else if (gameOptions.get("Player"+pp)==3) {
+        game.participants[p] = new player(p, "ucb"+pp, brainType.UCB1);
+      } else if (gameOptions.get("Player"+pp)==4) {
+        game.participants[p] = new player(p, "uct"+pp, brainType.UCTE10D4);
+      } else if (gameOptions.get("Player"+pp)==5) {
+        game.participants[p] = new player(p, "p-uct"+pp, brainType.UCTE10D4P1);
+      } else {
+        game.participants[p] = new player(p, "random"+pp, brainType.Random);
+      }
     }
     utils.gameMainBoard.attackChanceP=false;//アタックチャンス終了フラグはいったん寝せておく
     game.previousPlayer=0;
