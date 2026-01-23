@@ -115,11 +115,6 @@ void initRandomOrder() {
       randomOrder[k] = tmp;
     }
   }
-  //print("random order=");
-  //for(int i=0; i<28; i++) {
-  //  print(randomOrder[i]);
-  //}
-  //println();
 }
 
 int getRandomOrder() {
@@ -131,20 +126,11 @@ int getRandomOrder() {
     randomOrderCount ++;
     return int(random(4)+1);
   }
-
 }
 
 void backgroundHeader(){
   stroke(255);fill(255);
   rect(0,0,utils.mainU-1, utils.mainW*10);
-}
-
-void showHeader(){
-  backgroundHeader();
-  stroke(0);fill(0);
-  textSize(utils.fontSize);
-  textAlign(LEFT, CENTER);
-  text(utils.headerText,utils.mainL, utils.mainU*0.5);
 }
 
 void showGames() {
