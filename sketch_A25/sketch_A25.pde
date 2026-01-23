@@ -77,11 +77,10 @@ void setup() {
   
 }
 
-void draw() {
-  
-  if (displayManager == dP.onSimulator) {
+void draw() {  
+  if (displayManager == dP.onSimulator) {// シミュレーション
     showSimulator();
-  } else if (displayManager == dP.onGame) {// 通常のゲーム進行
+  } else if (displayManager == dP.onGame) {// ゲーム進行
     showGames();
   } else if (displayManager == dP.onContents) {
     showContents();
@@ -98,7 +97,7 @@ void mousePressed() {
         return;
       }
       for (button b : buttons) {
-        if (b.mouseOn()) {
+        if (b.mouseOn()) {//メニューをクリックすると選択される。
           if (b.dictKey.equals("Times") && b.dictInt==game.times10 && gameOptions.get("Times")==game.times10){
               game.times10 += 10;
               if (game.times10 == 100) game.times10 = 10;
@@ -119,7 +118,7 @@ void mousePressed() {
           return;
         }
       }
-      if (buttonStart.mouseOn()) {
+      if (buttonStart.mouseOn()) {//ゲームでスタート
         displayManager = dP.onGame;
         managerPhase = mP.GameStart;
         utils.gameMainBoard.simulatorNumber=0;
@@ -157,7 +156,6 @@ void mousePressed() {
       for (button b : buttons) {
         if (b.mouseOn()) {
           gameOptions.set(b.dictKey, b.dictInt);
-          //println("L121@A25",b.dictKey, b.dictInt,(b.dictKey=="SimMethod" && b.dictInt==3));
           if (b.dictKey=="SimMethod" && b.dictInt==1) {
             gameOptions.set("SimTimes", 2);
           } else if (b.dictKey=="SimMethod" && b.dictInt==2) {
