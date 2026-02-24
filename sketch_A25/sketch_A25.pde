@@ -171,6 +171,8 @@ void mousePressed() {
             gameOptions.set("pruning", 1); 
           } else if (b.dictKey=="SimTimes" && (b.dictInt==27 || b.dictInt==29)){
             gameOptions.set("pruning", 2); 
+          } else if (b.dictKey=="SimTimes" && (b.dictInt==21 || b.dictInt==22 || b.dictInt==23 || b.dictInt==24)){
+            gameOptions.set("pruning", 999); 
           }
           //println(gameOptions.get("SimMethod"), gameOptions.get("SimTimes"));
           return;
