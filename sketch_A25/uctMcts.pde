@@ -439,22 +439,22 @@ class uctClass {
     float numer=0;
     int denom=0;
     if (nd.onRGWB[1] && nR!=0) {// if (nd.onRGWB[1])
-      numer = Rrate;
+      numer = Rrate;//1 ここを変えるとバランスが変わる
       sum += (wR/nR*numer) ;
       denom += numer;
     }
     if (nd.onRGWB[2] && nG!=0) {
-      numer = Grate;
+      numer = Grate;//1
       sum += (wG/nG*numer);
       denom += numer;
     }
     if (nd.onRGWB[3] && nW!=0) {
-      numer = Wrate;
+      numer = Wrate;//1
       sum += (wW/nW*numer);
       denom += numer;
     }
     if (nd.onRGWB[4] && nB!=0) {
-      numer = Brate;
+      numer = Brate;//1
       sum += (wB/nB*numer);
       denom += numer;
     }

@@ -1046,7 +1046,12 @@ void showContents() {
       top += utils.vStep;
       left=utils.hOffset;
       //
-      buttonText = "[Chance Nodes Off]";
+      captionText = "Chance Nodes:";
+      fill(0);
+      text(captionText, left, top);
+      left += (textWidth(captionText)+utils.hSpace);
+      //
+      buttonText = "[Off]";
       button buttonChanceNode=new button();
       buttonChanceNode.setLT(left, top, buttonText);
       buttonChanceNode.setItem("chanceNodeOn", 0);
@@ -1056,7 +1061,7 @@ void showContents() {
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
       //
-      buttonText = "[Chance Nodes On]";
+      buttonText = "[On]";
       buttonChanceNode=new button();
       buttonChanceNode.setLT(left, top, buttonText);
       buttonChanceNode.setItem("chanceNodeOn", 1);
