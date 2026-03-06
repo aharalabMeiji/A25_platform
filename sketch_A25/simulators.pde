@@ -24,6 +24,12 @@ class startBoard {
       rect(x, y+dy*5.5, 5*dx, dy);
     }
   }
+  void add1NextPlayer(){
+    nextPlayer ++;
+    if (nextPlayer>=5){
+      nextPlayer = 1;
+    }
+  }
 }
 
 ArrayList<startBoard> simulatorStartBoard;

@@ -43,7 +43,7 @@ ArrayList<button> buttons;
 
 button buttonStart;
 button buttonNew, buttonOpenFile, buttonOpenPsrFile, buttonSaveFile, buttonDeleteFromList, buttonKifuFolder;
-button buttonPrevBoard, buttonNextBoard;
+button buttonPrevBoard, buttonDownBoard, buttonNextBoard;// board 列表示の前進・現在・後進（ゲームモード、シムモード）（たぶんゲーム木モードも）
 button buttonReturnToMenu, buttonMenuGame, buttonMenuSimulation, buttonPass, buttonUndo;
 button buttonSaveScreenShot;// スクショのボタン
 button buttonSaveBoard, buttonSaveReplace, buttonSaveAppend;// 盤面保存のボタン

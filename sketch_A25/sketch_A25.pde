@@ -125,6 +125,8 @@ void mousePressed() {
       } else if (buttonPrevBoard.mouseOn()) {
         int total = simulatorStartBoard.size();
         simulator.StartBoardId = (simulator.StartBoardId + total - 1)% total;
+      } else if (buttonDownBoard.mouseOn()) {
+        ;/// いちおう書いておくがなにもしない（ボタン設定もしていない）
       } else if (buttonNextBoard.mouseOn()) {
         int total = simulatorStartBoard.size();
         simulator.StartBoardId = (simulator.StartBoardId + 1)% total;
@@ -184,6 +186,12 @@ void mousePressed() {
       } else if (buttonPrevBoard.mouseOn()) {
         int total = simulatorStartBoard.size();
         simulator.StartBoardId = (simulator.StartBoardId + total - 1)% total;
+      } else if (buttonDownBoard.mouseOn()){
+        //simulationの中央ボード下
+        int total = simulatorStartBoard.size();
+        int startBoardId = (simulator.StartBoardId)% total;
+        simulatorStartBoard.get(startBoardId).add1NextPlayer();
+        //simulatorStartBoard.get(startBoardId).display();
       } else if (buttonNextBoard.mouseOn()) {
         int total = simulatorStartBoard.size();
         simulator.StartBoardId = (simulator.StartBoardId + 1)% total;
