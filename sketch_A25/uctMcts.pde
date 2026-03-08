@@ -432,8 +432,12 @@ class uctClass {
     if (nR+nG+nW+nB!=na) {
       println("averageBackPropagate", "("+wR+"/"+nR+")("+wG+"/"+nG+")("+wW+"/"+nW+")("+wB+"/"+nB+")na="+na);
     }
+    if (nd.onRGWB[1]==false && nR>0) {
+      println("illegal at averageBackPropagate",wR,"/",nR,nd.id);
+    }
     if (nd.onRGWB[2]==false && nG>0) {
-      println("something is wrong on childG at averageBackPropagat");
+      println("something is wrong on childG at averageBackPropagate",wG,"/",nG,nd.id);
+      
     }
     float sum=0f;
     float numer=0;
@@ -715,7 +719,7 @@ int uctMctsMainLoop(player pl) {
         //if(expandOK==false){
         //  println(uctMaxNode.parent.id+"->"+uctMaxNode.id);         
         //}
-        if (uctMaxNode.depth<uct.depthMax && uctMaxNode.id!="" && remaingInBd(uctMaxNode.bd)>0 && expandOK ) {   // 展開するための条件
+        if (uctMaxNode.depth<uct.depthMax && uctMaxNode.id!="" && remaingInBd(uctMaxNode.bd)>0 && expandOK ) {   // ここから展開するための条件
           // remaingInBd(uctMaxNode.bd) : 残り空パネルの個数（黄色も含む）
           uct.newNode=null;
           uctMaxNode.legalMoves=null;
@@ -735,7 +739,6 @@ int uctMctsMainLoop(player pl) {
               if (uct.isPassAtDepth2Node(uctMaxNode, p)) {
                 //print("[pass at"+uctMaxNode.id+";"+p+"]");
                 uctMaxNode.onRGWB[p]=false;
-                continue;
               } else {
                 uctMaxNode.onRGWB[p]=true;
               }
