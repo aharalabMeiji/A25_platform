@@ -146,7 +146,7 @@ class multiUcbClass {
       newNode.parent = null;//
       newNode.onRGWB = new boolean[5];
       for(int p=1; p<5; p++){//ノードをつるさない場合はフラグを倒しておく
-        if (uct.isPassAtDepth1Node(newNode, p)) newNode.onRGWB[p]=false;
+        if (uct.isPassChildrenList(newNode, p)) newNode.onRGWB[p]=false;
         else newNode.onRGWB[p]=true;
       } 
       thisPlayer.myBoard.copyBoardToSub(mainBoard);
