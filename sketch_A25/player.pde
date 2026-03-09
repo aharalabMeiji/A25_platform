@@ -1,5 +1,5 @@
 enum brainType{
-  Human, Random, UCBold, UCB1, UCB2, UCTE10D4, UCBUCT, UCTE10D4P1, UCTE10D4P2
+  Human, Random, UCBold, UCB1, UCB2, UCTE10D4, UCBUCT, UCTE10D4P1, UCTE10D4P2, Heuristic0
 }
 
 class player {
@@ -63,9 +63,9 @@ class player {
         return chooseOne(myBoard.vp);
       }
     } 
-    //else if (myBrain==brainType.UCBold){
-    //  return ucbMcBrain(this);
-    //} 
+    else if (myBrain==brainType.Heuristic0){
+      return heuristic0Brain(this);
+    } 
     else if (myBrain==brainType.UCB1){
       return ucbFastBrain(this, ucb1);
     } else if (myBrain==brainType.UCB2){

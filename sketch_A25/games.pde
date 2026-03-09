@@ -166,7 +166,7 @@ void showGames() {
       } else if (gameOptions.get("Player"+pp)==5) {
         game.participants[p] = new player(p, "p-uct"+pp, brainType.UCTE10D4P1);
       } else {
-        game.participants[p] = new player(p, "random"+pp, brainType.Random);
+        game.participants[p] = new player(p, "random"+pp, brainType.Heuristic0);
       }
     }
     utils.gameMainBoard.attackChanceP=false;//アタックチャンス終了フラグはいったん寝せておく
