@@ -322,9 +322,9 @@ void showContents() {
     buttonText = "[Auto(Random)]";
     buttonHuman1=new button();
     buttonHuman1.setLT(left, top, buttonText);
-    buttonHuman1.setItem("Order", 0);
+    buttonHuman1.setItem("Order", order.fullRandom);
     buttons.add(buttonHuman1);
-    if (gameOptions.get("Order") == 0) fill(255, 0, 0);
+    if (gameOptions.get("Order") == order.fullRandom) fill(255, 0, 0);
     else fill(0);
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
@@ -332,9 +332,9 @@ void showContents() {
     buttonText = "[Manual]";
     buttonRandom1=new button();
     buttonRandom1.setLT(left, top, buttonText);
-    buttonRandom1.setItem("Order", 1);
+    buttonRandom1.setItem("Order", order.manual);
     buttons.add(buttonRandom1);
-    if (gameOptions.get("Order") == 1) fill(255, 0, 0);
+    if (gameOptions.get("Order") == order.manual) fill(255, 0, 0);
     else fill(0);
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
@@ -342,9 +342,9 @@ void showContents() {
     buttonText = "[Weighted Random]";
     buttonRandom1=new button();
     buttonRandom1.setLT(left, top, buttonText);
-    buttonRandom1.setItem("Order", 3);
+    buttonRandom1.setItem("Order", order.weightedRandom);
     buttons.add(buttonRandom1);
-    if (gameOptions.get("Order") == 3) fill(255, 0, 0);
+    if (gameOptions.get("Order") == order.weightedRandom) fill(255, 0, 0);
     else fill(0);
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
@@ -352,15 +352,15 @@ void showContents() {
     buttonText = "[in order]";
     buttonRandom1=new button();
     buttonRandom1.setLT(left, top, buttonText);
-    buttonRandom1.setItem("Order", 4);
+    buttonRandom1.setItem("Order", order.inOrder);
     buttons.add(buttonRandom1);
-    if (gameOptions.get("Order") == 4) fill(255, 0, 0);
+    if (gameOptions.get("Order") == order.inOrder) fill(255, 0, 0);
     else fill(0);
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
 
     // weighted random
-    if (gameOptions.get("Order") == 3){
+    if (gameOptions.get("Order") == order.weightedRandom){
       top += utils.vStep;
       left=utils.hOffset;
       captionText = "Weight:";
