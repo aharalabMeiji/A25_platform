@@ -747,7 +747,7 @@ int uctMctsMainLoop(player pl) {
             }
           }
           for (int p=1; p<5; p++) {// 4人分の作業ここから
-            println(uctMaxNode.id+".onRGWB["+p+"]="+uctMaxNode.onRGWB[p]);
+            //println(uctMaxNode.id+".onRGWB["+p+"]="+uctMaxNode.onRGWB[p]);
             //uctMctsMainLoop 02-2-4-2
             if (uctMaxNode.onRGWB[p]) { // 「お立ち」では作業省略
               //println("プレイヤー"+p+の子供ノードをuctMaxNodeに追加);//展開中

@@ -100,34 +100,58 @@ void showUndoButton() { //
   buttonUndo.setLT(dx, dy, buttonUndoText);
 }
 
-
-void initRandomOrder() {
-  randomOrderCount=0;
-  for (int i=0; i<28; i++) {
-    randomOrder[i] = (i%4)+1;
+playerOrder order=new playerOrder();
+class playerOrder{
+  int type=0;
+  int randomOrderCount;
+  int loop=1;
+  int[] sequence;
+  int fullRandom=0;
+  int manual=1;
+  int conditionalRandom=3;
+  int inOrder=4;
+  playerOrder(){
+    randomOrderCount=0;
+    loop=1;
+    sequence = new int[40];
   }
-  for (int i=0; i<500; i++) {
-    int j=int(random(28));
-    int k=int(random(28));
-    if (j!=k) {
-      int tmp=randomOrder[j];
-      randomOrder[j] = randomOrder[k];
-      randomOrder[k] = tmp;
+  void init() {
+    randomOrderCount=0;
+    if (type==fullRandom){
+      loop=1;
+    } else if(type==conditionalRandom){
+      for (int i=0; i<28; i++) {
+        sequence[i] = (i%4)+1;
+      }
+      for (int i=0; i<500; i++) {
+        int j=int(random(28));
+        int k=int(random(28));
+        if (j!=k) {
+          int tmp=sequence[j];
+          sequence[j] = sequence[k];
+          sequence[k] = tmp;
+        }
+      }
+    } else if (type==inOrder){
+      randomOrderCount=int(random(4)+1);
     }
   }
-}
-
-int getRandomOrder() {
-  if (randomOrderCount<28) {
-    int ret = randomOrder[randomOrderCount];
-    randomOrderCount ++;
-    return ret;
-  } else {
-    randomOrderCount ++;
-    return int(random(4)+1);
+  
+  int getNext() {
+    if (type==fullRandom){
+      return int(random(4)+1);
+    } else if(type==conditionalRandom){
+      int ret = sequence[randomOrderCount%28];
+      randomOrderCount ++;
+      return ret;
+    } else if (type==inOrder){
+      int ret = (randomOrderCount-1)%4 + 1;
+      randomOrderCount ++;
+      return ret;
+    }
+    return 0;
   }
 }
-
 void backgroundHeader(){
   stroke(255);fill(255);
   rect(0,0,utils.mainU-1, utils.mainW*10);
@@ -207,9 +231,9 @@ void showGames() {
       game.editBoard=null;
     }
     kifu.string="";// 初期盤面以降の着手をここに記録する。
-    // 試しに、「ターン回数を均等にするランダム」を作ってみる
-    initRandomOrder();
-    //randomOrderCount=0;
+    // 手番のルールを初期化
+    order.type=gameOptions.get("Order");
+    order.init();
     //盤面を一度表示
     background(255);
     utils.gameMainBoard.displayGame();
@@ -221,28 +245,8 @@ void showGames() {
     showPassButton();
     managerPhase=mP.WaitChoosePlayer;// show setting and wait start
   } else if (managerPhase==mP.WaitChoosePlayer) {   
-    if (gameOptions.get("Order") == 3) {
-      game.nextPlayer = getRandomOrder();// 次の手番をランダムに決める //
-      for (int p = 1; p<=4; p++) {
-        game.participants[p].turn = false;
-      }
-      game.participants[game.nextPlayer].turn = true;
-      managerPhase = mP.AfterChoosePlayer;
-    } else if (gameOptions.get("Order") == 4){
-      if (game.previousPlayer==0){
-        game.previousPlayer = game.nextPlayer = int(random(4))+1;
-      } else {
-        game.nextPlayer = (game.previousPlayer%4)+1;
-        game.previousPlayer = game.nextPlayer;
-      }      
-      for (int p = 1; p<=4; p++) {
-        game.participants[p].turn = false;
-      }
-      game.participants[game.nextPlayer].turn = true;
-      managerPhase = mP.AfterChoosePlayer;
-    } else if (gameOptions.get("Order") == 0){
-      game.nextPlayer = mt.nextInt(4)+1; 
-      //game.nextPlayer = int(random(4))+1; 
+    if (gameOptions.get("Order") == 0 || gameOptions.get("Order") == 3 || gameOptions.get("Order") == 4) {
+      game.nextPlayer = order.getNext();// 次の手番を決める //
       for (int p = 1; p<=4; p++) {
         game.participants[p].turn = false;
       }
@@ -494,7 +498,7 @@ void showGames() {
       }
       // 棋譜文字列の初期化
       kifu.string="";
-      initRandomOrder();
+      order.init();
       managerPhase = mP.WaitChoosePlayer; 
     }
     ///////mP.GameEndここまで

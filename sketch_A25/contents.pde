@@ -353,10 +353,9 @@ void showContents() {
     buttonRandom1=new button();
     buttonRandom1.setLT(left, top, buttonText);
     buttonRandom1.setItem("Order", 4);
-    //buttons.add(buttonRandom1);
+    buttons.add(buttonRandom1);
     if (gameOptions.get("Order") == 4) fill(255, 0, 0);
     else fill(0);
-    fill(200);
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
 
@@ -949,6 +948,48 @@ void showContents() {
       }
     }
     //
+
+    // Order
+    top += utils.vStep;
+    left=utils.hOffset;
+    captionText = "Order:";
+    fill(0);
+    text(captionText, left, top);
+    left += (textWidth(captionText)+utils.hSpace);
+    //
+    buttonText = "[Auto(Random)]";
+    button button1=new button();
+    button1.setLT(left, top, buttonText);
+    button1.setItem("Order", 0);
+    buttons.add(button1);
+    if (gameOptions.get("Order") == 0) fill(255, 0, 0);
+    else fill(0);
+    text(buttonText, left, top);
+    left += (textWidth(buttonText)+utils.hSpace);
+    //
+    buttonText = "[Conditional Random]";
+    button1=new button();
+    button1.setLT(left, top, buttonText);
+    button1.setItem("Order", 3);
+    buttons.add(button1);
+    if (gameOptions.get("Order") == 3) fill(255, 0, 0);
+    else fill(0);
+    text(buttonText, left, top);
+    left += (textWidth(buttonText)+utils.hSpace);
+    //
+    buttonText = "[in order]";
+    button1=new button();
+    button1.setLT(left, top, buttonText);
+    button1.setItem("Order", 4);
+    buttons.add(button1);
+    if (gameOptions.get("Order") == 4) fill(255, 0, 0);
+    else fill(0);
+    text(buttonText, left, top);
+    left += (textWidth(buttonText)+utils.hSpace);
+    
+    
+    
+    
     top += utils.vStep;
     left=utils.hOffset;
     //

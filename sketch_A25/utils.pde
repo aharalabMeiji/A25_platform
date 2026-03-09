@@ -95,10 +95,6 @@ class kifu {
   String mmddhhmm="";
 };
 
-// ランダムに関する提案（回数は保証される、という版）
-int[] randomOrder=new int[28];
-int randomOrderCount=0;
-
 // UCB
 ucbClass ucb1 = new ucbClass();
 ucbClass ucb2 = new ucbClass();

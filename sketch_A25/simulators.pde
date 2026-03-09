@@ -1,4 +1,4 @@
-//// simulate line 2651 //<>//
+//// simulate line 2651 //<>// //<>//
 
 class startBoard {
   int[] theArray;
@@ -247,7 +247,7 @@ void fullRandomMC() {
       simulator.mainBoard.s[i].marked = 0;
     }
     //次の手番の指定
-    simulator.nextPlayer = simulatorStartBoard.get(simulator.StartBoardId).nextPlayer; //<>//
+    simulator.nextPlayer = simulatorStartBoard.get(simulator.StartBoardId).nextPlayer; //<>// //<>//
     if (simulator.nextPlayer==0) simulator.nextPlayer=1;
 
     // 着手可能点を計算しておく。
