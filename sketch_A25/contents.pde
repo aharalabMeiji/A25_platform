@@ -339,7 +339,7 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    buttonText = "[Conditional Random]";
+    buttonText = "[Weighted Random]";
     buttonRandom1=new button();
     buttonRandom1.setLT(left, top, buttonText);
     buttonRandom1.setItem("Order", 3);
@@ -359,6 +359,71 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
 
+    // weighted random
+    if (gameOptions.get("Order") == 3){
+      top += utils.vStep;
+      left=utils.hOffset;
+      captionText = "Weight:";
+      fill(0);
+      text(captionText, left, top);
+      left += (textWidth(captionText)+utils.hSpace);
+      //
+      captionText = " R:";
+      fill(0);
+      text(captionText, left, top);
+      left += (textWidth(captionText)+utils.hSpace);
+      buttonText = "["+gameOptions.get("Rrate")+"]";
+      buttonRandom1=new button();
+      buttonRandom1.setLT(left, top, buttonText);
+      buttonRandom1.setItem("Rrate", 4);
+      buttons.add(buttonRandom1);
+      fill(255, 0, 0);
+      text(buttonText, left, top);
+      left += (textWidth(buttonText)+utils.hSpace);
+      //      
+      //
+      captionText = " G:";
+      fill(0);
+      text(captionText, left, top);
+      left += (textWidth(captionText)+utils.hSpace);
+      buttonText = "["+gameOptions.get("Grate")+"]";
+      buttonRandom1=new button();
+      buttonRandom1.setLT(left, top, buttonText);
+      buttonRandom1.setItem("Grate", 4);
+      buttons.add(buttonRandom1);
+      fill(255, 0, 0);
+      text(buttonText, left, top);
+      left += (textWidth(buttonText)+utils.hSpace);
+      //      
+      //
+      captionText = " W:";
+      fill(0);
+      text(captionText, left, top);
+      left += (textWidth(captionText)+utils.hSpace);
+      buttonText = "["+gameOptions.get("Wrate")+"]";
+      buttonRandom1=new button();
+      buttonRandom1.setLT(left, top, buttonText);
+      buttonRandom1.setItem("Wrate", 4);
+      buttons.add(buttonRandom1);
+      fill(255, 0, 0);
+      text(buttonText, left, top);
+      left += (textWidth(buttonText)+utils.hSpace);
+      //      
+      //
+      captionText = " B:";
+      fill(0);
+      text(captionText, left, top);
+      left += (textWidth(captionText)+utils.hSpace);
+      buttonText = "["+gameOptions.get("Brate")+"]";
+      buttonRandom1=new button();
+      buttonRandom1.setLT(left, top, buttonText);
+      buttonRandom1.setItem("Brate", 4);
+      buttons.add(buttonRandom1);
+      fill(255, 0, 0);
+      text(buttonText, left, top);
+      left += (textWidth(buttonText)+utils.hSpace);
+      //      
+    }
 
     // Times
     top += utils.vStep;
@@ -406,6 +471,7 @@ void showContents() {
     else fill(0);
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
+    //
     top += utils.vStep;
     left=utils.hOffset;
     //
@@ -775,54 +841,7 @@ void showContents() {
         top += utils.vStep;
         left=utils.hOffset;
         //
-        //captionText = "max # of nodes:";
-        //fill(0);
-        //text(captionText, left, top);
-        //left += (textWidth(captionText)+utils.hSpace);
-        ////
-        //buttonText = "[10K]";
-        //button buttonTerminateThreshold1=new button();
-        //buttonTerminateThreshold1.setLT(left, top, buttonText);
-        //buttonTerminateThreshold1.setItem("terminateThreshold", 4);
-        //buttons.add(buttonTerminateThreshold1);
-        //if (gameOptions.get("terminateThreshold")==4) fill(255, 0, 0);
-        //else fill(0);
-        //text(buttonText, left, top);
-        //left += (textWidth(buttonText)+utils.hSpace);
-        ////
-        //buttonText = "[100K]";
-        //button buttonTerminateThreshold2=new button();
-        //buttonTerminateThreshold2.setLT(left, top, buttonText);
-        //buttonTerminateThreshold2.setItem("terminateThreshold", 5);
-        //buttons.add(buttonTerminateThreshold2);
-        //if (gameOptions.get("terminateThreshold")==5) fill(255, 0, 0);
-        //else fill(0);
-        //text(buttonText, left, top);
-        //left += (textWidth(buttonText)+utils.hSpace);
-        ////
-        //buttonText = "[1M]";
-        //button buttonTerminateThreshold3=new button();
-        //buttonTerminateThreshold3.setLT(left, top, buttonText);
-        //buttonTerminateThreshold3.setItem("terminateThreshold", 6);
-        //buttons.add(buttonTerminateThreshold3);
-        //if (gameOptions.get("terminateThreshold")==6) fill(255, 0, 0);
-        //else fill(0);
-        //text(buttonText, left, top);
-        //left += (textWidth(buttonText)+utils.hSpace);
-        ////
-        //buttonText = "[10M]";
-        //button buttonTerminateThreshold4=new button();
-        //buttonTerminateThreshold4.setLT(left, top, buttonText);
-        //buttonTerminateThreshold4.setItem("terminateThreshold", 7);
-        //buttons.add(buttonTerminateThreshold4);
-        //if (gameOptions.get("terminateThreshold")==7) fill(255, 0, 0);
-        //else fill(0);
-        //text(buttonText, left, top);
-        //left += (textWidth(buttonText)+utils.hSpace);
-        ////
-        //top += utils.vStep;
-        //left=utils.hOffset;
-        ////
+
         captionText = "max depth:";
         fill(0);
         text(captionText, left, top);
@@ -957,7 +976,7 @@ void showContents() {
     text(captionText, left, top);
     left += (textWidth(captionText)+utils.hSpace);
     //
-    buttonText = "[Auto(Random)]";
+    buttonText = "[Full Random]";
     button button1=new button();
     button1.setLT(left, top, buttonText);
     button1.setItem("Order", 0);
@@ -967,7 +986,7 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    buttonText = "[Conditional Random]";
+    buttonText = "[Weighted Random]";
     button1=new button();
     button1.setLT(left, top, buttonText);
     button1.setItem("Order", 3);
@@ -987,9 +1006,7 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     
-    
-    
-    
+    //
     top += utils.vStep;
     left=utils.hOffset;
     //

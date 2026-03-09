@@ -99,19 +99,34 @@ void mousePressed() {
       for (button b : buttons) {
         if (b.mouseOn()) {//メニューをクリックすると選択される。
           if (b.dictKey.equals("Times") && b.dictInt==game.times10 && gameOptions.get("Times")==game.times10){
-              game.times10 += 10;
-              if (game.times10 == 100) game.times10 = 10;
-              gameOptions.set("Times", game.times10);
+            game.times10 += 10;
+            if (game.times10 == 100) game.times10 = 10;
+            gameOptions.set("Times", game.times10);
           } else if (b.dictKey.equals("Times") && b.dictInt==game.times100 && gameOptions.get("Times")==game.times100){
-              game.times100 += 100;
-              if (game.times100 == 1000) game.times100 = 100;
-              gameOptions.set("Times", game.times100);
+            game.times100 += 100;
+            if (game.times100 == 1000) game.times100 = 100;
+            gameOptions.set("Times", game.times100);
           } else if (b.dictKey.equals("Times") && b.dictInt==game.times1000 && gameOptions.get("Times")==game.times1000){
-              game.times1000 += 1000;
-              if (game.times1000 == 11000) game.times1000 = 1000;
-              gameOptions.set("Times", game.times1000);
-          }
-          else {
+            game.times1000 += 1000;
+            if (game.times1000 == 11000) game.times1000 = 1000;
+            gameOptions.set("Times", game.times1000);
+          } else if (b.dictKey.equals("Rrate") && gameOptions.get("Rrate")==game.Rrate){
+            game.Rrate ++;
+            if(game.Rrate==6) game.Rrate=1;
+            gameOptions.set("Rrate", game.Rrate);
+          } else if (b.dictKey.equals("Grate") && gameOptions.get("Grate")==game.Grate){
+            game.Grate ++;
+            if(game.Grate==6) game.Grate=1;
+            gameOptions.set("Grate", game.Grate);
+          } else if (b.dictKey.equals("Wrate") && gameOptions.get("Wrate")==game.Wrate){
+            game.Wrate ++;
+            if(game.Wrate==6) game.Wrate=1;
+            gameOptions.set("Wrate", game.Wrate);
+          } else if (b.dictKey.equals("Brate") && gameOptions.get("Brate")==game.Brate){
+            game.Brate ++;
+            if(game.Brate==6) game.Brate=1;
+            gameOptions.set("Brate", game.Brate);
+          } else {
             gameOptions.set(b.dictKey, b.dictInt);
           }
           //println(b.dictKey, b.dictInt);

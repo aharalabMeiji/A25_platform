@@ -62,6 +62,7 @@ class games {
   int times10=10;
   int times100=100;
   int times1000=1000;
+  int Rrate=1,Grate=1,Wrate=1,Brate=1;
 }
 
 // simulators

@@ -105,33 +105,25 @@ class playerOrder{
   int type=0;
   int randomOrderCount;
   int loop=1;
-  int[] sequence;
   int fullRandom=0;
   int manual=1;
-  int conditionalRandom=3;
+  int weightedRandom=3;
   int inOrder=4;
+  int Rrate,Grate,Wrate,Brate;
   playerOrder(){
     randomOrderCount=0;
     loop=1;
-    sequence = new int[40];
+    Rrate=Grate=Wrate=Brate=1;
   }
   void init() {
     randomOrderCount=0;
     if (type==fullRandom){
       loop=1;
-    } else if(type==conditionalRandom){
-      for (int i=0; i<28; i++) {
-        sequence[i] = (i%4)+1;
-      }
-      for (int i=0; i<500; i++) {
-        int j=int(random(28));
-        int k=int(random(28));
-        if (j!=k) {
-          int tmp=sequence[j];
-          sequence[j] = sequence[k];
-          sequence[k] = tmp;
-        }
-      }
+    } else if(type==weightedRandom){
+      Rrate=gameOptions.get("Rrate");
+      Grate=gameOptions.get("Grate");
+      Wrate=gameOptions.get("Wrate");
+      Brate=gameOptions.get("Brate");
     } else if (type==inOrder){
       randomOrderCount=int(random(4)+1);
     }
@@ -140,10 +132,12 @@ class playerOrder{
   int getNext() {
     if (type==fullRandom){
       return int(random(4)+1);
-    } else if(type==conditionalRandom){
-      int ret = sequence[randomOrderCount%28];
-      randomOrderCount ++;
-      return ret;
+    } else if(type==weightedRandom){
+      int p= int(random(Rrate+Grate+Wrate+Brate));
+      if (p<Rrate) return 1;
+      else if (p<Rrate+Grate) return 2;
+      else if (p<Rrate+Grate+Wrate) return 3;
+      else return 4;
     } else if (type==inOrder){
       int ret = (randomOrderCount-1)%4 + 1;
       randomOrderCount ++;
@@ -152,6 +146,7 @@ class playerOrder{
     return 0;
   }
 }
+
 void backgroundHeader(){
   stroke(255);fill(255);
   rect(0,0,utils.mainU-1, utils.mainW*10);
