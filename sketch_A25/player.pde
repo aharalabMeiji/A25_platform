@@ -1,5 +1,5 @@
 enum brainType{
-  Human, Random, UCBold, UCB1, UCB2, UCTE10D4, UCBUCT, UCTE10D4P1, UCTE10D4P2, Heuristic0
+  Human, Random, UCBold, UCB1, UCB2, UCTE10D4, UCBUCT, UCTE10D4P1, UCTE10D4P2, Heuristic0, Heuristic1
 }
 
 class player {
@@ -66,6 +66,9 @@ class player {
     else if (myBrain==brainType.Heuristic0){
       return heuristic0Brain(this);
     } 
+    else if (myBrain==brainType.Heuristic1){
+      return heuristic1Brain(this);
+    } 
     else if (myBrain==brainType.UCB1){
       return ucbFastBrain(this, ucb1);
     } else if (myBrain==brainType.UCB2){
@@ -102,19 +105,16 @@ class player {
   }
   int callAttackChance(){// すでにある色を黄色へ変更するアルゴリズム
     if (yellow!=-1) return yellow;// 黄色にするパネルをすでに決定済みであれば、それを回答する。
-    if (myBrain==brainType.Random || myBrain==brainType.UCB1 || myBrain==brainType.UCTE10D4 || myBrain==brainType.UCBUCT ){
-      int[] ac = new int[25];
-      for (int i=0; i<25; i++){
-        if (1<=myBoard.s[i].col && myBoard.s[i].col<=4){
-          ac[i]=1;
-        }
-        else {
-          ac[i]=0;
-        }
+    int[] ac = new int[25];
+    for (int i=0; i<25; i++){
+      if (1<=myBoard.s[i].col && myBoard.s[i].col<=4){
+        ac[i]=1;
       }
-      return chooseOne(ac);
+      else {
+        ac[i]=0;
+      }
     }
-    return -1; // 
+    return chooseOne(ac);
   }
   int chooseOne(int[] candidates){// candidates must be a sequence of length 25
     // each elements of candidate must be a non-negative integer

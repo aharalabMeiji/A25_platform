@@ -967,6 +967,43 @@ void showContents() {
       }
     }
     //
+    // Playout
+    top += utils.vStep;
+    left=utils.hOffset;
+    captionText = "Playout:";
+    fill(0);
+    text(captionText, left, top);
+    left += (textWidth(captionText)+utils.hSpace);
+    //
+    buttonText ="[Random]";
+    button button1=new button();
+    button1.setLT(left, top, buttonText);
+    button1.setItem("Playout", 0);
+    buttons.add(button1);
+    if (gameOptions.get("Playout") == 0) fill(255, 0, 0);
+    else fill(0);
+    text(buttonText, left, top);
+    left += (textWidth(buttonText)+utils.hSpace);
+    //
+    buttonText = "[Corner]";
+    button1=new button();
+    button1.setLT(left, top, buttonText);
+    button1.setItem("Playout", 1);
+    buttons.add(button1);
+    if (gameOptions.get("Playout") == 1) fill(255, 0, 0);
+    else fill(0);
+    text(buttonText, left, top);
+    left += (textWidth(buttonText)+utils.hSpace);
+    //
+    buttonText = "[Cross-Corner]";
+    button1=new button();
+    button1.setLT(left, top, buttonText);
+    button1.setItem("Playout", 2);
+    buttons.add(button1);
+    if (gameOptions.get("Playout") == 2) fill(255, 0, 0);
+    else fill(0);
+    text(buttonText, left, top);
+    left += (textWidth(buttonText)+utils.hSpace);
 
     // Order
     top += utils.vStep;
@@ -977,7 +1014,7 @@ void showContents() {
     left += (textWidth(captionText)+utils.hSpace);
     //
     buttonText = "[Full Random]";
-    button button1=new button();
+    button1=new button();
     button1.setLT(left, top, buttonText);
     button1.setItem("Order", 0);
     buttons.add(button1);

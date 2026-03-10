@@ -104,9 +104,16 @@ int heu0AttackChance(player pl) {
 
 int heuristic0Brain(player pl) {
   pl.myBoard.buildVP(pl.position);
-  if (pl.myBoard.vp[0]==1 || pl.myBoard.vp[4]==1 || pl.myBoard.vp[20]==1 || pl.myBoard.vp[24]==1){
+  boolean canMoveCorner=false;
+  for (int k=0; k<25; k++){
+    if (isCorner(k) && pl.myBoard.vp[k]==1){
+      canMoveCorner=true;
+      break;
+    }
+  }
+  if (canMoveCorner){
     for (int k=0; k<25; k++){
-      if (k!=0 && k!=4 && k!=20 && k!=24){
+      if (isCorner(k)==false){
         pl.myBoard.vp[k]=0;
       }
     }
@@ -117,41 +124,82 @@ int heuristic0Brain(player pl) {
     // 
     int[] ac = new int[25];
     int countCorner=0;
-    if (pl.myBoard.s[0].col>0 && pl.myBoard.s[0].col != pl.position){
-      ac[0]=1;
-      countCorner ++;
+    for (int k=0; k<25; k++) {
+      ac[k]=0;
     }
-    if (pl.myBoard.s[4].col>0 && pl.myBoard.s[4].col != pl.position){
-      ac[4]=1;
-      countCorner ++;
-    }
-    if (pl.myBoard.s[20].col>0 && pl.myBoard.s[20].col != pl.position){
-      ac[20]=1;
-      countCorner ++;
-    }
-    if (pl.myBoard.s[24].col>0 && pl.myBoard.s[24].col != pl.position){
-      ac[24]=1;
-      countCorner ++;
+    for(int k=0; k<25; k++){
+      if (isCorner(k) && pl.myBoard.s[k].col>0 && pl.myBoard.s[k].col != pl.position){
+        ac[k]=1;
+        countCorner ++;
+      }
     }
     if (countCorner==0){
-      pl.yellow=-1;//消す場所をここに入れておけば、あとでそのように処理をする。
+      for (int k=0; k<25; k++) {
+        if (1<=pl.myBoard.s[k].col && pl.myBoard.s[k].col<=4) {
+          ac[k]=1;
+        }
+      }
     }
-    else {
-      pl.yellow = pl.chooseOne(ac);
-    }
+    pl.yellow = pl.chooseOne(ac);  //消す場所をここに入れておけば、あとでそのように処理をする。
   }
   return pl.chooseOne(pl.myBoard.vp);
 }
 
-int heuristic0AttackChance(player pl) {
-  if (pl.yellow!=-1) return pl.yellow;// すでに決定済みであれば、それを回答する。
-  int[] ac = new int[25];
-  for (int i=0; i<25; i++) {
-    if (1<=pl.myBoard.s[i].col && pl.myBoard.s[i].col<=4) {
-      ac[i]=1;
-    } else {
-      ac[i]=0;
+int heuristic1Brain(player pl) {
+  pl.myBoard.buildVP(pl.position);
+  boolean canMoveCorner=false;
+  for (int k=0; k<25; k++){
+    if (isCorner(k) && pl.myBoard.vp[k]==1){
+      canMoveCorner=true;
+      break;
     }
   }
-  return pl.chooseOne(ac);
+  if (canMoveCorner){
+    for (int k=0; k<25; k++){
+      if (isCorner(k)==false){
+        pl.myBoard.vp[k]=0;
+      }
+    }
+    return pl.chooseOne(pl.myBoard.vp);
+  } else {
+    boolean canMoveCross=false;
+    for (int k=0; k<25; k++){
+      if (isCross(k) && pl.myBoard.vp[k]==1){
+        canMoveCross=true;
+        break;
+      }
+    }
+    if (canMoveCross){
+      for (int k=0; k<25; k++){
+        if (isCross(k)==false){
+          pl.myBoard.vp[k]=0;
+        }
+      }
+      return pl.chooseOne(pl.myBoard.vp);
+    } 
+  }
+  //候補を一つに絞ってもよいが、いつでも同じ動作になってしまうので、複数個の候補を重みをつけておくとよい。
+  if (pl.myBoard.attackChanceP()) {
+    // 
+    int[] ac = new int[25];
+    int countCorner=0;
+    for (int k=0; k<25; k++) {
+      ac[k]=0;
+    }
+    for(int k=0; k<25; k++){
+      if (isCorner(k) && pl.myBoard.s[k].col>0 && pl.myBoard.s[k].col != pl.position){
+        ac[k]=1;
+        countCorner ++;
+      }
+    }
+    if (countCorner==0){
+      for (int k=0; k<25; k++) {
+        if (1<=pl.myBoard.s[k].col && pl.myBoard.s[k].col<=4) {
+          ac[k]=1;
+        }
+      }
+    }
+    pl.yellow = pl.chooseOne(ac);  //消す場所をここに入れておけば、あとでそのように処理をする。
+  }
+  return pl.chooseOne(pl.myBoard.vp);
 }
