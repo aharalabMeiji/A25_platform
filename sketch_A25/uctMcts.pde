@@ -70,7 +70,9 @@ class uctClass {
     //println("uctMctsBrain:プレーヤーをランダムエージェントに設定");
     participants = new player[5];
     for (int p=1; p<5; p++) {
-      participants[p] = new player(p, "random", brainType.Random);
+      if (gameOptions.get("Playout")==1) this.participants[p] = new player(p, "random", brainType.Heuristic1);//
+      else if (gameOptions.get("Playout")==2) this.participants[p] = new player(p, "random", brainType.Heuristic2);//
+      else this.participants[p] = new player(p, "random", brainType.Random);
     }
     //println("uctMctsBrain:着手可能点を計算しておく");
     pl.myBoard.buildVP(pl.position);

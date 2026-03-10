@@ -64,10 +64,10 @@ void showContents() {
     left += (textWidth(buttonText)+utils.hSpace);
     //
     //buttonText = "[Heuristic]";
-    //button buttonHeuristic1=new button();
-    //buttonHeuristic1.setLT(left, top, buttonText);
-    //buttonHeuristic1.setItem("Player1", 2);
-    ////buttons.add(buttonHeuristic1);
+    //button buttonHeuristic2=new button();
+    //buttonHeuristic2.setLT(left, top, buttonText);
+    //buttonHeuristic2.setItem("Player1", 2);
+    ////buttons.add(buttonHeuristic2);
     //if (gameOptions.get("Player1")%10 == 2) fill(255, 0, 0);
     //else fill(0);
     //fill(200, 200, 200);
@@ -132,10 +132,10 @@ void showContents() {
     left += (textWidth(buttonText)+utils.hSpace);
     //
     //buttonText = "[Heuristic]";
-    //buttonHeuristic1=new button();
-    //buttonHeuristic1.setLT(left, top, buttonText);
-    //buttonHeuristic1.setItem("Player2", 2);
-    ////buttons.add(buttonHeuristic1);
+    //buttonHeuristic2=new button();
+    //buttonHeuristic2.setLT(left, top, buttonText);
+    //buttonHeuristic2.setItem("Player2", 2);
+    ////buttons.add(buttonHeuristic2);
     //if (gameOptions.get("Player2") == 2) fill(255, 0, 0);
     //else fill(0);
     //fill(200, 200, 200);
@@ -201,10 +201,10 @@ void showContents() {
     left += (textWidth(buttonText)+utils.hSpace);
     //
     //buttonText = "[Heuristic]";
-    //buttonHeuristic1=new button();
-    //buttonHeuristic1.setLT(left, top, buttonText);
-    //buttonHeuristic1.setItem("Player3", 2);
-    ////buttons.add(buttonHeuristic1);
+    //buttonHeuristic2=new button();
+    //buttonHeuristic2.setLT(left, top, buttonText);
+    //buttonHeuristic2.setItem("Player3", 2);
+    ////buttons.add(buttonHeuristic2);
     //if (gameOptions.get("Player3") == 2) fill(255, 0, 0);
     //else fill(0);
     //fill(200, 200, 200);
@@ -270,10 +270,10 @@ void showContents() {
     left += (textWidth(buttonText)+utils.hSpace);
     //
     //buttonText = "[Heuristic]";
-    //buttonHeuristic1=new button();
-    //buttonHeuristic1.setLT(left, top, buttonText);
-    //buttonHeuristic1.setItem("Player4", 2);
-    ////buttons.add(buttonHeuristic1);
+    //buttonHeuristic2=new button();
+    //buttonHeuristic2.setLT(left, top, buttonText);
+    //buttonHeuristic2.setItem("Player4", 2);
+    ////buttons.add(buttonHeuristic2);
     //if (gameOptions.get("Player4") == 2) fill(255, 0, 0);
     //else fill(0);
     //fill(200, 200, 200);

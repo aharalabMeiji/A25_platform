@@ -161,15 +161,15 @@ void showGames() {
         game.participants[p] = new player(p, "human"+pp, brainType.Human);
       } else if (gameOptions.get("Player"+pp)==3) {
         game.participants[p] = new player(p, "ucb"+pp, brainType.UCB1);
-        //game.participants[p] = new player(p, "ucb"+pp, brainType.Heuristic0);
+        //game.participants[p] = new player(p, "ucb"+pp, brainType.Heuristic1);
       } else if (gameOptions.get("Player"+pp)==4) {
         game.participants[p] = new player(p, "uct"+pp, brainType.UCTE10D4);
       } else if (gameOptions.get("Player"+pp)==5) {
         game.participants[p] = new player(p, "p-uct"+pp, brainType.UCTE10D4P1);
       } else {
         game.participants[p] = new player(p, "random"+pp, brainType.Random);
-        //game.participants[p] = new player(p, "random"+pp, brainType.Heuristic0);
         //game.participants[p] = new player(p, "random"+pp, brainType.Heuristic1);
+        //game.participants[p] = new player(p, "random"+pp, brainType.Heuristic2);
       }
     }
     utils.gameMainBoard.attackChanceP=false;//アタックチャンス終了フラグはいったん寝せておく

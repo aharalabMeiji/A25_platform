@@ -102,7 +102,7 @@ int heu0AttackChance(player pl) {
   return pl.chooseOne(ac);
 }
 
-int heuristic0Brain(player pl) {
+int Heuristic1Brain(player pl) {
   pl.myBoard.buildVP(pl.position);
   boolean canMoveCorner=false;
   for (int k=0; k<25; k++){
@@ -145,7 +145,7 @@ int heuristic0Brain(player pl) {
   return pl.chooseOne(pl.myBoard.vp);
 }
 
-int heuristic1Brain(player pl) {
+int Heuristic2Brain(player pl) {
   pl.myBoard.buildVP(pl.position);
   boolean canMoveCorner=false;
   for (int k=0; k<25; k++){

@@ -104,9 +104,6 @@ winPoints playSimulatorToEnd(board sub, player[] _participants, int nextplayer) 
               sub.move(simulatorNextPlayer, attack);
             }
             attack = _participants[simulatorNextPlayer].callAttackChance(); //<>//
-            if (attack<0) {
-              float x=3/0;
-            }
             if (1 <= sub.s[attack].col&&  sub.s[attack].col<=4) {
               sub.s[attack].col=5;
             }
@@ -237,8 +234,8 @@ void fullRandomMC() {
     prevWinrate1=prevWinrate2=prevPanels1=prevPanels2=0;//収束の計算
     // プレーヤーをランダムプレーヤーに設定
     for (int p=1; p<5; p++) {
-      if (gameOptions.get("Playout")==1) simulator.Participants[p] = new player(p, "random", brainType.Heuristic0);//
-      else if (gameOptions.get("Playout")==2) simulator.Participants[p] = new player(p, "random", brainType.Heuristic1);//
+      if (gameOptions.get("Playout")==1) simulator.Participants[p] = new player(p, "random", brainType.Heuristic1);//
+      else if (gameOptions.get("Playout")==2) simulator.Participants[p] = new player(p, "random", brainType.Heuristic2);//
       else simulator.Participants[p] = new player(p, "random", brainType.Random);
     }
     for (int j=0; j<=25; j++) {
@@ -476,8 +473,9 @@ void UCB1(ucbClass ucb) {
     panelsConvergent=false;
     // プレーヤーをランダムに設定
     for (int p=1; p<5; p++) {
-      //simulator.Participants[p] = new player(p, "random", brainType.Random);
-      simulator.Participants[p] = new player(p, "random", brainType.Heuristic0);
+      if (gameOptions.get("Playout")==1) simulator.Participants[p] = new player(p, "random", brainType.Heuristic1);//
+      else if (gameOptions.get("Playout")==2) simulator.Participants[p] = new player(p, "random", brainType.Heuristic2);//
+      else simulator.Participants[p] = new player(p, "random", brainType.Random);
     }
     ucb.fullNodes = new ArrayList<uctNode>();
     // 評価値のクリア
