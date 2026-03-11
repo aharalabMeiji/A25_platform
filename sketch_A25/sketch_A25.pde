@@ -85,6 +85,8 @@ void draw() {
     showGames();
   } else if (displayManager == dP.onContents) {
     showContents();
+  } else if (displayManager == dP.onTree){
+    showTree();
   }
 }
 

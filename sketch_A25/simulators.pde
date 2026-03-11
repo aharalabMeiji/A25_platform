@@ -86,8 +86,9 @@ winPoints playSimulatorToEnd(board sub, player[] _participants, int nextplayer) 
     do {
       int simulatorNextPlayer;
       if (nextplayer==0) {// 次の手番をランダムに定める
-        simulatorNextPlayer = int(random(4))+1;
-      } else {// 次の手番をnextplayerによって定め、以降はランダムに定める
+        //simulatorNextPlayer = int(random(4))+1;//
+        simulatorNextPlayer = order.getNext();// 次の手番を決める //
+      } else {// 次の手番をnextplayerによって定め、以降はランダムに定める    
         simulatorNextPlayer = nextplayer;
         nextplayer=0;
       }
@@ -256,6 +257,8 @@ void fullRandomMC() {
     //数字の色
     simulator.mainBoard.svColor = simulator.nextPlayer;
     simulator.mainBoard.simulatorNumber=0;
+    order.type=gameOptions.get("Order");// 手番の重みづけ設定
+    order.init();// 手番の重みづけ設定
     simulationManager=sP.setStartBoard;
   } else if (simulationManager == sP.setStartBoard) {
     // 問題がアタックチャンス問題のときには、別処理にする。
@@ -587,6 +590,8 @@ void UCB1(ucbClass ucb) {
         newNode.wa[p] = wp.points[p];//　初回につき代入、以後+=
       }
     }
+    order.type=gameOptions.get("Order");// 手番の重みづけ設定
+    order.init();
     simulationManager=sP.setStartBoard;
   } else if (simulationManager==sP.setStartBoard) {// UCB1ループ部分
     if (simulator.mainBoard.attackChanceP()) {//アタックチャンスの場合// UCB1ループ部分
@@ -834,6 +839,8 @@ void UCT1() {
     
     //盤面データ
     simulator.mainBoard.copyBoardToSub(uct.nextPlayer.myBoard);
+    order.type=gameOptions.get("Order");// 手番の重みづけ設定
+    order.init();
     // brain 準備
     int answer = uct.mctsBrainPreparation(uct.nextPlayer);
     if (answer==-1) {

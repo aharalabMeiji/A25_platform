@@ -4,7 +4,7 @@ dP displayManager;
 sP simulationManager;
 
 enum dP{// display manager
-  onSimulator,onGame,onContents
+  onSimulator, onGame, onContents, onTree
 }
 
 enum mP{// game manager
