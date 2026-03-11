@@ -850,7 +850,7 @@ void UCT1() {
         showReturnButton();
         showScreenCapture();
       } else {
-        uct.printUctParameters();
+        println(uct.printUctParameters());
         uct.simulationTag=10000;
         simulationManager=sP.setStartBoard;
       }

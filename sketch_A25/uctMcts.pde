@@ -39,7 +39,7 @@ class uctClass {
     answer = mctsBrainPreparation(pl);
     if (answer==-1) return -1;
     answer = mctsBrainFirstSimulation(pl);
-    printUctParameters();
+    println(printUctParameters());
     if (answer!=-1) return answer;
     //uct.simulationTag=uct.expandThreshold*10;
     while (true) {
@@ -55,15 +55,16 @@ class uctClass {
     }// end of while(true)
   }
 
-  void printUctParameters() {
-    print ("uct ");
-    print ("E"+expandThreshold+"/");
-    print ("D"+depthMax+"/");
-    if (cancelCountMax<10000) print ("C"+cancelCountMax+"/");//uct.terminateThreshold,
-    else print ("woC/");
-    if (chanceNodeOn==1) print("CN/");
-    if (pruningThreshold<999) print("P"+uct.pruningThreshold+" ");
-    println();
+  String printUctParameters() {
+    String ret = "";
+    ret += "uct ";
+    ret += ("E"+expandThreshold+"/");
+    ret += ("D"+depthMax+"/");
+    if (cancelCountMax<100) ret +=  ("C"+cancelCountMax+"/");//uct.terminateThreshold,
+    else ret += "woC/";
+    if (chanceNodeOn==0) ret += "nonCN/";
+    if (pruningThreshold<999) ret += ("P"+uct.pruningThreshold+" ");
+    return ret;
   }
 
   int mctsBrainPreparation(player pl) {

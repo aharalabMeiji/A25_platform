@@ -1042,7 +1042,6 @@ void showContents() {
     else fill(0);
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
-    
     //
     top += utils.vStep;
     left=utils.hOffset;
@@ -1092,10 +1091,7 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    top += utils.vStep;
-    left=utils.hOffset;
-    //
-    captionText = "Absence next:";
+    captionText = "/  Absence next:";
     fill(0);
     text(captionText, left, top);
     left += (textWidth(captionText)+utils.hSpace);
@@ -1170,10 +1166,7 @@ void showContents() {
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
       //
-      top += utils.vStep;
-      left=utils.hOffset;
-      //
-      captionText = "Pruning:";
+      captionText = "/  Pruning:";
       fill(0);
       text(captionText, left, top);
       left += (textWidth(captionText)+utils.hSpace);
