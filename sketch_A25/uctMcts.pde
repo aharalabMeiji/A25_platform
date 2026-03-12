@@ -2,11 +2,11 @@ uctClass uct = new uctClass();
 class uctClass {
   player[] participants;
   winPoints winPoint;
-  winPoints randomPlayWinPoint;
+  winPoints playoutWinPoint;
   prize prize;
   board mainBoard;
   board subBoard;
-  board randomPlayBoard=null;
+  board playoutBoard=null;
   uctNode newNode;
   uctNode rootNode;
   ArrayList<uctNode> activeNodes;
@@ -64,6 +64,8 @@ class uctClass {
     else ret += "woC/";
     if (chanceNodeOn==0) ret += "nonCN/";
     if (pruningThreshold<999) ret += ("P"+uct.pruningThreshold+" ");
+    if (gameOptions.get("Order")==order.weightedRandom) ret += "O"+gameOptions.get("Rrate")+gameOptions.get("Grate")+gameOptions.get("Wrate")+gameOptions.get("Brate");
+    if (gameOptions.get("Order")==order.inTurn) ret += "Oo";
     return ret;
   }
 
@@ -87,6 +89,8 @@ class uctClass {
     pl.yellow=-1;
     winPoint=null;
     prize=new prize();
+    order.type=gameOptions.get("Order");// 手番のルール
+    order.init();// 手番のルール
     //println("uctMctsBrain:シミュレーション用のサブボード");
     mainBoard = new board();
     subBoard = new board();
@@ -102,6 +106,12 @@ class uctClass {
     qtyPlayouts=0;
     for (int d=0; d<=uct.depthMax; d++) {
       qtyNodes[d]=0;
+    }
+    if (order.type==order.weightedRandom){
+      Rrate = order.Rrate;
+      Grate = order.Grate;
+      Wrate = order.Wrate;
+      Brate = order.Brate;
     }
     //uct.rootNodeに子供をぶら下げる
     if (pl.myBoard.attackChanceP()==false) {
@@ -294,18 +304,18 @@ class uctClass {
       return nd0.childB;
     }
   }
-  void randomPlayAndBackPropagate(uctNode uctMaxNode, int _nextPlayer) {
+  void playoutAndBackPropagate(uctNode uctMaxNode, int _nextPlayer) {
     float[] wDeltas = new float[5];
     float[] pDeltas = new float[5];
-    //print("randomPlayAndBackPropagate:",uctMaxNode.id, "のノードを調べる",int(uctMaxNode.na)+":"+int(uctMaxNode.naR)+":"+int(uctMaxNode.naG)+":"+int(uctMaxNode.naW)+":"+int(uctMaxNode.naB));
-    if (this.randomPlayBoard==null) {
-      this.randomPlayBoard = new board();
+    //print("playoutAndBackPropagate:",uctMaxNode.id, "のノードを調べる",int(uctMaxNode.na)+":"+int(uctMaxNode.naR)+":"+int(uctMaxNode.naG)+":"+int(uctMaxNode.naW)+":"+int(uctMaxNode.naB));
+    if (this.playoutBoard==null) {
+      this.playoutBoard = new board();
     }
-    if (this.randomPlayWinPoint==null) {
-      this.randomPlayWinPoint = new winPoints();
+    if (this.playoutWinPoint==null) {
+      this.playoutWinPoint = new winPoints();
     }
     //println("uctMctsBrain:mainBoardへ盤面をコピー");
-    this.randomPlayBoard.copyBdToBoard(uctMaxNode.bd);
+    this.playoutBoard.copyBdToBoard(uctMaxNode.bd);
     int nextplayer = 1;
     if (1<=_nextPlayer && _nextPlayer<=4) {
       nextplayer = _nextPlayer;
@@ -315,15 +325,15 @@ class uctClass {
       } while (uctMaxNode.onRGWB[nextplayer]==false);
     }
     //println("uctMctsBrain:uct.mainBoardを最後まで打ち切る");
-    this.randomPlayWinPoint = playoutToEnd(this.randomPlayBoard, this.participants, nextplayer);
+    this.playoutWinPoint = playoutToEnd(this.playoutBoard, this.participants, nextplayer);
     uctMaxNode.na ++;//
     qtyPlayouts ++;
     //println("uctMctsBrain:nd.wa[p]、nd.pa[p]、nd.uct[p]");
     if (chanceNodeOn==1) {////chanceNodeOn=1; waRには「積み上げ」、waには「平均化」
       // このタイミングで、「差」を計算しておく。
       for (int p=1; p<=4; p++) {
-        wDeltas[p] = this.randomPlayWinPoint.points[p];
-        pDeltas[p] = this.randomPlayWinPoint.panels[p];
+        wDeltas[p] = this.playoutWinPoint.points[p];
+        pDeltas[p] = this.playoutWinPoint.panels[p];
       }
       if (nextplayer==1) {
         for (int p=1; p<=4; p++) {
@@ -359,8 +369,8 @@ class uctClass {
       //println("->",int(uctMaxNode.na)+":"+int(uctMaxNode.naR)+":"+int(uctMaxNode.naG)+":"+int(uctMaxNode.naW)+":"+int(uctMaxNode.naB));
     } else {// 旧式　// waへ「積み上げ」
       for (int p=1; p<=4; p++) {
-        uctMaxNode.wa[p] += this.randomPlayWinPoint.points[p];//2回め以降は和
-        uctMaxNode.pa[p] += this.randomPlayWinPoint.panels[p];//2回め以降は和
+        uctMaxNode.wa[p] += this.playoutWinPoint.points[p];//2回め以降は和
+        uctMaxNode.pa[p] += this.playoutWinPoint.panels[p];//2回め以降は和
       }
     }
     //println("親にさかのぼってデータを更新する");
@@ -411,8 +421,8 @@ class uctClass {
           }
         } else {//「旧式」//uct.chanceNodeOn=0;
           for (int p=1; p<=4; p++) {
-            nd0.wa[p] += this.randomPlayWinPoint.points[p];//2回め以降は和
-            nd0.pa[p] += this.randomPlayWinPoint.panels[p];//2回め以降は和
+            nd0.wa[p] += this.playoutWinPoint.points[p];//2回め以降は和
+            nd0.pa[p] += this.playoutWinPoint.panels[p];//2回め以降は和
           }
         }
         //println("uctMctsBrain:→　ノード ",nd0.id, "のデータ("+nd0.wa[1]+","+nd0.wa[2]+","+nd0.wa[3]+","+nd0.wa[4]+")/"+nd0.na);
@@ -447,7 +457,7 @@ class uctClass {
     float numer=0;
     int denom=0;
     if (nd.onRGWB[1] && nR!=0) {// if (nd.onRGWB[1])
-      numer = Rrate;//1 ここを変えるとバランスが変わる
+      numer = Rrate;//1 ここを変えるとバランスが変わる<- order.Rrate からコピー
       sum += (wR/nR*numer) ;
       denom += numer;
     }
@@ -679,7 +689,7 @@ int uctMctsMainLoop(player pl) {
       // uctMaxNodeから最後までランダムに打って（初手番を指定可能）
       // そののちに親までさかのぼって褒章データを更新する。
       pl.myBoard.simulatorNumber ++;
-      uct.randomPlayAndBackPropagate(uctMaxNode, 0);
+      uct.playoutAndBackPropagate(uctMaxNode, 0);
 
       //uctMctsMainLoop  02-2-4
       if (uctMaxNode.na >= uct.expandThreshold) {// 削除するための条件
@@ -730,6 +740,7 @@ int uctMctsMainLoop(player pl) {
           uctMaxNode.legalMoves=null;
           // uctMaxNode.parent.ncB == uct.pruningThresholdのとき、残されたアクティブノードをリストからはずす、というアイディアはある。
           // チャンスノードを別途ぶら下げる <- この案を却下。
+          // 
           // ぶら下げる場所を4か所作る（メモリとスピードの節約のため）
           if (uctMaxNode.childR==null) uctMaxNode.childR = new ArrayList<uctNode>();
           if (uctMaxNode.childG==null) uctMaxNode.childG = new ArrayList<uctNode>();
@@ -799,7 +810,7 @@ int uctMctsMainLoop(player pl) {
                     for (int count=0; count<4; count++) {
                       if (uctMaxNode.onRGWB[count+1]) {
                         pl.myBoard.simulatorNumber ++;
-                        uct.randomPlayAndBackPropagate(uct.newNode, count+1);
+                        uct.playoutAndBackPropagate(uct.newNode, count+1);
                       }
                     }
                   }
@@ -856,7 +867,7 @@ int uctMctsMainLoop(player pl) {
                 //  for (int count=0; count<4; count++) {
                 //    if (uctMaxNode.onRGWB[count+1]) {
                 //      pl.myBoard.simulatorNumber ++;
-                //      uct.randomPlayAndBackPropagate(uct.newNode, count+1);
+                //      uct.playoutAndBackPropagate(uct.newNode, count+1);
                 //    }
                 //  }
                 //}
@@ -918,7 +929,7 @@ int uctMctsMainLoop(player pl) {
                       for (int count=0; count<4; count++) {
                         if (uctMaxNode.onRGWB[count+1]) {
                           pl.myBoard.simulatorNumber ++;
-                          uct.randomPlayAndBackPropagate(uct.newNode, count+1);
+                          uct.playoutAndBackPropagate(uct.newNode, count+1);
                         }
                       }
                       //新規ノードの処理ここまで/// アタックチャンスのとき//展開中

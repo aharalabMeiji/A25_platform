@@ -108,7 +108,7 @@ class playerOrder{
   int fullRandom=0;
   int manual=1;
   int weightedRandom=3;
-  int inOrder=4;
+  int inTurn=4;
   int Rrate,Grate,Wrate,Brate;
   playerOrder(){
     randomOrderCount=0;
@@ -124,7 +124,7 @@ class playerOrder{
       Grate=gameOptions.get("Grate");
       Wrate=gameOptions.get("Wrate");
       Brate=gameOptions.get("Brate");
-    } else if (type==inOrder){
+    } else if (type==inTurn){
       randomOrderCount=int(random(4)+1);
     }
   }
@@ -138,7 +138,7 @@ class playerOrder{
       else if (p<Rrate+Grate) return 2;
       else if (p<Rrate+Grate+Wrate) return 3;
       else return 4;
-    } else if (type==inOrder){
+    } else if (type==inTurn){
       int ret = (randomOrderCount-1)%4 + 1;
       randomOrderCount ++;
       return ret;

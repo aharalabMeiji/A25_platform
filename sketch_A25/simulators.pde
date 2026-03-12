@@ -318,7 +318,7 @@ void fullRandomMC() {
       // ////問題がアタックチャンス問題のときの「ループ」@fullRandomMC
       //int loopLen = simulator.rootNode.legalMoves.size();
       for (uctNode nd : simulator.rootNode.legalMoves) {
-        order.randomOrderCount=nd.player+1;//in orderのための手順初期化
+        order.randomOrderCount=nd.player+1;//in turnのための手順初期化
         for (int i=0; i<25; i++) {// 問題画面をsimulatorSubにコピー
           simulator.subBoard.s[i].col = simulator.mainBoard.s[i].col;
         }
@@ -381,7 +381,7 @@ void fullRandomMC() {
     } else {// 通常時
       ///////////////////通常営業の「ループ」@fullRandomMC
       for (uctNode nd : simulator.rootNode.legalMoves) {
-        order.randomOrderCount=nd.player+1;// in order のための初期化
+        order.randomOrderCount=nd.player+1;// in turn のための初期化
         // 問題画面をsimulatorSubにコピー
         for (int k=0; k<25; k++) {
           simulator.subBoard.s[k].col = simulatorStartBoard.get(simulator.StartBoardId).theArray[k];
@@ -538,7 +538,7 @@ void UCB1(ucbClass ucb) {
           newNode.parent = ucb.rootNode;
           //newNode.childR = newNode.childG = newNode.childW = newNode.childB = null;
           //とりあえず、最初の１シミュレーションはここで行うのがよさそう。
-          order.randomOrderCount=newNode.player+1;//in orderのための手順初期化
+          order.randomOrderCount=newNode.player+1;//in turnのための手順初期化
           winPoints wp = playoutToEnd(simulator.subBoard, simulator.Participants, 0);//そこから最後までシミュレーションを行う。@UCB1
           simulator.mainBoard.simulatorNumber ++;
           newNode.na=1;//　初回につき代入、以後+=
@@ -566,7 +566,7 @@ void UCB1(ucbClass ucb) {
           }
           newNode.parent = ucb.rootNode;
           //とりあえず、最初の１シミュレーションはここで行うのがよさそう。
-          order.randomOrderCount=newNode.player+1;//in orderのための手順初期化
+          order.randomOrderCount=newNode.player+1;//in turnのための手順初期化
           winPoints wp = playoutToEnd(simulator.subBoard, simulator.Participants, 0);//そこから最後までシミュレーションを行う。@UCB1
           simulator.mainBoard.simulatorNumber ++;
           newNode.na=1;//　初回につき代入、以後+=
@@ -589,7 +589,7 @@ void UCB1(ucbClass ucb) {
       }
       newNode.parent = ucb.rootNode;
       //最初の１シミュレーション
-      order.randomOrderCount=newNode.player+1;//in orderのための手順初期化
+      order.randomOrderCount=newNode.player+1;//in turnのための手順初期化
       winPoints wp = playoutToEnd(simulator.subBoard, simulator.Participants, 0);//そこから最後までシミュレーションを行う。@UCB1
       simulator.mainBoard.simulatorNumber ++;
       newNode.na=1;//　初回につき代入、以後+=
@@ -617,7 +617,7 @@ void UCB1(ucbClass ucb) {
         for (int k=0; k<25; k++) {//ノードの盤面をsimulator.subBoardへコピ－
           simulator.subBoard.s[k].col = maxNd.bd[k] ;
         }
-        order.randomOrderCount=maxNd.player+1;//in orderのための手順初期化
+        order.randomOrderCount=maxNd.player+1;//in turnのための手順初期化
         winPoints wp = playoutToEnd(simulator.subBoard, simulator.Participants, 0);//そこから最後までシミュレーションを行う。@UCB1
         simulator.mainBoard.simulatorNumber ++;
         maxNd.na ++ ;//
@@ -679,7 +679,7 @@ void UCB1(ucbClass ucb) {
         for (int k=0; k<25; k++) {//ノードの盤面をsimulator.subBoardへコピ－
           simulator.subBoard.s[k].col = maxNd.bd[k] ;
         }
-        order.randomOrderCount=maxNd.player+1;//in orderのための手順初期化
+        order.randomOrderCount=maxNd.player+1;//in turnのための手順初期化
         //そこから最後までシミュレーションを行う。@UCB1
         winPoints wp = playoutToEnd(simulator.subBoard, simulator.Participants, 0);
         simulator.mainBoard.simulatorNumber ++;
@@ -876,6 +876,7 @@ void UCT1() {
     int answer=-1;
     answer = uctMctsMainLoop(uct.nextPlayer);
     if (uct.nextPlayer.myBoard.attackChanceP==false) {
+      // 表示のための、データのコピー
       for (uctNode nd : uct.rootNode.legalMoves) {
         int k = nd.move;//たぶん、kは0～２５
         if (0<=k && k<=25) {

@@ -349,12 +349,12 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    buttonText = "[in order]";
+    buttonText = "[in turn]";
     buttonRandom1=new button();
     buttonRandom1.setLT(left, top, buttonText);
-    buttonRandom1.setItem("Order", order.inOrder);
+    buttonRandom1.setItem("Order", order.inTurn);
     buttons.add(buttonRandom1);
-    if (gameOptions.get("Order") == order.inOrder) fill(255, 0, 0);
+    if (gameOptions.get("Order") == order.inTurn) fill(255, 0, 0);
     else fill(0);
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
@@ -1033,7 +1033,7 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    buttonText = "[in order]";
+    buttonText = "[in turn]";
     button1=new button();
     button1.setLT(left, top, buttonText);
     button1.setItem("Order", 4);

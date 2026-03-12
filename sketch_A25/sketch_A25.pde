@@ -35,7 +35,7 @@ void setup() {
   gameOptions.set("Player2", 0);
   gameOptions.set("Player3", 0);
   gameOptions.set("Player4", 0);
-  gameOptions.set("Order", 0);// 0 Random, 1:Manual, 2:Conditional random, 3:in order
+  gameOptions.set("Order", 0);// 0 Random, 1:Manual, 2:Conditional random, 3:in turn
   gameOptions.set("Playout",0);// 0:Random, 1:corner, 2:cross-corner 
   gameOptions.set("Times", 1);// 1:once, 100:100 times, 10000:10000 times
   gameOptions.set("SimTimes", 2);
