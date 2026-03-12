@@ -193,6 +193,22 @@ void mousePressed() {
             gameOptions.set("pruning", 2); 
           } else if (b.dictKey=="SimTimes" && (b.dictInt==21 || b.dictInt==22 || b.dictInt==23 || b.dictInt==24)){
             gameOptions.set("pruning", 999); 
+          } else if (b.dictKey.equals("Rrate") && gameOptions.get("Rrate")==simulator.Rrate){
+            simulator.Rrate ++;
+            if(simulator.Rrate==6) simulator.Rrate=1;
+            gameOptions.set("Rrate", simulator.Rrate);
+          } else if (b.dictKey.equals("Grate") && gameOptions.get("Grate")==simulator.Grate){
+            simulator.Grate ++;
+            if(simulator.Grate==6) simulator.Grate=1;
+            gameOptions.set("Grate", simulator.Grate);
+          } else if (b.dictKey.equals("Wrate") && gameOptions.get("Wrate")==simulator.Wrate){
+            simulator.Wrate ++;
+            if(simulator.Wrate==6) simulator.Wrate=1;
+            gameOptions.set("Wrate", simulator.Wrate);
+          } else if (b.dictKey.equals("Brate") && gameOptions.get("Brate")==simulator.Brate){
+            simulator.Brate ++;
+            if(simulator.Brate==6) simulator.Brate=1;
+            gameOptions.set("Brate", simulator.Brate);
           }
           //println(gameOptions.get("SimMethod"), gameOptions.get("SimTimes"));
           return;

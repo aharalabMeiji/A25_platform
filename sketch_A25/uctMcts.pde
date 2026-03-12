@@ -208,7 +208,7 @@ class uctClass {
           continue;
         }
         mainBoard.copyBdToBoard(nd.bd);
-        winPoint = playSimulatorToEnd(mainBoard, participants, nextplayer);//ここは次手番をnextplayerとする。
+        winPoint = playoutToEnd(mainBoard, participants, nextplayer);//ここは次手番をnextplayerとする。
         qtyPlayouts ++;
         pl.myBoard.simulatorNumber ++;
         if (chanceNodeOn==1) {// //chanceNodeOn=1; waRには「積み上げ」、waには「平均化」
@@ -315,7 +315,7 @@ class uctClass {
       } while (uctMaxNode.onRGWB[nextplayer]==false);
     }
     //println("uctMctsBrain:uct.mainBoardを最後まで打ち切る");
-    this.randomPlayWinPoint = playSimulatorToEnd(this.randomPlayBoard, this.participants, nextplayer);
+    this.randomPlayWinPoint = playoutToEnd(this.randomPlayBoard, this.participants, nextplayer);
     uctMaxNode.na ++;//
     qtyPlayouts ++;
     //println("uctMctsBrain:nd.wa[p]、nd.pa[p]、nd.uct[p]");

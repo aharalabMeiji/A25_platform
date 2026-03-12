@@ -71,9 +71,7 @@ class winPoints {
   }
 }
 
-winPoints playSimulatorToEnd(board sub, player[] _participants, int nextplayer) {//
-  // TODO アタックチャンスの判定と処理
-  // n(0)=4 -> AC_flag==false -> アタックチャンス, AC_flag=true
+winPoints playoutToEnd(board sub, player[] _participants, int nextplayer) {//
   //
   int remaining=0;
   for (int i=0; i<25; i++) {
@@ -90,8 +88,10 @@ winPoints playSimulatorToEnd(board sub, player[] _participants, int nextplayer) 
         simulatorNextPlayer = order.getNext();// 次の手番を決める //
       } else {// 次の手番をnextplayerによって定め、以降はランダムに定める    
         simulatorNextPlayer = nextplayer;
+        order.randomOrderCount=nextplayer+1;
         nextplayer=0;
       }
+      //print(simulatorNextPlayer);////////////////////////////////////////////
       if (1<= simulatorNextPlayer && simulatorNextPlayer<=4 ) {
         //println("playSimulatorToEnd:player変数が持っている盤面をsubにコピーする。");
         sub.copyBoardToSub(_participants[simulatorNextPlayer].myBoard);
@@ -104,7 +104,7 @@ winPoints playSimulatorToEnd(board sub, player[] _participants, int nextplayer) 
             if (sub.vp[attack]>0) {
               sub.move(simulatorNextPlayer, attack);
             }
-            attack = _participants[simulatorNextPlayer].callAttackChance(); //<>//
+            attack = _participants[simulatorNextPlayer].callAttackChance();
             if (1 <= sub.s[attack].col&&  sub.s[attack].col<=4) {
               sub.s[attack].col=5;
             }
@@ -226,7 +226,7 @@ void showSimulator() {
 void fullRandomMC() {
   // 完全ランダム＝モンテカルロ1手読み
   if (simulationManager==sP.GameStart) {
-    ///////////////////////////////////////////// シミュレーション開始。共通の準備
+    // シミュレーション開始。共通の準備@fullRandomMC
     startTime=millis();
     simulator.Participants = new player[5];
     simulator.rootNode = new uctNode();
@@ -249,7 +249,7 @@ void fullRandomMC() {
       simulator.mainBoard.s[i].marked = 0;
     }
     //次の手番の指定
-    simulator.nextPlayer = simulatorStartBoard.get(simulator.StartBoardId).nextPlayer; //<>//
+    simulator.nextPlayer = simulatorStartBoard.get(simulator.StartBoardId).nextPlayer;
     if (simulator.nextPlayer==0) simulator.nextPlayer=1;
 
     // 着手可能点を計算しておく。
@@ -263,7 +263,7 @@ void fullRandomMC() {
   } else if (simulationManager == sP.setStartBoard) {
     // 問題がアタックチャンス問題のときには、別処理にする。
     if (simulator.mainBoard.attackChanceP()) {
-      // ////////問題がアタックチャンス問題のときの「準備」
+      // ////////問題がアタックチャンス問題のときの「準備」@fullRandomMC
       // vpの初期化と、svの初期化
       simulator.mainBoard.attackChanceP=true;
       simulator.mainBoard.buildVP(simulator.nextPlayer);
@@ -293,7 +293,7 @@ void fullRandomMC() {
       }
       simulationManager = sP.runMC;
     } else {
-      // //問題がアタックチャンスでないときの「準備」
+      // //問題がアタックチャンスでないときの「準備」@fullRandomMC
       simulator.mainBoard.attackChanceP=false;
       simulator.mainBoard.buildVP(simulator.nextPlayer);
       simulator.rootNode.legalMoves.clear();
@@ -315,9 +315,10 @@ void fullRandomMC() {
     }
   } else if (simulationManager == sP.runMC) {
     if (simulator.mainBoard.attackChanceP()) {
-      // ////問題がアタックチャンス問題のときの「ループ」
+      // ////問題がアタックチャンス問題のときの「ループ」@fullRandomMC
       //int loopLen = simulator.rootNode.legalMoves.size();
       for (uctNode nd : simulator.rootNode.legalMoves) {
+        order.randomOrderCount=nd.player+1;//in orderのための手順初期化
         for (int i=0; i<25; i++) {// 問題画面をsimulatorSubにコピー
           simulator.subBoard.s[i].col = simulator.mainBoard.s[i].col;
         }
@@ -326,7 +327,7 @@ void fullRandomMC() {
         int i = int(k/25);
         simulator.subBoard.move(simulator.nextPlayer, j);// 1手着手する
         simulator.subBoard.setCol(i, 5);// 黄色を置く
-        winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants, 0);//そこから最後までシミュレーションを行う。
+        winPoints wp = playoutToEnd(simulator.subBoard, simulator.Participants, 0);//そこから最後までシミュレーションを行う。@fullRandomMC
         nd.na ++;
         for (int p=1; p<=4; p++) {
           nd.wa[p] += wp.points[p];// 総勝ち数
@@ -378,8 +379,9 @@ void fullRandomMC() {
         showScreenCapture();
       }
     } else {// 通常時
-      ///////////////////通常営業の「ループ」
+      ///////////////////通常営業の「ループ」@fullRandomMC
       for (uctNode nd : simulator.rootNode.legalMoves) {
+        order.randomOrderCount=nd.player+1;// in order のための初期化
         // 問題画面をsimulatorSubにコピー
         for (int k=0; k<25; k++) {
           simulator.subBoard.s[k].col = simulatorStartBoard.get(simulator.StartBoardId).theArray[k];
@@ -390,7 +392,7 @@ void fullRandomMC() {
             nd.bd[k] = simulator.subBoard.s[k].col;
           }
           //println(simulator.nextPlayer, j, "*");
-          winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants, 0);//そこから最後までシミュレーションを行う。
+          winPoints wp = playoutToEnd(simulator.subBoard, simulator.Participants, 0);//そこから最後までシミュレーションを行う。@fullRandomMC
           nd.na ++;
           for (int p=1; p<=4; p++) {
             nd.wa[p] += wp.points[p];
@@ -405,7 +407,7 @@ void fullRandomMC() {
           for (int k=0; k<25; k++) {
             nd.bd[k] = simulator.subBoard.s[k].col;
           }
-          winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants, 0);//そこから最後までシミュレーションを行う。
+          winPoints wp = playoutToEnd(simulator.subBoard, simulator.Participants, 0);//そこから最後までシミュレーションを行う。@fullRandomMC
           nd.na ++;
           for (int p=1; p<=4; p++) {
             nd.wa[p] += wp.points[p];
@@ -499,6 +501,8 @@ void UCB1(ucbClass ucb) {
     for (int j=0; j<25; j++) {
       ucb.rootNode.bd[j] = simulator.mainBoard.s[j].col;
     }
+    order.type=gameOptions.get("Order");// 手番の重みづけ設定
+    order.init();// 手番の重みづけ設定
     if (simulator.mainBoard.attackChanceP()) {//アタックチャンスのための１世代めの追加
       simulator.mainBoard.attackChanceP=true;
       simulator.mainBoard.buildVP(simulator.nextPlayer);// そもそもの着手可能パネル
@@ -534,7 +538,8 @@ void UCB1(ucbClass ucb) {
           newNode.parent = ucb.rootNode;
           //newNode.childR = newNode.childG = newNode.childW = newNode.childB = null;
           //とりあえず、最初の１シミュレーションはここで行うのがよさそう。
-          winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants, 0);//そこから最後までシミュレーションを行う。
+          order.randomOrderCount=newNode.player+1;//in orderのための手順初期化
+          winPoints wp = playoutToEnd(simulator.subBoard, simulator.Participants, 0);//そこから最後までシミュレーションを行う。@UCB1
           simulator.mainBoard.simulatorNumber ++;
           newNode.na=1;//　初回につき代入、以後+=
           for (int p=1; p<5; p++) {
@@ -561,7 +566,8 @@ void UCB1(ucbClass ucb) {
           }
           newNode.parent = ucb.rootNode;
           //とりあえず、最初の１シミュレーションはここで行うのがよさそう。
-          winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants, 0);//そこから最後までシミュレーションを行う。
+          order.randomOrderCount=newNode.player+1;//in orderのための手順初期化
+          winPoints wp = playoutToEnd(simulator.subBoard, simulator.Participants, 0);//そこから最後までシミュレーションを行う。@UCB1
           simulator.mainBoard.simulatorNumber ++;
           newNode.na=1;//　初回につき代入、以後+=
           for (int p=1; p<5; p++) {
@@ -583,15 +589,14 @@ void UCB1(ucbClass ucb) {
       }
       newNode.parent = ucb.rootNode;
       //最初の１シミュレーション
-      winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants, 0);//そこから最後までシミュレーションを行う。
+      order.randomOrderCount=newNode.player+1;//in orderのための手順初期化
+      winPoints wp = playoutToEnd(simulator.subBoard, simulator.Participants, 0);//そこから最後までシミュレーションを行う。@UCB1
       simulator.mainBoard.simulatorNumber ++;
       newNode.na=1;//　初回につき代入、以後+=
       for (int p=1; p<5; p++) {
         newNode.wa[p] = wp.points[p];//　初回につき代入、以後+=
       }
     }
-    order.type=gameOptions.get("Order");// 手番の重みづけ設定
-    order.init();
     simulationManager=sP.setStartBoard;
   } else if (simulationManager==sP.setStartBoard) {// UCB1ループ部分
     if (simulator.mainBoard.attackChanceP()) {//アタックチャンスの場合// UCB1ループ部分
@@ -612,7 +617,8 @@ void UCB1(ucbClass ucb) {
         for (int k=0; k<25; k++) {//ノードの盤面をsimulator.subBoardへコピ－
           simulator.subBoard.s[k].col = maxNd.bd[k] ;
         }
-        winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants, 0);//そこから最後までシミュレーションを行う。
+        order.randomOrderCount=maxNd.player+1;//in orderのための手順初期化
+        winPoints wp = playoutToEnd(simulator.subBoard, simulator.Participants, 0);//そこから最後までシミュレーションを行う。@UCB1
         simulator.mainBoard.simulatorNumber ++;
         maxNd.na ++ ;//
         for (int p=1; p<5; p++) {
@@ -673,7 +679,9 @@ void UCB1(ucbClass ucb) {
         for (int k=0; k<25; k++) {//ノードの盤面をsimulator.subBoardへコピ－
           simulator.subBoard.s[k].col = maxNd.bd[k] ;
         }
-        winPoints wp = playSimulatorToEnd(simulator.subBoard, simulator.Participants, 0);//そこから最後までシミュレーションを行う。
+        order.randomOrderCount=maxNd.player+1;//in orderのための手順初期化
+        //そこから最後までシミュレーションを行う。@UCB1
+        winPoints wp = playoutToEnd(simulator.subBoard, simulator.Participants, 0);
         simulator.mainBoard.simulatorNumber ++;
         maxNd.na ++ ;//　
         for (int p=1; p<5; p++) {
@@ -1017,7 +1025,7 @@ void mousePreesedSimulator() {
   if (buttonMainBoard.mouseOn()) {
     if (! simulator.mainBoard.attackChanceP()) {
       simulator.mainBoard.svColor = (simulator.mainBoard.svColor)%4+1;
-      println("main board has been clicked"+simulator.mainBoard.svColor);
+      //println("main board has been clicked"+simulator.mainBoard.svColor);
       if (gameOptions.get("SimMethod")==1) {
         for (uctNode nd : simulator.rootNode.legalMoves) {
           simulator.mainBoard.sv[nd.move] = nd.wa[simulator.mainBoard.svColor]/nd.na;//　その着手点はちょっと優秀ということになる。

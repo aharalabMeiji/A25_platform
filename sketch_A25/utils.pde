@@ -74,6 +74,7 @@ class simulators {
   board subBoard;
   uctNode rootNode=null;
   int nextPlayer=1;//1~4
+  int Rrate=1,Grate=1,Wrate=1,Brate=1;
 }
 
 //int simulator.nextPlayer=1;//1~4

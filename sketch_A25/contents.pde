@@ -375,7 +375,7 @@ void showContents() {
       buttonText = "["+gameOptions.get("Rrate")+"]";
       buttonRandom1=new button();
       buttonRandom1.setLT(left, top, buttonText);
-      buttonRandom1.setItem("Rrate", 4);
+      buttonRandom1.setItem("Rrate", game.Rrate);
       buttons.add(buttonRandom1);
       fill(255, 0, 0);
       text(buttonText, left, top);
@@ -389,7 +389,7 @@ void showContents() {
       buttonText = "["+gameOptions.get("Grate")+"]";
       buttonRandom1=new button();
       buttonRandom1.setLT(left, top, buttonText);
-      buttonRandom1.setItem("Grate", 4);
+      buttonRandom1.setItem("Grate", game.Grate);
       buttons.add(buttonRandom1);
       fill(255, 0, 0);
       text(buttonText, left, top);
@@ -403,7 +403,7 @@ void showContents() {
       buttonText = "["+gameOptions.get("Wrate")+"]";
       buttonRandom1=new button();
       buttonRandom1.setLT(left, top, buttonText);
-      buttonRandom1.setItem("Wrate", 4);
+      buttonRandom1.setItem("Wrate", game.Wrate);
       buttons.add(buttonRandom1);
       fill(255, 0, 0);
       text(buttonText, left, top);
@@ -417,7 +417,7 @@ void showContents() {
       buttonText = "["+gameOptions.get("Brate")+"]";
       buttonRandom1=new button();
       buttonRandom1.setLT(left, top, buttonText);
-      buttonRandom1.setItem("Brate", 4);
+      buttonRandom1.setItem("Brate", game.Brate);
       buttons.add(buttonRandom1);
       fill(255, 0, 0);
       text(buttonText, left, top);
@@ -1042,6 +1042,73 @@ void showContents() {
     else fill(0);
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
+    //
+    if (gameOptions.get("Order") == order.weightedRandom){
+      //
+      top += utils.vStep;
+      left=utils.hOffset;
+      captionText = "Weight:";
+      fill(0);
+      text(captionText, left, top);
+      left += (textWidth(captionText)+utils.hSpace);
+      //
+      captionText = " R:";
+      fill(0);
+      text(captionText, left, top);
+      left += (textWidth(captionText)+utils.hSpace);
+      buttonText = "["+gameOptions.get("Rrate")+"]";
+      button buttonRandom1=new button();
+      buttonRandom1.setLT(left, top, buttonText);
+      buttonRandom1.setItem("Rrate", simulator.Rrate);
+      buttons.add(buttonRandom1);
+      fill(255, 0, 0);
+      text(buttonText, left, top);
+      left += (textWidth(buttonText)+utils.hSpace);
+      //      
+      //
+      captionText = " G:";
+      fill(0);
+      text(captionText, left, top);
+      left += (textWidth(captionText)+utils.hSpace);
+      buttonText = "["+gameOptions.get("Grate")+"]";
+      buttonRandom1=new button();
+      buttonRandom1.setLT(left, top, buttonText);
+      buttonRandom1.setItem("Grate", simulator.Grate);
+      buttons.add(buttonRandom1);
+      fill(255, 0, 0);
+      text(buttonText, left, top);
+      left += (textWidth(buttonText)+utils.hSpace);
+      //      
+      //
+      captionText = " W:";
+      fill(0);
+      text(captionText, left, top);
+      left += (textWidth(captionText)+utils.hSpace);
+      buttonText = "["+gameOptions.get("Wrate")+"]";
+      buttonRandom1=new button();
+      buttonRandom1.setLT(left, top, buttonText);
+      buttonRandom1.setItem("Wrate", simulator.Wrate);
+      buttons.add(buttonRandom1);
+      fill(255, 0, 0);
+      text(buttonText, left, top);
+      left += (textWidth(buttonText)+utils.hSpace);
+      //      
+      //
+      captionText = " B:";
+      fill(0);
+      text(captionText, left, top);
+      left += (textWidth(captionText)+utils.hSpace);
+      buttonText = "["+gameOptions.get("Brate")+"]";
+      buttonRandom1=new button();
+      buttonRandom1.setLT(left, top, buttonText);
+      buttonRandom1.setItem("Brate", simulator.Brate);
+      buttons.add(buttonRandom1);
+      fill(255, 0, 0);
+      text(buttonText, left, top);
+      left += (textWidth(buttonText)+utils.hSpace);
+      //      
+      
+    }
     //
     top += utils.vStep;
     left=utils.hOffset;
