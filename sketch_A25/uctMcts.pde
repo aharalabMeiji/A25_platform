@@ -705,19 +705,24 @@ int uctMctsMainLoop(player pl) {
         }
         // uctMaxNodeはちょうどあふれたところ。
         // 展開するかどうか、pruningが発動するかどうか
-        boolean expandOK=false;
         // 深さ１のノードは無条件に展開する。
-        if (uctMaxNode.depth==1) expandOK=true;
-        else if (uctMaxNode.parent!=null) {
+        if (uctMaxNode.depth>1 && uctMaxNode.parent!=null) {
+          //UCT目線の長男（長女）を記録する。
+          if (uctMaxNode.player==1){
+            uctMaxNode.parent.ncR++;
+            if (uctMaxNode.parent.bcR==null)  uctMaxNode.parent.bcR=uctMaxNode;// bc = best child
+          } else if (uctMaxNode.player==2){
+            uctMaxNode.parent.ncG++;
+            if (uctMaxNode.parent.bcG==null) uctMaxNode.parent.bcG=uctMaxNode;// bc = best child
+          } else if (uctMaxNode.player==3){
+            uctMaxNode.parent.ncW++;
+            if (uctMaxNode.parent.bcW==null) uctMaxNode.parent.bcW=uctMaxNode;// bc = best child
+          } else if (uctMaxNode.player==4){
+            uctMaxNode.parent.ncB++;
+            if (uctMaxNode.parent.bcB==null) uctMaxNode.parent.bcB=uctMaxNode;// bc = best child
+          }
           if(uct.pruningThreshold==1){
             // Rchildの中で最初に展開が起こった場合、Rchild内の他のノードはその場で立ち枯れさせる
-            // uctMaxNode.parent.ncR++;//いちおう数える// nc = number of children
-            expandOK=true;
-            // 親目線で「長男（長女）」として登録する（いかなる状況でも上書き）
-            if (uctMaxNode.player==1) uctMaxNode.parent.bcR=uctMaxNode;// bc = best child
-            else if (uctMaxNode.player==2) uctMaxNode.parent.bcG=uctMaxNode;// bc = best child
-            else if (uctMaxNode.player==3) uctMaxNode.parent.bcW=uctMaxNode;// bc = best child
-            else if (uctMaxNode.player==4) uctMaxNode.parent.bcB=uctMaxNode;// bc = best child
             // uctMaxNode.parent.Rchildにいる他の子たちを、アクティブノードのリストからはずす。
             nacnd = ancestor.activeNodes.size();
             for (int zz = nacnd-1; zz>=0; zz--){
@@ -727,13 +732,39 @@ int uctMctsMainLoop(player pl) {
                 ancestor.activeNodes.remove(zz);//アクティブノードのリストから消去
               }
             }
+          } else if(uct.pruningThreshold==2){
+            boolean isBestChild=false;
+            // nc = number of children
+            if (uctMaxNode.player==1 && uctMaxNode.parent.ncR==1) isBestChild = true;
+            if (uctMaxNode.player==2 && uctMaxNode.parent.ncG==1) isBestChild = true;
+            if (uctMaxNode.player==3 && uctMaxNode.parent.ncW==1) isBestChild = true;
+            if (uctMaxNode.player==4 && uctMaxNode.parent.ncB==1) isBestChild = true;
+            if (isBestChild){
+              // Rchildの中で最初に展開が起こった場合、
+              float thresholdPruning = uctMaxNode.wa[uctMaxNode.player]/uctMaxNode.na*0.9;
+              // Rchild内の他のノードのうち、その人にとっての勝率が低い他のノードは
+              // その場で立ち枯れさせる(アクティブノードのリストからはずす。)
+              nacnd = ancestor.activeNodes.size();
+              for (int zz = nacnd-1; zz>=0; zz--){
+                uctNode acnd = ancestor.activeNodes.get(zz);
+                // 親が共通で、色も共通（長男本人は消去済み）
+                if (acnd.parent==uctMaxNode.parent && acnd.player==uctMaxNode.player){
+                  float thisValue = acnd.wa[acnd.player]/acnd.na;
+                  //println("acnd.id="+acnd.id+"acnd.wa="+thisValue+", threshold="+thresholdPruning);
+                  if (thisValue<=thresholdPruning){
+                    ancestor.activeNodes.remove(zz);//アクティブノードのリストから消去
+                  }
+                }
+              }
+            }
           }
+
         }
       
         //if(expandOK==false){
         //  println(uctMaxNode.parent.id+"->"+uctMaxNode.id);
         //}
-        if (uctMaxNode.depth<uct.depthMax && uctMaxNode.id!="" && remaingInBd(uctMaxNode.bd)>0 && expandOK ) {   // ここから展開するための条件
+        if (uctMaxNode.depth<uct.depthMax && uctMaxNode.id!="" && remaingInBd(uctMaxNode.bd)>0 /*&& expandOK*/ ) {   // ここから展開するための条件
           // remaingInBd(uctMaxNode.bd) : 残り空パネルの個数（黄色も含む）
           uct.newNode=null;
           uctMaxNode.legalMoves=null;
