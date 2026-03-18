@@ -65,6 +65,7 @@ void setup() {
   buttonSaveReplace = new button();
   buttonSaveAppend = new button();
   buttonSaveTree = new button();
+  buttonDispTree = new button();
   buttonPass = new button();
   buttonUndo = new button();
   buttonNNNext = new button();

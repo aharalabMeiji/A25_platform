@@ -62,11 +62,21 @@ class board {
     int total = simulatorStartBoard.size();
     int now = (simulator.StartBoardId) % total;
     text(utils.filename+"("+now+")", utils.mainL+utils.fontSize*18.5, utils.mainU-utils.fontSize);
-    //盤右下
-    String simMethod = "Monte Carlo Method";
-    if (gameOptions.get("SimTimes") == 1) simMethod += "(1k)";
-    else if (gameOptions.get("SimTimes") == 2) simMethod += "(10k)";
-    else simMethod += "(limit)";      
+    //盤左下
+    String simMethod = "MC ";
+    if (gameOptions.get("SimTimes") == 1) simMethod += "/1k";
+    else if (gameOptions.get("SimTimes") == 2) simMethod += "/10k";
+    else simMethod += "/limit";
+    if (gameOptions.get("Playout")==1) simMethod +="/Po1";
+    else if (gameOptions.get("Playout")==2) simMethod +="/Po2";
+    if (gameOptions.get("Order")==order.weightedRandom) {
+      simMethod +="/Od[";
+      simMethod += (""+gameOptions.get("Rrate")+":");
+      simMethod += (""+gameOptions.get("Grate")+":");
+      simMethod += (""+gameOptions.get("Wrate")+":");
+      simMethod += (""+gameOptions.get("Brate")+"]");
+    } else if (gameOptions.get("Order")==3) simMethod +="/Od3";
+    simMethod += "/";
     text(simMethod, utils.subL, utils.subU);
   }
   void displaySimUcb(){
@@ -104,10 +114,21 @@ class board {
     int now = (simulator.StartBoardId) % total;
     text(utils.filename+"("+now+")", utils.mainL+utils.fontSize*18.5, utils.mainU-utils.fontSize);
     //盤左下
-    String simMethod = "Monte Carlo Method(UCB) ";
-    if (gameOptions.get("SimTimes") == 11) simMethod += "(10 sec)";
-    else if (gameOptions.get("SimTimes") == 12) simMethod += "(60sec)";
-    else simMethod += "(limit)";
+    String simMethod = "MC(UCB) ";
+    if (gameOptions.get("SimTimes") == 11) simMethod += "/10 sec";
+    else if (gameOptions.get("SimTimes") == 12) simMethod += "/60 sec";
+    else simMethod += "/limit";
+    if (gameOptions.get("Playout")==1) simMethod +="/Po1";
+    else if (gameOptions.get("Playout")==2) simMethod +="/Po2";
+    if (gameOptions.get("Order")==order.weightedRandom) {
+      simMethod +="/Od[";
+      simMethod += (""+gameOptions.get("Rrate")+":");
+      simMethod += (""+gameOptions.get("Grate")+":");
+      simMethod += (""+gameOptions.get("Wrate")+":");
+      simMethod += (""+gameOptions.get("Brate")+"]");
+    } else if (gameOptions.get("Order")==order.inTurn) simMethod +="/inTurn";
+    simMethod += "/";
+    
     text(simMethod, utils.subL, utils.subU);
   }
   void displaySimUct() {
@@ -177,25 +198,36 @@ class board {
     }
     //Uct :盤左下
     fill(0);
-    String simMethod = "Monte Carlo Tree Search(UCT) ";
-    text(simMethod, utils.subL, utils.subU);
-    if (gameOptions.get("SimTimes") == 21) simMethod = "E10/D4/wC";
-    else if (gameOptions.get("SimTimes") == 22) simMethod = "E10/D4/woC";
-    else if (gameOptions.get("SimTimes") == 23) simMethod = "E10/D5/wC";
-    else if (gameOptions.get("SimTimes") == 24) simMethod = "E10/D5/woC";
-    else if (gameOptions.get("SimTimes") == 26) simMethod = "E100/D4";
-    else if (gameOptions.get("SimTimes") == 27) simMethod = "E100/D4";
-    else if (gameOptions.get("SimTimes") == 28) simMethod = "E100/D5";
-    else if (gameOptions.get("SimTimes") == 29) simMethod = "E100/D5";
+    String simMethod = "MCTS(UCT) ";
+    if (gameOptions.get("SimTimes") == 21) simMethod += "E10/D4/wC";
+    else if (gameOptions.get("SimTimes") == 22) simMethod += "E10/D4/woC";
+    else if (gameOptions.get("SimTimes") == 23) simMethod += "E10/D5/wC";
+    else if (gameOptions.get("SimTimes") == 24) simMethod += "E10/D5/woC";
+    else if (gameOptions.get("SimTimes") == 26) simMethod += "E100/D4";
+    else if (gameOptions.get("SimTimes") == 27) simMethod += "E100/D4";
+    else if (gameOptions.get("SimTimes") == 28) simMethod += "E100/D5";
+    else if (gameOptions.get("SimTimes") == 29) simMethod += "E100/D5";
     else {
-      simMethod="E"+str(gameOptions.get("expandThreshold"))+"/D"+str(gameOptions.get("depthMax"));
+      simMethod += "E"+str(gameOptions.get("expandThreshold"))+"/D"+str(gameOptions.get("depthMax"));
       if (gameOptions.get("wCancel")==1) simMethod += "/wC";
       else simMethod += "/woC";
     }
     if (gameOptions.get("chanceNodeOn")==1) simMethod += "/CN";
     if(gameOptions.get("pruning")==1) simMethod += "/P1";
     if(gameOptions.get("pruning")==2) simMethod += "/P2";
-    simMethod += "<";
+    simMethod += "/";
+    text(simMethod, utils.subL, utils.subU);
+    simMethod ="";
+    if (gameOptions.get("Playout")==1) simMethod +="/Po1";
+    else if (gameOptions.get("Playout")==2) simMethod +="/Po2";
+    if (gameOptions.get("Order")==order.weightedRandom) {
+      simMethod +="/Od[";
+      simMethod += (""+gameOptions.get("Rrate")+":");
+      simMethod += (""+gameOptions.get("Grate")+":");
+      simMethod += (""+gameOptions.get("Wrate")+":");
+      simMethod += (""+gameOptions.get("Brate")+"]");
+    } else if (gameOptions.get("Order")==order.inTurn) simMethod +="/inTurn";
+    simMethod += "/<";
     if(gameOptions.get("Absence0R")==1) simMethod += "R";
     if(gameOptions.get("Absence0G")==1) simMethod += "G";
     if(gameOptions.get("Absence0W")==1) simMethod += "W";

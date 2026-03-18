@@ -999,6 +999,7 @@ void showMcts(player nextPlayer) {
   showReturnButton();
   showScreenCapture();
   showSaveTree();
+  showDispTree();
 }
 
 void mousePreesedSimulator() {
@@ -1014,6 +1015,9 @@ void mousePreesedSimulator() {
   if (buttonSaveTree.mouseOn()) {//　ゲーム木保存、をクリックされたとき
     selectOutput("ゲーム木を保存", "saveTreeSelected");
     // uct.SaveGameTree(simulator.nextPlayer);
+  }
+  if (buttonDispTree.mouseOn()){// ゲーム木表示、をクリックされたとき
+    displayManager = dP.onTree;
   }
   if (buttonNNNext.mouseOn()) {// ３手先のデータ、をクリックされたとき
     //println("buttonNNNext.mouseOn()");

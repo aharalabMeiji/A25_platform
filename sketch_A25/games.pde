@@ -69,6 +69,19 @@ void showSaveTree(){
   buttonSaveTree.setLT(dx, dy, buttonSaveTreeText);
 }
 
+void showDispTree(){
+  float dx=utils.subL+textWidth("[Return to menu]")+utils.hSpace+textWidth("[Screenshot]")+utils.hSpace+textWidth("[Save Tree (csv)]")+utils.hSpace;
+  float dy=utils.subU+utils.mainH*1.5+utils.hOffset;
+  // ゲーム木表示 ボタン（シミュレーター、UCTでのみ使用）
+  fill(0);
+  textSize(utils.fontSize);
+  textAlign(LEFT, CENTER);
+  String buttonDispTreeText="[Disp Tree]";
+  text(buttonDispTreeText, dx, dy);
+  buttonDispTree.setLT(dx, dy, buttonDispTreeText);
+  
+}
+
 void showPassButton() { //
   float dx=utils.subL+int(utils.mainW+utils.hSpace)*3.5, dy=utils.subU+utils.mainH*1.5+utils.hOffset;
   // pass ボタン（ゲームでのみ使用）
