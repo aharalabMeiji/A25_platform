@@ -15,11 +15,11 @@ class treeNode{
   }
   void showTreeNode(float x, float y, float wid){
     stroke(0);noFill();
-    rect(x,y,wid,wid*1.5,10);
+    rect(x,y,wid,wid*1.1,10);
     startBoard tmpBoard=new startBoard(thisNode.bd, thisNode.player);
     float dx = wid/12.0;
-    float dy = dx*2/3;
-    tmpBoard.display(0,int(x+dx),int(y+dy),int(2*dx),int(2*dy));
+    float dy = dx*0.8;
+    tmpBoard.display(1,int(x+dx),int(y+dy),int(2*dx),int(2*dy));
     return;
   }
 };

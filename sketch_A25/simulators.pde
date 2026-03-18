@@ -22,6 +22,14 @@ class startBoard {
       }
       fill(utils.playerColor[nextPlayer]);
       rect(x, y+dy*5.5, 5*dx, dy);
+    } else if (mode==1) {
+      for (int k=0; k<25; k++) {
+        int xx=x+dx*(k%5);
+        int yy=y+dy*int(k/5);
+        stroke(0);
+        fill(utils.playerColor[theArray[k]]);
+        rect(xx, yy, dx, dy);
+      }
     }
   }
   void add1NextPlayer(){
