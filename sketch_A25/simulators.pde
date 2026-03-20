@@ -1025,6 +1025,7 @@ void mousePreesedSimulator() {
     // uct.SaveGameTree(simulator.nextPlayer);
   }
   if (buttonDispTree.mouseOn()){// ゲーム木表示、をクリックされたとき
+    tree.initialize();
     displayManager = dP.onTree;
   }
   if (buttonNNNext.mouseOn()) {// ３手先のデータ、をクリックされたとき

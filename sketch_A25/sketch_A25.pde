@@ -87,7 +87,7 @@ void draw() {
   } else if (displayManager == dP.onContents) {
     showContents();
   } else if (displayManager == dP.onTree){
-    showTree();
+    tree.show();
   }
 }
 
