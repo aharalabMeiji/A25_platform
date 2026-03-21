@@ -19,7 +19,7 @@ class treeNode {
     fill(0);
     //textSize(utils.fontSize);
     String msg = thisNode.id+"\n("+nf(thisNode.wa[thisNode.player]/thisNode.na,1,3)+")";
-    text(msg, int(x+dx), int(y+dy*12));
+    text(msg, int(x+dx), int(y+dy*11));
   }
 };
 
@@ -99,11 +99,10 @@ class gameTree {
           treeNode22.setNode(NL2.get(now));
           treeNode23.setNode(NL2.get(next));
           break;
-        case 3:
+        default:
           treeNode21.setNode(NL2.get(prev));
           treeNode22.setNode(NL2.get(now));
           treeNode23.setNode(NL2.get(next));
-          break;
         }
       } else {
         treeNode21.setNode(null);
@@ -121,6 +120,7 @@ class gameTree {
   }
   void show() {
     background(255);
+    textAlign(LEFT, TOP);
     treeNode11.showTreeNode(utils.unitSize*0.05, utils.mainU+utils.unitSize*0.06, utils.unitSize*0.25);
     treeNode12.showTreeNode(utils.unitSize*0.35, utils.mainU, utils.unitSize*0.3);
     treeNode13.showTreeNode(utils.unitSize*0.70, utils.mainU+utils.unitSize*0.06, utils.unitSize*0.25);
@@ -133,10 +133,11 @@ class gameTree {
     textAlign(CENTER, CENTER);
     text("↑",utils.unitSize*0.4,utils.mainU+utils.unitSize*0.375);
     text("↓",utils.unitSize*0.6,utils.mainU+utils.unitSize*0.375);
-    textAlign(LEFT, CENTER);
+    textAlign(LEFT, TOP);
     treeNode21.showTreeNode(utils.unitSize*0.05, utils.mainU+utils.unitSize*0.425, utils.unitSize*0.2);
     treeNode22.showTreeNode(utils.unitSize*0.4, utils.mainU+utils.unitSize*0.425, utils.unitSize*0.2);
     treeNode23.showTreeNode(utils.unitSize*0.70, utils.mainU+utils.unitSize*0.425, utils.unitSize*0.2);
+    textAlign(LEFT, CENTER);
     //top += utils.vStep;
     //left=utils.hOffset;
     //buttonText = "[Back]";

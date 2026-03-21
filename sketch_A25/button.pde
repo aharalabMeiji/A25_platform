@@ -24,7 +24,7 @@ class button{
   }
   void setLTWH(float _l, float _t, float _w, float _h){
     this.left = _l;
-    this.top = _t;
+    this.top = _t+_h*0.5f;
     this.wid = _w;
     this.hei = _h;
   }
