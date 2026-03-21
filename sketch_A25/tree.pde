@@ -1,7 +1,6 @@
 button buttonTree11, buttonTree12, buttonTree13;
 button buttonTree21, buttonTree22, buttonTree23;
-button buttonTreeColor;
-
+button buttonTreeColor, buttonTreeDown, buttonTreeUp;
 
 class treeNode {
   uctNode thisNode=null;
@@ -19,7 +18,7 @@ class treeNode {
     tmpBoard.display(1, int(x+dx), int(y+dy), int(2*dx), int(2*dy));
     fill(0);
     //textSize(utils.fontSize);
-    String msg = thisNode.id+"("+nf(thisNode.wa[thisNode.player]/thisNode.na,1,3)+")";
+    String msg = thisNode.id+"\n("+nf(thisNode.wa[thisNode.player]/thisNode.na,1,3)+")";
     text(msg, int(x+dx), int(y+dy*12));
   }
 };
@@ -37,6 +36,10 @@ class gameTree {
   ArrayList<uctNode> NL3=null;
   int color1=0, color2=0, color3=0;
   int NL1id=0, NL2id=0, NL3id=0;
+  //float X11,X12,X13,XM1,X21,X22,X23;
+  //float Y11,Y12,Y13,YM1,Y21,Y22,Y23;
+  //float W11,W12,W13,WM1,W21,W22,W23;
+  //float H11,H12,H13,HM1,H21,H22,H23;
   gameTree() {
     treeNode11=new treeNode();
     treeNode12=new treeNode();
@@ -44,16 +47,27 @@ class gameTree {
     treeNode21=new treeNode();
     treeNode22=new treeNode();
     treeNode23=new treeNode();
+    
   }
   void initialize() {
+    buttonTree11=new button();
+    buttonTree12=new button();
+    buttonTree13=new button();
+    buttonTree21=new button();
+    buttonTree22=new button();
+    buttonTree23=new button();
+    buttonTreeColor=new button();
+    buttonTreeDown=new button();
+    buttonTreeUp=new button();
     NL1=uct.rootNode.legalMoves;
     prize pz=new prize();
-    pz.getPrize3FromNodeList(uct.rootNode.legalMoves.get(0).player, uct.rootNode.legalMoves); //<>//
+    pz.getPrize3FromNodeList(uct.rootNode.legalMoves.get(0).player, uct.rootNode.legalMoves);
     for(NL1id=0; NL1id<uct.rootNode.legalMoves.size(); NL1id++){
       if(uct.rootNode.legalMoves.get(NL1id) == pz.m1) break;
     }
     color2=2;
     setAllPanes();
+    setButtons();
   }
   void setAllPanes(){
     if (NL1!=null && NL1.size()!=0){
@@ -70,16 +84,26 @@ class gameTree {
       else if (color2==4) NL2 = NL1.get(now).childB;
       if (NL2!=null && NL2.size()!=0){
         int noLM2 = NL2.size();
-        println("noLM2="+noLM2);
+        //println("noLM2="+noLM2);
         prev = (NL2id+noLM2-1)%noLM2;
         now = NL2id%noLM2;
         next = (NL2id+1)%noLM2;
-        treeNode22.setNode(NL2.get(now));
-        if(noLM2>=2){
+        switch(noLM2){
+        case 1:
+          treeNode21.setNode(null);
+          treeNode22.setNode(NL2.get(now));
+          treeNode23.setNode(null);
+          break;
+        case 2:
+          treeNode21.setNode(null);
+          treeNode22.setNode(NL2.get(now));
           treeNode23.setNode(NL2.get(next));
-          if (noLM2>=3){
-            treeNode21.setNode(NL2.get(prev));
-          }
+          break;
+        case 3:
+          treeNode21.setNode(NL2.get(prev));
+          treeNode22.setNode(NL2.get(now));
+          treeNode23.setNode(NL2.get(next));
+          break;
         }
       } else {
         treeNode21.setNode(null);
@@ -88,13 +112,28 @@ class gameTree {
       }
     }
   }
+  void setButtons(){
+    buttonTree11.setLTWH(utils.unitSize*0.05, utils.mainU+utils.unitSize*0.06, utils.unitSize*0.25, utils.unitSize*0.275);
+    buttonTree13.setLTWH(utils.unitSize*0.70, utils.mainU+utils.unitSize*0.06, utils.unitSize*0.25, utils.unitSize*0.275);
+    buttonTreeUp.setLTWH(utils.unitSize*0.35,utils.mainU+utils.unitSize*0.35, utils.unitSize*0.1,utils.unitSize*0.05);
+    buttonTreeColor.setLTWH(utils.unitSize*0.45,utils.mainU+utils.unitSize*0.35, utils.unitSize*0.1,utils.unitSize*0.05);
+    buttonTreeDown.setLTWH(utils.unitSize*0.55,utils.mainU+utils.unitSize*0.35, utils.unitSize*0.1,utils.unitSize*0.05);
+  }
   void show() {
     background(255);
     treeNode11.showTreeNode(utils.unitSize*0.05, utils.mainU+utils.unitSize*0.06, utils.unitSize*0.25);
     treeNode12.showTreeNode(utils.unitSize*0.35, utils.mainU, utils.unitSize*0.3);
     treeNode13.showTreeNode(utils.unitSize*0.70, utils.mainU+utils.unitSize*0.06, utils.unitSize*0.25);
     stroke(0);fill(utils.playerColor[color2]);
-    rect(utils.unitSize*0.35,utils.mainU+utils.unitSize*0.35, utils.unitSize*0.3,utils.unitSize*0.05);
+    rect(utils.unitSize*0.45,utils.mainU+utils.unitSize*0.35, utils.unitSize*0.1,utils.unitSize*0.05);
+    stroke(0);fill(255);
+    rect(utils.unitSize*0.35,utils.mainU+utils.unitSize*0.35, utils.unitSize*0.1,utils.unitSize*0.05);
+    rect(utils.unitSize*0.55,utils.mainU+utils.unitSize*0.35, utils.unitSize*0.1,utils.unitSize*0.05);
+    fill(0);
+    textAlign(CENTER, CENTER);
+    text("↑",utils.unitSize*0.4,utils.mainU+utils.unitSize*0.375);
+    text("↓",utils.unitSize*0.6,utils.mainU+utils.unitSize*0.375);
+    textAlign(LEFT, CENTER);
     treeNode21.showTreeNode(utils.unitSize*0.05, utils.mainU+utils.unitSize*0.425, utils.unitSize*0.2);
     treeNode22.showTreeNode(utils.unitSize*0.4, utils.mainU+utils.unitSize*0.425, utils.unitSize*0.2);
     treeNode23.showTreeNode(utils.unitSize*0.70, utils.mainU+utils.unitSize*0.425, utils.unitSize*0.2);
@@ -106,8 +145,22 @@ class gameTree {
     //fill(255, 0, 0);
     //text(buttonText, left, top);
     showReturnButton();
-    
+    showScreenCapture();
   }
   
 
 };
+
+void mousePressedTree(){
+  if (buttonTree11.mouseOn()){
+    println("buttonTree11");
+  } else if (buttonTree13.mouseOn()){
+    println("buttonTree13");
+  } else if (buttonTreeColor.mouseOn()){
+    println("buttonTreeColor");
+    tree.color2++;
+    if (tree.color2==5) tree.color2=1;
+    tree.setAllPanes(); //<>//
+    
+  }
+}

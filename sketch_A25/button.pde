@@ -22,4 +22,10 @@ class button{
     }
     return false;
   }
+  void setLTWH(float _l, float _t, float _w, float _h){
+    this.left = _l;
+    this.top = _t;
+    this.wid = _w;
+    this.hei = _h;
+  }
 };
