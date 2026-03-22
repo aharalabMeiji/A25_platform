@@ -258,7 +258,7 @@ void mousePressed() {
   } else if (displayManager == dP.onSimulator) {
     mousePreesedSimulator();
   } else if (displayManager == dP.onTree){
-    mousePressedTree();
+    tree.mousePressedTree();
   }
 }
 

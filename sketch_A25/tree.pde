@@ -36,10 +36,8 @@ class gameTree {
   ArrayList<uctNode> NL3=null;
   int color1=0, color2=0, color3=0;
   int NL1id=0, NL2id=0, NL3id=0;
-  //float X11,X12,X13,XM1,X21,X22,X23;
-  //float Y11,Y12,Y13,YM1,Y21,Y22,Y23;
-  //float W11,W12,W13,WM1,W21,W22,W23;
-  //float H11,H12,H13,HM1,H21,H22,H23;
+  int now1,prev1,next1;
+  int now2,prev2,next2;
   gameTree() {
     treeNode11=new treeNode();
     treeNode12=new treeNode();
@@ -61,48 +59,53 @@ class gameTree {
     buttonTreeUp=new button();
     NL1=uct.rootNode.legalMoves;
     prize pz=new prize();
-    pz.getPrize3FromNodeList(uct.rootNode.legalMoves.get(0).player, uct.rootNode.legalMoves);
-    for(NL1id=0; NL1id<uct.rootNode.legalMoves.size(); NL1id++){
-      if(uct.rootNode.legalMoves.get(NL1id) == pz.m1) break;
+    pz.getPrize3FromNodeList(NL1.get(0).player, NL1);
+    for(NL1id=0; NL1id<NL1.size(); NL1id++){
+      if(NL1.get(NL1id) == pz.m1) break;
     }
-    color2=2;
+    color2=NL1.get(0).player;
     setAllPanes();
     setButtons();
   }
   void setAllPanes(){
     if (NL1!=null && NL1.size()!=0){
       int noLM1 = NL1.size();
-      int prev = (NL1id+noLM1-1)%noLM1;
-      int now = NL1id%noLM1;
-      int next = (NL1id+1)%noLM1;
-      treeNode11.setNode(NL1.get(prev));
-      treeNode12.setNode(NL1.get(now));
-      treeNode13.setNode(NL1.get(next));
-      if (color2==1) NL2 = NL1.get(now).childR;
-      else if (color2==2) NL2 = NL1.get(now).childG;
-      else if (color2==3) NL2 = NL1.get(now).childW;
-      else if (color2==4) NL2 = NL1.get(now).childB;
+      prev1 = (NL1id+noLM1-1)%noLM1;
+      now1 = NL1id%noLM1;
+      next1 = (NL1id+1)%noLM1;
+      treeNode11.setNode(NL1.get(prev1));
+      treeNode12.setNode(NL1.get(now1));
+      treeNode13.setNode(NL1.get(next1));
+      if (color2==1) NL2 = NL1.get(now1).childR;
+      else if (color2==2) NL2 = NL1.get(now1).childG;
+      else if (color2==3) NL2 = NL1.get(now1).childW;
+      else if (color2==4) NL2 = NL1.get(now1).childB;
       if (NL2!=null && NL2.size()!=0){
+        prize pz=new prize();
+        pz.getPrize3FromNodeList(NL2.get(0).player, NL2);
         int noLM2 = NL2.size();
+        for(NL2id=0; NL2id<noLM2; NL2id++){
+          if(NL2.get(NL2id) == pz.m1) break;
+        }
         //println("noLM2="+noLM2);
-        prev = (NL2id+noLM2-1)%noLM2;
-        now = NL2id%noLM2;
-        next = (NL2id+1)%noLM2;
+        prev2 = (NL2id+noLM2-1)%noLM2;
+        now2 = NL2id%noLM2;
+        next2 = (NL2id+1)%noLM2;
         switch(noLM2){
         case 1:
           treeNode21.setNode(null);
-          treeNode22.setNode(NL2.get(now));
+          treeNode22.setNode(NL2.get(now2));
           treeNode23.setNode(null);
           break;
         case 2:
           treeNode21.setNode(null);
-          treeNode22.setNode(NL2.get(now));
-          treeNode23.setNode(NL2.get(next));
+          treeNode22.setNode(NL2.get(now2));
+          treeNode23.setNode(NL2.get(next2));
           break;
         default:
-          treeNode21.setNode(NL2.get(prev));
-          treeNode22.setNode(NL2.get(now));
-          treeNode23.setNode(NL2.get(next));
+          treeNode21.setNode(NL2.get(prev2));
+          treeNode22.setNode(NL2.get(now2));
+          treeNode23.setNode(NL2.get(next2));
         }
       } else {
         treeNode21.setNode(null);
@@ -117,13 +120,15 @@ class gameTree {
     buttonTreeUp.setLTWH(utils.unitSize*0.35,utils.mainU+utils.unitSize*0.35, utils.unitSize*0.1,utils.unitSize*0.05);
     buttonTreeColor.setLTWH(utils.unitSize*0.45,utils.mainU+utils.unitSize*0.35, utils.unitSize*0.1,utils.unitSize*0.05);
     buttonTreeDown.setLTWH(utils.unitSize*0.55,utils.mainU+utils.unitSize*0.35, utils.unitSize*0.1,utils.unitSize*0.05);
+    buttonTree21.setLTWH(utils.unitSize*0.05, utils.mainU+utils.unitSize*0.425, utils.unitSize*0.3, utils.unitSize*0.33);
+    buttonTree23.setLTWH(utils.unitSize*0.70, utils.mainU+utils.unitSize*0.425, utils.unitSize*0.3, utils.unitSize*0.33);
   }
   void show() {
     background(255);
     textAlign(LEFT, TOP);
     treeNode11.showTreeNode(utils.unitSize*0.05, utils.mainU+utils.unitSize*0.06, utils.unitSize*0.25);
     treeNode12.showTreeNode(utils.unitSize*0.35, utils.mainU, utils.unitSize*0.3);
-    treeNode13.showTreeNode(utils.unitSize*0.70, utils.mainU+utils.unitSize*0.06, utils.unitSize*0.25);
+    treeNode13.showTreeNode(utils.unitSize*0.65, utils.mainU+utils.unitSize*0.06, utils.unitSize*0.25);
     stroke(0);fill(utils.playerColor[color2]);
     rect(utils.unitSize*0.45,utils.mainU+utils.unitSize*0.35, utils.unitSize*0.1,utils.unitSize*0.05);
     stroke(0);fill(255);
@@ -134,9 +139,9 @@ class gameTree {
     text("↑",utils.unitSize*0.4,utils.mainU+utils.unitSize*0.375);
     text("↓",utils.unitSize*0.6,utils.mainU+utils.unitSize*0.375);
     textAlign(LEFT, TOP);
-    treeNode21.showTreeNode(utils.unitSize*0.05, utils.mainU+utils.unitSize*0.425, utils.unitSize*0.2);
-    treeNode22.showTreeNode(utils.unitSize*0.4, utils.mainU+utils.unitSize*0.425, utils.unitSize*0.2);
-    treeNode23.showTreeNode(utils.unitSize*0.70, utils.mainU+utils.unitSize*0.425, utils.unitSize*0.2);
+    treeNode21.showTreeNode(utils.unitSize*0.05, utils.mainU+utils.unitSize*0.425, utils.unitSize*0.3);
+    treeNode22.showTreeNode(utils.unitSize*0.35, utils.mainU+utils.unitSize*0.425, utils.unitSize*0.3);
+    treeNode23.showTreeNode(utils.unitSize*0.65, utils.mainU+utils.unitSize*0.425, utils.unitSize*0.3);
     textAlign(LEFT, CENTER);
     //top += utils.vStep;
     //left=utils.hOffset;
@@ -149,19 +154,21 @@ class gameTree {
     showScreenCapture();
   }
   
+  void mousePressedTree(){
+    if (buttonTree11.mouseOn()){
+      //println("buttonTree11");
+      NL1id = prev1;
+      setAllPanes();
+    } else if (buttonTree13.mouseOn()){
+      //println("buttonTree13");
+      NL1id = next1;
+      setAllPanes();
+    } else if (buttonTreeColor.mouseOn()){
+      color2++;
+      if (color2==5) color2=1;
+      setAllPanes();
+      
+    }
+  }
 
 };
-
-void mousePressedTree(){
-  if (buttonTree11.mouseOn()){
-    println("buttonTree11");
-  } else if (buttonTree13.mouseOn()){
-    println("buttonTree13");
-  } else if (buttonTreeColor.mouseOn()){
-    println("buttonTreeColor");
-    tree.color2++;
-    if (tree.color2==5) tree.color2=1;
-    tree.setAllPanes(); //<>//
-    
-  }
-}
