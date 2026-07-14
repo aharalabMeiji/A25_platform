@@ -479,39 +479,41 @@ void UCB1(ucbClass ucb) {
     // シミュレーション開始
     startTime=millis();
     simulator.Participants = new player[5];
-    //attackChanceSV = new float[625];//アタックチャンス時の評価値の表
-    //attackChanceSV2 = new float[625];//アタックチャンス時の評価値の表
     attackChanceVP = new int[625];//アタックチャンス時の合法手のフラグ
     winrateConvergents=false;
     panelsConvergent=false;
     // プレーヤーをランダムに設定
     for (int p=1; p<5; p++) {
-      if (gameOptions.get("Playout")==1) simulator.Participants[p] = new player(p, "random", brainType.Heuristic1);//
-      else if (gameOptions.get("Playout")==2) simulator.Participants[p] = new player(p, "random", brainType.Heuristic2);//
-      else simulator.Participants[p] = new player(p, "random", brainType.Random);
+      if (gameOptions.get("Playout")==1) 
+        simulator.Participants[p] = new player(p, "random", brainType.Heuristic1);//
+      else if (gameOptions.get("Playout")==2) 
+        simulator.Participants[p] = new player(p, "random", brainType.Heuristic2);//
+      else 
+        simulator.Participants[p] = new player(p, "random", brainType.Random);
     }
     ucb.fullNodes = new ArrayList<uctNode>();
     // 評価値のクリア
     for (int j=0; j<=25; j++) {
-      simulator.mainBoard.sv[j]=0;// ここにUCT値を代入する。
+      simulator.mainBoard.sv[j]=0;// ここにUCT値を代入する。<- ホントか？
     }
-    for (int i=0; i<25; i++) {
+    for (int i=0; i<25; i++) {//盤面の初期化。
       simulator.mainBoard.s[i].col = simulatorStartBoard.get(simulator.StartBoardId).theArray[i];
       simulator.mainBoard.s[i].marked = 0;
     }
     simulator.nextPlayer = simulatorStartBoard.get(simulator.StartBoardId).nextPlayer;
-    if (simulator.nextPlayer==0) simulator.nextPlayer=1;
+    if (simulator.nextPlayer==0) 
+      simulator.nextPlayer=1;
     //数字の色
     simulator.mainBoard.svColor = simulator.nextPlayer;
 
     // root nodeの設置と、
     ucb.rootNode = new uctNode();
-    for (int j=0; j<25; j++) {
+    for (int j=0; j<25; j++) {// copyBoardを使えないか？
       ucb.rootNode.bd[j] = simulator.mainBoard.s[j].col;
     }
     order.type=gameOptions.get("Order");// 手番の重みづけ設定
     order.init();// 手番の重みづけ設定
-    if (simulator.mainBoard.attackChanceP()) {//アタックチャンスのための１世代めの追加
+    if (simulator.mainBoard.attackChanceP()) {//アタックチャンスのための１世代めの追加//UCB1
       simulator.mainBoard.attackChanceP=true;
       simulator.mainBoard.buildVP(simulator.nextPlayer);// そもそもの着手可能パネル
       //アタックチャンス時の合法手の決定
@@ -586,6 +588,7 @@ void UCB1(ucbClass ucb) {
           simulator.mainBoard.s[j].marked=0;
         }
       }
+      // パスという選択肢
       uctNode newNode = new uctNode();
       ucb.rootNode.legalMoves.add(newNode);
       ucb.fullNodes.add(newNode);
@@ -604,6 +607,7 @@ void UCB1(ucbClass ucb) {
       for (int p=1; p<5; p++) {
         newNode.wa[p] = wp.points[p];//　初回につき代入、以後+=
       }
+      // パスというノードここまで
     }
     simulationManager=sP.setStartBoard;
   } else if (simulationManager==sP.setStartBoard) {// UCB1ループ部分
@@ -611,7 +615,7 @@ void UCB1(ucbClass ucb) {
       float maxUct=-100;
       uctNode maxNd=null;
       for (uctNode nd : ucb.fullNodes) {
-        float newUct = nd.UCTwp(nd.player, simulator.mainBoard.simulatorNumber, 1) ;
+        float newUct = nd.UCBValue(nd.player, simulator.mainBoard.simulatorNumber) ;
         if (newUct>maxUct) {
           maxUct=newUct;
           maxNd=nd;
@@ -674,7 +678,7 @@ void UCB1(ucbClass ucb) {
       float maxUct=-100;
       uctNode maxNd=null;
       for (uctNode nd : ucb.fullNodes) {
-        float newUct = nd.UCTwp(nd.player, simulator.mainBoard.simulatorNumber, 1) ;
+        float newUct = nd.UCBValue(nd.player, simulator.mainBoard.simulatorNumber) ;
         if (newUct>maxUct) {
           maxUct=newUct;
           maxNd=nd;

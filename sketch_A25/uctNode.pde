@@ -110,6 +110,14 @@ class uctNode {
     //float u2 = 2.0*sqrt(log(NN)/na);
     return u1 + u2;
   }
+  float UCBValue(int player, int NN){
+    // maxnアルゴリズムのUCB値 + 盤面
+    float u1 = wa[player]/na;//
+    if (u1>0.99 || u1<0.01)
+      u1 += pa[player]*0.004;
+    float u2 = 1.41421356*sqrt(log(NN)/na);
+    return u1 + u2;
+  }
   float UCTwp(int player, int NN, int option) {// NN:　累計試行回数
     // maxnアルゴリズムのUCB値 + 盤面
     float u1, u2;
