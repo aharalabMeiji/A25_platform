@@ -611,7 +611,7 @@ void UCB1(ucbClass ucb) {
       float maxUct=-100;
       uctNode maxNd=null;
       for (uctNode nd : ucb.fullNodes) {
-        float newUct = nd.UCTwp(nd.player, simulator.mainBoard.simulatorNumber) ;
+        float newUct = nd.UCTwp(nd.player, simulator.mainBoard.simulatorNumber, 1) ;
         if (newUct>maxUct) {
           maxUct=newUct;
           maxNd=nd;
@@ -674,7 +674,7 @@ void UCB1(ucbClass ucb) {
       float maxUct=-100;
       uctNode maxNd=null;
       for (uctNode nd : ucb.fullNodes) {
-        float newUct = nd.UCTwp(nd.player, simulator.mainBoard.simulatorNumber) ;
+        float newUct = nd.UCTwp(nd.player, simulator.mainBoard.simulatorNumber, 1) ;
         if (newUct>maxUct) {
           maxUct=newUct;
           maxNd=nd;
@@ -699,7 +699,7 @@ void UCB1(ucbClass ucb) {
         // 表示データの更新
         simulator.mainBoard.sv[maxNd.move] = maxNd.wa[maxNd.player]/maxNd.na;
         simulator.mainBoard.sv2[maxNd.move] = maxNd.pa[maxNd.player]/maxNd.na;
-        //maxNd.UCTwp(maxNd.player, simulator.mainBoard.simulatorNumber) ;
+        //maxNd.UCTwp(maxNd.player, simulator.mainBoard.simulatorNumber,1) ;
         if (gameOptions.get("SimTimes")==11) {// 10sec
           if (millis()-startTime>=10000) {
             simulationManager=sP.GameEnd;

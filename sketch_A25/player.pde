@@ -11,6 +11,7 @@ class player {
   float score;
   int yellow=-1;
   int noPass=0;
+  int uctOption=1;// 1: maxN, 2:paranoid, 3: bestreply search, 4: maxN+paranoid
   player(int _p, String _n, brainType _b) {
     position = _p;
     name = _n;

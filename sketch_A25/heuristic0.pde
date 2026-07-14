@@ -74,9 +74,9 @@ int isCornerBattle(board b){
   }
   return -1; 
 }
-boolean isMidField(int turn){
-  return true;
-}
+//boolean isMidField(int turn){
+//  return true;
+//}
 
 int heu0Brain(player pl) {
   pl.myBoard.buildVP(pl.position);

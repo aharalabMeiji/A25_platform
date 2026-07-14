@@ -63,7 +63,7 @@ int ucbFastBrain(player pl, ucbClass ucb) {
           for (int p=1; p<=4; p++) {
             newNode.wa[p] = wp.points[p];//初回は代入
             newNode.pa[p] = 1.0*wp.panels[p];//初回は代入
-            newNode.uct[p] = newNode.UCTwp(p, 1);// シミュレーション回数は１
+            newNode.uct[p] = newNode.UCTwp(p, 1, 1);// シミュレーション回数は１
           }
         }
       }
@@ -85,7 +85,7 @@ int ucbFastBrain(player pl, ucbClass ucb) {
         for (int p=1; p<=4; p++) {
           newNode.wa[p] = wp.points[p];//初回は代入
           newNode.pa[p] = 1.0*wp.panels[p];//初回は代入
-          newNode.uct[p] = newNode.UCTwp(p, 1);// シミュレーション回数は１
+          newNode.uct[p] = newNode.UCTwp(p, 1, 1);// シミュレーション回数は１
         }
         // subBoardはここで捨てる。
       }
@@ -104,7 +104,7 @@ int ucbFastBrain(player pl, ucbClass ucb) {
       for (int p=1; p<=4; p++) {
         newNode.wa[p] = wp.points[p];//初回は代入
         newNode.pa[p] = 1.0*wp.panels[p];//初回は代入
-        newNode.uct[p] = newNode.UCTwp(p, 1);// シミュレーション回数は１
+        newNode.uct[p] = newNode.UCTwp(p, 1, 1);// シミュレーション回数は１
       }
     }
     // subBoardはここで捨てる。
@@ -112,7 +112,7 @@ int ucbFastBrain(player pl, ucbClass ucb) {
   // １万回UCBを試して成績の悪いものをカットする。 
   int count=2;
   do{
-    uctNode maxNode = getMaxUcbFromNodeList(pl.position, ucb.rootNode.legalMoves, count);
+    uctNode maxNode = getMaxUcbFromNodeList(pl, ucb.rootNode.legalMoves, count);
     //if (uct == ucb1){
     //  print(":"+maxNode.na+"("+maxNode.move+")");
     //}
@@ -129,7 +129,7 @@ int ucbFastBrain(player pl, ucbClass ucb) {
     }
     for(uctNode nd : ucb.rootNode.legalMoves){
       for (int p=1; p<=4; p++) {
-        nd.uct[p] = nd.UCTwp(p, count);
+        nd.uct[p] = nd.UCTwp(p, count, 1);
       }
     }
     count++;
@@ -157,7 +157,7 @@ int ucbFastBrain(player pl, ucbClass ucb) {
     }
   }
   do{
-    uctNode maxNode = getMaxUcbFromNodeList(pl.position, ucb.rootNode.legalMoves, count);
+    uctNode maxNode = getMaxUcbFromNodeList(pl, ucb.rootNode.legalMoves, count);
     if (maxNode.na >= 1000) {
       break;
     }
@@ -171,7 +171,7 @@ int ucbFastBrain(player pl, ucbClass ucb) {
     }
     for(uctNode nd : ucb.rootNode.legalMoves){
       for (int p=1; p<=4; p++) {
-        nd.uct[p] = nd.UCTwp(p, count);
+        nd.uct[p] = nd.UCTwp(p, count, 1);
       }
     }
     count++;

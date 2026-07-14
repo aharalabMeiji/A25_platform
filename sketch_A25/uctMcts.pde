@@ -19,7 +19,6 @@ class uctClass {
   int cancelCountMax=10;
   float maxNodeWinrate=0.0;
   int chanceNodeOn=0;
-  int uctOption=0;
   int pruningThreshold=999;
   player nextPlayer=null;
   int nnNextPlayer=1;
@@ -98,7 +97,6 @@ class uctClass {
     //println("uctMctsBrain:ループ回数のカウント");
     pl.myBoard.simulatorNumber=0;
     //println("uctMctsBrain:UCT準備");
-    this.uctOption=gameOptions.get("uctOption");
     newNode = null;
     rootNode = new uctNode();
     rootNode.parent = null;
@@ -628,8 +626,8 @@ int uctMctsMainLoop(player pl) {
       for (uctNode nd : ancestor.activeNodes) {// 先祖たちにはアクティブノード（葉）がぶら下がっている。
         for (int p=1; p<=4; p++) {
           // シミュレーション総回数はpl.myBoard.simulatorNumber
-          // 平均パネル枚数に0.04かけて、加算している。２点満点
-          nd.uct[p] = nd.UCTwp(p, pl.myBoard.simulatorNumber);
+          // 平均パネル枚数に0.04かけて、加算している。1点満点
+          nd.uct[p] = nd.UCTwp(p, pl.myBoard.simulatorNumber, pl.uctOption);
           //nd.uct[p] = nd.UCTa(p, pl.myBoard.simulatorNumber);
         }
       }
@@ -993,40 +991,40 @@ int uctMctsMainLoop(player pl) {
 }
 
 
-void showAllMct(uctNode nd, int totalNumber, PrintWriter output) {
-  if (nd==null) return;
-  if (nd != uct.rootNode) {
-    float winrate = nd.wa[nd.player] / nd.na;
-    float ucbValue = nd.UCTwp(nd.player, totalNumber);
-    //float ucbValue = nd.UCTa(nd.player, totalNumber);
-    println(nd.id+": "+ nf(winrate, 0, 3)+" [" +nd.na+"] <"+nf(ucbValue, 0, 3)+">");
-  }
-  if (nd.legalMoves!=null && nd.legalMoves.size()>0) {
-    for (uctNode child : nd.legalMoves) {
-      showAllMct(child, totalNumber, output);
-    }
-  }
-  if (nd.childR!=null && nd.childR.size()>0) {
-    for (uctNode child : nd.childR) {
-      showAllMct(child, totalNumber, output);
-    }
-  }
-  if (nd.childR!=null && nd.childG.size()>0) {
-    for (uctNode child : nd.childG) {
-      showAllMct(child, totalNumber, output);
-    }
-  }
-  if (nd.childR!=null && nd.childW.size()>0) {
-    for (uctNode child : nd.childW) {
-      showAllMct(child, totalNumber, output);
-    }
-  }
-  if (nd.childR!=null && nd.childB.size()>0) {
-    for (uctNode child : nd.childB) {
-      showAllMct(child, totalNumber, output);
-    }
-  }
-}
+//void showAllMct(uctNode nd, int totalNumber, PrintWriter output) {
+//  if (nd==null) return;
+//  if (nd != uct.rootNode) {
+//    float winrate = nd.wa[nd.player] / nd.na;
+//    float ucbValue = nd.UCTwp(nd.player, totalNumber);
+//    //float ucbValue = nd.UCTa(nd.player, totalNumber);
+//    println(nd.id+": "+ nf(winrate, 0, 3)+" [" +nd.na+"] <"+nf(ucbValue, 0, 3)+">");
+//  }
+//  if (nd.legalMoves!=null && nd.legalMoves.size()>0) {
+//    for (uctNode child : nd.legalMoves) {
+//      showAllMct(child, totalNumber, output);
+//    }
+//  }
+//  if (nd.childR!=null && nd.childR.size()>0) {
+//    for (uctNode child : nd.childR) {
+//      showAllMct(child, totalNumber, output);
+//    }
+//  }
+//  if (nd.childR!=null && nd.childG.size()>0) {
+//    for (uctNode child : nd.childG) {
+//      showAllMct(child, totalNumber, output);
+//    }
+//  }
+//  if (nd.childR!=null && nd.childW.size()>0) {
+//    for (uctNode child : nd.childW) {
+//      showAllMct(child, totalNumber, output);
+//    }
+//  }
+//  if (nd.childR!=null && nd.childB.size()>0) {
+//    for (uctNode child : nd.childB) {
+//      showAllMct(child, totalNumber, output);
+//    }
+//  }
+//}
 
 int returnBestChildFromRoot(player pl, uctNode root) {
   // rootに直接ぶら下がっているノードの中から、最も勝率が良いものをリターンする。

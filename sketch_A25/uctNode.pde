@@ -110,10 +110,24 @@ class uctNode {
     //float u2 = 2.0*sqrt(log(NN)/na);
     return u1 + u2;
   }
-  float UCTwp(int player, int NN) {// NN:　累計試行回数
-    float u1 = (wa[player]+pa[player]*0.04)/2/na;
-    float u2 = 1.41421356*sqrt(log(NN)/na);
-    return u1 + u2;
+  float UCTwp(int player, int NN, int option) {// NN:　累計試行回数
+    // maxnアルゴリズムのUCB値 + 盤面
+    float u1, u2;
+    switch(option){
+    case 2:// paranoid
+      if (player==this.rootPlayer){
+        u1 = (wa[player]/na+pa[player]*0.04)/2;
+        u2 = 1.41421356*sqrt(log(NN)/na);
+      } else {
+        u1 = ((1.0 - wa[this.rootPlayer]/na)+pa[player]*0.04)/2;
+        u2 = 1.41421356*sqrt(log(NN)/na);
+      }//println("player="+player+", rootPlayer="+this.rootPlayer);
+      return u1 + u2;
+    default:
+      u1 = (wa[player]/na+pa[player]*0.04)/2;
+      u2 = 1.41421356*sqrt(log(NN)/na);
+      return u1 + u2; //<>//
+    }
   }
   float UCTb(int player, int NN) {// for MCTS
     float u1=0;
@@ -218,11 +232,11 @@ class chanceNode extends uctNode{
   }
 }
 
-uctNode getMaxUcbFromNodeList(int player, ArrayList<uctNode> nds, int NN) {
+uctNode getMaxUcbFromNodeList(player pl, ArrayList<uctNode> nds, int NN) {
   float best = 0;
   uctNode bestNd=null;
   for (uctNode nd : nds) {
-    float tmpUcb = nd.UCTwp(player, NN);
+    float tmpUcb = nd.UCTwp(pl.position, NN, pl.uctOption);
     if (best < tmpUcb) {
       best = tmpUcb;
       bestNd=nd;
