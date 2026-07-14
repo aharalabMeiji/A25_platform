@@ -52,6 +52,7 @@ void setup() {
   gameOptions.set("Absence1W", 0);
   gameOptions.set("Absence1B", 0);
   gameOptions.set("chanceNodeOn", 1);
+  gameOptions.set("uctOption",1);//1: maxn, 2:paranoid , 3:maxn + paranoid , 4: 
   gameOptions.set("pruning", 999);
   gameOptions.set("Rrate",1);
   gameOptions.set("Grate",1);

@@ -19,6 +19,7 @@ class uctClass {
   int cancelCountMax=10;
   float maxNodeWinrate=0.0;
   int chanceNodeOn=0;
+  int uctOption=0;
   int pruningThreshold=999;
   player nextPlayer=null;
   int nnNextPlayer=1;
@@ -97,10 +98,12 @@ class uctClass {
     //println("uctMctsBrain:ループ回数のカウント");
     pl.myBoard.simulatorNumber=0;
     //println("uctMctsBrain:UCT準備");
+    this.uctOption=gameOptions.get("uctOption");
     newNode = null;
     rootNode = new uctNode();
     rootNode.parent = null;
     rootNode.legalMoves = new ArrayList<uctNode>();
+    rootNode.player=pl.position;
     cancelCount=0;
     pl.myBoard.copyBoardToBd(uct.rootNode.bd);
     qtyPlayouts=0;
@@ -123,6 +126,7 @@ class uctClass {
           newNode.setParameters(pl.position, k,
             rootNode.id + (":"+kifu.playerColCode[pl.position]+nf(k+1, 2)),
             1, newNode, null, false);
+          newNode.setRootPlayer(this.rootNode.player);
           qtyNodes[0] ++;
           qtyNodes[1] ++;
           rootNode.legalMoves.add(uct.newNode);//ルートノードにぶら下げる
@@ -143,6 +147,7 @@ class uctClass {
         newNode.setParameters(pl.position, 25,
           uct.rootNode.id+(":"+kifu.playerColCode[pl.position]+nf(26, 2)),
           1, newNode, null, false);
+        newNode.setRootPlayer(this.rootNode.player);
         qtyNodes[0] ++;
         qtyNodes[1] ++;
         rootNode.legalMoves.add(newNode);//ルートノードにぶら下げる
@@ -162,11 +167,12 @@ class uctClass {
           int k = i*25+j;
           if ((pl.myBoard.vp[j]>0 && (pl.myBoard.s[i].col>=1 && pl.myBoard.s[i].col<=4)) || (pl.myBoard.vp[j]>0 && i==j)) {
             newNode = new uctNode();
-            qtyNodes[0] ++;
-            qtyNodes[1] ++;
             newNode.setParameters(pl.position, k,
               rootNode.id + (":"+kifu.playerColCode[pl.position]+nf(j+1, 2)) + (":Y"+nf(i+1, 2)),
               1, newNode, null, true );
+            newNode.setRootPlayer(this.rootNode.player);
+            qtyNodes[0] ++;
+            qtyNodes[1] ++;
             rootNode.legalMoves.add(newNode);//ぶら下げる
             newNode.onRGWB = new boolean[5];
             for (int p=1; p<5; p++) {
@@ -810,6 +816,7 @@ int uctMctsMainLoop(player pl) {
                     uct.newNode = new uctNode();
                     uct.qtyNodes[0] ++;
                     uct.newNode.setItem(p, k);
+                    uct.newNode.setRootPlayer(uct.rootNode.player);
                     uct.newNode.id = uctMaxNode.id+":"+kifu.playerColCode[p]+nf(k+1, 2);
                     uct.newNode.depth = uctMaxNode.depth+1;//=newChancenode.depth
                     uct.qtyNodes[uct.newNode.depth] ++;
@@ -854,6 +861,7 @@ int uctMctsMainLoop(player pl) {
                 //  uct.newNode = new uctNode();
                 //  uct.qtyNodes[0] ++;
                 //  uct.newNode.setItem(p, 25);
+                //  uct.newNode.setRootPlayer(uct.rootNode.player);
                 //  uct.newNode.id = uctMaxNode.id+":"+kifu.playerColCode[p]+nf(26, 2);
                 //  uct.newNode.depth = uctMaxNode.depth+1;//=newChancenode.depth
                 //  uct.qtyNodes[uct.newNode.depth] ++;
@@ -914,6 +922,7 @@ int uctMctsMainLoop(player pl) {
                       uct.newNode = new uctNode();
                       uct.qtyNodes[0] ++;
                       uct.newNode.setItem(p, k);
+                      uct.newNode.setRootPlayer(uct.rootNode.player);
                       uct.newNode.id = uctMaxNode.id + (":"+kifu.playerColCode[p]+nf(j+1, 2)) + (":Y"+nf(i+1, 2));
                       uct.newNode.depth = uctMaxNode.depth + 1;//=newChancenode.depth
                       uct.qtyNodes[uct.newNode.depth] ++;

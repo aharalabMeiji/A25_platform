@@ -12,6 +12,7 @@ class uctNode {
   //float NN=1;// 累計試行回数
   float[] uct;
   int player=0;
+  int rootPlayer=0;
   int move=-1;// attack chance時には、625までの数が入る。
   ArrayList<uctNode> legalMoves=null;// children から変更。深さ１の子供たち。
   ArrayList<uctNode> childR,childG,childW,childB;// チャンスノードの代わりに、子供を４つに分ける251018
@@ -98,6 +99,9 @@ class uctNode {
     ancestor = _ancestor;
     parent = _parent;
     attackChanceNode = _acn;
+  }
+  void setRootPlayer(int _p){
+    this.rootPlayer=_p;
   }
   float UCTa(int player, int NN) {// NN:　累計試行回数
     float u1 = wa[player]/na;
