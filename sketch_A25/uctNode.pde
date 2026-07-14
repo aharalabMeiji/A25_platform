@@ -124,7 +124,9 @@ class uctNode {
     switch(option){
     case 2:// paranoid
       if (player==this.rootPlayer){
-        u1 = (wa[player]/na+pa[player]*0.04)/2;
+        u1 = wa[player]/na;
+        if (u1>0.99 || u1<0.01)
+          u1 += pa[player]*0.004;
         u2 = 1.41421356*sqrt(log(NN)/na);
       } else {
         u1 = ((1.0 - wa[this.rootPlayer]/na)+pa[player]*0.04)/2;

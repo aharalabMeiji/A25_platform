@@ -23,13 +23,13 @@ class board {
     simulatorNumber=0;
     attackChanceP=false;
   }
-  void displayGame(){
+  void displayGame() {
     textAlign(CENTER, CENTER);
     for (int i = 0; i < 25; i ++) {
       s[i].displayGame();
     }
   }
-  void displaySimRandom(){
+  void displaySimRandom() {
     textAlign(CENTER, CENTER);
     background(255);
     //色つけ
@@ -57,7 +57,7 @@ class board {
     stroke(0);
     fill(utils.playerColor[simulator.nextPlayer]);
     rect(utils.mainL+utils.fontSize*12+textWidth("player: "), utils.mainU-utils.fontSize*1.3, utils.fontSize*2, utils.fontSize*0.8);
-    //ヘッダD、ファイル名（とおし番号）      
+    //ヘッダD、ファイル名（とおし番号）
     fill(0);
     int total = simulatorStartBoard.size();
     int now = (simulator.StartBoardId) % total;
@@ -79,7 +79,7 @@ class board {
     simMethod += "/";
     text(simMethod, utils.subL, utils.subU);
   }
-  void displaySimUcb(){
+  void displaySimUcb() {
     textAlign(CENTER, CENTER);
     background(255);
     //色つけ
@@ -108,7 +108,7 @@ class board {
     stroke(0);
     fill(utils.playerColor[simulator.nextPlayer]);
     rect(utils.mainL+utils.fontSize*12+textWidth("player: "), utils.mainU-utils.fontSize*1.3, utils.fontSize*2, utils.fontSize*0.8);
-    //ヘッダD、ファイル名（とおし番号）      
+    //ヘッダD、ファイル名（とおし番号）
     fill(0);
     int total = simulatorStartBoard.size();
     int now = (simulator.StartBoardId) % total;
@@ -128,7 +128,7 @@ class board {
       simMethod += (""+gameOptions.get("Brate")+"]");
     } else if (gameOptions.get("Order")==order.inTurn) simMethod +="/inTurn";
     simMethod += "/";
-    
+
     text(simMethod, utils.subL, utils.subU);
   }
   void displaySimUct() {
@@ -147,7 +147,7 @@ class board {
     textSize(utils.fontSize);
     if (!attackChanceP()) {
       if (svColor==3) fill(0);
-      else if(svColor==2) fill(0,128,0);
+      else if (svColor==2) fill(0, 128, 0);
       else fill(utils.playerColor[svColor]);
       textSize(utils.fontSize);
       text(1.0*sv[25], utils.mainL, utils.mainU-utils.fontSize);
@@ -161,39 +161,40 @@ class board {
     stroke(0);
     fill(utils.playerColor[simulator.nextPlayer]);
     rect(utils.mainL+utils.fontSize*12+textWidth("player: "), utils.mainU-utils.fontSize*1.3, utils.fontSize*2, utils.fontSize*0.8);
-    //Uct :ヘッダD、ファイル名（とおし番号）      
+    //Uct :ヘッダD、ファイル名（とおし番号）
     fill(0);
     int total = simulatorStartBoard.size();
     int now = (simulator.StartBoardId) % total;
     text(utils.filename+"("+now+")", utils.mainL+utils.fontSize*18.5, utils.mainU-utils.fontSize);
     //Uct :ヘッダE、ぐるぐる
-    switch(uct.underCalculation){
-      case 0: 
+    switch(uct.underCalculation) {
+    case 0:
       fill(#1E90FF);
-      ellipse(utils.mainL+utils.fontSize*27.5, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
+      ellipse(utils.mainL+utils.fontSize*27.5, utils.mainU-utils.fontSize, utils.fontSize*0.4, utils.fontSize*0.4);
       fill(#80c0ff);
-      ellipse(utils.mainL+utils.fontSize*28, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
+      ellipse(utils.mainL+utils.fontSize*28, utils.mainU-utils.fontSize, utils.fontSize*0.4, utils.fontSize*0.4);
       fill(#dcecfc);
-      ellipse(utils.mainL+utils.fontSize*28.5, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
+      ellipse(utils.mainL+utils.fontSize*28.5, utils.mainU-utils.fontSize, utils.fontSize*0.4, utils.fontSize*0.4);
       break;
-      case 1:
+    case 1:
       fill(#1E90FF);
-      ellipse(utils.mainL+utils.fontSize*28, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
+      ellipse(utils.mainL+utils.fontSize*28, utils.mainU-utils.fontSize, utils.fontSize*0.4, utils.fontSize*0.4);
       fill(#80c0ff);
-      ellipse(utils.mainL+utils.fontSize*28.5, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
+      ellipse(utils.mainL+utils.fontSize*28.5, utils.mainU-utils.fontSize, utils.fontSize*0.4, utils.fontSize*0.4);
       fill(#dcecfc);
-      ellipse(utils.mainL+utils.fontSize*27.5, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
+      ellipse(utils.mainL+utils.fontSize*27.5, utils.mainU-utils.fontSize, utils.fontSize*0.4, utils.fontSize*0.4);
       break;
-      case 2: 
+    case 2:
       fill(#1E90FF);
-      ellipse(utils.mainL+utils.fontSize*28.5, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
+      ellipse(utils.mainL+utils.fontSize*28.5, utils.mainU-utils.fontSize, utils.fontSize*0.4, utils.fontSize*0.4);
       fill(#80c0ff);
-      ellipse(utils.mainL+utils.fontSize*27.5, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
+      ellipse(utils.mainL+utils.fontSize*27.5, utils.mainU-utils.fontSize, utils.fontSize*0.4, utils.fontSize*0.4);
       fill(#dcecfc);
-      ellipse(utils.mainL+utils.fontSize*28, utils.mainU-utils.fontSize,utils.fontSize*0.4,utils.fontSize*0.4);
+      ellipse(utils.mainL+utils.fontSize*28, utils.mainU-utils.fontSize, utils.fontSize*0.4, utils.fontSize*0.4);
       break;
-      default: fill(#4CAF50);
-      text("✓", utils.mainL+utils.fontSize*28, utils.mainU-utils.fontSize);// 
+    default:
+      fill(#4CAF50);
+      text("✓", utils.mainL+utils.fontSize*28, utils.mainU-utils.fontSize);//
       break;
     }
     //Uct :盤左下
@@ -213,8 +214,8 @@ class board {
       else simMethod += "/woC";
     }
     if (gameOptions.get("chanceNodeOn")==1) simMethod += "/CN";
-    if(gameOptions.get("pruning")==1) simMethod += "/P1";
-    if(gameOptions.get("pruning")==2) simMethod += "/P2";
+    if (gameOptions.get("pruning")==1) simMethod += "/P1";
+    if (gameOptions.get("pruning")==2) simMethod += "/P2";
     simMethod += "/";
     text(simMethod, utils.subL, utils.subU);
     simMethod ="";
@@ -227,21 +228,23 @@ class board {
       simMethod += (""+gameOptions.get("Wrate")+":");
       simMethod += (""+gameOptions.get("Brate")+"]");
     } else if (gameOptions.get("Order")==order.inTurn) simMethod +="/inTurn";
+    if (gameOptions.get("uctOption")==2) simMethod +="/Op2";
+    else simMethod +="/Op1";
     simMethod += "/<";
-    if(gameOptions.get("Absence0R")==1) simMethod += "R";
-    if(gameOptions.get("Absence0G")==1) simMethod += "G";
-    if(gameOptions.get("Absence0W")==1) simMethod += "W";
-    if(gameOptions.get("Absence0B")==1) simMethod += "B";
+    if (gameOptions.get("Absence0R")==1) simMethod += "R";
+    if (gameOptions.get("Absence0G")==1) simMethod += "G";
+    if (gameOptions.get("Absence0W")==1) simMethod += "W";
+    if (gameOptions.get("Absence0B")==1) simMethod += "B";
     simMethod += "|";
-    if(gameOptions.get("Absence1R")==1) simMethod += "R";
-    if(gameOptions.get("Absence1G")==1) simMethod += "G";
-    if(gameOptions.get("Absence1W")==1) simMethod += "W";
-    if(gameOptions.get("Absence1B")==1) simMethod += "B";
+    if (gameOptions.get("Absence1R")==1) simMethod += "R";
+    if (gameOptions.get("Absence1G")==1) simMethod += "G";
+    if (gameOptions.get("Absence1W")==1) simMethod += "W";
+    if (gameOptions.get("Absence1B")==1) simMethod += "B";
     simMethod += ">";
     text(simMethod, utils.subL, utils.subU+utils.vStep);
   }
   //着手可能点のカウント
-  int countVp(){
+  int countVp() {
     int no=0;
     for (int k=0; k<25; k++) {
       if (vp[k]>0) {
@@ -250,8 +253,8 @@ class board {
     }
     return no;
   }
-  void setSvColor(){
-    for (int i=0; i<25; i++){
+  void setSvColor() {
+    for (int i=0; i<25; i++) {
       s[i].markColor = svColor;
     }
   }
@@ -411,7 +414,7 @@ class board {
   boolean attackChanceP() {
     int count0=0, count5=0;
     for (int i=0; i<25; i++) {
-      if (s[i].col==0) 
+      if (s[i].col==0)
         count0 ++;
       else if (s[i].col==5)
         count5 ++;
@@ -469,32 +472,32 @@ class board {
       s[k].marked=0;
     }
   }
-  boolean symmetryLR(){
-    for(int j=0; j<5; j++){
-      for (int i=0; i<2; i++){
+  boolean symmetryLR() {
+    for (int j=0; j<5; j++) {
+      for (int i=0; i<2; i++) {
         int k= 5*j + i;
         int kk = 5*j + (4-i);
         if (s[k].col != s[kk].col)
           return false;
       }
     }
-    return true;    
+    return true;
   }
-  boolean symmetryTB(){
-    for(int j=0; j<2; j++){
-      for (int i=0; i<5; i++){
+  boolean symmetryTB() {
+    for (int j=0; j<2; j++) {
+      for (int i=0; i<5; i++) {
         int k= 5*j + i;
         int kk = 5*(4-j) + i;
         if (s[k].col != s[kk].col)
           return false;
       }
     }
-    return true;    
+    return true;
   }
-  boolean symmetryDiagonal(){
-    for(int j=0; j<5; j++){
-      for (int i=0; i<5; i++){
-        if (i<j){
+  boolean symmetryDiagonal() {
+    for (int j=0; j<5; j++) {
+      for (int i=0; i<5; i++) {
+        if (i<j) {
           int k= 5*j + i;
           int kk = 5*i + j;
           if (s[k].col != s[kk].col)
@@ -502,66 +505,66 @@ class board {
         }
       }
     }
-    return true;    
+    return true;
   }
-  boolean symmetryAntiDiagonal(){
-    for(int j=0; j<5; j++){
-      for (int i=0; i<5; i++){
-        if (i+j<4){
+  boolean symmetryAntiDiagonal() {
+    for (int j=0; j<5; j++) {
+      for (int i=0; i<5; i++) {
+        if (i+j<4) {
           int k= 5*j + i;
-          int kk = 5*(4-i) + (4-j); 
+          int kk = 5*(4-i) + (4-j);
           if (s[k].col != s[kk].col)
             return false;
         }
       }
     }
-    return true;    
+    return true;
   }
-  void deleteSymmetricVp(){
-    if (this.symmetryLR()){
-      for(int j=0; j<5; j++){
-        for (int i=3; i<5; i++){
+  void deleteSymmetricVp() {
+    if (this.symmetryLR()) {
+      for (int j=0; j<5; j++) {
+        for (int i=3; i<5; i++) {
           int k= 5*j + i;
           vp[k]=0;
         }
       }
-    } else 
-    if (this.symmetryTB()){
-      for(int j=3; j<5; j++){
-        for (int i=0; i<5; i++){
+    } else
+    if (this.symmetryTB()) {
+      for (int j=3; j<5; j++) {
+        for (int i=0; i<5; i++) {
           int k= 5*j + i;
           vp[k]=0;
         }
       }
-    } else 
-    if (this.symmetryDiagonal()){
-      for(int j=0; j<5; j++){
-        for (int i=0; i<5; i++){
-          if (i<j){
+    } else
+    if (this.symmetryDiagonal()) {
+      for (int j=0; j<5; j++) {
+        for (int i=0; i<5; i++) {
+          if (i<j) {
             int k= 5*j + i;
             vp[k]=0;
           }
         }
       }
-    }  else 
-    if (this.symmetryAntiDiagonal()){
-      for(int j=0; j<5; j++){
-        for (int i=0; i<5; i++){
-          if (i+j>4){
+    } else
+    if (this.symmetryAntiDiagonal()) {
+      for (int j=0; j<5; j++) {
+        for (int i=0; i<5; i++) {
+          if (i+j>4) {
             int k= 5*j + i;
             vp[k]=0;
           }
         }
       }
-    }     
+    }
   }
 }; // end of class board
 
-int remaingInBd(int[] bd){
-  int len = min(bd.length,25);
+int remaingInBd(int[] bd) {
+  int len = min(bd.length, 25);
   int count=0;
-  for(int k=0; k<len; k++){
-    if(bd[k]==0 || bd[k]==5){
+  for (int k=0; k<len; k++) {
+    if (bd[k]==0 || bd[k]==5) {
       count++;
     }
   }
@@ -583,46 +586,48 @@ class panel {
     y = _y;
     n = _n;
   }
-  void drawBackground(){
+  void drawBackground() {
     dx = utils.mainL + utils.mainW * x;
     dy = utils.mainU + utils.mainH * y;
     fill(utils.playerColor[col]);//
     stroke(0);
     rect(dx, dy, utils.mainW, utils.mainH);
-    if ( col==5 ){
+    if ( col==5 ) {
       float offset = utils.mainH*0.1;
       fill(utils.playerColor[0]);
-      rect(dx+offset, dy+offset, utils.mainW-2*offset, utils.mainH-2*offset);        
+      rect(dx+offset, dy+offset, utils.mainW-2*offset, utils.mainH-2*offset);
     }
   }
-  void drawLargeNumber(){
+  void drawLargeNumber() {
     fill(0);
     textAlign(CENTER, CENTER);
     textSize(utils.fontSize*2);
     text(n, dx+utils.mainW/2, dy+utils.mainH/2-5);
   }
-  void markData(){
+  void markData() {
     textAlign(CENTER, CENTER);
     textSize(utils.fontSize*0.7);
-    if (markColor==0 || markColor==3){
-    fill(255);stroke(255);
+    if (markColor==0 || markColor==3) {
+      fill(255);
+      stroke(255);
     } else {
-      fill(235);stroke(255);
+      fill(235);
+      stroke(255);
     }
     float wid = textWidth("0000000");
     float hei = utils.fontSize*1.3;
     rect(dx+utils.mainW/2-wid*0.5, dy+utils.mainH/2+utils.fontSize*1.2-hei*0.5, wid, hei);
-    if (markColor==0 || markColor==3){
+    if (markColor==0 || markColor==3) {
       fill(0);
-    } else if (markColor==2){
-      fill(0,128,0);
+    } else if (markColor==2) {
+      fill(0, 128, 0);
     } else {
       fill(utils.playerColor[markColor]);
     }
     text(sv, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*0.9);
     text(sv2, dx+utils.mainW/2, dy+utils.mainH/2+utils.fontSize*1.5);
   }
-  void displayGame(){
+  void displayGame() {
     drawBackground();
     drawLargeNumber();
     if (marked>0) {
@@ -631,12 +636,12 @@ class panel {
       text("o", dx+utils.mainW/2, dy+utils.mainH/2);
     }
   }
-  void displaySimRandom(){
+  void displaySimRandom() {
     drawBackground();
     if (marked>0) markData();
     drawLargeNumber();
   }
-  void displaySimUcb(){
+  void displaySimUcb() {
     drawBackground();
     if (marked>0) markData();
     drawLargeNumber();

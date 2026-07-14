@@ -19,6 +19,7 @@ class uctClass {
   int cancelCountMax=10;
   float maxNodeWinrate=0.0;
   int chanceNodeOn=0;
+  int uctOption = 1;
   int pruningThreshold=999;
   player nextPlayer=null;
   int nnNextPlayer=1;
@@ -627,7 +628,7 @@ int uctMctsMainLoop(player pl) {
         for (int p=1; p<=4; p++) {
           // シミュレーション総回数はpl.myBoard.simulatorNumber
           // 平均パネル枚数に0.04かけて、加算している。1点満点
-          nd.uct[p] = nd.UCTwp(p, pl.myBoard.simulatorNumber, pl.uctOption);
+          nd.uct[p] = nd.UCTwp(p, pl.myBoard.simulatorNumber, uct.uctOption);
           //nd.uct[p] = nd.UCTa(p, pl.myBoard.simulatorNumber);
         }
       }
