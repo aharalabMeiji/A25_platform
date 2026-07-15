@@ -129,8 +129,23 @@ class uctNode {
           u1 += pa[player]*0.004;
         u2 = 1.41421356*sqrt(log(NN)/na);
       } else {
-        u1 = ((1.0 - wa[this.rootPlayer]/na)+pa[player]*0.04)/2;
+        u1 = 1.0 - wa[this.rootPlayer]/na;
+        if (u1>0.99 || u1<0.01)
+          u1 += pa[player]*0.004;
         u2 = 1.41421356*sqrt(log(NN)/na);
+      }//println("player="+player+", rootPlayer="+this.rootPlayer);
+      return u1 + u2;
+    case 3:// hybrid (= maxn + paranoid)
+      if (player==this.rootPlayer){
+        u1 = wa[player]/na;
+        if (u1>0.99 || u1<0.01)
+          u1 += pa[player]*0.004;
+        u2 = 1.41421356*sqrt(log(NN)/na);
+      } else {
+        u1 = (na - wa[this.rootPlayer]+wa[player])/na/2;
+        if (u1>0.99 || u1<0.01)
+          u1 += pa[player]*0.004;
+         u2 = 1.41421356*sqrt(log(NN)/na);
       }//println("player="+player+", rootPlayer="+this.rootPlayer);
       return u1 + u2;
     default:

@@ -1269,6 +1269,44 @@ void showContents() {
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
       //
+      top += utils.vStep;
+      left=utils.hOffset;
+      //
+      captionText = "UCT :";
+      fill(0);
+      text(captionText, left, top);
+      left += (textWidth(captionText)+utils.hSpace);
+      //
+      buttonText = "[maxn]";
+      button buttonUctOption1=new button();
+      buttonUctOption1.setLT(left, top, buttonText);
+      buttonUctOption1.setItem("uctOption", 1);
+      buttons.add(buttonUctOption1);
+      if (gameOptions.get("uctOption")==1) fill(255, 0, 0);
+      else fill(0);
+      text(buttonText, left, top);
+      left += (textWidth(buttonText)+utils.hSpace);
+      //
+      buttonText = "[paranoid]";
+      button buttonUctOption2=new button();
+      buttonUctOption2.setLT(left, top, buttonText);
+      buttonUctOption2.setItem("uctOption", 2);
+      buttons.add(buttonUctOption2);
+      if (gameOptions.get("uctOption")==2) fill(255, 0, 0);
+      else fill(0);
+      text(buttonText, left, top);
+      left += (textWidth(buttonText)+utils.hSpace);
+      //
+      buttonText = "[hybrid]";
+      button buttonUctOption3=new button();
+      buttonUctOption3.setLT(left, top, buttonText);
+      buttonUctOption3.setItem("uctOption", 3);
+      buttons.add(buttonUctOption3);
+      if (gameOptions.get("uctOption")==3) fill(255, 0, 0);
+      else fill(0);
+      text(buttonText, left, top);
+      left += (textWidth(buttonText)+utils.hSpace);
+      //
     }
     //
     top += utils.vStep;

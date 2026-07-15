@@ -228,8 +228,9 @@ class board {
       simMethod += (""+gameOptions.get("Wrate")+":");
       simMethod += (""+gameOptions.get("Brate")+"]");
     } else if (gameOptions.get("Order")==order.inTurn) simMethod +="/inTurn";
-    if (gameOptions.get("uctOption")==2) simMethod +="/Op2";
-    else simMethod +="/Op1";
+    if (gameOptions.get("uctOption")==2) simMethod +="/para";
+    else if (gameOptions.get("uctOption")==3) simMethod +="/hybr";
+    else simMethod +="/maxn";
     simMethod += "/<";
     if (gameOptions.get("Absence0R")==1) simMethod += "R";
     if (gameOptions.get("Absence0G")==1) simMethod += "G";
