@@ -219,8 +219,8 @@ class board {
     simMethod += "/";
     text(simMethod, utils.subL, utils.subU);
     simMethod ="";
-    if (gameOptions.get("Playout")==1) simMethod +="/Po1";
-    else if (gameOptions.get("Playout")==2) simMethod +="/Po2";
+    if (gameOptions.get("Playout")==1) simMethod +="/CornerPO";
+    else if (gameOptions.get("Playout")==2) simMethod +="/CrossPO";
     if (gameOptions.get("Order")==order.weightedRandom) {
       simMethod +="/Od[";
       simMethod += (""+gameOptions.get("Rrate")+":");
