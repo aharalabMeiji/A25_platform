@@ -1,5 +1,6 @@
 enum brainType{
-  Human, Random, UCBold, UCB1, UCB2, UCTE10D4, UCBUCT, UCTE10D4P1, UCTE10D4P2, Heuristic1, Heuristic2
+  Human, Random, UCBold, UCB1, UCB2, UCTE10D4, UCBUCT, UCTD4P1, UCTE10D4P2, UCTD4P1Para, 
+  Heuristic1, Heuristic2
 }
 
 class player {
@@ -82,7 +83,7 @@ class player {
       uct.chanceNodeOn=1;
       uct.pruningThreshold=999;
       return uct.mctsBrain(this);//250618 現在の一つの解
-    } else if (myBrain==brainType.UCTE10D4P1){
+    } else if (myBrain==brainType.UCTD4P1){
       uct.expandThreshold=100;
       uct.terminateThreshold = uct.expandThreshold*1000000;
       uct.depthMax=4;
