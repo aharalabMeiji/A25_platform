@@ -1,4 +1,4 @@
-//// simulate line 2651 //<>// //<>//
+//// simulate line 2651 //<>// //<>// //<>//
 
 class startBoard {
   int[] theArray;
@@ -1114,6 +1114,7 @@ void saveScreenShotSelected(File selection) {
     }
     println("選択されたファイルパス: " + utils.filePath);
     save(utils.filePath);
+    frameRate(10000);
   }
 }
 

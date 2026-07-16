@@ -715,7 +715,10 @@ int uctMctsMainLoop(player pl) {
           //UCT目線の長男（長女）を記録する。
           if (uctMaxNode.player==1){
             uctMaxNode.parent.ncR++;
-            if (uctMaxNode.parent.bcR==null)  uctMaxNode.parent.bcR=uctMaxNode;// bc = best child
+            if (uctMaxNode.parent.bcR==null){
+              uctMaxNode.parent.bcR=uctMaxNode;// bc = best child
+            } else {// second best child
+            }
           } else if (uctMaxNode.player==2){
             uctMaxNode.parent.ncG++;
             if (uctMaxNode.parent.bcG==null) uctMaxNode.parent.bcG=uctMaxNode;// bc = best child

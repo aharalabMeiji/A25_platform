@@ -49,7 +49,11 @@ void showContents() {
     buttonHuman1.setItem("Player1", 0);
     buttons.add(buttonHuman1);
     if (gameOptions.get("Player1") == 0) fill(255, 0, 0);
-    else fill(0);
+    else {
+      fill(0);
+      buttonText="[H]";
+      buttonHuman1.setLT(left, top, buttonText);
+    }    
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
@@ -59,7 +63,11 @@ void showContents() {
     buttonRandom1.setItem("Player1", 1);
     buttons.add(buttonRandom1);
     if (gameOptions.get("Player1") == 1) fill(255, 0, 0);
-    else fill(0);
+    else {
+      fill(0);
+      buttonText="[R]";
+      buttonRandom1.setLT(left, top, buttonText);
+    }    
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
@@ -80,7 +88,11 @@ void showContents() {
     buttonUCT1.setItem("Player1", 3);
     buttons.add(buttonUCT1);
     if (gameOptions.get("Player1")%10 == 3) fill(255, 0, 0);
-    else fill(0);
+    else {
+      fill(0);
+      buttonText="[B]";
+      buttonUCT1.setLT(left, top, buttonText);
+    }
     text(buttonText, left, top);
     left += (textWidth(buttonText)+10);
     //
@@ -90,7 +102,11 @@ void showContents() {
     buttonUCTMCTS1.setItem("Player1", 4);
     buttons.add(buttonUCTMCTS1);
     if (gameOptions.get("Player1")%10==4) fill(255, 0, 0);
-    else fill(0);
+    else {
+      fill(0);
+      buttonText="[T]";
+      buttonUCTMCTS1.setLT(left, top, buttonText);
+    }
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
@@ -100,7 +116,11 @@ void showContents() {
     buttonUCTMCTS1.setItem("Player1", 5);
     buttons.add(buttonUCTMCTS1);
     if (gameOptions.get("Player1")%10==5) fill(255, 0, 0);
-    else fill(0);
+    else {
+      fill(0);
+      buttonText="[pT]";
+      buttonUCTMCTS1.setLT(left, top, buttonText);
+    }
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
 
@@ -117,7 +137,11 @@ void showContents() {
     buttonHuman1.setItem("Player2", 0);
     buttons.add(buttonHuman1);
     if (gameOptions.get("Player2") == 0) fill(255, 0, 0);
-    else fill(0);
+    else {
+      fill(0);
+      buttonText="[H]";
+      buttonHuman1.setLT(left, top, buttonText);
+    }    
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
@@ -127,7 +151,11 @@ void showContents() {
     buttonRandom1.setItem("Player2", 1);
     buttons.add(buttonRandom1);
     if (gameOptions.get("Player2") == 1) fill(255, 0, 0);
-    else fill(0);
+    else {
+      fill(0);
+      buttonText="[R]";
+      buttonRandom1.setLT(left, top, buttonText);
+    }    
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
@@ -148,7 +176,11 @@ void showContents() {
     buttonUCT1.setItem("Player2", 3);
     buttons.add(buttonUCT1);
     if (gameOptions.get("Player2") == 3) fill(255, 0, 0);
-    else fill(0);
+    else {
+      fill(0);
+      buttonText="[B]";
+      buttonUCT1.setLT(left, top, buttonText);
+    }
     //fill(200, 200, 200);
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
@@ -159,7 +191,11 @@ void showContents() {
     buttonUCTMCTS1.setItem("Player2", 4);
     buttons.add(buttonUCTMCTS1);
     if (gameOptions.get("Player2")%10==4) fill(255, 0, 0);
-    else fill(0);
+    else {
+      fill(0);
+      buttonText="[T]";
+      buttonUCTMCTS1.setLT(left, top, buttonText);
+    }
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
@@ -169,7 +205,11 @@ void showContents() {
     buttonUCTMCTS1.setItem("Player2", 5);
     buttons.add(buttonUCTMCTS1);
     if (gameOptions.get("Player2")%10==5) fill(255, 0, 0);
-    else fill(0);
+    else {
+      fill(0);
+      buttonText="[pT]";
+      buttonUCTMCTS1.setLT(left, top, buttonText);
+    }
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
 
@@ -186,7 +226,11 @@ void showContents() {
     buttonHuman1.setItem("Player3", 0);
     buttons.add(buttonHuman1);
     if (gameOptions.get("Player3") == 0) fill(255, 0, 0);
-    else fill(0);
+    else {
+      fill(0);
+      buttonText="[H]";
+      buttonHuman1.setLT(left, top, buttonText);
+    }    
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
@@ -196,7 +240,11 @@ void showContents() {
     buttonRandom1.setItem("Player3", 1);
     buttons.add(buttonRandom1);
     if (gameOptions.get("Player3") == 1) fill(255, 0, 0);
-    else fill(0);
+    else {
+      fill(0);
+      buttonText="[R]";
+      buttonRandom1.setLT(left, top, buttonText);
+    }    
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
@@ -216,9 +264,12 @@ void showContents() {
     buttonUCT1.setLT(left, top, buttonText);
     buttonUCT1.setItem("Player3", 3);
     buttons.add(buttonUCT1);
-    if (gameOptions.get("Player3") == 3) fill(255, 0, 0);
-    else fill(0);
-    //fill(200, 200, 200);
+    if (gameOptions.get("Player3") == 3)fill(255, 0, 0);
+    else {
+      fill(0);
+      buttonText="[B]";
+      buttonUCT1.setLT(left, top, buttonText);
+    }
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
@@ -228,7 +279,11 @@ void showContents() {
     buttonUCTMCTS1.setItem("Player3", 4);
     buttons.add(buttonUCTMCTS1);
     if (gameOptions.get("Player3")%10==4) fill(255, 0, 0);
-    else fill(0);
+    else {
+      fill(0);
+      buttonText="[T]";
+      buttonUCTMCTS1.setLT(left, top, buttonText);
+    }
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
@@ -238,7 +293,11 @@ void showContents() {
     buttonUCTMCTS1.setItem("Player3", 5);
     buttons.add(buttonUCTMCTS1);
     if (gameOptions.get("Player3")%10==5) fill(255, 0, 0);
-    else fill(0);
+    else {
+      fill(0);
+      buttonText="[pT]";
+      buttonUCTMCTS1.setLT(left, top, buttonText);
+    }
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
 
@@ -255,7 +314,11 @@ void showContents() {
     buttonHuman1.setItem("Player4", 0);
     buttons.add(buttonHuman1);
     if (gameOptions.get("Player4") == 0) fill(255, 0, 0);
-    else fill(0);
+    else {
+      fill(0);
+      buttonText="[H]";
+      buttonHuman1.setLT(left, top, buttonText);
+    }    
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
@@ -265,7 +328,11 @@ void showContents() {
     buttonRandom1.setItem("Player4", 1);
     buttons.add(buttonRandom1);
     if (gameOptions.get("Player4") == 1) fill(255, 0, 0);
-    else fill(0);
+    else {
+      fill(0);
+      buttonText="[R]";
+      buttonRandom1.setLT(left, top, buttonText);
+    }    
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
@@ -286,8 +353,11 @@ void showContents() {
     buttonUCT1.setItem("Player4", 3);
     buttons.add(buttonUCT1);
     if (gameOptions.get("Player4") == 3) fill(255, 0, 0);
-    else fill(0);
-    //fill(200, 200, 200);
+    else {
+      fill(0);
+      buttonText="[B]";
+      buttonUCT1.setLT(left, top, buttonText);
+    }
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
@@ -297,7 +367,11 @@ void showContents() {
     buttonUCTMCTS1.setItem("Player4", 4);
     buttons.add(buttonUCTMCTS1);
     if (gameOptions.get("Player4")%10==4) fill(255, 0, 0);
-    else fill(0);
+    else {
+      fill(0);
+      buttonText="[T]";
+      buttonUCTMCTS1.setLT(left, top, buttonText);
+    }
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
@@ -307,7 +381,11 @@ void showContents() {
     buttonUCTMCTS1.setItem("Player4", 5);
     buttons.add(buttonUCTMCTS1);
     if (gameOptions.get("Player4")%10==5) fill(255, 0, 0);
-    else fill(0);
+    else {
+      fill(0);
+      buttonText="[pT]";
+      buttonUCTMCTS1.setLT(left, top, buttonText);
+    }
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
 
