@@ -269,8 +269,8 @@ void showGames() {
       game.participants[p].displayGame();//
     }
     if (game.editMode){
-      //showSaveReplaceButton();
-      //showSaveAppendButton();
+      showSaveReplaceButton();
+      showSaveAppendButton();
       if (game.editBoard.size()>1){
         showUndoButton();
       }
