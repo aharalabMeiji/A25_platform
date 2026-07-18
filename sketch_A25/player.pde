@@ -1,5 +1,5 @@
 enum brainType{
-  Human, Random, UCBold, UCB1, UCB2, UCTE10D4, UCBUCT, UCTD4P1, UCTE10D4P2, UCTD4P1Para, 
+  Human, Random, UCBold, UCB1, UCB2, UCTE10D4, UCBUCT, UCTD4P1, UCTE10D4P2, UCTD4P1Para,UCTD4P2Para, 
   Heuristic1, Heuristic2
 }
 
@@ -82,6 +82,7 @@ class player {
       uct.cancelCountMax=10;
       uct.chanceNodeOn=1;
       uct.pruningThreshold=999;
+      uct.uctOption=1;// maxn
       return uct.mctsBrain(this);//250618 現在の一つの解
     } else if (myBrain==brainType.UCTD4P1){
       uct.expandThreshold=100;
@@ -90,6 +91,7 @@ class player {
       uct.cancelCountMax=1000;
       uct.chanceNodeOn=1;
       uct.pruningThreshold=1;
+      uct.uctOption=1;// maxn
       return uct.mctsBrain(this);//260114 枝切りの提案１
     } else if (myBrain==brainType.UCTE10D4P2){
       uct.expandThreshold=100;
@@ -98,7 +100,17 @@ class player {
       uct.cancelCountMax=1000;
       uct.chanceNodeOn=1;
       uct.pruningThreshold=2;
-      return uct.mctsBrain(this);//260114 枝切りの提案２
+      uct.uctOption=1;// maxn
+      return uct.mctsBrain(this);//260114 枝切りの提案2
+    } else if (myBrain==brainType.UCTD4P1Para){
+      uct.expandThreshold=100;
+      uct.terminateThreshold = uct.expandThreshold*1000000;
+      uct.depthMax=4;
+      uct.cancelCountMax=1000;
+      uct.chanceNodeOn=1;
+      uct.pruningThreshold=1;
+      uct.uctOption=2; //paranoid
+      return uct.mctsBrain(this);//260718 Pruning1-paranoid-UCT
     } 
     //else if (myBrain==brainType.UCBUCT){
     //  return uctMctsABrain(this, 1000, 1000000, 4);

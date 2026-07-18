@@ -58,7 +58,7 @@ int ucbFastBrain(player pl, ucbClass ucb) {
           ucb.subBoard.copyBoardToBd(newNode.bd);
           newNode.attackChanceNode=true;
           //1回実行する@ucbFastBrain
-          winPoints wp = playoutToEnd(ucb.subBoard, ucbMcParticipants, 0);// //<>// //<>//
+          winPoints wp = playoutToEnd(ucb.subBoard, ucbMcParticipants, 0);// //<>//
           newNode.na=1;//
           for (int p=1; p<=4; p++) {
             newNode.wa[p] = wp.points[p];//初回は代入

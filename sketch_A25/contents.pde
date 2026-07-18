@@ -123,6 +123,20 @@ void showContents() {
     }
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
+    //
+    buttonText = "[p1Paranoid]";
+    button buttonUCTP1PARA=new button();
+    buttonUCTP1PARA.setLT(left, top, buttonText);
+    buttonUCTP1PARA.setItem("Player1", 6);
+    buttons.add(buttonUCTP1PARA);
+    if (gameOptions.get("Player1")%10==6) fill(255, 0, 0);
+    else {
+      fill(0);
+      buttonText="[p1Para]";
+      buttonUCTP1PARA.setLT(left, top, buttonText);
+    }
+    text(buttonText, left, top);
+    left += (textWidth(buttonText)+utils.hSpace);
 
     // Player2
     top += utils.vStep;

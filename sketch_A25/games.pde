@@ -178,6 +178,8 @@ void showGames() {
         game.participants[p] = new player(p, "uct"+pp, brainType.UCTE10D4);
       } else if (gameOptions.get("Player"+pp)==5) {
         game.participants[p] = new player(p, "p-uct"+pp, brainType.UCTD4P1);
+      } else if (gameOptions.get("Player"+pp)==6) {
+        game.participants[p] = new player(p, "p-para"+pp, brainType.UCTD4P1Para);
       } else {
         game.participants[p] = new player(p, "random"+pp, brainType.Random);
         //game.participants[p] = new player(p, "random"+pp, brainType.Heuristic1);

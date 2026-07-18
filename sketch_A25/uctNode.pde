@@ -120,7 +120,8 @@ class uctNode {
   }
   float UCTwp(int player, int NN, int option) {// NN:　累計試行回数
     // maxnアルゴリズムのUCB値 + 盤面
-    float u1, u2;
+    float u1, u2; //<>//
+    //print(option);
     switch(option){
     case 2:// paranoid
       if (player==this.rootPlayer){
@@ -259,7 +260,7 @@ uctNode getMaxUcbFromNodeList(player pl, ArrayList<uctNode> nds, int NN) {
   float best = 0;
   uctNode bestNd=null;
   for (uctNode nd : nds) {
-    float tmpUcb = nd.UCTwp(pl.position, NN, pl.uctOption);
+    float tmpUcb = nd.UCBValue(pl.position, NN);
     if (best < tmpUcb) {
       best = tmpUcb;
       bestNd=nd;
