@@ -226,6 +226,20 @@ void showContents() {
     }
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
+    //
+    buttonText = "[p1Paranoid]";
+    buttonUCTP1PARA=new button();
+    buttonUCTP1PARA.setLT(left, top, buttonText);
+    buttonUCTP1PARA.setItem("Player2", 6);
+    buttons.add(buttonUCTP1PARA);
+    if (gameOptions.get("Player2")%10==6) fill(255, 0, 0);
+    else {
+      fill(0);
+      buttonText="[p1Para]";
+      buttonUCTP1PARA.setLT(left, top, buttonText);
+    }
+    text(buttonText, left, top);
+    left += (textWidth(buttonText)+utils.hSpace);
 
     // Player3
     top += utils.vStep;
@@ -314,6 +328,20 @@ void showContents() {
     }
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
+    //
+    buttonText = "[p1Paranoid]";
+    buttonUCTP1PARA=new button();
+    buttonUCTP1PARA.setLT(left, top, buttonText);
+    buttonUCTP1PARA.setItem("Player3", 6);
+    buttons.add(buttonUCTP1PARA);
+    if (gameOptions.get("Player3")%10==6) fill(255, 0, 0);
+    else {
+      fill(0);
+      buttonText="[p1Para]";
+      buttonUCTP1PARA.setLT(left, top, buttonText);
+    }
+    text(buttonText, left, top);
+    left += (textWidth(buttonText)+utils.hSpace);
 
     // Player4
     top += utils.vStep;
@@ -399,6 +427,20 @@ void showContents() {
       fill(0);
       buttonText="[pT]";
       buttonUCTMCTS1.setLT(left, top, buttonText);
+    }
+    text(buttonText, left, top);
+    left += (textWidth(buttonText)+utils.hSpace);
+    //
+    buttonText = "[p1Paranoid]";
+    buttonUCTP1PARA=new button();
+    buttonUCTP1PARA.setLT(left, top, buttonText);
+    buttonUCTP1PARA.setItem("Player4", 6);
+    buttons.add(buttonUCTP1PARA);
+    if (gameOptions.get("Player4")%10==6) fill(255, 0, 0);
+    else {
+      fill(0);
+      buttonText="[p1Para]";
+      buttonUCTP1PARA.setLT(left, top, buttonText);
     }
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
