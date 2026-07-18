@@ -715,10 +715,7 @@ int uctMctsMainLoop(player pl) {
           //UCT目線の長男（長女）を記録する。
           if (uctMaxNode.player==1){
             uctMaxNode.parent.ncR++;
-            if (uctMaxNode.parent.bcR==null){
-              uctMaxNode.parent.bcR=uctMaxNode;// bc = best child
-            } else {// second best child
-            }
+            if (uctMaxNode.parent.bcR==null) uctMaxNode.parent.bcR=uctMaxNode;// bc = best child
           } else if (uctMaxNode.player==2){
             uctMaxNode.parent.ncG++;
             if (uctMaxNode.parent.bcG==null) uctMaxNode.parent.bcG=uctMaxNode;// bc = best child
@@ -753,17 +750,22 @@ int uctMctsMainLoop(player pl) {
               // Rchild内の他のノードのうち、その人にとっての勝率が低い他のノードは
               // その場で立ち枯れさせる(アクティブノードのリストからはずす。)
               nacnd = ancestor.activeNodes.size();
+              //int acndcount0=0;
+              //int acndcount1=0;
               for (int zz = nacnd-1; zz>=0; zz--){
                 uctNode acnd = ancestor.activeNodes.get(zz);
                 // 親が共通で、色も共通（長男本人は消去済み）
                 if (acnd.parent==uctMaxNode.parent && acnd.player==uctMaxNode.player){
+                  //acndcount1++;
                   float thisValue = acnd.wa[acnd.player]/acnd.na;
                   //println("acnd.id="+acnd.id+"acnd.wa="+thisValue+", threshold="+thresholdPruning);
                   if (thisValue<=thresholdPruning){
                     ancestor.activeNodes.remove(zz);//アクティブノードのリストから消去
+                    //acndcount0++;
                   }
                 }
               }
+              //println(acndcount0+" nodes were deleted in "+acndcount1+" nodes at "+uctMaxNode.parent.id);
             }
           }
 
