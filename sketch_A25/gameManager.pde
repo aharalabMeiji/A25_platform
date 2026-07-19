@@ -4,11 +4,11 @@ dP displayManager;
 sP simulationManager;
 
 enum dP{// display manager
-  onSimulator, onGame, onContents, onTree
+  onSimulator, onGame, onContents, onTree, onExperiment
 }
 
 enum mP{// game manager
-  GameStart,
+  PrepareGame, GameStart,
   WaitChoosePlayer,AfterChoosePlayer,
   BeforeMoving,OnMoving,AfterMoving,
   BeforeAttackChance,OnAttackChance,AfterAttackChance,

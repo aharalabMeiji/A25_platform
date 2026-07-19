@@ -685,7 +685,18 @@ void showContents() {
     buttonStart.setLT(left, top, buttonText);
     fill(255, 0, 0);
     text(buttonText, left, top);
-  } else if (gameOptions.get("gameMode") == 1) {///////////////////////////////////////// Simulation options
+    left += (textWidth(buttonText)+utils.hSpace);
+    // 202607の実験のためのボタン
+    top += utils.vStep;
+    left=utils.hOffset;
+    buttonText = "[2026 experiment]";
+    buttonExperiment=new button();
+    buttonExperiment.setLT(left, top, buttonText);
+    fill(255, 0, 0);
+    text(buttonText, left, top);
+    left += (textWidth(buttonText)+utils.hSpace);
+
+} else if (gameOptions.get("gameMode") == 1) {///////////////////////////////////////// Simulation options
     fill(0);
     text(utils.filename, utils.mainL+utils.fontSize*22, utils.mainU-utils.fontSize);
     // シミュレーション方法選択
@@ -1522,7 +1533,7 @@ void showContents() {
       top += utils.vStep*7;
       
     }
-    // Start
+    // Start　シミュレーションモードのスタート
     top += utils.vStep;
     left=utils.hOffset;
     buttonText = "S T A R T";

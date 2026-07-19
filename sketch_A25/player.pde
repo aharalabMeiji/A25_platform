@@ -1,5 +1,5 @@
 enum brainType{
-  Human, Random, UCBold, UCB1, UCB2, UCTE10D4, UCBUCT, UCTD4P1, UCTE10D4P2, UCTD4P1Para,UCTD4P2Para, 
+  Human, Random, UCBold, UCB1, UCB2, UCTE10D4, UCBUCT, UCTD4P1, UCTE10D4P2, UCTD4P1Para, UCTD4P2Para, UCTD4P1Hybrid, 
   Heuristic1, Heuristic2
 }
 
@@ -111,6 +111,15 @@ class player {
       uct.pruningThreshold=1;
       uct.uctOption=2; //paranoid
       return uct.mctsBrain(this);//260718 Pruning1-paranoid-UCT
+    } else if (myBrain==brainType.UCTD4P1Hybrid){
+      uct.expandThreshold=100;
+      uct.terminateThreshold = uct.expandThreshold*1000000;
+      uct.depthMax=4;
+      uct.cancelCountMax=1000;
+      uct.chanceNodeOn=1;
+      uct.pruningThreshold=1;
+      uct.uctOption=3; //hybrid
+      return uct.mctsBrain(this);//260718 Pruning1-hybrid-UCT
     } 
     //else if (myBrain==brainType.UCBUCT){
     //  return uctMctsABrain(this, 1000, 1000000, 4);

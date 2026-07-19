@@ -89,6 +89,8 @@ void draw() {
     showContents();
   } else if (displayManager == dP.onTree){
     tree.show();
+  } else if (displayManager == dP.onExperiment){
+    showExperiment();
   }
 }
 
@@ -142,6 +144,9 @@ void mousePressed() {
         displayManager = dP.onGame;
         managerPhase = mP.GameStart;
         utils.gameMainBoard.simulatorNumber=0;
+      } else if (buttonExperiment!=null && buttonExperiment.mouseOn()){
+        displayManager = dP.onExperiment;
+        managerPhase = mP.PrepareGame;
       } else if (buttonPrevBoard.mouseOn()) {
         int total = simulatorStartBoard.size();
         simulator.StartBoardId = (simulator.StartBoardId + total - 1)% total;
