@@ -12,6 +12,8 @@ float[][] strategySum = new float[NUM_PLAYERS][NUM_ACTIONS];
 // グラフ描画用の履歴
 ArrayList<float[]> strategyHistory = new ArrayList<float[]>();
 
+boolean shuuryou=false;
+
 void setup() {
   size(800, 500);
   frameRate(60);
@@ -105,10 +107,12 @@ void setup() {
 }
 
 void draw() {
+  if(shuuryou) return;
   background(245);
   
+  if (strategyHistory.size()>=(width-250)/10) shuuryou=true;
   // 1フレームあたり100回シミュレーションを回して高速に収束させる
-  for (int step = 0; step < 100; step++) {
+  for (int step = 0; step < 2; step++) {
     runRegretMatchingStep();
   }
   
@@ -123,7 +127,7 @@ void draw() {
     }
   }
   strategyHistory.add(currentEquilibrium);
-  if (strategyHistory.size() > width - 250) {
+  if (strategyHistory.size() > (width - 250)/10) {
     strategyHistory.remove(0);
   }
   
@@ -216,11 +220,11 @@ void drawGraph() {
   // 履歴プロット
   noFill();
   strokeWeight(2);
-  for (int p = 0; p < NUM_PLAYERS; p++) {
+  for (int p = 0; p < 2; p++) {
     stroke(colors[p]);
     beginShape();
     for (int i = 0; i < strategyHistory.size(); i++) {
-      float x = 50 + i;
+      float x = 50 + i*10;
       float y = 50 + graphHeight * (1.0 - strategyHistory.get(i)[p]);
       vertex(x, y);
     }

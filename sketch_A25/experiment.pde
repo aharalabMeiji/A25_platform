@@ -62,26 +62,37 @@ void showExperiment(){
     }
 
     // UCBで次の手を決める。
+    game.participants[game.nextPlayer] = UCBplayer;
     utils.gameMainBoard.copyBoardToSub(game.participants[game.nextPlayer].myBoard);// copy a current board to the player's.
-    int UcbAttack = game.participants[game.nextPlayer].callBrain();
+    int ucbAttack = game.participants[game.nextPlayer].callBrain();
     // UCTで次の手を決める。
+    game.participants[game.nextPlayer] = UCTplayer;
+    utils.gameMainBoard.copyBoardToSub(game.participants[game.nextPlayer].myBoard);// copy a current board to the player's.
+    int uct1Attack = game.participants[game.nextPlayer].callBrain();
     // p1-maxnで次の手を決める。
+    //experimentMaxn();
     // p1-paranoidで次の手を決める。
+    //experimentParanoid();
     // p1-hybridで次の手を決める。
-    println(kifu.string+","+game.nextPlayer+","+UcbAttack);
+    //experimentHybrid();
+    println(kifu.string+","+game.nextPlayer+","+ucbAttack+","+uct1Attack);
 
     // UCBの手を実行する。
-    kifu.string += (kifu.playerColCode[game.nextPlayer]+nf(UcbAttack+1,2));
+    kifu.string += (kifu.playerColCode[game.nextPlayer]+nf(ucbAttack+1,2));
     utils.gameMainBoard.buildVP(game.nextPlayer);
-    if (UcbAttack==25) {        // パスを選択
+    if (ucbAttack==25) {        // パスを選択
       managerPhase = mP.AfterMoving;
       game.participants[game.nextPlayer].noPass+=2;// 向こう２ターンはパス禁止
-    } else if (utils.gameMainBoard.vp[UcbAttack]>0) {
-      utils.gameMainBoard.move(game.nextPlayer, UcbAttack);// 着手可能ならば着手する
+    } else if (utils.gameMainBoard.vp[ucbAttack]>0) {
+      utils.gameMainBoard.move(game.nextPlayer, ucbAttack);// 着手可能ならば着手する
       game.participants[game.nextPlayer].noPass = max(0, game.participants[game.nextPlayer].noPass-1);
     }
     managerPhase = mP.AfterMoving;
   } else if (managerPhase == mP.OnAttackChance){
+    // UCBでアタックチャンスの手を決める。
+    game.participants[game.nextPlayer] = UCBplayer;
+    utils.gameMainBoard.copyBoardToSub(game.participants[game.nextPlayer].myBoard);// copy a current board to the player's.
+    int ucbAttack = game.participants[game.nextPlayer].callBrain();
     ;
   } else if (managerPhase == mP.AfterMoving){
     //とりま表示
@@ -122,3 +133,8 @@ void showExperiment(){
 //  Halt,
 //  GameEnd 
 //}
+
+int experimentUCT1(){
+  
+  return -1;
+}
