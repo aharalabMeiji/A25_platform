@@ -4,6 +4,7 @@ globals utils=new globals();
 class globals {
   board gameMainBoard;// use in games
   board gameSubBoard;// use in board.buildVP
+  board experimentMainBoard;// use in experiment
   //playerColor
   color[] playerColor =  {
     color(128, 128, 128),

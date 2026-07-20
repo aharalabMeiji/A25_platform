@@ -64,7 +64,12 @@ class uctClass {
     if (cancelCountMax<100) ret +=  ("C"+cancelCountMax+"/");//uct.terminateThreshold,
     else ret += "woC/";
     if (chanceNodeOn==0) ret += "nonCN/";
-    if (pruningThreshold<999) ret += ("P"+uct.pruningThreshold+" ");
+    if (pruningThreshold<999) {
+      ret += ("P"+uct.pruningThreshold+"/");
+      if (uctOption==1) ret +="maxn/";
+      if (uctOption==2) ret +="paranoid/";
+      if (uctOption==3) ret +="hybrid/";
+    }
     if (gameOptions.get("Order")==order.weightedRandom) ret += "O"+gameOptions.get("Rrate")+gameOptions.get("Grate")+gameOptions.get("Wrate")+gameOptions.get("Brate");
     if (gameOptions.get("Order")==order.inTurn) ret += "Oo";
     return ret;
