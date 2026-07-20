@@ -49,7 +49,7 @@ void showExperiment(){
     managerPhase=mP.GameStart;
   }
   else if(managerPhase == mP.GameStart){
-    if (experimentGameCount == experimentGameNumber){
+    if (experimentGameCount == experimentGameNumber){ //<>//
       managerPhase = mP.GameEnd;
     } else {
       kifu.string="";// 初期盤面以降の着手をここに記録する。
@@ -98,7 +98,7 @@ void showExperiment(){
     }
     utils.experimentMainBoard.buildVP(game.nextPlayer);
     if (ucbAttack<25 && utils.experimentMainBoard.vp[ucbAttack]<=0)
-      println("failure"); //<>//
+      println("failure");
     managerPhase = mP.T2;
   } else if (managerPhase == mP.T2){
     // UCTで次の手を決める。
@@ -114,7 +114,7 @@ void showExperiment(){
     }
     utils.experimentMainBoard.buildVP(game.nextPlayer);///// out of index?
     if (uct1Attack<25 && utils.experimentMainBoard.vp[uct1Attack]<=0)
-      println("failure"); //<>//
+      println("failure");
     game.participants[game.nextPlayer] = new player(game.nextPlayer, "ucb0", brainType.UCB1);
     managerPhase = mP.T3;
   } else if (managerPhase == mP.T3){
@@ -131,7 +131,7 @@ void showExperiment(){
     }
     utils.experimentMainBoard.buildVP(game.nextPlayer);
     if (maxnAttack<25 && utils.experimentMainBoard.vp[maxnAttack]<=0)
-      println("failure"); //<>//
+      println("failure");
     managerPhase = mP.T4;
   } else if (managerPhase == mP.T4){
     // p1-paranoidで次の手を決める。
@@ -147,7 +147,7 @@ void showExperiment(){
     }
     utils.experimentMainBoard.buildVP(game.nextPlayer);
     if (paraAttack<25 && utils.experimentMainBoard.vp[paraAttack]<=0)
-      println("failure"); //<>//
+      println("failure");
     managerPhase = mP.T5;
   } else if (managerPhase == mP.T5){
     // p1-hybridで次の手を決める。
@@ -163,12 +163,12 @@ void showExperiment(){
     }
     utils.experimentMainBoard.buildVP(game.nextPlayer);
     if (hybrAttack<25 && utils.experimentMainBoard.vp[hybrAttack]<=0)
-      println("failure"); //<>//
+      println("failure");
     managerPhase = mP.T6;
   } else if (managerPhase == mP.T6){
     //turnCount++;    
     println(kifu.string+","+game.nextPlayer+","+ucbText+","+uct1Text+","+maxnText+","+paraText+","+hybrText);
-    text("kifu/kifu"+ kifu.mmddhhmm+"-"+nf(experimentTurnCount,2), width/2,50);
+    //text("kifu/kifu"+ kifu.mmddhhmm+"-"+nf(experimentTurnCount,2), width/2,50);
     if(!maxnText.equals(paraText)){
       background(255);
       utils.experimentMainBoard.displayGame();
@@ -177,7 +177,7 @@ void showExperiment(){
       println("kifu/kifu"+ kifu.mmddhhmm+"-"+nf(experimentTurnCount,2)+":"+kifu.playerColCode[game.nextPlayer]);
       textSize(utils.fontSize*2);
       text("kifu/kifu"+ kifu.mmddhhmm+"-"+nf(experimentTurnCount,2)+":"+kifu.playerColCode[game.nextPlayer], width/2, height*0.9);
-      appendText(kifu.kifuFullPath, str(experimentTurnCount)+","+kifu.string+","+game.nextPlayer+","+ucbText+","+uct1Text+","+maxnText+","+paraText+","+hybrText);
+      appendText(kifu.kifuFullPath, kifu.mmddhhmm+"-"+str(experimentTurnCount)+","+kifu.string+","+game.nextPlayer+","+ucbText+","+uct1Text+","+maxnText+","+paraText+","+hybrText);
       save("kifu/kifu"+ kifu.mmddhhmm+"/"+ kifu.mmddhhmm+"-"+nf(experimentTurnCount,2)+".png"); 
     }
     
@@ -218,7 +218,8 @@ void showExperiment(){
       }
     }
     if (remain05 == 0) {
-      managerPhase = mP.GameEnd;
+      managerPhase = mP.GameStart;
+      println("new game");
     } else if (utils.experimentMainBoard.attackChanceP==false && remain05 == 4 && remain0 == 4) {// アタックチャンス（着手後に色を消すことができる。）
       utils.experimentMainBoard.attackChanceP=true;
       managerPhase = mP.WaitChoosePlayer;
