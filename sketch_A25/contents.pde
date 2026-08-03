@@ -53,7 +53,7 @@ void showContents() {
       fill(0);
       buttonText="[H]";
       buttonHuman1.setLT(left, top, buttonText);
-    }    
+    }
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
@@ -67,7 +67,7 @@ void showContents() {
       fill(0);
       buttonText="[R]";
       buttonRandom1.setLT(left, top, buttonText);
-    }    
+    }
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
@@ -124,7 +124,7 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    buttonText = "[p1Paranoid]";
+    buttonText = "[pUCTpara]";
     button buttonUCTP1PARA=new button();
     buttonUCTP1PARA.setLT(left, top, buttonText);
     buttonUCTP1PARA.setItem("Player1", 6);
@@ -132,7 +132,7 @@ void showContents() {
     if (gameOptions.get("Player1")%10==6) fill(255, 0, 0);
     else {
       fill(0);
-      buttonText="[p1Para]";
+      buttonText="[para]";
       buttonUCTP1PARA.setLT(left, top, buttonText);
     }
     text(buttonText, left, top);
@@ -155,7 +155,7 @@ void showContents() {
       fill(0);
       buttonText="[H]";
       buttonHuman1.setLT(left, top, buttonText);
-    }    
+    }
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
@@ -169,7 +169,7 @@ void showContents() {
       fill(0);
       buttonText="[R]";
       buttonRandom1.setLT(left, top, buttonText);
-    }    
+    }
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
@@ -227,7 +227,7 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    buttonText = "[p1Paranoid]";
+    buttonText = "[pUCTpara]";
     buttonUCTP1PARA=new button();
     buttonUCTP1PARA.setLT(left, top, buttonText);
     buttonUCTP1PARA.setItem("Player2", 6);
@@ -235,7 +235,7 @@ void showContents() {
     if (gameOptions.get("Player2")%10==6) fill(255, 0, 0);
     else {
       fill(0);
-      buttonText="[p1Para]";
+      buttonText="[para]";
       buttonUCTP1PARA.setLT(left, top, buttonText);
     }
     text(buttonText, left, top);
@@ -258,7 +258,7 @@ void showContents() {
       fill(0);
       buttonText="[H]";
       buttonHuman1.setLT(left, top, buttonText);
-    }    
+    }
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
@@ -272,7 +272,7 @@ void showContents() {
       fill(0);
       buttonText="[R]";
       buttonRandom1.setLT(left, top, buttonText);
-    }    
+    }
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
@@ -329,7 +329,7 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    buttonText = "[p1Paranoid]";
+    buttonText = "[pUCTpara]";
     buttonUCTP1PARA=new button();
     buttonUCTP1PARA.setLT(left, top, buttonText);
     buttonUCTP1PARA.setItem("Player3", 6);
@@ -337,7 +337,7 @@ void showContents() {
     if (gameOptions.get("Player3")%10==6) fill(255, 0, 0);
     else {
       fill(0);
-      buttonText="[p1Para]";
+      buttonText="[para]";
       buttonUCTP1PARA.setLT(left, top, buttonText);
     }
     text(buttonText, left, top);
@@ -360,7 +360,7 @@ void showContents() {
       fill(0);
       buttonText="[H]";
       buttonHuman1.setLT(left, top, buttonText);
-    }    
+    }
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
@@ -374,7 +374,7 @@ void showContents() {
       fill(0);
       buttonText="[R]";
       buttonRandom1.setLT(left, top, buttonText);
-    }    
+    }
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
@@ -431,7 +431,7 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    buttonText = "[p1Paranoid]";
+    buttonText = "[pUCTpara]";
     buttonUCTP1PARA=new button();
     buttonUCTP1PARA.setLT(left, top, buttonText);
     buttonUCTP1PARA.setItem("Player4", 6);
@@ -439,7 +439,7 @@ void showContents() {
     if (gameOptions.get("Player4")%10==6) fill(255, 0, 0);
     else {
       fill(0);
-      buttonText="[p1Para]";
+      buttonText="[para]";
       buttonUCTP1PARA.setLT(left, top, buttonText);
     }
     text(buttonText, left, top);
@@ -494,7 +494,7 @@ void showContents() {
     left += (textWidth(buttonText)+utils.hSpace);
 
     // weighted random
-    if (gameOptions.get("Order") == order.weightedRandom){
+    if (gameOptions.get("Order") == order.weightedRandom) {
       top += utils.vStep;
       left=utils.hOffset;
       captionText = "Weight:";
@@ -514,7 +514,7 @@ void showContents() {
       fill(255, 0, 0);
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
-      //      
+      //
       //
       captionText = " G:";
       fill(0);
@@ -528,7 +528,7 @@ void showContents() {
       fill(255, 0, 0);
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
-      //      
+      //
       //
       captionText = " W:";
       fill(0);
@@ -542,7 +542,7 @@ void showContents() {
       fill(255, 0, 0);
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
-      //      
+      //
       //
       captionText = " B:";
       fill(0);
@@ -556,7 +556,7 @@ void showContents() {
       fill(255, 0, 0);
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
-      //      
+      //
     }
 
     // Times
@@ -687,16 +687,15 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     // 202607の実験のためのボタン
-    top += utils.vStep;
-    left=utils.hOffset;
-    buttonText = "[2026 experiment]";
-    buttonExperiment=new button();
-    buttonExperiment.setLT(left, top, buttonText);
-    fill(255, 0, 0);
-    text(buttonText, left, top);
-    left += (textWidth(buttonText)+utils.hSpace);
-
-} else if (gameOptions.get("gameMode") == 1) {///////////////////////////////////////// Simulation options
+    //top += utils.vStep;
+    //left=utils.hOffset;
+    //buttonText = "[2026 experiment]";
+    //buttonExperiment=new button();
+    //buttonExperiment.setLT(left, top, buttonText);
+    //fill(255, 0, 0);
+    //text(buttonText, left, top);
+    //left += (textWidth(buttonText)+utils.hSpace);
+  } else if (gameOptions.get("gameMode") == 1) {///////////////////////////////////////// Simulation options
     fill(0);
     text(utils.filename, utils.mainL+utils.fontSize*22, utils.mainU-utils.fontSize);
     // シミュレーション方法選択
@@ -778,7 +777,7 @@ void showContents() {
       else fill(0);
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
-    } else if (gameOptions.get("SimMethod") == 2 ){//[UCB]
+    } else if (gameOptions.get("SimMethod") == 2 ) {//[UCB]
       top += utils.vStep;
       left=utils.hOffset;
       captionText = "Time:";
@@ -816,7 +815,7 @@ void showContents() {
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
       //
-    } else {//gameOptions.get("SimMethod") == 3 
+    } else {//gameOptions.get("SimMethod") == 3
       //println("L561@contents",gameOptions.get("SimTimes"));
       top += utils.vStep;
       left=utils.hOffset;
@@ -923,19 +922,19 @@ void showContents() {
       left += (textWidth(buttonText)+utils.hSpace);
       //
     }
-    if (gameOptions.get("SimMethod") == 3 ){
+    if (gameOptions.get("SimMethod") == 3 ) {
       top += utils.vStep;
       left=utils.hOffset;
       //
       fill(255, 0, 0);
-      if (gameOptions.get("SimTimes") == 21) text("max depth=4, visit/node=10, with cancelling",left,top);
-      else if (gameOptions.get("SimTimes") == 22) text("max depth=4, visit/node=10, w/o cancelling",left,top);
-      else if (gameOptions.get("SimTimes") == 23) text("max depth=5, visit/node=10, with cancelling",left,top);
-      else if (gameOptions.get("SimTimes") == 24) text("max depth=5, visit/node=10, w/o cancelling",left,top);
-      else if (gameOptions.get("SimTimes") == 26) text("max depth=4, visit/node=100, pruning 1",left,top);
-      else if (gameOptions.get("SimTimes") == 27) text("max depth=4, visit/node=100, pruning 2",left,top);
-      else if (gameOptions.get("SimTimes") == 28) text("max depth=5, visit/node=100, pruning 1",left,top);
-      else if (gameOptions.get("SimTimes") == 29) text("max depth=5, visit/node=100, pruning 2",left,top);
+      if (gameOptions.get("SimTimes") == 21) text("max depth=4, visit/node=10, with cancelling", left, top);
+      else if (gameOptions.get("SimTimes") == 22) text("max depth=4, visit/node=10, w/o cancelling", left, top);
+      else if (gameOptions.get("SimTimes") == 23) text("max depth=5, visit/node=10, with cancelling", left, top);
+      else if (gameOptions.get("SimTimes") == 24) text("max depth=5, visit/node=10, w/o cancelling", left, top);
+      else if (gameOptions.get("SimTimes") == 26) text("max depth=4, visit/node=100, pruning 1", left, top);
+      else if (gameOptions.get("SimTimes") == 27) text("max depth=4, visit/node=100, pruning 2", left, top);
+      else if (gameOptions.get("SimTimes") == 28) text("max depth=5, visit/node=100, pruning 1", left, top);
+      else if (gameOptions.get("SimTimes") == 29) text("max depth=5, visit/node=100, pruning 2", left, top);
       else if (gameOptions.get("SimTimes") == 25) {
         //
         captionText = "visit/node:";
@@ -1188,7 +1187,7 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     //
-    if (gameOptions.get("Order") == order.weightedRandom){
+    if (gameOptions.get("Order") == order.weightedRandom) {
       //
       top += utils.vStep;
       left=utils.hOffset;
@@ -1209,7 +1208,7 @@ void showContents() {
       fill(255, 0, 0);
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
-      //      
+      //
       //
       captionText = " G:";
       fill(0);
@@ -1223,7 +1222,7 @@ void showContents() {
       fill(255, 0, 0);
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
-      //      
+      //
       //
       captionText = " W:";
       fill(0);
@@ -1237,7 +1236,7 @@ void showContents() {
       fill(255, 0, 0);
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
-      //      
+      //
       //
       captionText = " B:";
       fill(0);
@@ -1251,10 +1250,9 @@ void showContents() {
       fill(255, 0, 0);
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
-      //      
-      
+      //
     }
-    if (gameOptions.get("SimMethod")==3){
+    if (gameOptions.get("SimMethod")==3) {
       //
       top += utils.vStep;
       left=utils.hOffset;
@@ -1350,7 +1348,7 @@ void showContents() {
       left += (textWidth(buttonText)+utils.hSpace);
     }
     //
-    if (gameOptions.get("SimMethod") == 3 ){
+    if (gameOptions.get("SimMethod") == 3 ) {
       top += utils.vStep;
       left=utils.hOffset;
       //
@@ -1452,6 +1450,16 @@ void showContents() {
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
       //
+      buttonText = "[underdog]";
+      button buttonUctOption4=new button();
+      buttonUctOption4.setLT(left, top, buttonText);
+      buttonUctOption4.setItem("uctOption", 4);
+      buttons.add(buttonUctOption4);
+      if (gameOptions.get("uctOption")==4) fill(255, 0, 0);
+      else fill(0);
+      text(buttonText, left, top);
+      left += (textWidth(buttonText)+utils.hSpace);
+      //
     }
     //
     top += utils.vStep;
@@ -1531,7 +1539,6 @@ void showContents() {
       fill(0);
       text(next, left+boardDispSize*5+smallBoardDispSize*9, top+boardDispSize*7);
       top += utils.vStep*7;
-      
     }
     // Start　シミュレーションモードのスタート
     top += utils.vStep;

@@ -1,5 +1,6 @@
 enum brainType{
-  Human, Random, UCBold, UCB1, UCB2, UCTE10D4, UCBUCT, UCTD4P1, UCTE10D4P2, UCTD4P1Para, UCTD4P2Para, UCTD4P1Hybrid, 
+  Human, Random, UCBold, UCB1, UCB2, UCTE10D4, UCBUCT, UCTD4P1, UCTE10D4P2, 
+  UCTD4P1Para, UCTD4P2Para, UCTD4P1Hybrid, UCTD4P1dog,
   Heuristic1, Heuristic2
 }
 
@@ -12,7 +13,7 @@ class player {
   float score;
   int yellow=-1;
   int noPass=0;
-  int uctOption=1;// 1: maxN, 2:paranoid, 3: bestreply search, 4: maxN+paranoid
+  int uctOption=1;// 1: maxN, 2:paranoid, 3: maxN+paranoid,  4:underdog
   player(int _p, String _n, brainType _b) {
     position = _p;
     name = _n;
@@ -119,6 +120,15 @@ class player {
       uct.chanceNodeOn=1;
       uct.pruningThreshold=1;
       uct.uctOption=3; //hybrid
+      return uct.mctsBrain(this);//260718 Pruning1-underdog-UCT
+    } else if (myBrain==brainType.UCTD4P1dog){
+      uct.expandThreshold=100;
+      uct.terminateThreshold = uct.expandThreshold*1000000;
+      uct.depthMax=4;
+      uct.cancelCountMax=1000;
+      uct.chanceNodeOn=1;
+      uct.pruningThreshold=1;
+      uct.uctOption=4; //underdog
       return uct.mctsBrain(this);//260718 Pruning1-hybrid-UCT
     } 
     //else if (myBrain==brainType.UCBUCT){
