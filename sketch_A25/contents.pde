@@ -1450,7 +1450,7 @@ void showContents() {
       text(buttonText, left, top);
       left += (textWidth(buttonText)+utils.hSpace);
       //
-      buttonText = "[underdog]";
+      buttonText = "[anti-leader]";
       button buttonUctOption4=new button();
       buttonUctOption4.setLT(left, top, buttonText);
       buttonUctOption4.setItem("uctOption", 4);

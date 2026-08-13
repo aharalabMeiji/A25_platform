@@ -230,6 +230,7 @@ class board {
     } else if (gameOptions.get("Order")==order.inTurn) simMethod +="/inTurn";
     if (gameOptions.get("uctOption")==2) simMethod +="/para";
     else if (gameOptions.get("uctOption")==3) simMethod +="/hybr";
+    else if (gameOptions.get("uctOption")==4) simMethod +="/anti";
     else simMethod +="/maxn";
     simMethod += "/<";
     if (gameOptions.get("Absence0R")==1) simMethod += "R";

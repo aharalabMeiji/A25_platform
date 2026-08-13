@@ -13,7 +13,7 @@ class player {
   float score;
   int yellow=-1;
   int noPass=0;
-  int uctOption=1;// 1: maxN, 2:paranoid, 3: maxN+paranoid,  4:underdog
+  int uctOption=1;// 1: maxN, 2:paranoid, 3: maxN+paranoid,  4:anti-leader
   player(int _p, String _n, brainType _b) {
     position = _p;
     name = _n;
@@ -120,7 +120,7 @@ class player {
       uct.chanceNodeOn=1;
       uct.pruningThreshold=1;
       uct.uctOption=3; //hybrid
-      return uct.mctsBrain(this);//260718 Pruning1-underdog-UCT
+      return uct.mctsBrain(this);//260718 Pruning1-anti_leader-UCT
     } else if (myBrain==brainType.UCTD4P1dog){
       uct.expandThreshold=100;
       uct.terminateThreshold = uct.expandThreshold*1000000;
@@ -128,7 +128,7 @@ class player {
       uct.cancelCountMax=1000;
       uct.chanceNodeOn=1;
       uct.pruningThreshold=1;
-      uct.uctOption=4; //underdog
+      uct.uctOption=4; //anti-leader
       return uct.mctsBrain(this);//260718 Pruning1-hybrid-UCT
     } 
     //else if (myBrain==brainType.UCBUCT){

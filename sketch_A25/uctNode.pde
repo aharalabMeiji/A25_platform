@@ -149,7 +149,7 @@ class uctNode {
       }//println("player="+player+", rootPlayer="+this.rootPlayer);
       u2 = 1.41421356*sqrt(log(NN)/na);
       return u1 + u2;
-    case 4://underdog 
+    case 4://anti-leader
       nCol[1]=nCol[2]=nCol[3]=nCol[4]=0;
       for(int k=0; k<25; k++){
         if (this.bd[k]<5){

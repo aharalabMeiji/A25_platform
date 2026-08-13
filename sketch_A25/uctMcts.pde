@@ -69,7 +69,7 @@ class uctClass {
       if (uctOption==1) ret +="maxn/";
       if (uctOption==2) ret +="paranoid/";
       if (uctOption==3) ret +="hybrid/";
-      if (uctOption==4) ret +="underdog/";
+      if (uctOption==4) ret +="anti-leader/";
     }
     if (gameOptions.get("Order")==order.weightedRandom) ret += "O"+gameOptions.get("Rrate")+gameOptions.get("Grate")+gameOptions.get("Wrate")+gameOptions.get("Brate");
     if (gameOptions.get("Order")==order.inTurn) ret += "Oo";
