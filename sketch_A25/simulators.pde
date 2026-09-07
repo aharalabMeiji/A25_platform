@@ -887,7 +887,7 @@ void UCT1() {
         showScreenCapture();
       } else {
         println(uct.printUctParameters());
-        uct.simulationTag=10000;
+        //uct.simulationTag=10000;//たぶん何も使っていない。
         simulationManager=sP.setStartBoard;
       }
     }
@@ -895,7 +895,7 @@ void UCT1() {
   } else if (simulationManager==sP.setStartBoard) {
     uct.nextPlayer=simulator.Participants[simulator.nextPlayer];
     int answer=-1;
-    answer = uctMctsMainLoop(uct.nextPlayer);
+    answer = uctMctsMainLoop(uct.nextPlayer); //<>//
     if (uct.nextPlayer.myBoard.attackChanceP==false) {
       // 表示のための、データのコピー
       for (uctNode nd : uct.rootNode.legalMoves) {

@@ -1,3 +1,5 @@
+import java.io.FileWriter;
+
 int experimentGameNumber = 10;// シミュレーションゲーム数
 int experimentGameCount = 0;// シミュレーションゲームのカウント
 int experimentTurnCount = 0;
@@ -251,6 +253,10 @@ void appendText(String filename, String text) {
   }
 }
 
+int expSimCount=0;
+String expSimFileName="sB07-0907.csv";
+File expSimFile;
+
 void showExpSim(){// 100 times simulation
   //盤面と手番は与えられている
   // 盤面：
@@ -259,7 +265,30 @@ void showExpSim(){// 100 times simulation
   // csvへ出力：E100D4P1_20260907.csvのような感じ
   // 横方向は、着手可能場所ごとに、RGWBの推定勝率を書く感じ。
   // たとえば、id, R10_R, R10_G, R10_W,　R10_B, R15_R, R15_G, R15_W,　R15_B, ... のような感じ。
-  if (simulationManager==sP.GameStart) {
+  UCT1(); //<>//
+  // 結果を吸い取れるか。
+  if (simulationManager==sP.GameEnd){
+    println("once end");
+    int legalMovesN=uct.rootNode.legalMoves.size();
+    try {
+      FileWriter writer = new FileWriter(expSimFileName, true);
+      String lineData=""; 
+      for (int xi=0; xi<legalMovesN; xi++){
+        uctNode nd = uct.rootNode.legalMoves.get(xi);
+        lineData += (nd.id+","+nd.wa[1]+","+nd.wa[2]+","+nd.wa[3]+","+nd.wa[4]+","+nd.na);
+        if(xi<legalMovesN-1) lineData += ",";
+      }
+      writer.write(lineData + "\n");
+      writer.close();
+    }
+    catch (IOException e) {
+      println("error"+e.getMessage());
+    }
+
+    expSimCount++;
+    if (expSimCount==100)
+      simulationManager = sP.gameHalt;
+    else 
+      simulationManager = sP.GameStart;
   }
-  
 }

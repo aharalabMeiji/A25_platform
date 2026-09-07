@@ -19,5 +19,5 @@ enum mP{// game manager
 }
 
 enum sP{// simulation manager
-  GameStart, setStartBoard, runMC, GameEnd 
+  GameStart, setStartBoard, runMC, GameEnd , gameHalt
 }

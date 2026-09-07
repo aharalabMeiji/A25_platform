@@ -120,7 +120,7 @@ class uctNode {
   }
   float UCTwp(int player, int NN, int option) {// NN:　累計試行回数
     // maxnアルゴリズムのUCB値 + 盤面
-    float u1, u2; //<>// //<>// //<>//
+    float u1, u2; 
     //print(option);
     switch(option){
     case 2:// paranoid
@@ -148,9 +148,12 @@ class uctNode {
       u2 = 1.41421356*sqrt(log(NN)/na);
       return u1 + u2;
     default:
-      u1 = (wa[player]/na+pa[player]*0.04)/2;
+      u1 = wa[player]/na;
+      if (u1>0.99 || u1<0.01)
+        u1 += pa[player]*0.004;
+      //u1 = (wa[player]/na+pa[player]*0.04)/2;
       u2 = 1.41421356*sqrt(log(NN)/na);
-      return u1 + u2; //<>// //<>//
+      return u1 + u2;  //<>//
     }
   }
   float UCTb(int player, int NN) {// for MCTS

@@ -229,7 +229,7 @@ void mousePressed() {
         simulationManager = sP.GameStart;
       } else if (buttonExperiment!=null && buttonExperiment.mouseOn()){//100回シミュ
         displayManager = dP.onExperimentalSimulator;
-        managerPhase = mP.PrepareGame;
+        simulationManager = sP.GameStart;
       } else if (buttonPrevBoard.mouseOn()) {
         int total = simulatorStartBoard.size();
         simulator.StartBoardId = (simulator.StartBoardId + total - 1)% total;
