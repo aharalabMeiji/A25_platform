@@ -168,7 +168,7 @@ void showExperiment(){
   } else if (managerPhase == mP.T6){
     //turnCount++;    
     println(kifu.string+","+game.nextPlayer+","+ucbText+","+uct1Text+","+maxnText+","+paraText+","+hybrText);
-    //text("kifu/kifu"+ kifu.mmddhhmm+"-"+nf(experimentTurnCount,2), width/2,50);
+    text("kifu/kifu"+ kifu.mmddhhmm+"-"+nf(experimentTurnCount,2), width/2,50);
     if(!maxnText.equals(paraText)){
       background(255);
       utils.experimentMainBoard.displayGame();
@@ -249,4 +249,17 @@ void appendText(String filename, String text) {
   } catch (IOException e) {
     e.printStackTrace();
   }
+}
+
+void showExpSim(){// 100 times simulation
+  //盤面と手番は与えられている
+  // 盤面：
+  // 手番：
+  // セッティングは変更可能だが、いちおうE100D4P1を100回想定している。
+  // csvへ出力：E100D4P1_20260907.csvのような感じ
+  // 横方向は、着手可能場所ごとに、RGWBの推定勝率を書く感じ。
+  // たとえば、id, R10_R, R10_G, R10_W,　R10_B, R15_R, R15_G, R15_W,　R15_B, ... のような感じ。
+  if (simulationManager==sP.GameStart) {
+  }
+  
 }

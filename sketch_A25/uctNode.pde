@@ -9,7 +9,6 @@ class uctNode {
   float[] paR, paG, paW, paB;// このノードの（誰にとっての）累積パネル数
   int ncR, ncG, ncW, ncB;//このノードの（誰にとっての）展開済みの子ノードの数
   int []bd;// 盤面// ここをboard 型にするかどうか。
-  int []nCol;// 色のカウント
   //float NN=1;// 累計試行回数
   float[] uct;
   int player=0;
@@ -41,7 +40,6 @@ class uctNode {
       pa[p]=0;paR[p]=0;paG[p]=0;paW[p]=0;paB[p]=0;
     }
     bd= new int[25];
-    nCol = new int[5];
     //NN=1;
     uct=new float[5];
     for (int p=0; p<5; p++) uct[p]=0;
@@ -129,11 +127,11 @@ class uctNode {
       if (player==this.rootPlayer){
         u1 = wa[player]/na;
         if (u1>0.99 || u1<0.01)
-          u1 += pa[player]/na/25.0;
+          u1 += pa[player]*0.004;
       } else {
         u1 = 1.0 - wa[this.rootPlayer]/na;
         if (u1>0.99 || u1<0.01)
-          u1 += pa[player]/na/25.0;
+          u1 += pa[player]*0.004;
       }//println("player="+player+", rootPlayer="+this.rootPlayer);
       u2 = 1.41421356*sqrt(log(NN)/na);
       return u1 + u2;
@@ -141,43 +139,18 @@ class uctNode {
       if (player==this.rootPlayer){
         u1 = wa[player]/na;
         if (u1>0.99 || u1<0.01)
-          u1 += pa[player]/na/25.0;
+          u1 += pa[player]*0.004;
       } else {
         u1 = (na - wa[this.rootPlayer]+wa[player])/na/2;
         if (u1>0.99 || u1<0.01)
-          u1 += pa[player]/na/25.0;
+          u1 += pa[player]*0.004;
       }//println("player="+player+", rootPlayer="+this.rootPlayer);
       u2 = 1.41421356*sqrt(log(NN)/na);
       return u1 + u2;
-    case 4://anti-leader
-      nCol[1]=nCol[2]=nCol[3]=nCol[4]=0;
-      for(int k=0; k<25; k++){
-        if (this.bd[k]<5){
-          nCol[this.bd[k]] ++;
-        }
-      }
-      int ud=player;
-      for(int i=player+1; i<player+4; i++){
-        int ii = (i-1)%4+1;
-        if(nCol[ud]<nCol[ii]){
-          ud = ii;
-        }
-      }
-      if(ud==player){
-        u1 = wa[player]/na;
-      } else {
-        u1 = (na-wa[ud])/na;
-      }
-      if (u1>0.99 || u1<0.01)
-        u1 += pa[player]/na/25.0;
+    default:
+      u1 = (wa[player]/na+pa[player]*0.04)/2;
       u2 = 1.41421356*sqrt(log(NN)/na);
-      return u1 + u2; 
-    default:// 
-      u1 = wa[player]/na;
-      if (u1>0.99 || u1<0.01)
-        u1 += pa[player]/na/25.0;
-      u2 = 1.41421356*sqrt(log(NN)/na);
-      return u1 + u2; 
+      return u1 + u2; //<>// //<>//
     }
   }
   float UCTb(int player, int NN) {// for MCTS

@@ -5,7 +5,8 @@ MersenneTwister mt;
 
 void setup() {
   size(960, 960);
-  mt = new MersenneTwister();
+  //int randomSeed = 1;
+  //mt = new MersenneTwister(MTseed);
   frameRate(10000);//draw()の実行をできるだけ早く繰り返す
   utils.filename = "default.txt";
   utils.filenamePath = sketchPath()+"\\"+"data"+"\\"+"default.txt";
@@ -52,7 +53,7 @@ void setup() {
   gameOptions.set("Absence1W", 0);
   gameOptions.set("Absence1B", 0);
   gameOptions.set("chanceNodeOn", 1);
-  gameOptions.set("uctOption",1);//1: maxn, 2:paranoid , 3:maxn + paranoid , 4:anti-leader
+  gameOptions.set("uctOption",1);//1: maxn, 2:paranoid , 3:maxn + paranoid 
   gameOptions.set("pruning", 999);
   gameOptions.set("Rrate",1);
   gameOptions.set("Grate",1);
@@ -91,6 +92,8 @@ void draw() {
     tree.show();
   } else if (displayManager == dP.onExperiment){
     showExperiment();
+  } else if (displayManager == dP.onExperimentalSimulator){
+    showExpSim();
   }
 }
 
@@ -224,6 +227,9 @@ void mousePressed() {
       if (buttonStart.mouseOn()) {
         displayManager = dP.onSimulator;
         simulationManager = sP.GameStart;
+      } else if (buttonExperiment!=null && buttonExperiment.mouseOn()){//100回シミュ
+        displayManager = dP.onExperimentalSimulator;
+        managerPhase = mP.PrepareGame;
       } else if (buttonPrevBoard.mouseOn()) {
         int total = simulatorStartBoard.size();
         simulator.StartBoardId = (simulator.StartBoardId + total - 1)% total;

@@ -14,6 +14,7 @@ class uctClass {
   int cancelCount=0;
   int loopCount=0;
   int expandThreshold = 10;//
+  int minimumPlayout = 10;//
   int terminateThreshold = 10000000;
   int depthMax = 4;
   int cancelCountMax=10;
@@ -69,7 +70,6 @@ class uctClass {
       if (uctOption==1) ret +="maxn/";
       if (uctOption==2) ret +="paranoid/";
       if (uctOption==3) ret +="hybrid/";
-      if (uctOption==4) ret +="anti-leader/";
     }
     if (gameOptions.get("Order")==order.weightedRandom) ret += "O"+gameOptions.get("Rrate")+gameOptions.get("Grate")+gameOptions.get("Wrate")+gameOptions.get("Brate");
     if (gameOptions.get("Order")==order.inTurn) ret += "Oo";
@@ -222,9 +222,9 @@ class uctClass {
       }
       //println("uctMctsBrain:最後までシミュレーションを数回行う");
       // ここをUCBにするアイディアもあるが、結局淘汰されるようなので、０でなければなんでもいいみたい。
-      for (int count=0; count<4; count++) {
+      for (int count=0; count<this.minimumPlayout*4; count++) {
         //フラグonRGWBが倒れている選択肢については、シミュレーションしない。
-        int nextplayer = count+1;
+        int nextplayer = (count%4)+1;
         if (nd.onRGWB[nextplayer]==false) {
           continue;
         }
@@ -238,31 +238,6 @@ class uctClass {
             nd.addWa(nextplayer, p, winPoint.points[p]);
             nd.addPa(nextplayer, p, winPoint.panels[p]);
           }
-          //if (nextplayer==1) {
-          //  nd.naR ++;
-          //  for (int p=1; p<=4; p++) {
-          //    nd.waR[p] += //
-          //    nd.paR[p] += winPoint.panels[p];//
-          //  }
-          //} else if (nextplayer==2) {
-          //  nd.naG ++;
-          //  for (int p=1; p<=4; p++) {
-          //    nd.waG[p] += winPoint.points[p];//
-          //    nd.paG[p] += winPoint.panels[p];//
-          //  }
-          //} else if (nextplayer==3) {
-          //  nd.naW ++;
-          //  for (int p=1; p<=4; p++) {
-          //    nd.waW[p] += winPoint.points[p];//
-          //    nd.paW[p] += winPoint.panels[p];//
-          //  }
-          //} else { //if(nextplayer==4){
-          //  nd.naB ++;
-          //  for (int p=1; p<=4; p++) {
-          //    nd.waB[p] += winPoint.points[p];//
-          //    nd.paB[p] += winPoint.panels[p];//
-          //  }
-          //}
           nd.na ++;//
           // nd.na = nd.naR + nd.naG + nd.naW + nd.naB;
           for (int p=1; p<=4; p++) {
@@ -852,10 +827,10 @@ int uctMctsMainLoop(player pl) {
                     uct.subBoard.copyBoardToBd(uct.newNode.bd);
                     // uct.newNodeの報酬データを初期化
                     uct.newNode.initRewardOfNode();
-                    // 4回、最後まで打ち切ってバックプロパゲートしておく。
+                    // 数回、最後まで打ち切ってバックプロパゲートしておく。
                     // uct値を有効にするため。
-                    for (int count=0; count<4; count++) {
-                      if (uctMaxNode.onRGWB[count+1]) {
+                    for (int count=0; count<uct.minimumPlayout*4; count++) {
+                      if (uctMaxNode.onRGWB[(count%4)+1]) {//なにか勘違い
                         pl.myBoard.simulatorNumber ++;
                         uct.playoutAndBackPropagate(uct.newNode, count+1);
                       }
