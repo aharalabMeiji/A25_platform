@@ -36,7 +36,7 @@ class uctClass {
   int mctsBrain(player pl) { //
     //ここから
     startTime=millis();
-    int answer = uctMctsStartingJoseki(pl);
+    int answer= uctMctsStartingJoseki(pl);
     if (answer!=-1) return answer;
     answer = mctsBrainPreparation(pl);
     if (answer==-1) return -1;
