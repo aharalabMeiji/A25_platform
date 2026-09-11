@@ -1,6 +1,6 @@
 import java.io.FileWriter;
 
-int experimentGameNumber = 3;// シミュレーションゲーム数
+int experimentGameNumber = 500;// シミュレーションゲーム数
 int experimentGameCount = 0;// シミュレーションゲームのカウント
 int experimentTurnCount = 0;
 
@@ -238,7 +238,7 @@ void showExperiment(){
       println("kifu/kifu"+ kifu.mmddhhmm+"-"+nf(experimentTurnCount,2)+":"+kifu.playerColCode[game.nextPlayer]);
       textSize(utils.fontSize*2);
       text("kifu/kifu"+ kifu.mmddhhmm+"-"+nf(experimentTurnCount,2)+":"+kifu.playerColCode[game.nextPlayer], width/2, height*0.9);
-      appendText(kifu.kifuFullPath, kifu.mmddhhmm+"-"+str(experimentTurnCount)+","+str(experimentGameCount)+","+kifu.string+","+game.nextPlayer+","+ucbText+","+maxnText+","+paraText+","+distributionText);
+      appendText(kifu.kifuFullPath, kifu.mmddhhmm+"-"+str(experimentTurnCount)+","+str(random(1))+","+str(experimentGameCount)+","+kifu.string+","+game.nextPlayer+","+ucbText+","+maxnText+","+paraText+","+distributionText);
       //appendText(kifu.kifuFullPath, kifu.mmddhhmm+"-"+str(experimentTurnCount)+","+kifu.string+","+game.nextPlayer+","+ucbText+","+uct1Text+","+maxnText+","+paraText+","+hybrText);
       //画面保存
       save("kifu/kifu"+ kifu.mmddhhmm+"/"+ kifu.mmddhhmm+"-"+nf(experimentTurnCount,2)+".png"); 
