@@ -174,3 +174,165 @@ boolean isSymmetricPosition(int[] board, int i, int j) {
 
   return false;
 }
+//対称性を考慮した代表番号を求める
+int canonicalMove(int[] board, int move) {
+
+  if (move==25) return 25;
+  int representative = move;
+
+  // boardを保つ8種類の対称変換を調べる
+  for (int s = 0; s < 8; s++) {
+
+    if (isBoardSymmetric(board, s)) {
+
+      int j = transformIndex(move, s);
+
+      // 同値類の中で最小の番号を代表番号とする
+      if (j < representative) {
+        representative = j;
+      }
+    }
+  }
+
+  return representative;
+}
+
+//Maxn と Paranoid の出現頻度を、対称性を考慮して数える
+// 26(pass)も考慮に入れる。
+ArrayList<duplicate> countSymmetricMoves(
+  int[] board,
+  int[] maxnMove,
+  int[] paraMove
+) {
+
+  int[] maxnCount = new int[26];
+  int[] paraCount = new int[26];
+
+  // Maxn
+  for (int i = 0; i < maxnMove.length; i++) {
+
+    int move = maxnMove[i];
+
+    if (move < 0 || move >= 26) continue;
+
+    int representative = canonicalMove(board, move);
+
+    maxnCount[representative]++;
+  }
+
+  // Paranoid
+  for (int i = 0; i < paraMove.length; i++) {
+
+    int move = paraMove[i];
+
+    if (move < 0 || move >= 26) continue;
+
+    int representative = canonicalMove(board, move);
+
+    paraCount[representative]++;
+  }
+
+
+  ArrayList<duplicate> result =
+    new ArrayList<duplicate>();
+
+  // 少なくとも一方で出現した同値類を登録
+  for (int i = 0; i < 26; i++) {
+
+    if (maxnCount[i] > 0 || paraCount[i] > 0) {
+
+      result.add(
+        new duplicate(
+          i,
+          maxnCount[i],
+          paraCount[i]
+        )
+      );
+    }
+  }
+
+  return result;
+}
+
+// 確認用の表示関数
+void printSymmetricDistribution(
+  int[] board,
+  int[] maxnMove,
+  int[] paraMove
+) {
+
+  ArrayList<duplicate> list =
+    countSymmetricMoves(board, maxnMove, paraMove);
+
+  println("representative : Maxn , Paranoid");
+
+  for (duplicate d : list) {
+
+    float pm =
+      (float)d.maxnScore / maxnMove.length;
+
+    float pp =
+      (float)d.paraScore / paraMove.length;
+
+    println(
+      str(d.number+1)
+      + " : "
+      + d.maxnScore + " (" + pm + ")"
+      + " , "
+      + d.paraScore + " (" + pp + ")"
+    );
+  }
+}
+String textSymmetricDistribution(
+  int[] board,
+  int[] maxnMove,
+  int[] paraMove
+) {
+  String ret="";
+  ArrayList<duplicate> list =
+    countSymmetricMoves(board, maxnMove, paraMove);
+
+  println("representative : Maxn , Paranoid");
+
+  for (duplicate d : list) {
+
+    float pm =
+      (float)d.maxnScore / maxnMove.length;
+
+    float pp =
+      (float)d.paraScore / paraMove.length;
+
+    ret += (
+      str(d.number+1)
+      + "," + d.maxnScore + "," + pm + ","
+      + d.paraScore + "," + pp + ","
+    );
+  }
+  return ret;
+}
+
+//確率分布としての距離
+float symmetricDistributionDistance(
+  int[] board,
+  int[] maxnMove,
+  int[] paraMove
+) {
+
+  ArrayList<duplicate> list =
+    countSymmetricMoves(board, maxnMove, paraMove);
+
+  float sum = 0.0;
+
+  for (duplicate d : list) {
+
+    float p =
+      (float)d.maxnScore / maxnMove.length;
+
+    float q =
+      (float)d.paraScore / paraMove.length;
+
+    sum += abs(p - q);
+  }
+
+  return 0.5 * sum;
+}

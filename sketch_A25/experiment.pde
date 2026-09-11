@@ -1,6 +1,6 @@
 import java.io.FileWriter;
 
-int experimentGameNumber = 500;// シミュレーションゲーム数
+int experimentGameNumber = 3;// シミュレーションゲーム数
 int experimentGameCount = 0;// シミュレーションゲームのカウント
 int experimentTurnCount = 0;
 
@@ -15,20 +15,20 @@ String paraText;
 int hybrAttack,hybrYellow;
 String hybrText;
 player UCBplayer;
-player UCTplayer;
+//player UCTplayer;
 player MAXNplayer;
 player PARAplayer;
-player HYBRplayer;
+//player HYBRplayer;
 
 void showExperiment(){
   if(managerPhase == mP.PrepareGame){
     //int a = 1/0;
     if(utils.experimentMainBoard==null) utils.experimentMainBoard=new board();
     if (UCBplayer == null) UCBplayer = new player(1, "ucb0", brainType.UCB1);
-    if (UCTplayer == null)  UCTplayer = new player(1, "ucb0", brainType.UCTE10D4);
+    //if (UCTplayer == null)  UCTplayer = new player(1, "ucb0", brainType.UCTE10D4);
     if (MAXNplayer == null)  MAXNplayer = new player(1, "ucb0", brainType.ExpMaxn);
     if (PARAplayer == null)  PARAplayer = new player(1, "ucb0", brainType.ExpPara);
-    if (HYBRplayer == null)  HYBRplayer = new player(1, "ucb0", brainType.UCTD4P1Hybrid);
+    //if (HYBRplayer == null)  HYBRplayer = new player(1, "ucb0", brainType.UCTD4P1Hybrid);
     for(int p=1; p<5; p++){
       game.participants[p] = new player(p, "ucb"+str(p), brainType.UCB1);
     }
@@ -171,11 +171,13 @@ void showExperiment(){
     println(kifu.string+","+game.nextPlayer+","+ucbText+","+maxnText+","+paraText);
     //println(kifu.string+","+game.nextPlayer+","+ucbText+","+uct1Text+","+maxnText+","+paraText+","+hybrText);
     text("kifu/kifu"+ kifu.mmddhhmm+"-"+nf(experimentTurnCount,2), width/2,50);
-    if(!maxnText.equals(paraText)){// 着手が一致しなかったならば
+    if(!maxnText.equals(paraText) && maxnYellow==-1 && paraYellow==-1){// 着手が一致しなかったならば(アタックチャンス除外）
+      int stableCheck=20;
+      int[] localBoard=new int[25];
+      int[] localMaxn=new int[20];
+      int[] localPara=new int[20];
+      for(int k=0; k<25; k++){   localBoard[k]=utils.experimentMainBoard.getCol(k); }
       println("確定するかどうかのチェック");
-      int stableCheck=5;
-      int maxnStable=0;
-      String maxnStableScore="["+maxnText+"]";
       for (int x=0; x<stableCheck; x++){
         println("maxn"+x);
         game.participants[game.nextPlayer] = MAXNplayer;
@@ -190,22 +192,16 @@ void showExperiment(){
         }
         // 合法手であるかどうかの再チェック
         utils.experimentMainBoard.buildVP(game.nextPlayer);
-        if (maxnAttack0<25 && utils.experimentMainBoard.vp[maxnAttack0]<=0){
+        if (0<=maxnAttack0 && maxnAttack0<25 && utils.experimentMainBoard.vp[maxnAttack0]<=0){
           println("maxn合法手でない");
+          localMaxn[x] = -1;
           continue;
+        } else if(maxnAttack0==-1){
+          println("不正終了");
         }
         //
-        maxnStableScore += ("("+maxnText0+")");
-        if (maxnText.equals(maxnText0)){
-          println("maxn確認！");
-          maxnStable++;
-        } else {
-          println("maxn失敗!");
-          //失敗しても打ち切りしない
-        }
+        localMaxn[x] = maxnAttack0 ;
       }
-      int paraStable=0;
-      String paraStableScore="["+paraText+"]";
       for (int x=0; x<stableCheck; x++){
         println("para"+x);
         game.participants[game.nextPlayer] = PARAplayer;
@@ -221,18 +217,20 @@ void showExperiment(){
         utils.experimentMainBoard.buildVP(game.nextPlayer);
         if (paraAttack0<25 && utils.experimentMainBoard.vp[paraAttack0]<=0){
           println("para合法手でない");
+          localPara[x] = -1;
           continue;
+        } else if(paraAttack0==-1){
+          println("不正終了");
         }
         // 
-        paraStableScore += ("("+paraText0+")");
-        if (paraText.equals(paraText0)){
-          println("para確認！");
-          paraStable++;
-        } else {
-          println("para失敗!");
-        }
+        localPara[x] = paraAttack0;
       }
-      println("確定したのでデータを残す");
+      println("データを残す");
+      String distributionText="";
+      printSymmetricDistribution(localBoard,localMaxn, localPara);
+      print("Distance="+symmetricDistributionDistance(localBoard,localMaxn, localPara));
+      distributionText += (symmetricDistributionDistance(localBoard,localMaxn, localPara));
+      distributionText += (","+textSymmetricDistribution(localBoard,localMaxn, localPara));
       background(255);
       utils.experimentMainBoard.displayGame();
       //game.participants[game.nextPlayer].displayGame();//
@@ -240,7 +238,7 @@ void showExperiment(){
       println("kifu/kifu"+ kifu.mmddhhmm+"-"+nf(experimentTurnCount,2)+":"+kifu.playerColCode[game.nextPlayer]);
       textSize(utils.fontSize*2);
       text("kifu/kifu"+ kifu.mmddhhmm+"-"+nf(experimentTurnCount,2)+":"+kifu.playerColCode[game.nextPlayer], width/2, height*0.9);
-      appendText(kifu.kifuFullPath, kifu.mmddhhmm+"-"+str(experimentTurnCount)+","+kifu.string+","+game.nextPlayer+","+ucbText+","+maxnText+","+paraText+","+maxnStableScore+","+paraStableScore);
+      appendText(kifu.kifuFullPath, kifu.mmddhhmm+"-"+str(experimentTurnCount)+","+str(experimentGameCount)+","+kifu.string+","+game.nextPlayer+","+ucbText+","+maxnText+","+paraText+","+distributionText);
       //appendText(kifu.kifuFullPath, kifu.mmddhhmm+"-"+str(experimentTurnCount)+","+kifu.string+","+game.nextPlayer+","+ucbText+","+uct1Text+","+maxnText+","+paraText+","+hybrText);
       //画面保存
       save("kifu/kifu"+ kifu.mmddhhmm+"/"+ kifu.mmddhhmm+"-"+nf(experimentTurnCount,2)+".png"); 
