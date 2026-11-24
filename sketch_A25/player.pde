@@ -1,5 +1,6 @@
 enum brainType{
-  Human, Random, UCBold, UCB1, UCB2, UCTE10D4, UCBUCT, UCTD4P1, UCTE10D4P2, UCTD4P1Para, UCTD4P2Para, UCTD4P1Hybrid, 
+  Human, Random, UCBold, UCB1, UCB2, UCTE10D4, UCBUCT, 
+  UCTD4P1, UCTE10D4P2, UCTD4P1Para, UCTD4P2Para, UCTD4P1Hybrid, 
   ExpMaxn, ExpPara,
   Heuristic1, Heuristic2
 }
