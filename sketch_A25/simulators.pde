@@ -756,7 +756,7 @@ void UCB1(ucbClass ucb) {
 void UCT1() {
   int SimTimes = gameOptions.get("SimTimes");
   if (simulationManager==sP.GameStart) {
-    println("UCT1.GameStart");
+    //println("UCT1.GameStart");
     startTime=millis();
     uct.chanceNodeOn=0;
     if (SimTimes == 21) {
