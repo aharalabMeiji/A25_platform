@@ -571,7 +571,7 @@ void showGames() {
   }
 }
 
-void mousePreesedGame() {// ゲーム中のキーボード待ちの処理
+void mousePressedGame() {// ゲーム中のキーボード待ちの処理
   if (buttonReturnToMenu.mouseOn()) {//　メニューに戻る、をクリックされたとき
     displayManager = dP.onContents;
     managerPhase=mP.GameStart;

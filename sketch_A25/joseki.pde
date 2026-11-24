@@ -1,3 +1,5 @@
+// メモ：定跡については、エージェントごとに調査を行い、複数の着手について確率分布として提示すること。
+
 int rotation(int pos, int theta) {
   if (theta==0) return pos;
   if (theta==2) return 24-pos;

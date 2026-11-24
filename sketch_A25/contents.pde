@@ -18,7 +18,7 @@ void showContents() {
   buttonMenuGame = new button();
   buttonMenuGame.setLT(left, top, buttonText);
   buttonMenuGame.setItem("gameMode", 0);
-  //buttons.add(buttonMenuGame);
+  buttons.add(buttonMenuGame);
   if (gameOptions.get("gameMode") == 0) fill(255, 0, 0);
   else fill(0);
   text(buttonText, left, top);
@@ -687,14 +687,14 @@ void showContents() {
     text(buttonText, left, top);
     left += (textWidth(buttonText)+utils.hSpace);
     // 202607の実験のためのボタン
-    top += utils.vStep;
-    left=utils.hOffset;
-    buttonText = "[2026 experiment]";
-    buttonExperiment=new button();
-    buttonExperiment.setLT(left, top, buttonText);
-    fill(255, 0, 0);
-    text(buttonText, left, top);
-    left += (textWidth(buttonText)+utils.hSpace);
+    //top += utils.vStep;
+    //left=utils.hOffset;
+    //buttonText = "[2026 experiment]";
+    //buttonExperiment=new button();
+    //buttonExperiment.setLT(left, top, buttonText);
+    //fill(255, 0, 0);
+    //text(buttonText, left, top);
+    //left += (textWidth(buttonText)+utils.hSpace);
 
 } else if (gameOptions.get("gameMode") == 1) {///////////////////////////////////////// Simulation options
     fill(0);

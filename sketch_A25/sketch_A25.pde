@@ -1,3 +1,6 @@
+//一般的な課題：人数を減らすオプションをつけるかどうか。
+//一般的な課題：JSへ移植するかどうか。
+
 import javax.swing.JOptionPane; //
 import org.apache.commons.math3.random.MersenneTwister;
 
@@ -8,74 +11,15 @@ void setup() {
   //int randomSeed = 1;
   //mt = new MersenneTwister(MTseed);
   frameRate(10000);//draw()の実行をできるだけ早く繰り返す
-  utils.filename = "default.txt";
-  utils.filenamePath = sketchPath()+"\\"+"data"+"\\"+"default.txt";
   
-  utils.unitSize = width;
-  utils.mainL = int(utils.unitSize/12);
-  utils.mainU = int(utils.unitSize/16);
-  utils.mainW = utils.mainL*2;
-  utils.mainH = utils.mainU*2;
-  utils.subL = utils.mainL;
-  utils.subU = int(utils.mainU*1.5)+utils.mainH*5;
-  utils.fontSize=utils.unitSize/35;
-  utils.hOffset=utils.fontSize;
-  utils.hSpace=10;
-  utils.vStep=utils.fontSize*1.5;
-
-  utils.gameMainBoard = new board();
-  utils.gameSubBoard = new board();
+  utils.setups();
   simulator.mainBoard = new board();
   simulator.subBoard = new board();
   game.participants = new player[5];
   game.participants[0] = null;
   managerPhase = mP.GameStart;
-
-  gameOptions.set("gameMode", 0);
-  gameOptions.set("Player1", 0);
-  gameOptions.set("Player2", 0);
-  gameOptions.set("Player3", 0);
-  gameOptions.set("Player4", 0);
-  gameOptions.set("Order", 0);// 0 Random, 1:Manual, 2:Conditional random, 3:in turn
-  gameOptions.set("Playout",0);// 0:Random, 1:corner, 2:cross-corner 
-  gameOptions.set("Times", 1);// 1:once, 100:100 times, 10000:10000 times
-  gameOptions.set("SimTimes", 2);
-  gameOptions.set("SimMethod", 1);
-  gameOptions.set("expandThreshold", 10);
-  gameOptions.set("depthMax", 4);
-  gameOptions.set("wCancel", 1);
-  gameOptions.set("Absence0R", 0);
-  gameOptions.set("Absence0G", 0);
-  gameOptions.set("Absence0W", 0);
-  gameOptions.set("Absence0B", 0);
-  gameOptions.set("Absence1R", 0);
-  gameOptions.set("Absence1G", 0);
-  gameOptions.set("Absence1W", 0);
-  gameOptions.set("Absence1B", 0);
-  gameOptions.set("chanceNodeOn", 1);
-  gameOptions.set("uctOption",1);//1: maxn, 2:paranoid , 3:maxn + paranoid 
-  gameOptions.set("pruning", 999);
-  gameOptions.set("Rrate",1);
-  gameOptions.set("Grate",1);
-  gameOptions.set("Wrate",1);
-  gameOptions.set("Brate",1);
-  
-  buttons = new ArrayList<button>();
-  buttonReturnToMenu = new button();
-  buttonSaveScreenShot = new button();
-  buttonSaveBoard = new button();
-  buttonSaveReplace = new button();
-  buttonSaveAppend = new button();
-  buttonSaveTree = new button();
-  buttonDispTree = new button();
-  buttonPass = new button();
-  buttonUndo = new button();
-  buttonNNNext = new button();
-  buttonMainBoard = new button();
-  displayManager = dP.onContents;
-  managerPhase = mP.GameStart;
-  simulationManager = sP.setStartBoard;
-
+  initGameOptions();// utils.pde
+  initButtons();// button
   simulatorStartBoard = new ArrayList<startBoard>();
   initStartBoard();
   
@@ -102,10 +46,6 @@ void draw() {
 void mousePressed() {
   if (displayManager == dP.onContents) {
     if (gameOptions.get("gameMode")==0) {// game のメニュー画面
-      if (buttonMenuSimulation.mouseOn()) {
-        gameOptions.set("gameMode", 1);
-        return;
-      }
       for (button b : buttons) {
         if (b.mouseOn()) {//メニューをクリックすると選択される。
           if (b.dictKey.equals("Times") && b.dictInt==game.times10 && gameOptions.get("Times")==game.times10){
@@ -139,50 +79,43 @@ void mousePressed() {
           } else {
             gameOptions.set(b.dictKey, b.dictInt);
           }
-          //println(b.dictKey, b.dictInt);
           return;
         }
       }
-      if (buttonStart.mouseOn()) {//ゲームでスタート
+      if (buttonStart.mouseOn()) {//START
         displayManager = dP.onGame;
         managerPhase = mP.GameStart;
         utils.gameMainBoard.simulatorNumber=0;
       } else if (buttonExperiment!=null && buttonExperiment.mouseOn()){
         displayManager = dP.onExperiment;
         managerPhase = mP.PrepareGame;
-      } else if (buttonPrevBoard.mouseOn()) {
-        int total = simulatorStartBoard.size();
-        simulator.StartBoardId = (simulator.StartBoardId + total - 1)% total;
-      //} else if (buttonDownBoard.mouseOn()) {
-      //  ;/// いちおう書いておくがなにもしない（ボタン設定もしていない）
-      } else if (buttonNextBoard.mouseOn()) {
-        int total = simulatorStartBoard.size();
-        simulator.StartBoardId = (simulator.StartBoardId + 1)% total;
-      } else if (buttonSaveFile.mouseOn()) {
-        selectOutput("保存先を選択してください", "saveFileSelected");
-      } else if (buttonOpenFile.mouseOn()) {
-        selectInput("読み込むファイルを選択してください", "openFileSelected");
-      } else if (buttonNew.mouseOn()) {
+      } else if (buttonNew.mouseOn()) {// new list
         simulatorStartBoard.clear();
         simulatorStartBoard.add(startBoard0);
-      } else if (buttonDeleteFromList.mouseOn()) {
+      } else if (buttonOpenFile.mouseOn()) {// open file
+        selectInput("読み込むファイルを選択してください", "openFileSelected");
+      } else if (buttonSaveFile.mouseOn()) {// save file
+        selectOutput("保存先を選択してください", "saveFileSelected");
+      } else if (buttonDeleteFromList.mouseOn()) {// delete from list
         if (simulator.StartBoardId!=0) {
-          // イエス・ノーダイアログを表示
+          // イエスノーダイアログを表示
           int response = JOptionPane.showConfirmDialog(null, "盤面 "+(simulator.StartBoardId)+" を消去しますか？", "消去の確認", JOptionPane.YES_NO_OPTION);
           // ユーザーの応答を確認
           if (response == JOptionPane.YES_OPTION) {
             simulatorStartBoard.remove(simulator.StartBoardId);
           }
         }
-      } else if (buttonKifuFolder.mouseOn()) {
+      } else if (buttonKifuFolder.mouseOn()) {// kifu folder
         selectOutput("棋譜を保存する場所を選択してください", "saveKifuFileSelected");
+      } else if (buttonPrevBoard.mouseOn()) {//previous board
+        int total = simulatorStartBoard.size();
+        simulator.StartBoardId = (simulator.StartBoardId + total - 1)% total;
+      } else if (buttonNextBoard.mouseOn()) {//next board
+        int total = simulatorStartBoard.size();
+        simulator.StartBoardId = (simulator.StartBoardId + 1)% total;
       }
     }
     if (gameOptions.get("gameMode")==1) {// simulator のメニュー画面
-      if (buttonMenuGame.mouseOn()) {
-        gameOptions.set("gameMode", 0);
-        return;
-      }
       for (button b : buttons) {
         if (b.mouseOn()) {
           gameOptions.set(b.dictKey, b.dictInt);
@@ -220,53 +153,51 @@ void mousePressed() {
             if(simulator.Brate==6) simulator.Brate=1;
             gameOptions.set("Brate", simulator.Brate);
           }
-          //println(gameOptions.get("SimMethod"), gameOptions.get("SimTimes"));
           return;
         }
       }
-      if (buttonStart.mouseOn()) {
+      if (buttonStart.mouseOn()) {// start
         displayManager = dP.onSimulator;
         simulationManager = sP.GameStart;
-      } else if (buttonExperiment!=null && buttonExperiment.mouseOn()){//100回シミュ
+      } else if (buttonExperiment!=null && buttonExperiment.mouseOn()){//100回シミュレーション
         displayManager = dP.onExperimentalSimulator;
         simulationManager = sP.GameStart;
-      } else if (buttonPrevBoard.mouseOn()) {
+      } else if (buttonPrevBoard.mouseOn()) {//previous board
         int total = simulatorStartBoard.size();
         simulator.StartBoardId = (simulator.StartBoardId + total - 1)% total;
-      } else if (buttonDownBoard.mouseOn()){
-        //simulationの中央ボード下
+      } else if (buttonDownBoard.mouseOn()){//simulationの中央ボード下の色変更        
         int total = simulatorStartBoard.size();
         int startBoardId = (simulator.StartBoardId)% total;
         simulatorStartBoard.get(startBoardId).add1NextPlayer();
         //simulatorStartBoard.get(startBoardId).display();
-      } else if (buttonNextBoard.mouseOn()) {
+      } else if (buttonNextBoard.mouseOn()) {// next board
         int total = simulatorStartBoard.size();
         simulator.StartBoardId = (simulator.StartBoardId + 1)% total;
-      } else if (buttonSaveFile.mouseOn()) {
+      } else if (buttonNew.mouseOn()) {// new list
+        simulatorStartBoard.clear();
+        simulatorStartBoard.add(startBoard0);
+      } else if (buttonSaveFile.mouseOn()) {// save file
         selectOutput("保存先を選択してください", "saveFileSelected");
-      } else if (buttonOpenFile.mouseOn()) {
+      } else if (buttonOpenFile.mouseOn()) {// open file
         selectInput("読み込むファイルを選択してください", "openFileSelected");
       //} else if (buttonOpenPsrFile.mouseOn()) {
       //  selectInput("読み込むPSRファイルを選択してください", "openPsrFileSelected");
-      } else if (buttonNew.mouseOn()) {
-        simulatorStartBoard.clear();
-        simulatorStartBoard.add(startBoard0);
-      } else if (buttonDeleteFromList.mouseOn()) {
+      } else if (buttonDeleteFromList.mouseOn()) {// delete from lst
         if (simulator.StartBoardId!=0) {
-          // イエス・ノーダイアログを表示
+          // イエスノーダイアログを表示
           int response = JOptionPane.showConfirmDialog(null, "盤面 "+(simulator.StartBoardId)+" を消去しますか？", "消去の確認", JOptionPane.YES_NO_OPTION);
           // ユーザーの応答を確認
           if (response == JOptionPane.YES_OPTION) {
             simulatorStartBoard.remove(simulator.StartBoardId);
           }
         }
-      } else if (buttonKifuFolder.mouseOn()) {
+      } else if (buttonKifuFolder.mouseOn()) {// set kifu folder // simulationにはボタンがない。
         selectOutput("棋譜を保存する場所を選択してください", "saveKifuFileSelected");
       }
     }
     return;
   } else if (displayManager == dP.onGame) {
-    mousePreesedGame();
+    mousePressedGame();
   } else if (displayManager == dP.onSimulator) {
     mousePreesedSimulator();
   } else if (displayManager == dP.onTree){

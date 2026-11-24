@@ -569,6 +569,7 @@ void UCB1(ucbClass ucb) {
           ucb.rootNode.legalMoves.add(newNode);
           ucb.fullNodes.add(newNode);
           newNode.setItem(simulator.nextPlayer, j);
+          newNode.id=kifu.playerColCode[simulator.nextPlayer]+nf(j+1, 2);
           simulator.mainBoard.copyBoardToSub(simulator.subBoard);
           simulator.subBoard.move(simulator.nextPlayer, j);
           for (int k=0; k<25; k++) {
@@ -759,7 +760,14 @@ void UCB1(ucbClass ucb) {
       }
     }
   } else if (simulationManager==sP.GameEnd) {
-    ;
+    //すたっつの表示
+    for (uctNode nd : ucb.fullNodes) {
+      print(nd.id+" ");
+      for(int p=1;p<5;p++){
+        print((nd.wa[p]/nd.na),(nd.pa[p]/nd.na)+" ");
+      }
+      println(nd.na);
+    }
   }
   //println(millis()-startTime);
   //startTime=millis();
