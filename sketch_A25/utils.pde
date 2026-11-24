@@ -116,6 +116,29 @@ class simulators {
   uctNode rootNode=null;
   int nextPlayer=1;//1~4
   int Rrate=1, Grate=1, Wrate=1, Brate=1;
+  void clearMainBoardSvs(){
+    for (int j=0; j<=25; j++) {
+      mainBoard.sv[j]=0;
+      mainBoard.sv2[j]=0;
+    }
+  }
+  void initMainBoardSs(int[] bd){
+    for (int i=0; i<25; i++) {
+      mainBoard.s[i].col = bd[i];
+      mainBoard.s[i].marked = 0;
+    }
+  }
+  void initParticipantsRandom(){
+    simulator.Participants = new player[5];
+    for (int p=1; p<5; p++) {
+      if (gameOptions.get("Playout")==1) 
+        Participants[p] = new player(p, "random", brainType.Heuristic1);//
+      else if (gameOptions.get("Playout")==2) 
+        Participants[p] = new player(p, "random", brainType.Heuristic2);//
+      else 
+        Participants[p] = new player(p, "random", brainType.Random);
+    }
+  }
 }
 
 //int simulator.nextPlayer=1;//1~4

@@ -559,7 +559,7 @@ void printAllWaPa(uctNode nd) {// デバッグのためのコンソール出力
 
 
 int uctMctsMainLoop(player pl) {
-  //uctMctsMainLoop  01
+  //println("uctMctsMainLoop  01勝率３位までをリストアップし、大差かどうかを調べる");
   // 勝率３位までをリストアップし、大差かどうかを調べる
   uct.prize.getPrize3FromNodeList(pl.position, uct.rootNode.legalMoves);
   if (uct.prize.getMove(1)!=null) {
@@ -599,10 +599,12 @@ int uctMctsMainLoop(player pl) {
     }
   }
   uct.underCalculation ++;//計算中表示のためのアルゴリズム
-  if (uct.underCalculation==3) uct.underCalculation=0;//繰り返し
-  //uctMctsMainLoop  02
+  if (uct.underCalculation==3) 
+    uct.underCalculation=0;//繰り返し
+  //println("uctMctsMainLoop  02uct.loopStart");
+  //int tmpTick= millis();
   for (int repeat=0; repeat<uct.loopCount; repeat++) {
-    //uctMctsMainLoop  02-1
+    //println("uctMctsMainLoop  02-1:",repeat+"/"+uct.loopCount, (millis()-tmpTick));//uctMctsMainLoop  02-1
     // VERSION2 バージョン１は消去済み
     for (uctNode ancestor : uct.rootNode.legalMoves) {//root直下に、先祖たちがぶら下がっている。
       for (uctNode nd : ancestor.activeNodes) {// 先祖たちにはアクティブノード（葉）がぶら下がっている。
@@ -615,10 +617,11 @@ int uctMctsMainLoop(player pl) {
       }
     }
 
-    //uctMctsMainLoop  02-2
+    //println("uctMctsMainLoop  02-2");//uctMctsMainLoop  02-2
     for (uctNode ancestor : uct.rootNode.legalMoves) {//
       //println("ancestorごとに、uct値が最大となるアクティブノードを見つける");
-      //uctMctsMainLoop block 02-2-1
+      //println("uctMctsMainLoop  02-2-1:",ancestor.id,"active nodes="+ancestor.activeNodes.size());//uctMctsMainLoop block 02-2-1
+      int tmptmptick=millis();
       float uctMax=-1;
       uctNode uctMaxNode=null;
       for (int zz=ancestor.activeNodes.size()-1; zz>=0; zz--) {//消去する可能性があるので、後ろからサーチする。
@@ -631,9 +634,10 @@ int uctMctsMainLoop(player pl) {
           uctMaxNode = nd;
         }
       }
-      //uctMctsMainLoop block 02-2-2
+      //println("uctMctsMainLoop  02-2-2 continue?="+(uctMaxNode!=null));//uctMctsMainLoop block 02-2-2
       // このancestorの下のアクティブノードが尽きたとき。
       if (uctMaxNode==null) {// すでに尽きていてもこうなる。
+        //println("uctMaxNode==null");
         //よそのancestorで、続行するかを調査
         boolean anotherAncestor=false;
         for (uctNode ancestor2 : uct.rootNode.legalMoves) {
@@ -668,16 +672,16 @@ int uctMctsMainLoop(player pl) {
           }
         }// すべての先祖が終わったら、そこでおわり
         else {
+          //println("終わってない先祖がいる");
           continue;
         }
       }//
-      //uctMctsMainLoop block 02-2-3
+      //println("uctMctsMainLoop  02-2-3playout and back propagate at",uctMaxNode.id);//uctMctsMainLoop block 02-2-3
       // uctMaxNodeから最後までランダムに打って（初手番を指定可能）
       // そののちに親までさかのぼって褒章データを更新する。
       pl.myBoard.simulatorNumber ++;
       uct.playoutAndBackPropagate(uctMaxNode, 0);
-
-      //uctMctsMainLoop  02-2-4
+      //println("uctMctsMainLoop  02-4");//uctMctsMainLoop  02-2-4
       if (uctMaxNode.na >= uct.expandThreshold) {// 削除するための条件
         //println("uctMctsBrain:uctMaxNodeはuct.activeNodesから削除");
         //展開するにせよしないにせよ、この作業は等価に必要。
@@ -755,8 +759,11 @@ int uctMctsMainLoop(player pl) {
         //if(expandOK==false){
         //  println(uctMaxNode.parent.id+"->"+uctMaxNode.id);
         //}
+      
+        //println("time to 02-4-2 =",(millis()-tmptmptick));
         if (uctMaxNode.depth<uct.depthMax && uctMaxNode.id!="" && remaingInBd(uctMaxNode.bd)>0 /*&& expandOK*/ ) {   // ここから展開するための条件
           // remaingInBd(uctMaxNode.bd) : 残り空パネルの個数（黄色も含む）
+          //println("uctMctsMainLoop  02-4-2.展開"+uctMaxNode.id);
           uct.newNode=null;
           uctMaxNode.legalMoves=null;
           // uctMaxNode.parent.ncB == uct.pruningThresholdのとき、残されたアクティブノードをリストからはずす、というアイディアはある。
@@ -831,6 +838,7 @@ int uctMctsMainLoop(player pl) {
                     // uct値を有効にするため。
                     for (int count=0; count<uct.minimumPlayout*4; count++) {
                       if (uctMaxNode.onRGWB[(count%4)+1]) {//なにか勘違い
+                        repeat++;// ループ回数から減らす。
                         pl.myBoard.simulatorNumber ++;
                         uct.playoutAndBackPropagate(uct.newNode, count+1);
                       }
@@ -969,6 +977,8 @@ int uctMctsMainLoop(player pl) {
           }
         }
       }// アクティブノード削除からの展開、ここまで
+      //println("time to 02-2-5 =",(millis()-tmptmptick));
+
       //uctMctsMainLoop block 02-2-5
       //if (pl.myBoard.simulatorNumber >= uct.terminateThreshold) {// 却下
       //}

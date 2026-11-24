@@ -1,4 +1,4 @@
-//// simulate line 2651  //<>//
+//// simulate line 2651 
 
 class startBoard {
   int[] theArray;
@@ -236,26 +236,16 @@ void fullRandomMC() {
   if (simulationManager==sP.GameStart) {
     // シミュレーション開始。共通の準備@fullRandomMC
     startTime=millis();
-    simulator.Participants = new player[5];
     simulator.rootNode = new uctNode();
     simulator.rootNode.legalMoves = new ArrayList<uctNode>();
     attackChanceVP = new int[625];//
     prevWinrate1=prevWinrate2=prevPanels1=prevPanels2=0;//収束の計算
     // プレーヤーをランダムプレーヤーに設定
-    for (int p=1; p<5; p++) {
-      if (gameOptions.get("Playout")==1) simulator.Participants[p] = new player(p, "random", brainType.Heuristic1);//
-      else if (gameOptions.get("Playout")==2) simulator.Participants[p] = new player(p, "random", brainType.Heuristic2);//
-      else simulator.Participants[p] = new player(p, "random", brainType.Random);
-    }
-    for (int j=0; j<=25; j++) {
-      simulator.mainBoard.sv[j]=0;
-      simulator.mainBoard.sv2[j]=0;
-    }
+    simulator.initParticipantsRandom();
+    // メインボードのsvの初期化
+    simulator.clearMainBoardSvs();
     //メインボードの初期可
-    for (int i=0; i<25; i++) {
-      simulator.mainBoard.s[i].col = simulatorStartBoard.get(simulator.StartBoardId).theArray[i];
-      simulator.mainBoard.s[i].marked = 0;
-    }
+    simulator.initMainBoardSs(simulatorStartBoard.get(simulator.StartBoardId).theArray);
     //次の手番の指定
     simulator.nextPlayer = simulatorStartBoard.get(simulator.StartBoardId).nextPlayer;
     if (simulator.nextPlayer==0) simulator.nextPlayer=1;
@@ -478,28 +468,17 @@ void UCB1(ucbClass ucb) {
   if (simulationManager==sP.GameStart) {
     // シミュレーション開始
     startTime=millis();
-    simulator.Participants = new player[5];
     attackChanceVP = new int[625];//アタックチャンス時の合法手のフラグ
     winrateConvergents=false;
     panelsConvergent=false;
-    // プレーヤーをランダムに設定
-    for (int p=1; p<5; p++) {
-      if (gameOptions.get("Playout")==1)
-        simulator.Participants[p] = new player(p, "random", brainType.Heuristic1);//
-      else if (gameOptions.get("Playout")==2)
-        simulator.Participants[p] = new player(p, "random", brainType.Heuristic2);//
-      else
-      simulator.Participants[p] = new player(p, "random", brainType.Random);
-    }
+    // プレーヤーをランダムプレーヤーに設定
+    simulator.initParticipantsRandom();
     ucb.fullNodes = new ArrayList<uctNode>();
     // 評価値のクリア
-    for (int j=0; j<=25; j++) {
-      simulator.mainBoard.sv[j]=0;// ここにUCT値を代入する。<- ホントか？
-    }
-    for (int i=0; i<25; i++) {//盤面の初期化。
-      simulator.mainBoard.s[i].col = simulatorStartBoard.get(simulator.StartBoardId).theArray[i];
-      simulator.mainBoard.s[i].marked = 0;
-    }
+    // メインボードのsvの初期化
+    simulator.clearMainBoardSvs();
+    //メインボードの初期可
+    simulator.initMainBoardSs(simulatorStartBoard.get(simulator.StartBoardId).theArray);
     simulator.nextPlayer = simulatorStartBoard.get(simulator.StartBoardId).nextPlayer;
     if (simulator.nextPlayer==0)
       simulator.nextPlayer=1;
@@ -777,6 +756,7 @@ void UCB1(ucbClass ucb) {
 void UCT1() {
   int SimTimes = gameOptions.get("SimTimes");
   if (simulationManager==sP.GameStart) {
+    println("UCT1.GameStart");
     startTime=millis();
     uct.chanceNodeOn=0;
     if (SimTimes == 21) {
@@ -856,18 +836,12 @@ void UCT1() {
     }
     uct.chanceNodeOn=gameOptions.get("chanceNodeOn");
     uct.pruningThreshold=gameOptions.get("pruning");
-    simulator.Participants = new player[5];
-    for (int p=1; p<5; p++) {
-      simulator.Participants[p] = new player(p, "random", brainType.Random);
-    }
-    for (int j=0; j<=25; j++) {
-      simulator.mainBoard.sv[j]=0;
-      simulator.mainBoard.sv2[j]=0;
-    }
-    for (int i=0; i<25; i++) {
-      simulator.mainBoard.s[i].col = simulatorStartBoard.get(simulator.StartBoardId).theArray[i];
-      simulator.mainBoard.s[i].marked = 0;
-    }
+    // プレーヤーをランダムプレーヤーに設定
+    simulator.initParticipantsRandom();
+    // メインボードのsvの初期化
+    simulator.clearMainBoardSvs();
+    //メインボードの初期可
+    simulator.initMainBoardSs(simulatorStartBoard.get(simulator.StartBoardId).theArray);
     simulator.nextPlayer = simulatorStartBoard.get(simulator.StartBoardId).nextPlayer;
     if (simulator.nextPlayer==0) simulator.nextPlayer=1;
     uct.nextPlayer=simulator.Participants[simulator.nextPlayer];
@@ -901,9 +875,10 @@ void UCT1() {
     }
     uct.nnNextPlayer = uct.nextPlayer.position;
   } else if (simulationManager==sP.setStartBoard) {
+    //println("UCT1.setStartBoard");
     uct.nextPlayer=simulator.Participants[simulator.nextPlayer];
     int answer=-1;
-    answer = uctMctsMainLoop(uct.nextPlayer); //<>//
+    answer = uctMctsMainLoop(uct.nextPlayer);
     if (uct.nextPlayer.myBoard.attackChanceP==false) {
       // 表示のための、データのコピー
       for (uctNode nd : uct.rootNode.legalMoves) {
