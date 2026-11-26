@@ -1542,13 +1542,13 @@ void showContents() {
     fill(255, 0, 0);
     text(buttonText, left, top);
     // 202908の実験のためのボタン
-    //top += utils.vStep;
-    //left=utils.hOffset;
-    //buttonText = "[100 times sim]";
-    //buttonExperiment=new button();
-    //buttonExperiment.setLT(left, top, buttonText);
-    //fill(255, 0, 0);
-    //text(buttonText, left, top);
-    //left += (textWidth(buttonText)+utils.hSpace);  
+    top += utils.vStep;
+    left=utils.hOffset;
+    buttonText = "[100 times sim]";
+    buttonExperiment=new button();
+    buttonExperiment.setLT(left, top, buttonText);
+    fill(255, 0, 0);
+    text(buttonText, left, top);
+    left += (textWidth(buttonText)+utils.hSpace);  
   }
 }

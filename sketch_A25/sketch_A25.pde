@@ -1,6 +1,6 @@
 //一般的な課題：人数を減らすオプションをつけるかどうか。
 //一般的な課題：JSへ移植するかどうか。
-// 十字盤面で、UCT/E10/D4/wC/maxnが、画面遷移が起こらないのをチェック
+//ファイル名に全角文字があるとき、createFontを実行せよ、とでる。
 
 import javax.swing.JOptionPane; //
 import org.apache.commons.math3.random.MersenneTwister;
